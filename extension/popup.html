@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Bot Detector</title>
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    width: 288px; margin: 0; padding: 14px 16px 12px;
+    font: 400 13px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1c1f24; background: #fff;
+  }
+  h1 { font-size: 14px; margin: 0 0 2px; }
+  .sub { font-size: 11.5px; opacity: 0.7; margin: 0 0 12px; }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px 0; border-top: 1px solid #e8ebef; }
+  .row:first-of-type { border-top: 0; }
+  .k { opacity: 0.72; }
+  .v { font-weight: 600; text-align: right; }
+  .v.local { color: #14663a; }
+  .v.backend { color: #4b3a91; }
+  .v.warn { color: #7a5300; }
+  .actions { display: flex; gap: 8px; margin-top: 12px; }
+  button {
+    flex: 1; padding: 6px 8px; border-radius: 8px; border: 1px solid #cfd5dc;
+    background: #f4f6f8; color: inherit; font: inherit; font-size: 12px; cursor: pointer;
+  }
+  button:hover { background: #e9edf2; }
+  .note { font-size: 11px; opacity: 0.68; margin-top: 10px; }
+  @media (prefers-color-scheme: dark) {
+    body { background: #16181c; color: #e3e7ec; }
+    .row { border-top-color: #2b3037; }
+    button { background: #22262c; border-color: #3a4048; }
+    button:hover { background: #2b3037; }
+    .v.local { color: #7fd6a2; }
+    .v.backend { color: #c3b6f5; }
+    .v.warn { color: #f0c86a; }
+  }
+</style>
+</head>
+<body>
+<h1>Bot Detector</h1>
+<p class="sub" id="sub">Reading extension state…</p>
+
+<div class="row">
+  <span class="k">Scored by</span>
+  <span class="v" id="mode">—</span>
+</div>
+<div class="row">
+  <span class="k">Auto-badge commenters</span>
+  <label><input type="checkbox" id="autoScan"></label>
+</div>
+<div class="row">
+  <span class="k">Cached accounts</span>
+  <span class="v" id="cache">—</span>
+</div>
+<div class="row">
+  <span class="k">Lookups queued / active</span>
+  <span class="v" id="queue">—</span>
+</div>
+
+<div class="actions">
+  <button id="clearCache">Clear cache</button>
+  <button id="options">Options</button>
+</div>
+
+<p class="note" id="note"></p>
+
+<script type="module" src="popup.js"></script>
+</body>
+</html>

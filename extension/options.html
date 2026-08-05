@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Bot Detector — options</title>
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+    max-width: 720px;
+    font: 400 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1c1f24;
+    background: #ffffff;
+  }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  h2 { font-size: 16px; margin: 32px 0 8px; }
+  p.sub { margin: 0 0 24px; opacity: 0.7; }
+  section { padding: 16px 18px; border: 1px solid #dfe3e8; border-radius: 12px; margin-bottom: 18px; }
+  label.row { display: flex; align-items: flex-start; gap: 10px; margin: 10px 0; }
+  label.row input[type="checkbox"] { margin-top: 4px; }
+  input[type="url"], input[type="text"] {
+    width: 100%; padding: 8px 10px; border-radius: 8px;
+    border: 1px solid #cfd5dc; font: inherit; font-size: 14px;
+    background: transparent; color: inherit;
+  }
+  button {
+    padding: 7px 12px; border-radius: 8px; border: 1px solid #cfd5dc;
+    background: #f4f6f8; color: inherit; font: inherit; font-size: 14px; cursor: pointer;
+  }
+  button:hover { background: #e9edf2; }
+  button.primary { background: #1c1f24; color: #fff; border-color: #1c1f24; }
+  button.primary:hover { background: #33383f; }
+  .actions { display: flex; gap: 8px; align-items: center; margin-top: 12px; flex-wrap: wrap; }
+  .hint { font-size: 13px; opacity: 0.72; margin: 4px 0 0; }
+  .status { font-size: 13px; margin-top: 10px; min-height: 20px; }
+  .status.ok { color: #14663a; }
+  .status.warn { color: #7a5300; }
+  .status.err { color: #a3231b; }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th, td { text-align: left; vertical-align: top; padding: 7px 8px; border-top: 1px solid #e8ebef; }
+  th { width: 34%; font-weight: 600; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; }
+  .mode { font-weight: 600; }
+  @media (prefers-color-scheme: dark) {
+    body { background: #16181c; color: #e3e7ec; }
+    section { border-color: #33383f; }
+    input[type="url"], input[type="text"] { border-color: #3a4048; }
+    button { background: #22262c; border-color: #3a4048; }
+    button:hover { background: #2b3037; }
+    button.primary { background: #e3e7ec; color: #16181c; border-color: #e3e7ec; }
+    th, td { border-top-color: #2b3037; }
+    .status.ok { color: #7fd6a2; }
+    .status.warn { color: #f0c86a; }
+    .status.err { color: #f2a29a; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Bot Detector</h1>
+<p class="sub">Badges Reddit commenters with automation and agenda signals as you scroll, and shows the working behind every band.</p>
+
+<section>
+  <h2 style="margin-top:0">Scanning</h2>
+  <label class="row">
+    <input type="checkbox" id="autoScan">
+    <span>
+      <strong>Badge commenters automatically</strong>
+      <span class="hint">Accounts are looked up as they scroll into view, never all at once. Turning this off removes every badge and stops all lookups.</span>
+    </span>
+  </label>
+  <label class="row">
+    <input type="checkbox" id="scanPosts">
+    <span>
+      <strong>Badge post authors too</strong>
+      <span class="hint">Off means comments only — useful on busy feed pages.</span>
+    </span>
+  </label>
+</section>
+
+<section>
+  <h2 style="margin-top:0">Where scoring happens</h2>
+  <p class="hint" style="margin-bottom:10px">
+    Current mode: <span class="mode" id="mode">local</span>
+  </p>
+  <label for="backendUrl"><strong>Backend URL</strong> (optional)</label>
+  <p class="hint" style="margin: 4px 0 8px">
+    Leave this <strong>empty</strong> and everything runs in your browser: the extension fetches the public
+    Reddit archive directly and scores it locally. No account, no API key, no server, and nothing about your
+    browsing leaves the machine except the username being looked up.
+  </p>
+  <p class="hint" style="margin: 0 0 10px">
+    Set it and lookups go to your own server instead, which can add an LLM read of an account's agenda —
+    the one part that needs an API key, and therefore the one part that cannot live inside an extension
+    anyone can unzip. If a configured backend is unreachable, scoring falls back to local and every card
+    says so rather than quietly pretending.
+  </p>
+  <input type="url" id="backendUrl" placeholder="http://localhost:8787" spellcheck="false" autocomplete="off">
+  <div class="actions">
+    <button id="save" class="primary">Save</button>
+    <button id="test">Test connection</button>
+    <button id="clearBackend">Use local scoring</button>
+  </div>
+  <div class="status" id="backendStatus"></div>
+</section>
+
+<section>
+  <h2 style="margin-top:0">Cache</h2>
+  <p class="hint" style="margin-top:0">
+    Verdicts are cached in this browser for 12 hours, capped at 300 accounts with least-recently-seen
+    eviction. Scrolling past the same person twice is one lookup — the archive is a free public service
+    and this extension is not going to be the reason it stops being one.
+  </p>
+  <div class="status" id="cacheStatus"></div>
+  <div class="actions">
+    <button id="clearCache">Clear cached verdicts</button>
+  </div>
+</section>
+
+<!--
+  Permission justification. Least privilege matters more than usual here: this
+  thing runs on pages you are logged into. Every entry in manifest.json:
+
+    "storage"                              settings (sync) + the verdict cache (local). No other
+                                           storage area, and nothing is ever sent anywhere from it.
+    content_scripts "*://*.reddit.com/*"   reads the Reddit pages you are already looking at, to find
+                                           usernames. Note this is the content script's MATCH pattern
+                                           and NOT a host_permission: reddit.com is deliberately absent
+                                           from host_permissions, so the background worker cannot fetch
+                                           reddit.com at all. It has no reason to — the data source
+                                           documents that Reddit's own API answers 403 regardless of
+                                           headers, so nothing here ever calls it.
+    "https://arctic-shift.photon-reddit.com/*"
+                                           the public comment/post archive the scoring reads. The only
+                                           host this extension ever contacts, and only ever with a
+                                           username.
+    optional_host_permissions              NOT granted at install. Requested, per-origin, only when you
+                                           type a backend URL and press Save — because a backend can be
+                                           anywhere, and asking for "all sites" up front to cover a
+                                           feature almost nobody enables is exactly the pattern that
+                                           makes extensions untrustworthy.
+
+  Deliberately NOT requested: "tabs" (we never enumerate your tabs),
+  "activeTab", "scripting" (the content script is declarative and visible in the
+  manifest), "webRequest", "cookies", "history", "identity". There is no
+  analytics, no telemetry, and no remote code — everything that runs is in this
+  folder.
+-->
+<section>
+  <h2 style="margin-top:0">What this extension can see, and why</h2>
+  <table>
+    <tr>
+      <th><code>storage</code></th>
+      <td>Your settings and the verdict cache. Nothing is uploaded from it.</td>
+    </tr>
+    <tr>
+      <th><code>*://*.reddit.com/*</code></th>
+      <td>Reads the Reddit pages you are already looking at, to find usernames. This is the content script's match pattern only — the extension's background worker has no permission to fetch reddit.com at all.</td>
+    </tr>
+    <tr>
+      <th><code>arctic-shift.photon-reddit.com</code></th>
+      <td>The public archive of Reddit comments and posts that the scoring is based on. The only host this extension ever contacts, and only ever with a username.</td>
+    </tr>
+    <tr>
+      <th>Your backend, if you set one</th>
+      <td>Requested when you save the URL, not at install — and revoked whenever you clear the field.</td>
+    </tr>
+  </table>
+  <p class="hint">
+    Not requested: access to your tabs, your history, your cookies, or any site other than the two above.
+    No telemetry, no analytics, no remote code. Everything that runs is in this folder.
+  </p>
+</section>
+
+<script type="module" src="options.js"></script>
+</body>
+</html>

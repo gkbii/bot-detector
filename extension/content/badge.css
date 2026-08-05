@@ -1,0 +1,531 @@
+/*
+ * content/badge.css — every rule is namespaced `.bd-*` and every selector is
+ * rooted in one of our own elements, so nothing here can reach a node Reddit
+ * made. The `!important`s are confined to the badge, which lives inside
+ * subreddit-supplied CSS on old Reddit that will otherwise happily restyle a
+ * <span> it has never seen; the panel is appended to <body> and needs none.
+ *
+ * Dark mode comes from the OS by default and from `.bd-dark` when the adapter
+ * detects that Reddit itself is rendering dark (the two disagree often — a
+ * light-mode laptop reading Reddit in dark theme is normal).
+ */
+
+.bd-badge,
+.bd-badge *,
+.bd-panel,
+.bd-panel * {
+  box-sizing: border-box !important;
+}
+
+/* --- badge --------------------------------------------------------------- */
+.bd-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 3px !important;
+  vertical-align: middle !important;
+  margin: 0 0 0 6px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: none !important;
+  font: 500 11px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  white-space: nowrap !important;
+  vertical-align: baseline !important;
+}
+
+.bd-badge:focus-visible {
+  outline: 2px solid #3b7dd8 !important;
+  outline-offset: 2px !important;
+  border-radius: 4px !important;
+}
+
+.bd-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  padding: 1px 6px !important;
+  border-radius: 999px !important;
+  border: 1px solid transparent !important;
+  background: #eef0f3 !important;
+  color: #3c4249 !important;
+  text-decoration: none !important;
+}
+
+.bd-chip .bd-k {
+  opacity: 0.72 !important;
+  font-weight: 400 !important;
+}
+
+.bd-chip .bd-v {
+  font-weight: 700 !important;
+}
+
+.bd-chip-pending {
+  color: #5c6470 !important;
+  background: #eef0f3 !important;
+  font-style: italic !important;
+}
+
+.bd-chip-error {
+  color: #6b4b00 !important;
+  background: #fdf3d9 !important;
+  border-color: #e6cf93 !important;
+}
+
+/* Bands. `insufficient-data` is deliberately not a colour on the good/bad
+   scale: grey, dashed, and labelled "no data". Absence of evidence must never
+   render as a clean bill of health. */
+.bd-band-low {
+  background: #e7f6ec !important;
+  border-color: #bcdfc8 !important;
+  color: #14663a !important;
+}
+
+.bd-band-moderate {
+  background: #fdf3d9 !important;
+  border-color: #e8cf8e !important;
+  color: #7a5300 !important;
+}
+
+.bd-band-high {
+  background: #fce8e6 !important;
+  border-color: #f0bcb6 !important;
+  color: #a3231b !important;
+}
+
+.bd-band-insufficient-data {
+  background: transparent !important;
+  border: 1px dashed #a8b0ba !important;
+  color: #5c6470 !important;
+}
+
+.bd-badge.bd-open .bd-chip {
+  box-shadow: 0 0 0 2px rgba(59, 125, 216, 0.35) !important;
+}
+
+/* --- panel --------------------------------------------------------------- */
+.bd-panel {
+  position: fixed;
+  z-index: 2147483000;
+  width: 384px;
+  max-width: calc(100vw - 24px);
+  max-height: 74vh;
+  overflow-y: auto;
+  padding: 14px 16px 12px;
+  border: 1px solid #d6dae0;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #1c1f24;
+  box-shadow: 0 12px 32px rgba(15, 20, 30, 0.22);
+  font: 400 13px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  text-align: left;
+}
+
+.bd-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.bd-panel-user {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.bd-close {
+  border: 0;
+  background: none;
+  color: inherit;
+  font-size: 18px;
+  line-height: 1;
+  padding: 2px 6px;
+  cursor: pointer;
+  border-radius: 6px;
+  opacity: 0.65;
+}
+
+.bd-close:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.bd-headline {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.bd-prov {
+  margin-bottom: 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #f4f6f8;
+  border: 1px solid #e3e7ec;
+}
+
+.bd-prov-degraded {
+  background: #fdf3d9;
+  border-color: #e8cf8e;
+}
+
+.bd-prov-line {
+  font-size: 12px;
+}
+
+.bd-prov-warn {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #7a5300;
+}
+
+.bd-prov-meta {
+  margin-top: 4px;
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.bd-axis {
+  margin: 0 0 14px;
+  padding-top: 10px;
+  border-top: 1px solid #e8ebef;
+}
+
+.bd-axis-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bd-axis-title {
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.bd-axis-score {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.bd-pill {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.bd-pill-llm {
+  background: #eae6fb;
+  border-color: #cfc4f2;
+  color: #4b3a91;
+}
+
+.bd-axis-blurb {
+  margin: 4px 0 8px;
+  font-size: 11.5px;
+  opacity: 0.68;
+}
+
+.bd-signals {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bd-signal {
+  padding: 6px 0;
+  border-top: 1px dotted #e2e6eb;
+}
+
+.bd-signal:first-child {
+  border-top: 0;
+}
+
+.bd-signal-head {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.bd-signal-dir {
+  font-size: 10px;
+  width: 12px;
+  flex: 0 0 12px;
+  text-align: center;
+  opacity: 0.75;
+}
+
+.bd-dir-raises .bd-signal-dir {
+  color: #a3231b;
+}
+
+.bd-dir-lowers .bd-signal-dir {
+  color: #14663a;
+}
+
+.bd-signal-label {
+  font-weight: 600;
+  font-size: 12.5px;
+}
+
+.bd-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid transparent;
+}
+
+.bd-signal-value {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.bd-signal-evidence {
+  margin-top: 3px;
+  padding-left: 18px;
+  font-size: 11.5px;
+  opacity: 0.8;
+}
+
+.bd-kv {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 10px;
+  margin-top: 4px;
+  padding-left: 18px;
+  font-size: 11px;
+}
+
+.bd-kv-pair {
+  display: inline-flex;
+  gap: 4px;
+  align-items: baseline;
+}
+
+.bd-kv-k {
+  opacity: 0.6;
+}
+
+.bd-kv-v {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.bd-signal-weight {
+  padding-left: 18px;
+  font-size: 10.5px;
+  opacity: 0.5;
+}
+
+.bd-empty {
+  margin: 4px 0;
+  font-size: 12px;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+.bd-coverage {
+  padding-top: 10px;
+  border-top: 1px solid #e8ebef;
+}
+
+.bd-cov-error {
+  margin-top: 3px;
+  font-size: 11px;
+  color: #7a5300;
+}
+
+.bd-llm-summary {
+  margin: 6px 0;
+  font-size: 12.5px;
+}
+
+.bd-panel-foot {
+  display: flex;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid #e8ebef;
+}
+
+.bd-btn {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid #cfd5dc;
+  background: #f4f6f8;
+  color: inherit;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.bd-btn:hover:not(:disabled) {
+  background: #e9edf2;
+}
+
+.bd-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.bd-btn-quiet {
+  margin-left: auto;
+  background: transparent;
+}
+
+/* --- dark ---------------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  .bd-chip {
+    background: #2a2f36 !important;
+    color: #d7dce2 !important;
+  }
+
+  .bd-chip-pending {
+    background: #2a2f36 !important;
+    color: #9aa3ad !important;
+  }
+
+  .bd-band-low {
+    background: #123322 !important;
+    border-color: #1f5c39 !important;
+    color: #7fd6a2 !important;
+  }
+
+  .bd-band-moderate {
+    background: #3a2f10 !important;
+    border-color: #6d5719 !important;
+    color: #f0c86a !important;
+  }
+
+  .bd-band-high {
+    background: #3d1c19 !important;
+    border-color: #7a332c !important;
+    color: #f2a29a !important;
+  }
+
+  .bd-band-insufficient-data {
+    background: transparent !important;
+    border: 1px dashed #6b737d !important;
+    color: #9aa3ad !important;
+  }
+
+  .bd-panel {
+    background: #16181c;
+    color: #e3e7ec;
+    border-color: #33383f;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+  }
+
+  .bd-prov {
+    background: #1e2126;
+    border-color: #33383f;
+  }
+
+  .bd-prov-degraded {
+    background: #3a2f10;
+    border-color: #6d5719;
+  }
+
+  .bd-prov-warn,
+  .bd-cov-error {
+    color: #f0c86a;
+  }
+
+  .bd-axis,
+  .bd-coverage,
+  .bd-panel-foot {
+    border-top-color: #2b3037;
+  }
+
+  .bd-signal {
+    border-top-color: #262b31;
+  }
+
+  .bd-btn {
+    background: #22262c;
+    border-color: #3a4048;
+  }
+
+  .bd-btn:hover:not(:disabled) {
+    background: #2b3037;
+  }
+
+  .bd-pill-llm {
+    background: #2c2547;
+    border-color: #453a75;
+    color: #c3b6f5;
+  }
+}
+
+/* Reddit rendering dark while the OS is light. Same values, explicit class. */
+.bd-badge.bd-dark .bd-chip {
+  background: #2a2f36 !important;
+  color: #d7dce2 !important;
+}
+
+.bd-badge.bd-dark .bd-band-low {
+  background: #123322 !important;
+  border-color: #1f5c39 !important;
+  color: #7fd6a2 !important;
+}
+
+.bd-badge.bd-dark .bd-band-moderate {
+  background: #3a2f10 !important;
+  border-color: #6d5719 !important;
+  color: #f0c86a !important;
+}
+
+.bd-badge.bd-dark .bd-band-high {
+  background: #3d1c19 !important;
+  border-color: #7a332c !important;
+  color: #f2a29a !important;
+}
+
+.bd-badge.bd-dark .bd-band-insufficient-data {
+  background: transparent !important;
+  border: 1px dashed #6b737d !important;
+  color: #9aa3ad !important;
+}
+
+.bd-panel.bd-dark {
+  background: #16181c;
+  color: #e3e7ec;
+  border-color: #33383f;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+}
+
+.bd-panel.bd-dark .bd-prov {
+  background: #1e2126;
+  border-color: #33383f;
+}
+
+.bd-panel.bd-dark .bd-prov-degraded {
+  background: #3a2f10;
+  border-color: #6d5719;
+}
+
+.bd-panel.bd-dark .bd-axis,
+.bd-panel.bd-dark .bd-coverage,
+.bd-panel.bd-dark .bd-panel-foot {
+  border-top-color: #2b3037;
+}
+
+.bd-panel.bd-dark .bd-signal {
+  border-top-color: #262b31;
+}
+
+.bd-panel.bd-dark .bd-btn {
+  background: #22262c;
+  border-color: #3a4048;
+}

@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "Bot Detector",
+  "version": "0.1.0",
+  "description": "Badges Reddit commenters with automation and agenda signals. Scores locally in your browser by default — no account, no key, no server.",
+  "minimum_chrome_version": "111",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://arctic-shift.photon-reddit.com/*"
+  ],
+  "optional_host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.reddit.com/*"
+      ],
+      "js": [
+        "content/badge.js",
+        "content/reddit.js"
+      ],
+      "css": [
+        "content/badge.css"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Bot Detector"
+  }
+}
