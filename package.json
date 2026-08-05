@@ -20,7 +20,7 @@
   "//dependencies": [
     "One, and it is optional at runtime. extension/ and the deterministic scoring",
     "core have NO dependencies and must keep none: they use fetch and node:test",
-    "only, per the repo convention of preferring built-ins (see root CLAUDE.md),",
+    "only, per the convention of preferring Node's built-ins to npm packages,",
     "and a dependency there would additionally have to survive being loaded",
     "unbundled by a browser extension. @anthropic-ai/sdk is used by server/",
     "agenda.js alone, for the same Messages API call task-runner already depends",

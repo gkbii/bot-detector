@@ -6,10 +6,10 @@ positive evidence of a real person — rendered inline next to each name as you
 scroll a thread.
 
 A Chrome extension is the product. It installs load-unpacked on any laptop,
-scores entirely in the browser, and needs no account, no API key and no server.
-Everything else in this repo runs on one Mac mini at home; this deliberately
-does not, because a tool for reading a Reddit thread has to work on whichever
-machine is in front of you.
+scores entirely in the browser, and needs **no account, no API key and no
+server** — a tool for reading a Reddit thread has to work on whichever machine
+is in front of you, so nothing here depends on infrastructure you would have to
+run. [Jump to the install](#install); it is five steps and no build.
 
 There is also an **optional** Node server (`server/`) that adds exactly two
 things the browser cannot do: a Claude read of what an account actually argues,
@@ -65,11 +65,11 @@ bot-detector/
   server/test/               the backend's suite
 ```
 
-## This is the one ESM package in the repo, deliberately
+## ESM, deliberately
 
-`skill-backend/` and `task-runner/` are CommonJS. This package sets
-`"type": "module"` and **it must stay that way** — do not "fix" it for
-consistency.
+This package sets `"type": "module"` and **it must stay that way** — do not
+"fix" it to CommonJS. (It is developed alongside several CommonJS packages, so
+the temptation is real; see [Where this comes from](#where-this-comes-from).)
 
 The reason is a hard constraint, not a preference. The extension is the primary
 artifact and must load unpacked with zero setup, so the scoring core lives
@@ -332,20 +332,33 @@ that if we throw, the page is exactly as Reddit rendered it.
 In local mode, **nothing about your browsing leaves the machine except the
 username being looked up**, which goes to the public archive and nowhere else.
 
-## Installing it on a machine that is not the Mac mini
+## Install
 
-No build step, no `npm install`, no key. Chrome 111+ (or any Chromium: Edge,
-Brave, Arc).
+**Requirements: Chrome 111 or newer — or any Chromium browser (Edge, Brave,
+Arc, Vivaldi). That is the entire list.** No build step, no `npm install`, no
+Node, no account, no API key, no server.
 
-1. Get the files onto the machine — clone this repo, or copy just the
-   `bot-detector/extension/` directory. It is self-contained; nothing outside
-   that directory is needed to run the extension.
-2. Open `chrome://extensions`.
-3. Turn on **Developer mode** (top right).
-4. Click **Load unpacked** and select `bot-detector/extension/`.
-5. Open any Reddit thread. Badges appear next to usernames as you scroll.
+```sh
+git clone https://github.com/gkbii/bot-detector.git
+```
 
-That is the whole install. Optional bits, all off by default:
+(Or download the ZIP from the green **Code** button and unzip it. You can also
+copy out just the `extension/` directory — it is self-contained, and nothing
+outside it is needed to run the extension.)
+
+Then:
+
+1. Open `chrome://extensions` in your browser.
+2. Turn on **Developer mode** — the toggle in the top right.
+3. Click **Load unpacked** and select the `extension/` directory inside your
+   clone. Select the directory containing `manifest.json` itself, not the repo
+   root and not `manifest.json` as a file.
+4. Open any Reddit thread. Badges appear next to usernames as you scroll.
+
+That is the whole install. Nothing to configure, and the first badge should
+appear within a second or two of a username scrolling into view.
+
+Optional bits, all off by default:
 
 * Click the toolbar icon for a status readout — which provider produced the
   verdicts you are looking at, the queue depth, the cache size. It exists
@@ -355,23 +368,39 @@ That is the whole install. Optional bits, all off by default:
   auto-scanning and post-page scanning, and is where a backend URL goes if you
   run one.
 
-Load-unpacked extensions stay installed across restarts but Chrome will nag
-about developer mode; there is no signed listing, and publishing one is not
-planned.
+Load-unpacked extensions stay installed across restarts, but Chrome will nag
+about developer mode every so often and that is expected — there is no Web
+Store listing, and publishing one is not planned. Updating means `git pull` and
+then the reload arrow on the extension's card in `chrome://extensions`.
 
-Troubleshooting: if badges never appear, check `chrome://extensions` for a
-worker load error — the `extension/lib/` modules are static imports, so a
-missing or renamed file there stops the worker rather than half-running it. The
-popup will say the worker is not answering, and the content script renders a
-neutral "unavailable" badge instead of touching the page.
+### If badges never appear
+
+* **Check `chrome://extensions` for a service-worker load error.** The
+  `extension/lib/` modules are static imports, so a missing or renamed file
+  there stops the worker outright rather than half-running it. Click **service
+  worker** on the extension's card to open its console.
+* **Click the toolbar icon.** If the popup says the worker is not answering,
+  the problem is the worker, not Reddit's page. If it reports verdicts and
+  queue depth, the lookups are working and the problem is on the page side.
+* **Check you selected the right directory** — `extension/`, the one holding
+  `manifest.json`, not the repo root.
+* **A grey dashed "no data" badge is not a failure.** It is a real verdict:
+  the account has too little history to score (fewer than 15 comments, or under
+  14 days), and see [Coverage is part of every
+  verdict](#coverage-is-part-of-every-verdict) for why that is deliberately not
+  reported as a clean score. Accounts created after 2025-03-25 can also come
+  back empty — that is an upstream data limitation, documented in
+  [`EVALUATION.md`](EVALUATION.md).
+* The content script renders a neutral "unavailable" badge and never touches
+  Reddit's own DOM when something goes wrong, so a broken lookup can degrade
+  the badge but cannot break the page.
 
 ## The optional server, and the seam it plugs into
 
-`providers/index.js` is the seam. It is the same adapter shape this repo already
-uses three times on the Node side
-(`skill-backend/src/integrations/{haClient,taskRunner,messageReminders}.js`): a
-documented interface, a probe for whether the richer dependency is actually
-there, and a graceful degrade to the simpler one that **says so out loud**.
+`providers/index.js` is the seam, and it is the ordinary integration-adapter
+shape: a documented interface, a probe for whether the richer dependency is
+actually there, and a graceful degrade to the simpler one that **says so out
+loud**.
 
 ```
 chrome.storage.sync.backendUrl empty (the default) -> providers/local.js
@@ -424,8 +453,8 @@ has no second opinion about it. Re-implementing the fetch or the scoring here
 would immediately produce two answers to the same question that drift apart
 silently.
 
-`node:http` with no framework, like `website/server.js` — this repo does not
-reach for Express outside `skill-backend`. Two routes, `/api/health` and
+`node:http` with no framework — two routes for an optional local backend is not
+a reason to take an Express dependency. Two routes, `/api/health` and
 `/api/verdict`. One npm dependency, `@anthropic-ai/sdk`, imported *lazily*, so
 `npm install` is not needed to run the extension, the tests, or the
 deterministic half of the server: a backend started without it still serves
@@ -433,13 +462,33 @@ verdicts and reports the missing agenda read rather than dying. Same for a
 missing key — the server runs, `/api/health` says `agenda: false`, and the
 extension's card says the read was unavailable.
 
-Setup, if you want it: `cp .env.example .env`, put a key in it,
-`npm install && npm start`, then paste the URL into the extension's options page
-and hit the probe button. Every var is documented with its reasoning in
-`.env.example`; the ones that matter are `ANTHROPIC_API_KEY`,
-`BOT_AGENDA_MODEL` (Opus by default, for the same reason task-runner's
-`CHESS_SYNTHESIS_MODEL` is), and `BOT_DETECTOR_ALLOWED_ORIGINS` if you expose it
-beyond localhost.
+### Setting the server up, if you want it
+
+Requires Node 22+ (for native ESM and `node:sqlite`) and an
+[Anthropic API key](https://console.anthropic.com/). Neither is needed for the
+extension itself.
+
+```sh
+cp .env.example .env      # then put your key in ANTHROPIC_API_KEY
+npm install               # the one dependency, @anthropic-ai/sdk
+npm start                 # listens on http://localhost:3200
+```
+
+Then open the extension's options page (`chrome://extensions` → Bot Detector →
+**Details** → **Extension options**), paste `http://localhost:3200` into the
+backend URL field, and hit the probe button. It will tell you whether the
+server answered and whether the agenda read is available. Clear the field to go
+back to local scoring.
+
+Every var is documented with its reasoning in `.env.example`. The ones that
+matter are `ANTHROPIC_API_KEY`, `BOT_AGENDA_MODEL` (Opus by default — judging
+whether comments are talking points or a genuinely held opinion is the one
+intelligence-sensitive call here, and a cheaper model is measurably worse at
+it), and `BOT_DETECTOR_ALLOWED_ORIGINS`, which you must set to your exact
+`chrome-extension://<id>` if you expose the server beyond localhost.
+
+Nothing about the server is required, and turning it off loses exactly the two
+things listed above and nothing else.
 
 ### Citations are verified, not trusted
 
@@ -487,11 +536,11 @@ Stated in `server/index.js`'s header because this thing judges real people:
   `DELETE` run on open and after every write, not a read-time filter. A row past
   its TTL is gone from disk, not merely invisible. The profile TTL is therefore
   also the retention bound on stored text.
-* The cache is a separate `.db` file from anything else in the repo, because it
-  is rebuildable — delete it and every entry regenerates — not operational
-  state. Mixing it into `tasks.db` would make "clear the cache" dangerous.
-  Three tables with three lifetimes, for the same reason the chess and vintage
-  stores split theirs: a profile is one fetch, a verdict is a cheap pure
+* The cache is a `.db` file of its own, shared with nothing, because it is
+  rebuildable — delete it and every entry regenerates — rather than operational
+  state. Mixing it into a database that holds anything you would miss makes
+  "clear the cache" dangerous. Three tables with three lifetimes: a profile is
+  one fetch, a verdict is a cheap pure
   function of it, an LLM read is an Opus call. A stale verdict must not drag a
   still-valid LLM read down with it.
 * `server/username.js` is a **security boundary, not a nicety**: its output is
@@ -545,3 +594,34 @@ real runtime could find" above, and the two false positives it also missed. Both
 classes of bug were found by pointing the thing at live accounts. A change to
 the fetch window, the pagination, or any timing signal deserves the same
 treatment before it is believed.
+
+## Where this comes from
+
+This is developed inside a larger private monorepo of personal projects and
+mirrored out here, which is the whole explanation for two things a reader
+notices:
+
+* **Code comments occasionally reference sibling packages you cannot see** —
+  a `task-runner`, a `skill-backend`, a chess project. They are pointing at
+  precedent for a decision (the same citation-verification rule, the same
+  `node:sqlite`-over-`better-sqlite3` choice), so the reasoning still stands on
+  its own where it is written; only the cross-reference dangles.
+* **`package.json` is `"private": true`.** That is deliberate and stays — it
+  guards against an accidental `npm publish`. It does not restrict your use of
+  the code, which is governed by the [licence](LICENSE). The extension is not
+  distributed as an npm package; you install it with **Load unpacked**, per the
+  [install steps](#install).
+
+Mirrored with `git subtree`, so the history here is the real commit history of
+these files rather than a squashed dump.
+
+## Licence
+
+[MIT](LICENSE). Do what you like with it.
+
+It reads public data only, through a public archive, with no credentials — see
+[Privacy rules the server holds itself to](#privacy-rules-the-server-holds-itself-to)
+for the specific limits, which apply to the extension too. It is a tool for
+reading the shape of an account's public posting, not for identifying anyone;
+the model is never asked who an account belongs to, and the schema gives it
+nowhere to put such a claim. Please keep it that way.

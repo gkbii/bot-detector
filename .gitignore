@@ -1,6 +1,13 @@
+# Your API key, if you run the optional server. Listed HERE rather than relying
+# on a parent .gitignore, because this directory is also published on its own as
+# a standalone public repo (see the README's "Where this comes from") -- where
+# there is no parent, and the very first thing a reader does is
+# `cp .env.example .env`.
+.env
+
 # The optional server's SQLite cache. Rebuildable from the public archive on
 # demand, and it holds strangers' comment bodies until their TTL expires --
-# neither of which belongs in git. (Root .gitignore already covers .env.)
+# neither of which belongs in git.
 data/
 
 # Only the optional server needs an install; the extension and the scoring core
