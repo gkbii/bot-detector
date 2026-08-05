@@ -248,6 +248,27 @@ human eventually lands a comment in every hour of the day across insomnia,
 travel and timezone changes, and a strict-zero test would call them a bot for
 it.
 
+## What it actually scored on a live thread
+
+[`EVALUATION.md`](EVALUATION.md) is the 2026-08-05 run against a real
+r/politics thread (236 authors, 25 accounts scored end-to-end) with eight
+self-declared bots used as ground truth. The good news is the headline: no
+human scored above `low` on automation and no bot scored `low` — the bands do
+not overlap. Three defects it turned up, none of which the 106 tests can see:
+
+* **The users endpoint is a frozen 2025-03-25 snapshot, not a lagging one**, so
+  `fetchAccount` returns `null` for every account created since — **14.8% of
+  that thread**, and disproportionately the new accounts most worth checking.
+  The scoring core does not need that blob; a stream-derived profile scores
+  fine with `karma-velocity` degrading to `insufficient-data` on its own.
+* **`asks-questions` counts `?` inside URL query strings**, which moves a human
+  by a point or two and takes RemindMeBot from 0% to 100% — a false positive
+  shaped exactly like the adversary, on the axis meant to vouch for people.
+* **`dormancy-revival` reports a confident weight-3 zero from windows too short
+  to contain a 120-day gap** (AutoModerator's spans 0.0 days), where
+  `posting-hour-dead-zone` correctly says `insufficient-data` from the same
+  window.
+
 ## A bug only the real runtime could find
 
 `extension/lib/sources/arcticShift.js` defaults its injected fetch to
