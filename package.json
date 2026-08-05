@@ -1,0 +1,49 @@
+{
+  "name": "bot-detector",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Reddit account signal analysis — three separate scores (automation, agenda, authenticity), shared by the Chrome extension and the optional Node server.",
+
+  "//type": [
+    "ESM, deliberately — this is the ONE package in BigBrain that is not CommonJS.",
+    "The Chrome extension is the primary artifact and must install with",
+    "load-unpacked and zero setup, so the scoring core lives inside extension/lib/",
+    "and is loaded directly by an MV3 service worker, which only supports ESM",
+    "(\"type\": \"module\" in manifest.json). The optional Node server imports the",
+    "very same files via ../extension/lib/..., so there is one implementation of",
+    "the scoring with no build step, no bundler and no copy. Node 22 loads ESM",
+    "natively, so honouring the extension's constraint costs nothing here.",
+    "skill-backend/ and task-runner/ stay CommonJS; do not 'fix' this to match them."
+  ],
+  "type": "module",
+
+  "//dependencies": [
+    "One, and it is optional at runtime. extension/ and the deterministic scoring",
+    "core have NO dependencies and must keep none: they use fetch and node:test",
+    "only, per the repo convention of preferring built-ins (see root CLAUDE.md),",
+    "and a dependency there would additionally have to survive being loaded",
+    "unbundled by a browser extension. @anthropic-ai/sdk is used by server/",
+    "agenda.js alone, for the same Messages API call task-runner already depends",
+    "on it for -- pure JS, no compiler and no Homebrew formula, so it satisfies",
+    "the convention the same way that one does. server/agenda.js imports it",
+    "LAZILY, so `npm install` is not needed to run the extension, the scoring",
+    "core, or the deterministic half of the server; a backend started without it",
+    "still serves verdicts and reports the missing agenda read rather than dying."
+  ],
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.115.0"
+  },
+
+  "engines": {
+    "node": ">=22"
+  },
+  "//scripts": [
+    "Both globs are needed: test/ holds the shared core's suite and server/test/",
+    "the backend's. A single test/*.test.js glob silently skips the server."
+  ],
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "test": "node --test test/*.test.js server/test/*.test.js"
+  }
+}

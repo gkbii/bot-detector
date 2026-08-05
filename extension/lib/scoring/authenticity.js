@@ -1,0 +1,332 @@
+/**
+ * AUTHENTICITY — positive evidence that this is a real person.
+ *
+ * This axis exists because a tool that only ever flags suspicion never answers
+ * the question that was asked. Run three suspicion scores over a normal human
+ * and you get three shrugs, which reads as "probably fine, but…" — everyone
+ * ends up looking slightly guilty and nobody gets vouched for. So these
+ * signals look for things that are HARD TO FAKE AND POINTLESS TO FAKE:
+ * admitting error, staying in an argument, caring about unrelated subjects,
+ * asking for help, and taking an unpopular position in front of your own
+ * audience.
+ *
+ * A low score here is NOT an accusation. It means we found no positive
+ * evidence, which is a different statement from the automation and agenda
+ * axes, and the headline in index.js is careful to keep them apart.
+ */
+
+import { commentsOldestFirst, groupHistogram } from '../sources/profile.js';
+import { buildAxis, signal, unmeasured } from './axis.js';
+import {
+  clamp01, normalizedEntropy, pct, plural, rescale,
+} from './stats.js';
+
+const MIN_COMMENTS = 10;
+const MIN_THREADS = 5;
+const MIN_GROUP_ITEMS = 10;
+
+/**
+ * Admitting error. Cheap to type, but a propaganda account has no reason to —
+ * conceding a point is the opposite of the job.
+ */
+const SELF_CORRECTION_PATTERNS = [
+  /\bi was wrong\b/i,
+  /\byou(?:'| a)?re right\b/i,
+  /\bfair (?:point|enough)\b/i,
+  /\bgood (?:catch|point)\b/i,
+  /\bi stand corrected\b/i,
+  /\bi misremembered\b/i,
+  /\bi misread\b/i,
+  /\bmy (?:mistake|bad)\b/i,
+  /\bi'?m wrong\b/i,
+  /\bcorrection\b/i,
+  /(?:^|\s)edit\s*[:\-]/i,
+  /\bTIL\b/,
+  /\bturns out i\b/i,
+  /\bthanks for (?:the )?correct/i,
+];
+
+const HELP_SEEKING_PATTERNS = [
+  /\bdoes anyone know\b/i,
+  /\bcan (?:someone|anyone)\b/i,
+  /\bhow do i\b/i,
+  /\bany (?:idea|advice|suggestions|recommendations)\b/i,
+  /\bam i missing\b/i,
+  /\bwhat am i doing wrong\b/i,
+  /\bnot sure (?:if|how|what|why)\b/i,
+  /\bgenuine question\b/i,
+];
+
+/** Threads with at least this many comments count as sustained back-and-forth. */
+const SUSTAINED_MIN_COMMENTS = 3;
+
+/**
+ * A "dominant group" needs both a real share and a real sample before the
+ * dissent signal will look inside it.
+ */
+const DOMINANT_MIN_SHARE = 0.25;
+const DOMINANT_MIN_SCORED_COMMENTS = 10;
+/** Past this, the account is simply disliked — see the note on the signal. */
+const DISSENT_DAMPING_START = 0.35;
+const DISSENT_DAMPING_END = 0.8;
+
+export function scoreAuthenticity(profile) {
+  return buildAxis([
+    selfCorrectionSignal(profile),
+    sustainedThreadSignal(profile),
+    topicalBreadthSignal(profile),
+    questionSignal(profile),
+    offScriptDissentSignal(profile),
+  ]);
+}
+
+function selfCorrectionSignal(profile) {
+  const key = 'self-correction';
+  const label = 'Admits being wrong';
+  const weight = 2.5;
+
+  const bodies = profile.comments.map((c) => c.body).filter((b) => typeof b === 'string' && b.length);
+  if (bodies.length < MIN_COMMENTS) {
+    return unmeasured({
+      key, label, weight, evidence: `Only ${bodies.length} comments with retrievable text — needs at least ${MIN_COMMENTS}.`,
+    });
+  }
+
+  const examples = [];
+  let hits = 0;
+  for (const body of bodies) {
+    const matched = SELF_CORRECTION_PATTERNS.find((re) => re.test(body));
+    if (matched) {
+      hits += 1;
+      if (examples.length < 3) {
+        const m = body.match(matched);
+        if (m) examples.push(m[0].trim().toLowerCase());
+      }
+    }
+  }
+
+  const share = hits / bodies.length;
+  const strength = rescale(share, 0.005, 0.05);
+
+  return signal({
+    key,
+    label,
+    weight,
+    strength,
+    value: { hits, sample: bodies.length, share, examples },
+    evidence: hits
+      ? `${hits} of ${bodies.length} comments (${pct(share)}) contain self-correction language — e.g. ${examples.map((e) => `"${e}"`).join(', ')}. Conceding a point is the opposite of what a scripted account is for.`
+      : `None of the ${bodies.length} comments contain self-correction language. That is an absence of positive evidence, not evidence of anything.`,
+  });
+}
+
+/**
+ * Sustained back-and-forth: threads the account stayed in, replying to other
+ * commenters rather than only to the submission. Requiring at least one
+ * non-top-level comment is what makes this "an argument" rather than "three
+ * separate thoughts about the same post".
+ */
+function sustainedThreadSignal(profile) {
+  const key = 'sustained-threads';
+  const label = 'Stays in conversations';
+  const weight = 2;
+
+  const threads = new Map();
+  for (const c of commentsOldestFirst(profile)) {
+    const id = c.threadId ?? c.id;
+    if (!id) continue;
+    if (!threads.has(id)) threads.set(id, []);
+    threads.get(id).push(c);
+  }
+
+  if (threads.size < MIN_THREADS) {
+    return unmeasured({
+      key, label, weight, evidence: `Only ${threads.size} distinct threads in the retrieved history — needs at least ${MIN_THREADS}.`,
+    });
+  }
+
+  let sustained = 0;
+  let deepest = 0;
+  for (const comments of threads.values()) {
+    if (comments.length > deepest) deepest = comments.length;
+    const repliesToOthers = comments.filter((c) => c.isTopLevel === false).length;
+    if (comments.length >= SUSTAINED_MIN_COMMENTS && repliesToOthers >= 1) sustained += 1;
+  }
+
+  const share = sustained / threads.size;
+  const strength = rescale(share, 0.02, 0.25);
+
+  return signal({
+    key,
+    label,
+    weight,
+    strength,
+    value: { sustained, threads: threads.size, share, deepestThread: deepest },
+    evidence: sustained
+      ? `Held sustained back-and-forth in ${sustained} of ${threads.size} threads (${pct(share)}), replying to other commenters rather than only to the submission; the longest run was ${deepest} comments in one thread.`
+      : `No thread received ${SUSTAINED_MIN_COMMENTS}+ comments including a reply to another commenter, across ${threads.size} threads.`,
+  });
+}
+
+/**
+ * Topical breadth. Real people are interested in more than one thing. Scored
+ * from both how much sits OUTSIDE the largest cluster and how many distinct
+ * groups there are, because either alone is gameable: an account in two groups
+ * 50/50 has a low top share, and an account touching 30 groups once each while
+ * spending 90% of itself in one has a high distinct count.
+ */
+function topicalBreadthSignal(profile) {
+  const key = 'topical-breadth';
+  const label = 'Range of interests';
+  const weight = 2;
+
+  const histogram = groupHistogram([...profile.comments, ...profile.posts]);
+  const counts = [...histogram.values()];
+  const total = counts.reduce((a, b) => a + b, 0);
+
+  if (total < MIN_GROUP_ITEMS) {
+    return unmeasured({
+      key, label, weight, evidence: `Only ${total} items carry a group — needs at least ${MIN_GROUP_ITEMS}.`,
+    });
+  }
+
+  const topCount = Math.max(...counts);
+  const topShare = topCount / total;
+  const outside = 1 - topShare;
+  const entropy = normalizedEntropy(counts, Math.max(histogram.size, 2)) ?? 0;
+
+  const strength = clamp01(
+    0.5 * rescale(outside, 0.15, 0.75)
+    + 0.5 * rescale(histogram.size, 2, 15),
+  );
+
+  return signal({
+    key,
+    label,
+    weight,
+    strength,
+    value: { distinctGroups: histogram.size, topShare, outsideTopShare: outside, entropy },
+    evidence: `Active in ${histogram.size} ${plural(histogram.size, 'group')} across ${total} items; the largest accounts for ${pct(topShare)}, leaving ${pct(outside)} elsewhere (spread ${entropy.toFixed(2)} of 1.00).`,
+  });
+}
+
+function questionSignal(profile) {
+  const key = 'asks-questions';
+  const label = 'Asks questions';
+  const weight = 1.5;
+
+  const bodies = profile.comments.map((c) => c.body).filter((b) => typeof b === 'string' && b.length);
+  if (bodies.length < MIN_COMMENTS) {
+    return unmeasured({
+      key, label, weight, evidence: `Only ${bodies.length} comments with retrievable text — needs at least ${MIN_COMMENTS}.`,
+    });
+  }
+
+  let questions = 0;
+  let helpSeeking = 0;
+  for (const body of bodies) {
+    if (body.includes('?')) questions += 1;
+    if (HELP_SEEKING_PATTERNS.some((re) => re.test(body))) helpSeeking += 1;
+  }
+
+  const share = questions / bodies.length;
+  const strength = clamp01(
+    0.7 * rescale(share, 0.03, 0.30)
+    + 0.3 * rescale(helpSeeking / bodies.length, 0.005, 0.06),
+  );
+
+  return signal({
+    key,
+    label,
+    weight,
+    strength,
+    value: { questions, helpSeeking, sample: bodies.length, share },
+    evidence: `${questions} of ${bodies.length} comments (${pct(share)}) ask a question, including ${helpSeeking} that explicitly seek help or admit uncertainty.`,
+  });
+}
+
+/**
+ * ARGUES OFF-SCRIPT — net-downvoted comments inside the account's OWN dominant
+ * group. The rarest and best signal in the file: a propaganda account does not
+ * take unpopular positions in front of the audience it was created to
+ * influence. Doing so costs it the standing it exists to accumulate.
+ *
+ * Implemented carefully, because it is easy to get wrong in three ways:
+ *
+ *   * SCORE SEMANTICS. On this platform a comment starts at 1 (your own vote),
+ *     so "downvoted" is score <= 0, not score < some average. A hidden score
+ *     is null from the source and is excluded from the denominator entirely —
+ *     counting hidden as undownvoted would manufacture consensus.
+ *
+ *   * IT MUST BE THEIR OWN TURF. Being downvoted in a group you visited once
+ *     is not courage, it is being an outsider. So it only looks inside a group
+ *     that is genuinely dominant, by share AND by absolute sample.
+ *
+ *   * MORE IS NOT BETTER. Past a point this stops being principled dissent and
+ *     starts being an account its own community dislikes, which is not the
+ *     same evidence at all. Strength is therefore DAMPED above 35% rather than
+ *     saturating, so a troll cannot ride this signal to a vouch.
+ *
+ * When no dissent is found the direction is pinned to 'neutral' rather than
+ * the derived 'lowers': absence of a rare positive is not a mark against
+ * anyone, and letting it read as one would quietly punish every ordinary
+ * account for not being remarkable.
+ */
+function offScriptDissentSignal(profile) {
+  const key = 'off-script-dissent';
+  const label = 'Takes unpopular positions on home turf';
+  const weight = 3;
+
+  const withGroup = profile.comments.filter((c) => c.group);
+  const histogram = groupHistogram(withGroup);
+  if (!histogram.size) {
+    return unmeasured({ key, label, weight, evidence: 'No comments carry a group.' });
+  }
+
+  const [topGroup, topCount] = [...histogram.entries()].sort((a, b) => b[1] - a[1])[0];
+  const topShare = topCount / withGroup.length;
+
+  const scored = withGroup.filter((c) => c.group === topGroup && Number.isFinite(c.score));
+
+  if (topShare < DOMINANT_MIN_SHARE || scored.length < DOMINANT_MIN_SCORED_COMMENTS) {
+    return unmeasured({
+      key,
+      label,
+      weight,
+      value: { topGroup, topShare, scoredInTopGroup: scored.length },
+      evidence: `No group is dominant enough to check for off-script dissent — the largest, "${topGroup}", holds ${pct(topShare)} of comments with ${scored.length} carrying a visible score (needs ${pct(DOMINANT_MIN_SHARE)} and ${DOMINANT_MIN_SCORED_COMMENTS}).`,
+    });
+  }
+
+  const downvoted = scored.filter((c) => c.score <= 0);
+  const share = downvoted.length / scored.length;
+
+  if (downvoted.length === 0) {
+    return signal({
+      key,
+      label,
+      weight,
+      strength: 0,
+      direction: 'neutral',
+      value: { topGroup, scored: scored.length, downvoted: 0, share: 0 },
+      evidence: `None of the ${scored.length} scored comments in the account's dominant group ("${topGroup}") were net-downvoted. No evidence either way that it will take an unpopular position there.`,
+    });
+  }
+
+  const damping = 1 - rescale(share, DISSENT_DAMPING_START, DISSENT_DAMPING_END);
+  const strength = clamp01((0.3 + 0.7 * rescale(share, 0.005, 0.06)) * damping);
+
+  const worst = downvoted.map((c) => c.score).sort((a, b) => a - b).slice(0, 3);
+  const dampingNote = share > DISSENT_DAMPING_START
+    ? ' At this rate it reads less like principled dissent and more like an account its own community dislikes, so the signal is discounted.'
+    : ' A scripted account does not spend standing this way in front of its own audience.';
+
+  return signal({
+    key,
+    label,
+    weight,
+    strength,
+    value: { topGroup, scored: scored.length, downvoted: downvoted.length, share, worstScores: worst },
+    evidence: `${downvoted.length} of ${scored.length} scored comments (${pct(share)}) in the account's dominant group ("${topGroup}") were net-downvoted, worst at ${worst.join(', ')}.${dampingNote}`,
+  });
+}

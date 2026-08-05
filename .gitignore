@@ -1,0 +1,8 @@
+# The optional server's SQLite cache. Rebuildable from the public archive on
+# demand, and it holds strangers' comment bodies until their TTL expires --
+# neither of which belongs in git. (Root .gitignore already covers .env.)
+data/
+
+# Only the optional server needs an install; the extension and the scoring core
+# run with nothing installed at all.
+node_modules/
