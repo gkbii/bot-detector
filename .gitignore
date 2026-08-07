@@ -13,3 +13,8 @@ data/
 # Only the optional server needs an install; the extension and the scoring core
 # run with nothing installed at all.
 node_modules/
+
+# Per-machine Claude Code permissions, if whoever is working on this uses it.
+# Local to one checkout by definition, and the same reason as `.env`: this repo
+# stands alone, so there is no parent file to inherit the rule from.
+.claude/settings.local.json
