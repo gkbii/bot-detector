@@ -60,6 +60,12 @@
           ':scope > [slot="commentMeta"] faceplate-hovercard',
           ':scope > [slot="commentMeta"]',
         ],
+        // New Reddit renames these slots from time to time — that rename is
+        // exactly what broke comment badging while post badging kept working.
+        // When every `anchor` selector above misses, fall back to the comment's
+        // own author link (see ownAuthorLink) so a rename moves the badge rather
+        // than dropping it.
+        ownAuthorLink: true,
       },
       post: {
         container: 'shreddit-post',
@@ -70,6 +76,7 @@
           ':scope [slot="credit-bar"] faceplate-hovercard',
           ':scope [slot="credit-bar"]',
         ],
+        ownAuthorLink: true,
       },
       self: [
         '#user-drawer-content a[href^="/user/"]',
@@ -319,7 +326,36 @@
       const node = container.querySelector(selector);
       if (node) return node;
     }
+    // Every pinned slot selector missed. On new Reddit this happens when a slot
+    // is renamed; rather than silently drop the badge, insert next to the
+    // container's own author link.
+    if (spec.ownAuthorLink) {
+      const link = ownAuthorLink(container, spec.container);
+      if (link) return link;
+    }
     return null;
+  }
+
+  // The comment's own author link, and only its own. shreddit-comment elements
+  // nest — a reply is a descendant shreddit-comment — so a bare querySelector
+  // would happily return a child comment's author and hang this comment's badge
+  // inside a reply. Requiring the link's nearest container to be *this* one
+  // keeps us on the right meta row. The username test skips post-body mentions
+  // of /user/x that are not real handles.
+  //
+  // The byline has two links to the same profile — the avatar (wraps only an
+  // image) and the name (has visible text). Prefer the name: anchoring on the
+  // avatar drops the badge into the narrow avatar column, where the two chips
+  // overlap the name row. The avatar is only the last-resort fallback.
+  function ownAuthorLink(container, containerSelector) {
+    let avatarLink = null;
+    for (const link of container.querySelectorAll('a[href*="/user/"]')) {
+      if (link.closest(containerSelector) !== container) continue;
+      if (!usernameFromHref(link.getAttribute('href'))) continue;
+      if ((link.textContent || '').trim()) return link;
+      if (!avatarLink) avatarLink = link;
+    }
+    return avatarLink;
   }
 
   // -------------------------------------------------------------------------
