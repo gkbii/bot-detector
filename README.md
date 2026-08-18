@@ -679,7 +679,29 @@ Stated in `server/index.js`'s header because this thing judges real people:
 
 ## Adding a second platform
 
-TikTok and X are the stated next targets, and the shape is already in place:
+TikTok and X were the stated next targets, and both were probed against the
+live services on 2026-08-18 — [`PLATFORMS.md`](PLATFORMS.md) is what came back.
+The short version is that the seam holds and the *data* does not:
+
+* **TikTok cannot be done at all.** There is no comments-by-account view
+  anywhere on the platform, signed in or not, so `profile.comments` could only
+  ever be filled from videos — and a video is never a reply, which makes
+  `conversation-depth` and `drive-by-ratio` fire on the file format rather than
+  on the account. The real payload scores `insufficient-data` on all three
+  axes; the best case that does not exist yet scores a normal human at
+  automation `moderate`, authenticity `0`.
+* **X has one unauthenticated route and it reports the endpoint, not the
+  account.** `syndication.twitter.com/srv/timeline-profile` returns 20 or 100
+  items depending on the account, allows 30 accounts per 15 minutes per IP, and
+  is **not a contiguous timeline**: it includes pinned tweets, the 100-item
+  variant is sampled across years, and four of twelve accounts came back 279 to
+  554 days stale. Across those twelve, agenda returned `insufficient-data` six
+  times — and where signals did fire they fired on artefacts, scoring `@POTUS`
+  `high` on dormancy from a pinned tweet and `@NYTimes` `high` on
+  round-the-clock posting from a payload nine months old.
+
+The shape underneath is nonetheless already right, and the X mapping needed no
+new field:
 
 * `profile.js`'s `AccountProfile` is **platform-neutral** — `group` not
   `subreddit`, `threadId` not `link_id`, `replyCount` not `num_comments`. The
