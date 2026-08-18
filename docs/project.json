@@ -1,0 +1,97 @@
+{
+  "slug": "bot-detector",
+  "name": "Bot Detector",
+  "tagline": "Scores a Reddit commenter on three separate things, because a paid human passes every bot check.",
+  "status": "live",
+  "repos": [
+    "bot-detector"
+  ],
+  "diagramCaption": "Three scores that never meet, computed in your own browser from a public archive, with everything it could not see stated on the badge.",
+  "diagramCaptionSimple": "It works out three separate scores inside your own browser, and always says what it was not able to check.",
+  "howToUse": {
+    "intro": "It is public and installs unpacked. Four steps, then it works as you scroll.",
+    "introSimple": "It is free to get and installs in one step. Four things, then it just works.",
+    "steps": [
+      {
+        "label": "Get the code: github.com/gkbii/bot-detector",
+        "detail": "Public. Clone or download it — no build step.",
+        "detailSimple": "Download it from GitHub. Nothing to compile."
+      },
+      {
+        "label": "Load it: Developer mode, then Load unpacked",
+        "detail": "Point the browser at the extension folder. That is the whole install.",
+        "detailSimple": "Turn on developer mode in your browser and point it at the folder."
+      },
+      {
+        "label": "Open a Reddit thread and scroll",
+        "detail": "A badge appears next to each commenter as it scores them.",
+        "detailSimple": "Open Reddit and a small badge appears next to each person."
+      },
+      {
+        "label": "Click a badge for the working behind the score",
+        "detail": "Every signal that fired, how much was read, and what it could not judge.",
+        "detailSimple": "Click a badge to see why it decided that, and what it could not tell."
+      }
+    ]
+  },
+  "features": [
+    {
+      "id": "three-scores-never-one-number",
+      "name": "Three Scores, Never One Number",
+      "summary": "Automation, agenda and evidence of a real person are scored separately and never averaged into one.",
+      "summarySimple": "It gives three separate scores instead of one, and never blends them together.",
+      "detailHtml": "<p>Someone paid to post talking points has a real account age, organic timing and varied language — they score clean on every automation signal there is. Averaging the three would hide exactly the case this exists to find. The third score matters too: a tool that can only accuse never answers who is arguing in good faith.</p>",
+      "detailHtmlSimple": "<p>A real person paid to push a message looks completely normal on every automation check. Blending the scores would hide them. The third score exists so the tool can also say when someone seems genuine.</p>",
+      "nodes": ["profile", "gate", "automation", "agenda", "authenticity", "verdict"]
+    },
+    {
+      "id": "no-account-no-server",
+      "name": "No Account, No Server, Nothing to Sign Up For",
+      "summary": "It installs on any laptop in one step and does the whole job inside the browser.",
+      "summarySimple": "It works on any computer straight away, with nothing to sign up for.",
+      "detailHtml": "<p>Reddit's own feed refuses a plain server request whatever headers it sends, so there is no server-side path to it at all — which forced the scoring into the browser and, incidentally, made the tool need nothing from me. One worker owns every lookup, so five open tabs stay one polite client of a free public archive.</p>",
+      "detailHtmlSimple": "<p>Reddit blocks requests from servers, so everything had to happen inside the browser instead. That turned out well: it needs no account and nothing running at my end. It also asks the archive it reads politely, however many tabs you have open.</p>",
+      "nodes": ["thread", "content", "worker", "cache", "local", "archive", "badge"]
+    },
+    {
+      "id": "says-what-it-could-not-see",
+      "name": "It Says What It Could Not See",
+      "summary": "A report over 100 of 2,568 comments says so, and not enough data is its own visible answer.",
+      "summarySimple": "It always says how much it actually looked at, and can answer that it does not know.",
+      "detailHtml": "<p>Absence of evidence must not read as innocence or as guilt, so a thin account gets no score at all rather than a flattering low one. Two of its strongest signals once fired on the shape of the tool's own paging — a twelve-year dormancy that was an artefact — so the window is now bounded to what it can prove.</p>",
+      "detailHtmlSimple": "<p>It always says how many comments it managed to read, and if there is not enough to judge it says so rather than guessing. Two of its strongest signals once reacted to the tool's own behaviour instead of the account, so it now only claims what it can actually show.</p>",
+      "nodes": ["profile", "gate", "verdict", "badge", "provider"]
+    },
+    {
+      "id": "optional-read-citations-checked",
+      "name": "The Optional Read, With Its Citations Checked",
+      "summary": "You can add a model read of what an account argues. Anything it cannot cite is dropped.",
+      "summarySimple": "You can turn on a smarter read of what someone argues, and anything it cannot prove is thrown away.",
+      "detailHtml": "<p>Nothing here needs it, and running without it loses only two things: the judgement pattern-matching cannot make, and a lookup cache shared between machines. The model may cite only the numbered comments it was handed; an unresolvable citation is dropped, a finding with none left is rejected, and nothing survives means no block at all.</p>",
+      "detailHtmlSimple": "<p>It works fine without this. Turned on, it asks a model what the account is actually arguing — and the model can only point at comments it was given. Anything it cannot point at is thrown away rather than shown.</p>",
+      "nodes": ["provider", "backend", "pack", "llm", "shared", "verdict"]
+    }
+  ],
+  "links": [
+    {
+      "href": "https://github.com/gkbii/bot-detector",
+      "label": "Get it on GitHub",
+      "description": "The extension itself, public and installable — the only part of this lab that runs on your machine rather than mine. Load it unpacked and it scores in your browser: no account, no build step.",
+      "descriptionSimple": "The add-on itself, free and ready to install — the only thing here that runs on your computer. Load it in your browser and it works: no account, nothing to set up."
+    }
+  ],
+  "media": [],
+  "ignore": [
+    "docs/**",
+    "README.md",
+    "EVALUATION.md",
+    "LICENSE",
+    "**/*.md",
+    "test/**",
+    "server/test/**",
+    "**/*.test.js",
+    "package-lock.json",
+    ".gitignore",
+    ".env.example"
+  ]
+}

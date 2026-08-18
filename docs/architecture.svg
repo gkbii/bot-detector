@@ -1,0 +1,537 @@
+<svg id="bot-detector" xmlns="http://www.w3.org/2000/svg" class="flowchart" viewBox="0 -35 3736.296875 600.6847534179688" role="graphics-document document" aria-roledescription="flowchart-v2" aria-labelledby="bot-detector-diagram-title">
+  <title id="bot-detector-diagram-title">Architecture diagram: Bot Detector</title>
+  <style>
+    #bot-detector{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:var(--text, #1c1a17);}
+    @keyframes edge-animation-frame{from{stroke-dashoffset:0;}}
+    @keyframes dash{to{stroke-dashoffset:0;}}
+    #bot-detector .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}
+    #bot-detector .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}
+    #bot-detector .error-icon{fill:var(--bg-alt, #f1efe9);}
+    #bot-detector .error-text{fill:var(--text, #1c1a17);stroke:var(--text, #1c1a17);}
+    #bot-detector .edge-thickness-normal{stroke-width:1px;}
+    #bot-detector .edge-thickness-thick{stroke-width:3.5px;}
+    #bot-detector .edge-pattern-solid{stroke-dasharray:0;}
+    #bot-detector .edge-thickness-invisible{stroke-width:0;fill:none;}
+    #bot-detector .edge-pattern-dashed{stroke-dasharray:3;}
+    #bot-detector .edge-pattern-dotted{stroke-dasharray:2;}
+    #bot-detector .marker{fill:var(--text-muted, #635e56);stroke:var(--text-muted, #635e56);}
+    #bot-detector .marker.cross{stroke:var(--text-muted, #635e56);}
+    #bot-detector svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}
+    #bot-detector p{margin:0;}
+    #bot-detector .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:var(--text, #1c1a17);}
+    #bot-detector .cluster-label text{fill:var(--text, #1c1a17);}
+    #bot-detector .cluster-label span{color:var(--text, #1c1a17);}
+    #bot-detector .cluster-label span p{background-color:transparent;}
+    #bot-detector .label text,#bot-detector span{fill:var(--text, #1c1a17);color:var(--text, #1c1a17);}
+    #bot-detector .node rect,#bot-detector .node circle,#bot-detector .node ellipse,#bot-detector .node polygon,#bot-detector .node path{fill:var(--card-bg, #ffffff);stroke:var(--border, #e3ded4);stroke-width:1px;}
+    #bot-detector .rough-node .label text,#bot-detector .node .label text,#bot-detector .image-shape .label,#bot-detector .icon-shape .label{text-anchor:middle;}
+    #bot-detector .node .katex path{fill:var(--text, #1c1a17);stroke:var(--text, #1c1a17);stroke-width:1px;}
+    #bot-detector .rough-node .label,#bot-detector .node .label,#bot-detector .image-shape .label,#bot-detector .icon-shape .label{text-align:center;}
+    #bot-detector .node.clickable{cursor:pointer;}
+    #bot-detector .root .anchor path{fill:var(--text-muted, #635e56)!important;stroke-width:0;stroke:var(--text-muted, #635e56);}
+    #bot-detector .arrowheadPath{fill:var(--text-muted, #635e56);}
+    #bot-detector .edgePath .path{stroke:var(--text-muted, #635e56);stroke-width:1px;}
+    #bot-detector .flowchart-link{stroke:var(--text-muted, #635e56);fill:none;}
+    #bot-detector .edgeLabel{background-color:var(--bg, #fbfaf8);text-align:center;}
+    #bot-detector .edgeLabel p{background-color:var(--bg, #fbfaf8);}
+    #bot-detector .edgeLabel rect{opacity:0.5;background-color:var(--bg, #fbfaf8);fill:var(--bg, #fbfaf8);}
+    #bot-detector .labelBkg{background-color:var(--bg, #fbfaf8);}
+    #bot-detector .cluster rect{fill:var(--bg-alt, #f1efe9);stroke:var(--border, #e3ded4);stroke-width:1px;}
+    #bot-detector .cluster text{fill:var(--text, #1c1a17);}
+    #bot-detector .cluster span{color:var(--text, #1c1a17);}
+    #bot-detector div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:var(--bg-alt, #f1efe9);border:1px solid var(--border, #e3ded4);border-radius:2px;pointer-events:none;z-index:100;}
+    #bot-detector .flowchartTitleText{text-anchor:middle;font-size:18px;fill:var(--text, #1c1a17);}
+    #bot-detector rect.text{fill:none;stroke-width:0;}
+    #bot-detector .icon-shape,#bot-detector .image-shape{background-color:var(--bg, #fbfaf8);text-align:center;}
+    #bot-detector .icon-shape p,#bot-detector .image-shape p{background-color:var(--bg, #fbfaf8);padding:2px;}
+    #bot-detector .icon-shape .label rect,#bot-detector .image-shape .label rect{opacity:0.5;background-color:var(--bg, #fbfaf8);fill:var(--bg, #fbfaf8);}
+    #bot-detector .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}
+    #bot-detector .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}
+    #bot-detector .node .neo-node{stroke:var(--border, #e3ded4);}
+    #bot-detector [data-look="neo"].node rect,#bot-detector [data-look="neo"].cluster rect,#bot-detector [data-look="neo"].node polygon{stroke:url(#bot-detector-gradient);filter:drop-shadow( 1px 2px 2px var(--border, #e3ded4));}
+    #bot-detector [data-look="neo"].swimlane.cluster rect{filter:none;}
+    #bot-detector [data-look="neo"].node path{stroke:url(#bot-detector-gradient);stroke-width:1px;}
+    #bot-detector [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px var(--border, #e3ded4));}
+    #bot-detector [data-look="neo"].node .neo-line path{stroke:var(--border, #e3ded4);filter:none;}
+    #bot-detector [data-look="neo"].node circle{stroke:url(#bot-detector-gradient);filter:drop-shadow( 1px 2px 2px var(--border, #e3ded4));}
+    #bot-detector [data-look="neo"].node circle .state-start{fill:var(--text, #1c1a17);}
+    #bot-detector [data-look="neo"].icon-shape .icon{fill:url(#bot-detector-gradient);filter:drop-shadow( 1px 2px 2px var(--border, #e3ded4));}
+    #bot-detector [data-look="neo"].icon-shape .icon-neo path{stroke:url(#bot-detector-gradient);filter:drop-shadow( 1px 2px 2px var(--border, #e3ded4));}
+    #bot-detector :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}
+  </style>
+  <g>
+    <marker id="bot-detector_flowchart-v2-pointEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path>
+    </marker>
+    <marker id="bot-detector_flowchart-v2-pointStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="4.5" refY="5" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path>
+    </marker>
+    <marker id="bot-detector_flowchart-v2-pointEnd-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="11.5" refY="7" markerUnits="userSpaceOnUse" markerWidth="10.5" markerHeight="14" orient="auto">
+      <path d="M 0 0 L 11.5 7 L 0 14 z" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></path>
+    </marker>
+    <marker id="bot-detector_flowchart-v2-pointStart-margin" class="marker flowchart-v2" viewBox="0 0 11.5 14" refX="1" refY="7" markerUnits="userSpaceOnUse" markerWidth="11.5" markerHeight="14" orient="auto">
+      <polygon points="0,7 11.5,14 11.5,0" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></polygon>
+    </marker>
+    <marker id="bot-detector_flowchart-v2-circleEnd" class="marker flowchart-v2" viewBox="0 0 10 10" refX="11" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto">
+      <circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle>
+    </marker>
+    <marker id="bot-detector_flowchart-v2-circleStart" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-1" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto">
+      <circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle>
+    </marker>
+    <marker id="bot-detector_flowchart-v2-circleEnd-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refY="5" refX="12.25" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto">
+      <circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle>
+    </marker>
+    <marker id="bot-detector_flowchart-v2-circleStart-margin" class="marker flowchart-v2" viewBox="0 0 10 10" refX="-2" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto">
+      <circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 0; stroke-dasharray: 1, 0;"></circle>
+    </marker>
+    <marker id="bot-detector_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="12" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto">
+      <path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path>
+    </marker>
+    <marker id="bot-detector_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewBox="0 0 11 11" refX="-1" refY="5.2" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto">
+      <path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path>
+    </marker>
+    <marker id="bot-detector_flowchart-v2-crossEnd-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="17.7" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto">
+      <path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5;"></path>
+    </marker>
+    <marker id="bot-detector_flowchart-v2-crossStart-margin" class="marker cross flowchart-v2" viewBox="0 0 15 15" refX="-3.5" refY="7.5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto">
+      <path d="M 1,1 L 14,14 M 1,14 L 14,1" class="arrowMarkerPath" style="stroke-width: 2.5; stroke-dasharray: 1, 0;"></path>
+    </marker>
+    <g class="root">
+      <g class="clusters"></g>
+      <g class="edgePaths">
+        <path d="M107.207,284.456L136.027,319.657C164.846,354.858,222.486,425.26,269.61,460.462C316.734,495.663,353.344,495.663,371.648,495.663L389.953,495.663" id="bot-detector-L_thread_content_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_thread_content_0" data-points="W3sieCI6MTA3LjIwNjk4NTczMjg3NTIyLCJ5IjoyODQuNDU2Mjc5NzU0NjM4N30seyJ4IjoyODAuMTI1LCJ5Ijo0OTUuNjYyNTU5NTA5Mjc3MzR9LHsieCI6MzkzLjk1MzEyNSwieSI6NDk1LjY2MjU1OTUwOTI3NzM0fV0=" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M548.047,495.663L567.46,495.663C586.872,495.663,625.698,495.663,663.857,495.663C702.016,495.663,739.508,495.663,758.254,495.663L777,495.663" id="bot-detector-L_content_worker_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_content_worker_0" data-points="W3sieCI6NTQ4LjA0Njg3NSwieSI6NDk1LjY2MjU1OTUwOTI3NzM0fSx7IngiOjY2NC41MjM0Mzc1LCJ5Ijo0OTUuNjYyNTU5NTA5Mjc3MzR9LHsieCI6NzgxLCJ5Ijo0OTUuNjYyNTU5NTA5Mjc3MzR9XQ==" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M929.788,520.163L935.769,522.288C941.75,524.413,953.711,528.663,977.271,530.788C1000.831,532.913,1035.99,532.913,1087.71,532.913C1139.43,532.913,1207.711,532.913,1278.293,532.913C1348.875,532.913,1421.758,532.913,1494.982,532.913C1568.206,532.913,1641.771,532.913,1719.016,532.913C1796.26,532.913,1877.185,532.913,1941.207,532.913C2005.229,532.913,2052.349,532.913,2094.257,532.913C2136.164,532.913,2172.859,532.913,2209.555,532.913C2246.25,532.913,2282.945,532.913,2323.408,532.913C2363.87,532.913,2408.099,532.913,2452.328,532.913C2496.557,532.913,2540.786,532.913,2583.919,532.913C2627.052,532.913,2669.089,532.913,2727.081,532.913C2785.073,532.913,2859.021,532.913,2936.324,532.913C3013.628,532.913,3094.286,532.913,3158.99,532.913C3223.693,532.913,3272.44,532.913,3300.319,532.481C3328.197,532.05,3335.207,531.188,3338.712,530.757L3342.217,530.326" id="bot-detector-L_worker_cache_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_worker_cache_0" data-points="W3sieCI6OTI5Ljc4ODQzMzMwNTM2OTIsInkiOjUyMC4xNjI1NTk1MDkyNzczfSx7IngiOjk2NS42NzE4NzUsInkiOjUzMi45MTI1NTk1MDkyNzczfSx7IngiOjEwNzEuMTQ4NDM3NSwieSI6NTMyLjkxMjU1OTUwOTI3NzN9LHsieCI6MTI3NS45OTIxODc1LCJ5Ijo1MzIuOTEyNTU5NTA5Mjc3M30seyJ4IjoxNDk0LjY0MDYyNSwieSI6NTMyLjkxMjU1OTUwOTI3NzN9LHsieCI6MTcxNS4zMzU5Mzc1LCJ5Ijo1MzIuOTEyNTU5NTA5Mjc3M30seyJ4IjoxOTU4LjEwOTM3NSwieSI6NTMyLjkxMjU1OTUwOTI3NzN9LHsieCI6MjA5OS40Njg3NSwieSI6NTMyLjkxMjU1OTUwOTI3NzN9LHsieCI6MjIwOS41NTQ2ODc1LCJ5Ijo1MzIuOTEyNTU5NTA5Mjc3M30seyJ4IjoyMzE5LjY0MDYyNSwieSI6NTMyLjkxMjU1OTUwOTI3NzN9LHsieCI6MjQ1Mi4zMjgxMjUsInkiOjUzMi45MTI1NTk1MDkyNzczfSx7IngiOjI1ODUuMDE1NjI1LCJ5Ijo1MzIuOTEyNTU5NTA5Mjc3M30seyJ4IjoyNzExLjEyNSwieSI6NTMyLjkxMjU1OTUwOTI3NzN9LHsieCI6MjkzMi45Njg3NSwieSI6NTMyLjkxMjU1OTUwOTI3NzN9LHsieCI6MzE3NC45NDUzMTI1LCJ5Ijo1MzIuOTEyNTU5NTA5Mjc3M30seyJ4IjozMzIxLjE4NzUsInkiOjUzMi45MTI1NTk1MDkyNzczfSx7IngiOjMzNDYuMTg3NSwieSI6NTI5LjgzNzcwNjA0NTI2Mjd9XQ==" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M3458.797,522.913L3468.941,522.913C3479.086,522.913,3499.375,522.913,3530.233,467.003C3561.092,411.094,3602.52,299.276,3623.233,243.366L3643.947,187.457" id="bot-detector-L_cache_badge_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_cache_badge_0" data-points="W3sieCI6MzQ1OC43OTY4NzUsInkiOjUyMi45MTI1NTk1MDkyNzczfSx7IngiOjM1MTkuNjY0MDYyNSwieSI6NTIyLjkxMjU1OTUwOTI3NzN9LHsieCI6MzY0NS4zMzcwMjY0ODU1OSwieSI6MTgzLjcwNjI3OTc1NDYzODY3fV0=" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M874.196,471.163L889.442,443.204C904.688,415.246,935.18,359.329,953.926,331.371C972.672,303.413,979.672,303.413,983.172,303.413L986.672,303.413" id="bot-detector-L_worker_provider_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_worker_provider_0" data-points="W3sieCI6ODc0LjE5NjA0Mzk2OTQ0MDgsInkiOjQ3MS4xNjI1NTk1MDkyNzczNH0seyJ4Ijo5NjUuNjcxODc1LCJ5IjozMDMuNDEyNTU5NTA5Mjc3MzR9LHsieCI6OTkwLjY3MTg3NSwieSI6MzAzLjQxMjU1OTUwOTI3NzM0fV0=" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M1098.424,327.913L1128.019,354.496C1157.613,381.079,1216.803,434.246,1266.464,458.168C1316.126,482.089,1356.26,476.766,1376.327,474.105L1396.394,471.443" id="bot-detector-L_provider_local_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_provider_local_0" data-points="W3sieCI6MTA5OC40MjM4MjgxMjUsInkiOjMyNy45MTI1NTk1MDkyNzczNH0seyJ4IjoxMjc1Ljk5MjE4NzUsInkiOjQ4Ny40MTI1NTk1MDkyNzczNH0seyJ4IjoxNDAwLjM1OTM3NSwieSI6NDcwLjkxNzM2NTMxMTk3MTV9XQ==" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M1097.844,278.913L1127.535,251.663C1157.226,224.413,1216.609,169.913,1266.611,142.663C1316.612,115.413,1357.232,115.413,1377.542,115.413L1397.852,115.413" id="bot-detector-L_provider_backend_0" class="edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_provider_backend_0" data-points="W3sieCI6MTA5Ny44NDM1MDA2NjQ4OTM2LCJ5IjoyNzguOTEyNTU5NTA5Mjc3MzR9LHsieCI6MTI3NS45OTIxODc1LCJ5IjoxMTUuNDEyNTU5NTA5Mjc3MzR9LHsieCI6MTQwMS44NTE1NjI1LCJ5IjoxMTUuNDEyNTU5NTA5Mjc3MzR9XQ==" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M1151.625,307.341L1172.353,308.353C1193.081,309.365,1234.536,311.389,1284.993,332.116C1335.449,352.842,1394.906,392.272,1424.635,411.987L1454.363,431.702" id="bot-detector-L_provider_local_2" class="edge-thickness-normal edge-pattern-dotted edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_provider_local_2" data-points="W3sieCI6MTE1MS42MjUsInkiOjMwNy4zNDEyMzk5MDU5MjExfSx7IngiOjEyNzUuOTkyMTg3NSwieSI6MzEzLjQxMjU1OTUwOTI3NzM0fSx7IngiOjE0NTcuNjk2NTc4NjYzNzkzMiwieSI6NDMzLjkxMjU1OTUwOTI3NzM0fV0=" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M1588.922,458.413L1609.991,458.413C1631.06,458.413,1673.198,458.413,1723.271,447.481C1773.344,436.549,1831.353,414.686,1860.357,403.755L1889.361,392.823" id="bot-detector-L_local_archive_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_local_archive_0" data-points="W3sieCI6MTU4OC45MjE4NzUsInkiOjQ1OC40MTI1NTk1MDkyNzczNH0seyJ4IjoxNzE1LjMzNTkzNzUsInkiOjQ1OC40MTI1NTk1MDkyNzczNH0seyJ4IjoxODkzLjEwNDQ2NTUwNTQ2NDUsInkiOjM5MS40MTI1NTk1MDkyNzczNH1d" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M1579.791,139.913L1602.382,146.413C1624.973,152.913,1670.154,165.913,1727.407,199.254C1784.66,232.596,1853.984,286.28,1888.647,313.122L1923.309,339.963" id="bot-detector-L_backend_archive_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_backend_archive_0" data-points="W3sieCI6MTU3OS43OTA3ODQ5NDA5NDQ4LCJ5IjoxMzkuOTEyNTU5NTA5Mjc3MzR9LHsieCI6MTcxNS4zMzU5Mzc1LCJ5IjoxNzguOTEyNTU5NTA5Mjc3MzR9LHsieCI6MTkyNi40NzEzNDcyNDA2OTE2LCJ5IjozNDIuNDEyNTU5NTA5Mjc3MzR9XQ==" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M1572.77,90.913L1596.531,83.462C1620.292,76.01,1667.814,61.108,1717.813,53.657C1767.813,46.206,1820.289,46.206,1846.527,46.206L1872.766,46.206" id="bot-detector-L_backend_shared_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_backend_shared_0" data-points="W3sieCI6MTU3Mi43Njk4ODExMjI3MDg3LCJ5Ijo5MC45MTI1NTk1MDkyNzczNH0seyJ4IjoxNzE1LjMzNTkzNzUsInkiOjQ2LjIwNjI3OTc1NDYzODY3fSx7IngiOjE4NzYuNzY1NjI1LCJ5Ijo0Ni4yMDYyNzk3NTQ2Mzg2N31d" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M2074.469,366.913L2078.635,366.913C2082.802,366.913,2091.135,366.913,2098.802,366.913C2106.469,366.913,2113.469,366.913,2116.969,366.913L2120.469,366.913" id="bot-detector-L_archive_profile_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_archive_profile_0" data-points="W3sieCI6MjA3NC40Njg3NSwieSI6MzY2LjkxMjU1OTUwOTI3NzM0fSx7IngiOjIwOTkuNDY4NzUsInkiOjM2Ni45MTI1NTk1MDkyNzczNH0seyJ4IjoyMTI0LjQ2ODc1LCJ5IjozNjYuOTEyNTU5NTA5Mjc3MzR9XQ==" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M2294.641,366.913L2298.807,366.913C2302.974,366.913,2311.307,366.913,2318.974,366.913C2326.641,366.913,2333.641,366.913,2337.141,366.913L2340.641,366.913" id="bot-detector-L_profile_gate_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_profile_gate_0" data-points="W3sieCI6MjI5NC42NDA2MjUsInkiOjM2Ni45MTI1NTk1MDkyNzczNH0seyJ4IjoyMzE5LjY0MDYyNSwieSI6MzY2LjkxMjU1OTUwOTI3NzM0fSx7IngiOjIzNDQuNjQwNjI1LCJ5IjozNjYuOTEyNTU5NTA5Mjc3MzR9XQ==" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M2479.306,391.413L2496.924,407.413C2514.543,423.413,2549.779,455.413,2588.416,471.413C2627.052,487.413,2669.089,487.413,2727.081,487.413C2785.073,487.413,2859.021,487.413,2929.967,463.546C3000.912,439.679,3068.856,391.946,3102.827,368.079L3136.799,344.212" id="bot-detector-L_gate_verdict_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_gate_verdict_0" data-points="W3sieCI6MjQ3OS4zMDYwODE0MzE1MzU0LCJ5IjozOTEuNDEyNTU5NTA5Mjc3MzR9LHsieCI6MjU4NS4wMTU2MjUsInkiOjQ4Ny40MTI1NTk1MDkyNzczNH0seyJ4IjoyNzExLjEyNSwieSI6NDg3LjQxMjU1OTUwOTI3NzM0fSx7IngiOjI5MzIuOTY4NzUsInkiOjQ4Ny40MTI1NTk1MDkyNzczNH0seyJ4IjozMTQwLjA3MjIxOTY2OTExNzcsInkiOjM0MS45MTI1NTk1MDkyNzczNH1d" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M2518.002,391.413L2529.171,395.579C2540.34,399.746,2562.678,408.079,2579.589,412.246C2596.5,416.413,2607.984,416.413,2613.727,416.413L2619.469,416.413" id="bot-detector-L_gate_automation_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_gate_automation_0" data-points="W3sieCI6MjUxOC4wMDE3MzYxMTExMTEzLCJ5IjozOTEuNDEyNTU5NTA5Mjc3MzR9LHsieCI6MjU4NS4wMTU2MjUsInkiOjQxNi40MTI1NTk1MDkyNzczNH0seyJ4IjoyNjIzLjQ2ODc1LCJ5Ijo0MTYuNDEyNTU5NTA5Mjc3MzR9XQ==" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M2518.002,342.413L2529.171,338.246C2540.34,334.079,2562.678,325.746,2582.153,321.579C2601.628,317.413,2618.24,317.413,2626.546,317.413L2634.852,317.413" id="bot-detector-L_gate_agenda_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_gate_agenda_0" data-points="W3sieCI6MjUxOC4wMDE3MzYxMTExMTEzLCJ5IjozNDIuNDEyNTU5NTA5Mjc3MzR9LHsieCI6MjU4NS4wMTU2MjUsInkiOjMxNy40MTI1NTk1MDkyNzczNH0seyJ4IjoyNjM4Ljg1MTU2MjUsInkiOjMxNy40MTI1NTk1MDkyNzczNH1d" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M2474.219,342.413L2492.685,321.746C2511.151,301.079,2548.084,259.746,2571.848,239.079C2595.612,218.413,2606.208,218.413,2611.507,218.413L2616.805,218.413" id="bot-detector-L_gate_authenticity_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_gate_authenticity_0" data-points="W3sieCI6MjQ3NC4yMTkzMjg3MDM3MDQsInkiOjM0Mi40MTI1NTk1MDkyNzczNH0seyJ4IjoyNTg1LjAxNTYyNSwieSI6MjE4LjQxMjU1OTUwOTI3NzM0fSx7IngiOjI2MjAuODA0Njg3NSwieSI6MjE4LjQxMjU1OTUwOTI3NzM0fV0=" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M2798.781,416.413L2821.146,416.413C2843.51,416.413,2888.24,416.413,2940.336,404.248C2992.433,392.084,3051.896,367.756,3081.628,355.591L3111.36,343.427" id="bot-detector-L_automation_verdict_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_automation_verdict_0" data-points="W3sieCI6Mjc5OC43ODEyNSwieSI6NDE2LjQxMjU1OTUwOTI3NzM0fSx7IngiOjI5MzIuOTY4NzUsInkiOjQxNi40MTI1NTk1MDkyNzczNH0seyJ4IjozMTE1LjA2MjIyMzgwMDUwNSwieSI6MzQxLjkxMjU1OTUwOTI3NzM0fV0=" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M2783.398,317.413L2808.327,317.413C2833.255,317.413,2883.112,317.413,2927.496,317.413C2971.88,317.413,3010.792,317.413,3030.247,317.413L3049.703,317.413" id="bot-detector-L_agenda_verdict_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_agenda_verdict_0" data-points="W3sieCI6Mjc4My4zOTg0Mzc1LCJ5IjozMTcuNDEyNTU5NTA5Mjc3MzR9LHsieCI6MjkzMi45Njg3NSwieSI6MzE3LjQxMjU1OTUwOTI3NzM0fSx7IngiOjMwNTMuNzAzMTI1LCJ5IjozMTcuNDEyNTU5NTA5Mjc3MzR9XQ==" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M2801.445,218.413L2823.366,218.413C2845.286,218.413,2889.128,218.413,2940.78,230.577C2992.433,242.741,3051.896,267.069,3081.628,279.234L3111.36,291.398" id="bot-detector-L_authenticity_verdict_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_authenticity_verdict_0" data-points="W3sieCI6MjgwMS40NDUzMTI1LCJ5IjoyMTguNDEyNTU5NTA5Mjc3MzR9LHsieCI6MjkzMi45Njg3NSwieSI6MjE4LjQxMjU1OTUwOTI3NzM0fSx7IngiOjMxMTUuMDYyMjIzODAwNTA1LCJ5IjoyOTIuOTEyNTU5NTA5Mjc3MzR9XQ==" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M1587.43,117.094L1608.747,117.481C1630.065,117.867,1672.701,118.64,1734.48,119.026C1796.26,119.413,1877.185,119.413,1941.207,119.413C2005.229,119.413,2052.349,119.413,2094.257,119.413C2136.164,119.413,2172.859,119.413,2209.555,119.413C2246.25,119.413,2282.945,119.413,2309.229,119.413C2335.513,119.413,2351.385,119.413,2359.322,119.413L2367.258,119.413" id="bot-detector-L_backend_pack_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_backend_pack_0" data-points="W3sieCI6MTU4Ny40Mjk2ODc1LCJ5IjoxMTcuMDk0MzE4MTU1NjAxMX0seyJ4IjoxNzE1LjMzNTkzNzUsInkiOjExOS40MTI1NTk1MDkyNzczNH0seyJ4IjoxOTU4LjEwOTM3NSwieSI6MTE5LjQxMjU1OTUwOTI3NzM0fSx7IngiOjIwOTkuNDY4NzUsInkiOjExOS40MTI1NTk1MDkyNzczNH0seyJ4IjoyMjA5LjU1NDY4NzUsInkiOjExOS40MTI1NTk1MDkyNzczNH0seyJ4IjoyMzE5LjY0MDYyNSwieSI6MTE5LjQxMjU1OTUwOTI3NzM0fSx7IngiOjIzNzEuMjU3ODEyNSwieSI6MTE5LjQxMjU1OTUwOTI3NzM0fV0=" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M2533.398,119.413L2542.001,119.413C2550.604,119.413,2567.81,119.413,2579.913,119.413C2592.016,119.413,2599.016,119.413,2602.516,119.413L2606.016,119.413" id="bot-detector-L_pack_llm_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_pack_llm_0" data-points="W3sieCI6MjUzMy4zOTg0Mzc1LCJ5IjoxMTkuNDEyNTU5NTA5Mjc3MzR9LHsieCI6MjU4NS4wMTU2MjUsInkiOjExOS40MTI1NTk1MDkyNzczNH0seyJ4IjoyNjEwLjAxNTYyNSwieSI6MTE5LjQxMjU1OTUwOTI3NzM0fV0=" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M2812.234,119.413L2832.357,119.413C2852.479,119.413,2892.724,119.413,2947.67,147.907C3002.615,176.402,3072.262,233.39,3107.085,261.885L3141.908,290.379" id="bot-detector-L_llm_verdict_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_llm_verdict_0" data-points="W3sieCI6MjgxMi4yMzQzNzUsInkiOjExOS40MTI1NTk1MDkyNzczNH0seyJ4IjoyOTMyLjk2ODc1LCJ5IjoxMTkuNDEyNTU5NTA5Mjc3MzR9LHsieCI6MzE0NS4wMDM3NjgxNTAyNTI3LCJ5IjoyOTIuOTEyNTU5NTA5Mjc3MzR9XQ==" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M3195.332,341.913L3216.308,367.121C3237.284,392.329,3279.236,442.746,3303.752,469.25C3328.269,495.754,3335.35,498.345,3338.89,499.64L3342.431,500.936" id="bot-detector-L_verdict_cache_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_verdict_cache_0" data-points="W3sieCI6MzE5NS4zMzE4NDc4ODQwNjgzLCJ5IjozNDEuOTEyNTU5NTA5Mjc3MzR9LHsieCI6MzMyMS4xODc1LCJ5Ijo0OTMuMTYyNTU5NTA5Mjc3MzR9LHsieCI6MzM0Ni4xODc1LCJ5Ijo1MDIuMzEwMjQ4NTY0NzIwOH1d" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M3188.662,292.913L3210.75,253.462C3232.837,214.01,3277.012,135.108,3312.651,95.657C3348.289,56.206,3375.391,56.206,3408.47,56.206C3441.549,56.206,3480.607,56.206,3516.722,68.885C3552.837,81.563,3586.011,106.92,3602.597,119.599L3619.184,132.277" id="bot-detector-L_verdict_badge_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_verdict_badge_0" data-points="W3sieCI6MzE4OC42NjIxODYzNzExNjI1LCJ5IjoyOTIuOTEyNTU5NTA5Mjc3MzR9LHsieCI6MzMyMS4xODc1LCJ5Ijo1Ni4yMDYyNzk3NTQ2Mzg2N30seyJ4IjozNDAyLjQ5MjE4NzUsInkiOjU2LjIwNjI3OTc1NDYzODY3fSx7IngiOjM1MTkuNjY0MDYyNSwieSI6NTYuMjA2Mjc5NzU0NjM4Njd9LHsieCI6MzYyMi4zNjE4NzgwMzM5ODA3LCJ5IjoxMzQuNzA2Mjc5NzU0NjM4Njd9XQ==" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+        <path d="M3636.684,134.706L3617.181,107.755C3597.678,80.804,3558.671,26.902,3519.639,-0.049C3480.607,-27,3441.549,-27,3408.47,-27C3375.391,-27,3348.289,-27,3310.365,-27C3272.44,-27,3223.693,-27,3158.99,-27C3094.286,-27,3013.628,-27,2936.324,-27C2859.021,-27,2785.073,-27,2727.081,-27C2669.089,-27,2627.052,-27,2583.919,-27C2540.786,-27,2496.557,-27,2452.328,-27C2408.099,-27,2363.87,-27,2323.408,-27C2282.945,-27,2246.25,-27,2209.555,-27C2172.859,-27,2136.164,-27,2094.257,-27C2052.349,-27,2005.229,-27,1941.207,-27C1877.185,-27,1796.26,-27,1719.016,-27C1641.771,-27,1568.206,-27,1494.982,-27C1421.758,-27,1348.875,-27,1278.293,-27C1207.711,-27,1139.43,-27,1087.71,-27C1035.99,-27,1000.831,-27,965.779,-27C930.727,-27,895.781,-27,845.59,-27C795.398,-27,729.961,-27,664.988,-27C600.016,-27,535.508,-27,471.441,-27C407.375,-27,343.75,-27,282.893,16.19C222.036,59.379,163.946,145.758,134.901,188.948L105.857,232.137" id="bot-detector-L_badge_thread_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_badge_thread_0" data-points="W3sieCI6MzYzNi42ODQzOTcyOTAyNjUsInkiOjEzNC43MDYyNzk3NTQ2Mzg2N30seyJ4IjozNTE5LjY2NDA2MjUsInkiOi0yN30seyJ4IjozNDAyLjQ5MjE4NzUsInkiOi0yN30seyJ4IjozMzIxLjE4NzUsInkiOi0yN30seyJ4IjozMTc0Ljk0NTMxMjUsInkiOi0yN30seyJ4IjoyOTMyLjk2ODc1LCJ5IjotMjd9LHsieCI6MjcxMS4xMjUsInkiOi0yN30seyJ4IjoyNTg1LjAxNTYyNSwieSI6LTI3fSx7IngiOjI0NTIuMzI4MTI1LCJ5IjotMjd9LHsieCI6MjMxOS42NDA2MjUsInkiOi0yN30seyJ4IjoyMjA5LjU1NDY4NzUsInkiOi0yN30seyJ4IjoyMDk5LjQ2ODc1LCJ5IjotMjd9LHsieCI6MTk1OC4xMDkzNzUsInkiOi0yN30seyJ4IjoxNzE1LjMzNTkzNzUsInkiOi0yN30seyJ4IjoxNDk0LjY0MDYyNSwieSI6LTI3fSx7IngiOjEyNzUuOTkyMTg3NSwieSI6LTI3fSx7IngiOjEwNzEuMTQ4NDM3NSwieSI6LTI3fSx7IngiOjk2NS42NzE4NzUsInkiOi0yN30seyJ4Ijo4NjAuODM1OTM3NSwieSI6LTI3fSx7IngiOjY2NC41MjM0Mzc1LCJ5IjotMjd9LHsieCI6NDcxLCJ5IjotMjd9LHsieCI6MjgwLjEyNSwieSI6LTI3fSx7IngiOjEwMy42MjQ1NTYzODkyMzQ5OCwieSI6MjM1LjQ1NjI3OTc1NDYzODY3fV0=" data-look="classic" marker-end="url(#bot-detector_flowchart-v2-pointEnd)"></path>
+      </g>
+      <g class="edgeLabels">
+        <g class="edgeLabel" transform="translate(280.125, 495.66255950927734)">
+          <g class="label" data-id="L_thread_content_0" transform="translate(0, -19.299999237060547)">
+            <g>
+              <rect class="background" style="" x="-88.828125" y="-1" width="177.65625" height="40.599998474121094"></rect>
+              <text y="-10.1" text-anchor="middle" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">usernames</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> scrolling</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> into</tspan></tspan><tspan class="text-outer-tspan row" x="0" y="1em" dy="1.1em" text-anchor="middle"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">view</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="edgeLabel" transform="translate(664.5234375, 495.66255950927734)">
+          <g class="label" data-id="L_content_worker_0" transform="translate(0, -10.5)">
+            <g>
+              <rect class="background" style="" x="-91.4765625" y="-1" width="182.953125" height="23"></rect>
+              <text y="-10.1" text-anchor="middle" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">one</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> lookup</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> ask</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> per</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> name</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="edgeLabel">
+          <g class="label" data-id="L_worker_cache_0" transform="translate(0, 0)">
+            <text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"></tspan></text>
+          </g>
+        </g>
+        <g>
+          <rect class="background" style="stroke: none"></rect>
+        </g>
+        <g class="edgeLabel" transform="translate(3519.6640625, 522.9125595092773)">
+          <g class="label" data-id="L_cache_badge_0" transform="translate(0, -10.5)">
+            <g>
+              <rect class="background" style="" x="-35.8671875" y="-1" width="71.734375" height="23"></rect>
+              <text y="-10.1" text-anchor="middle" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">still</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> fresh</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="edgeLabel">
+          <g class="label" data-id="L_worker_provider_0" transform="translate(0, 0)">
+            <text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"></tspan></text>
+          </g>
+        </g>
+        <g>
+          <rect class="background" style="stroke: none"></rect>
+        </g>
+        <g class="edgeLabel" transform="translate(1233.87417, 449.58023)">
+          <g class="label" data-id="L_provider_local_0" transform="translate(0, -10.5)">
+            <g>
+              <rect class="background" style="" x="-42.203125" y="-1" width="84.40625" height="23"></rect>
+              <text y="-10.1" text-anchor="middle" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">the</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> default</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="edgeLabel" transform="translate(1275.9921875, 115.41255950927734)">
+          <g class="label" data-id="L_provider_backend_0" transform="translate(0, -10.5)">
+            <g>
+              <rect class="background" style="" x="-69.34375" y="-1" width="138.6875" height="23"></rect>
+              <text y="-10.1" text-anchor="middle" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">only</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> if</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> you</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> run</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> one</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="edgeLabel" transform="translate(1314.95919, 339.25411)">
+          <g class="label" data-id="L_provider_local_2" transform="translate(0, -10.5)">
+            <g>
+              <rect class="background" style="" x="-99.3671875" y="-1" width="198.734375" height="23"></rect>
+              <text y="-10.1" text-anchor="middle" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">unreachable,</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> and</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> it</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> says</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> so</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="edgeLabel" transform="translate(1715.3359375, 458.41255950927734)">
+          <g class="label" data-id="L_local_archive_0" transform="translate(-0.0390625, -10.5)">
+            <g>
+              <rect class="background" style="" x="-101.375" y="-1" width="202.828125" height="23"></rect>
+              <text y="-10.1" text-anchor="middle" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">capped,</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> spaced,</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> backed</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> off</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="edgeLabel">
+          <g class="label" data-id="L_backend_archive_0" transform="translate(0, 0)">
+            <text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"></tspan></text>
+          </g>
+        </g>
+        <g>
+          <rect class="background" style="stroke: none"></rect>
+        </g>
+        <g class="edgeLabel">
+          <g class="label" data-id="L_backend_shared_0" transform="translate(0, 0)">
+            <text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"></tspan></text>
+          </g>
+        </g>
+        <g>
+          <rect class="background" style="stroke: none"></rect>
+        </g>
+        <g class="edgeLabel">
+          <g class="label" data-id="L_archive_profile_0" transform="translate(0, 0)">
+            <text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"></tspan></text>
+          </g>
+        </g>
+        <g>
+          <rect class="background" style="stroke: none"></rect>
+        </g>
+        <g class="edgeLabel">
+          <g class="label" data-id="L_profile_gate_0" transform="translate(0, 0)">
+            <text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"></tspan></text>
+          </g>
+        </g>
+        <g>
+          <rect class="background" style="stroke: none"></rect>
+        </g>
+        <g class="edgeLabel" transform="translate(2711.125, 487.41255950927734)">
+          <g class="label" data-id="L_gate_verdict_0" transform="translate(0, -10.5)">
+            <g>
+              <rect class="background" style="" x="-61.6171875" y="-1" width="123.234375" height="23"></rect>
+              <text y="-10.1" text-anchor="middle" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">too</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> thin</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> to</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> score</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="edgeLabel">
+          <g class="label" data-id="L_gate_automation_0" transform="translate(0, 0)">
+            <text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"></tspan></text>
+          </g>
+        </g>
+        <g>
+          <rect class="background" style="stroke: none"></rect>
+        </g>
+        <g class="edgeLabel">
+          <g class="label" data-id="L_gate_agenda_0" transform="translate(0, 0)">
+            <text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"></tspan></text>
+          </g>
+        </g>
+        <g>
+          <rect class="background" style="stroke: none"></rect>
+        </g>
+        <g class="edgeLabel">
+          <g class="label" data-id="L_gate_authenticity_0" transform="translate(0, 0)">
+            <text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"></tspan></text>
+          </g>
+        </g>
+        <g>
+          <rect class="background" style="stroke: none"></rect>
+        </g>
+        <g class="edgeLabel">
+          <g class="label" data-id="L_automation_verdict_0" transform="translate(0, 0)">
+            <text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"></tspan></text>
+          </g>
+        </g>
+        <g>
+          <rect class="background" style="stroke: none"></rect>
+        </g>
+        <g class="edgeLabel">
+          <g class="label" data-id="L_agenda_verdict_0" transform="translate(0, 0)">
+            <text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"></tspan></text>
+          </g>
+        </g>
+        <g>
+          <rect class="background" style="stroke: none"></rect>
+        </g>
+        <g class="edgeLabel">
+          <g class="label" data-id="L_authenticity_verdict_0" transform="translate(0, 0)">
+            <text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"></tspan></text>
+          </g>
+        </g>
+        <g>
+          <rect class="background" style="stroke: none"></rect>
+        </g>
+        <g class="edgeLabel">
+          <g class="label" data-id="L_backend_pack_0" transform="translate(0, 0)">
+            <text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"></tspan></text>
+          </g>
+        </g>
+        <g>
+          <rect class="background" style="stroke: none"></rect>
+        </g>
+        <g class="edgeLabel">
+          <g class="label" data-id="L_pack_llm_0" transform="translate(0, 0)">
+            <text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"></tspan></text>
+          </g>
+        </g>
+        <g>
+          <rect class="background" style="stroke: none"></rect>
+        </g>
+        <g class="edgeLabel" transform="translate(2932.96875, 119.41255950927734)">
+          <g class="label" data-id="L_llm_verdict_0" transform="translate(0, -10.5)">
+            <g>
+              <rect class="background" style="" x="-95.734375" y="-1" width="191.46875" height="23"></rect>
+              <text y="-10.1" text-anchor="middle" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">only</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> citations</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> that</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> resolve</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="edgeLabel">
+          <g class="label" data-id="L_verdict_cache_0" transform="translate(0, 0)">
+            <text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"></tspan></text>
+          </g>
+        </g>
+        <g>
+          <rect class="background" style="stroke: none"></rect>
+        </g>
+        <g class="edgeLabel">
+          <g class="label" data-id="L_verdict_badge_0" transform="translate(0, 0)">
+            <text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"></tspan></text>
+          </g>
+        </g>
+        <g>
+          <rect class="background" style="stroke: none"></rect>
+        </g>
+        <g class="edgeLabel">
+          <g class="label" data-id="L_badge_thread_0" transform="translate(0, 0)">
+            <text y="-10.1" text-anchor="middle"><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em" text-anchor="middle"></tspan></text>
+          </g>
+        </g>
+        <g>
+          <rect class="background" style="stroke: none"></rect>
+        </g>
+      </g>
+      <g class="nodes">
+        <g class="node default" id="bot-detector-flowchart-thread-0" data-node="thread" data-look="classic" transform="translate(87.1484375, 259.9562797546387)">
+          <rect class="basic label-container" style="" x="-79.1484375" y="-24.5" width="158.296875" height="49"></rect>
+          <g class="label" style="" transform="translate(0, -9.5)">
+            <rect></rect>
+            <g>
+              <rect class="background" style="stroke: none"></rect>
+              <text y="-10.1" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">Reddit</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> thread</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="node default" id="bot-detector-flowchart-content-1" data-node="content" data-look="classic" transform="translate(471, 495.66255950927734)">
+          <rect class="basic label-container" style="" x="-77.046875" y="-24.5" width="154.09375" height="49"></rect>
+          <g class="label" style="" transform="translate(0, -9.5)">
+            <rect></rect>
+            <g>
+              <rect class="background" style="stroke: none"></rect>
+              <text y="-10.1" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">Page</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> adapter</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="node default" id="bot-detector-flowchart-worker-3" data-node="worker" data-look="classic" transform="translate(860.8359375, 495.66255950927734)">
+          <rect class="basic label-container" style="" x="-79.8359375" y="-24.5" width="159.671875" height="49"></rect>
+          <g class="label" style="" transform="translate(0, -9.5)">
+            <rect></rect>
+            <g>
+              <rect class="background" style="stroke: none"></rect>
+              <text y="-10.1" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">Lookup</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> queue</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="node default" id="bot-detector-flowchart-cache-5" data-node="cache" data-look="classic" transform="translate(3402.4921875, 522.9125595092773)">
+          <path d="M0,11.848162030643783 a56.3046875,11.848162030643783 0,0,0 112.609375,0 a56.3046875,11.848162030643783 0,0,0 -112.609375,0 l0,45.848162030643785 a56.3046875,11.848162030643783 0,0,0 112.609375,0 l0,-45.848162030643785" class="basic label-container outer-path" style="" transform="translate(-56.3046875, -34.77224304596567)"></path>
+          <g class="label" style="" transform="translate(0, -10.5)">
+            <rect></rect>
+            <g>
+              <rect class="background" style="stroke: none"></rect>
+              <text y="-10.1" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">Verdict</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> cache</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="node default" id="bot-detector-flowchart-badge-7" data-node="badge" data-look="classic" transform="translate(3654.4140625, 159.20627975463867)">
+          <rect class="basic label-container" style="" x="-73.8828125" y="-24.5" width="147.765625" height="49"></rect>
+          <g class="label" style="" transform="translate(0, -9.5)">
+            <rect></rect>
+            <g>
+              <rect class="background" style="stroke: none"></rect>
+              <text y="-10.1" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">Inline</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> badge</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="node default" id="bot-detector-flowchart-provider-9" data-node="provider" data-look="classic" transform="translate(1071.1484375, 303.41255950927734)">
+          <rect class="basic label-container" style="" x="-80.4765625" y="-24.5" width="160.953125" height="49"></rect>
+          <g class="label" style="" transform="translate(0, -9.5)">
+            <rect></rect>
+            <g>
+              <rect class="background" style="stroke: none"></rect>
+              <text y="-10.1" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">Provider</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> seam</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="node default" id="bot-detector-flowchart-local-11" data-node="local" data-look="classic" transform="translate(1494.640625, 458.41255950927734)">
+          <rect class="basic label-container" style="" x="-94.28125" y="-24.5" width="188.5625" height="49"></rect>
+          <g class="label" style="" transform="translate(0, -9.5)">
+            <rect></rect>
+            <g>
+              <rect class="background" style="stroke: none"></rect>
+              <text y="-10.1" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">In-browser</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> lookup</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="node default" id="bot-detector-flowchart-backend-13" data-node="backend" data-look="classic" transform="translate(1494.640625, 115.41255950927734)">
+          <rect class="basic label-container" style="" x="-92.7890625" y="-24.5" width="185.578125" height="49"></rect>
+          <g class="label" style="" transform="translate(0, -9.5)">
+            <rect></rect>
+            <g>
+              <rect class="background" style="stroke: none"></rect>
+              <text y="-10.1" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">Optional</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> backend</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="node default" id="bot-detector-flowchart-archive-17" data-node="archive" data-look="classic" transform="translate(1958.109375, 366.91255950927734)">
+          <rect class="basic label-container" style="" x="-116.359375" y="-24.5" width="232.71875" height="49"></rect>
+          <g class="label" style="" transform="translate(0, -9.5)">
+            <rect></rect>
+            <g>
+              <rect class="background" style="stroke: none"></rect>
+              <text y="-10.1" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">Public</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> comment</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> archive</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="node default" id="bot-detector-flowchart-shared-21" data-node="shared" data-look="classic" transform="translate(1958.109375, 46.20627975463867)">
+          <path d="M0,14.137519009341734 a81.34375,14.137519009341734 0,0,0 162.6875,0 a81.34375,14.137519009341734 0,0,0 -162.6875,0 l0,48.13751900934173 a81.34375,14.137519009341734 0,0,0 162.6875,0 l0,-48.13751900934173" class="basic label-container outer-path" style="" transform="translate(-81.34375, -38.206278514012595)"></path>
+          <g class="label" style="" transform="translate(0, -10.5)">
+            <rect></rect>
+            <g>
+              <rect class="background" style="stroke: none"></rect>
+              <text y="-10.1" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">Shared</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> lookup</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> cache</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="node default" id="bot-detector-flowchart-profile-23" data-node="profile" data-look="classic" transform="translate(2209.5546875, 366.91255950927734)">
+          <rect class="basic label-container" style="" x="-85.0859375" y="-24.5" width="170.171875" height="49"></rect>
+          <g class="label" style="" transform="translate(0, -9.5)">
+            <rect></rect>
+            <g>
+              <rect class="background" style="stroke: none"></rect>
+              <text y="-10.1" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">Account</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> profile</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="node default" id="bot-detector-flowchart-gate-25" data-node="gate" data-look="classic" transform="translate(2452.328125, 366.91255950927734)">
+          <rect class="basic label-container" style="" x="-107.6875" y="-24.5" width="215.375" height="49"></rect>
+          <g class="label" style="" transform="translate(0, -9.5)">
+            <rect></rect>
+            <g>
+              <rect class="background" style="stroke: none"></rect>
+              <text y="-10.1" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">Insufficient-data</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> gate</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="node default" id="bot-detector-flowchart-verdict-27" data-node="verdict" data-look="classic" transform="translate(3174.9453125, 317.41255950927734)">
+          <rect class="basic label-container" style="" x="-121.2421875" y="-24.5" width="242.484375" height="49"></rect>
+          <g class="label" style="" transform="translate(0, -9.5)">
+            <rect></rect>
+            <g>
+              <rect class="background" style="stroke: none"></rect>
+              <text y="-10.1" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">Three</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> bands,</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> side</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> by</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> side</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="node default" id="bot-detector-flowchart-automation-29" data-node="automation" data-look="classic" transform="translate(2711.125, 416.41255950927734)">
+          <rect class="basic label-container" style="" x="-87.65625" y="-24.5" width="175.3125" height="49"></rect>
+          <g class="label" style="" transform="translate(0, -9.5)">
+            <rect></rect>
+            <g>
+              <rect class="background" style="stroke: none"></rect>
+              <text y="-10.1" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">Automation</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> axis</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="node default" id="bot-detector-flowchart-agenda-31" data-node="agenda" data-look="classic" transform="translate(2711.125, 317.41255950927734)">
+          <rect class="basic label-container" style="" x="-72.2734375" y="-24.5" width="144.546875" height="49"></rect>
+          <g class="label" style="" transform="translate(0, -9.5)">
+            <rect></rect>
+            <g>
+              <rect class="background" style="stroke: none"></rect>
+              <text y="-10.1" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">Agenda</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> axis</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="node default" id="bot-detector-flowchart-authenticity-33" data-node="authenticity" data-look="classic" transform="translate(2711.125, 218.41255950927734)">
+          <rect class="basic label-container" style="" x="-90.3203125" y="-24.5" width="180.640625" height="49"></rect>
+          <g class="label" style="" transform="translate(0, -9.5)">
+            <rect></rect>
+            <g>
+              <rect class="background" style="stroke: none"></rect>
+              <text y="-10.1" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">Authenticity</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> axis</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="node default" id="bot-detector-flowchart-pack-41" data-node="pack" data-look="classic" transform="translate(2452.328125, 119.41255950927734)">
+          <rect class="basic label-container" style="" x="-81.0703125" y="-24.5" width="162.140625" height="49"></rect>
+          <g class="label" style="" transform="translate(0, -9.5)">
+            <rect></rect>
+            <g>
+              <rect class="background" style="stroke: none"></rect>
+              <text y="-10.1" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">Evidence</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> pack</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+        <g class="node default" id="bot-detector-flowchart-llm-43" data-node="llm" data-look="classic" transform="translate(2711.125, 119.41255950927734)">
+          <rect class="basic label-container" style="" x="-101.109375" y="-24.5" width="202.21875" height="49"></rect>
+          <g class="label" style="" transform="translate(0, -9.5)">
+            <rect></rect>
+            <g>
+              <rect class="background" style="stroke: none"></rect>
+              <text y="-10.1" style=""><tspan class="text-outer-tspan row" x="0" y="-0.1em" dy="1.1em"><tspan font-style="normal" class="text-inner-tspan" font-weight="normal">Claude</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> agenda</tspan><tspan font-style="normal" class="text-inner-tspan" font-weight="normal"> read</tspan></tspan></text>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+  <defs>
+    <filter id="bot-detector-drop-shadow" height="130%" width="130%">
+      <feDropShadow dx="4" dy="4" stdDeviation="0" flood-opacity="0.06" flood-color="var(--text, #1c1a17)"></feDropShadow>
+    </filter>
+  </defs>
+  <defs>
+    <filter id="bot-detector-drop-shadow-small" height="150%" width="150%">
+      <feDropShadow dx="2" dy="2" stdDeviation="0" flood-opacity="0.06" flood-color="var(--text, #1c1a17)"></feDropShadow>
+    </filter>
+  </defs>
+  <linearGradient id="bot-detector-gradient" gradientUnits="objectBoundingBox" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="var(--border, #e3ded4)" stop-opacity="1"></stop>
+    <stop offset="100%" stop-color="var(--border, #e3ded4)" stop-opacity="1"></stop>
+  </linearGradient>
+</svg>
