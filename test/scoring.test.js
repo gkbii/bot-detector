@@ -446,14 +446,18 @@ test('agenda: truncated history cannot manufacture a dormancy gap', () => {
   // We page newest-first, so the stretch between the account's first activity
   // and the oldest thing we fetched is history we never asked for — not
   // silence. Counting it would flag every prolific account.
+  // 400 days, not 120: the window has to be longer than MIN_DORMANCY_GAP_DAYS
+  // or the span gate answers first and this stops testing the truncation rule
+  // at all (JIO-290). What is under test here is that the 7 unfetched years
+  // are not counted, so the fetched window must be one a gap could fit in.
   const rand = rng(41);
-  const stamps = humanTimestamps({ rand, days: 120, activeHours: WAKING_HOURS });
+  const stamps = humanTimestamps({ rand, days: 400, activeHours: WAKING_HOURS });
   const comments = stamps.map((at, i) => comment({ id: `tr${i}`, at, body: randomText(rand) }));
 
   const verdict = scoreAccount(profileOf({
     comments,
     firstSeenUtc: NOW - 3000 * DAY, // account is 8 years old
-    truncated: true, // but we only fetched the last 120 days
+    truncated: true, // but we only fetched the last 400 days
   }));
 
   const sig = findSignal(verdict.agenda, 'dormancy-revival');
@@ -499,6 +503,124 @@ test('agenda: a shallow comment window plus one ancient post is not a twelve-yea
     (sig.value?.largestGapDays ?? 0) < 120,
     `the 2014 post sits below the reliable window and must be excluded, got ${sig.value?.largestGapDays}`,
   );
+});
+
+
+/**
+ * u/AutoModerator, live on 2026-08-05: 299 comments spanning 0.0 days, on an
+ * account years old. The signal answered "longest silence is 0 days, below the
+ * 120-day threshold" and contributed strength 0 at weight 3 — the only sentence
+ * the arithmetic allowed, dressed up as a finding (JIO-290, Finding 3).
+ */
+function firehoseComments({ count = 299, spanSeconds = 3000, prefix = 'am' } = {}) {
+  return Array.from({ length: count }, (_, i) => comment({
+    id: `${prefix}${i}`,
+    at: NOW - spanSeconds + Math.floor((i * spanSeconds) / count),
+    group: `g${i % 40}`,
+    body: `Your submission was removed for reason ${i}, please read the rules before posting again.`,
+  }));
+}
+
+test('agenda: a window too short to hold a 120-day gap is insufficient-data, not a clean zero', () => {
+  const sig = findSignal(
+    scoreAccount(profileOf({
+      comments: firehoseComments(),
+      firstSeenUtc: NOW - 3000 * DAY,
+      truncated: true,
+    })).agenda,
+    'dormancy-revival',
+  );
+
+  assert.equal(sig.band, BAND.INSUFFICIENT,
+    `299 comments over 0.0 days cannot rule a 120-day silence in or out, got ${sig.band}: ${sig.evidence}`);
+  assert.equal(sig.direction, 'neutral', 'an unmeasurable signal must not argue either way');
+  assert.doesNotMatch(sig.evidence, /below the 120-day dormancy threshold/,
+    'reporting a confident zero from a window a gap could not fit in is the defect');
+  assert.match(sig.evidence, /could not fit inside it/);
+});
+
+test('agenda: the dormancy span gate fires on a COMPLETE short history too, not just a truncated one', () => {
+  // Gating on coverage.truncated instead of on the span would have left the
+  // bug live for exactly the young accounts this axis gets pointed at: a
+  // 30-day history that is complete still cannot hold a 120-day silence.
+  const rand = rng(61);
+  const stamps = humanTimestamps({ rand, days: 30, activeHours: WAKING_HOURS });
+  const comments = stamps.map((at, i) => comment({ id: `yg${i}`, at, body: randomText(rand) }));
+
+  const verdict = scoreAccount(profileOf({
+    comments,
+    firstSeenUtc: NOW - 30 * DAY,
+    truncated: false,
+  }));
+  assert.equal(verdict.agenda.band === BAND.INSUFFICIENT, false, 'the axis itself still scores');
+
+  const sig = findSignal(verdict.agenda, 'dormancy-revival');
+  assert.equal(sig.band, BAND.INSUFFICIENT);
+  assert.equal(sig.direction, 'neutral');
+  assert.ok(sig.value.spanDays < 120 && sig.value.spanDays > 20,
+    `expected the measured span in the value, got ${JSON.stringify(sig.value)}`);
+});
+
+// ---------------------------------------------------------------------------
+// Finding 2 — query strings are not questions
+// ---------------------------------------------------------------------------
+
+/** One real u/RemindMeBot comment, links and all. Seven '?' and no question. */
+const REMINDME_BODY = [
+  'I will be messaging you in 1 day on [**2026-08-06 12:00:00 UTC**]'
+  + '(http://www.wolframalpha.com/input/?i=2026-08-06%2012:00:00%20UTC%20To%20Local%20Time)'
+  + ' to remind you of [**this link**]'
+  + '(https://www.reddit.com/r/tipofmypenis/comments/1vgfto6/name/p1wwajz/?context=3)',
+  '[**CLICK THIS LINK**](https://www.reddit.com/message/compose/?to=RemindMeBot'
+  + '&subject=Reminder&message=RemindMe%21%202026-08-06%2012%3A00%3A00%20UTC)'
+  + ' to send a PM to also be reminded and to reduce spam.',
+  '^(Parent commenter can ) [^(delete this message to hide from others.)]'
+  + '(https://www.reddit.com/message/compose/?to=RemindMeBot&subject=Delete%20Comment)',
+  'Info | Custom | Your Reminders | Feedback | reddit.com/r/RemindMeBot/comments/e1bko7/?st=abc',
+].join('\n\n');
+
+test('authenticity: query strings in links are not questions', () => {
+  assert.ok(REMINDME_BODY.split('?').length - 1 >= 5, 'the fixture must carry the query strings');
+
+  const comments = Array.from({ length: 60 }, (_, i) => comment({
+    id: `rb${i}`, at: NOW - 3000 + i * 50, group: `g${i % 30}`, body: REMINDME_BODY,
+  }));
+  const sig = findSignal(
+    scoreAccount(profileOf({ comments, firstSeenUtc: NOW - 2000 * DAY, truncated: true })).authenticity,
+    'asks-questions',
+  );
+
+  assert.equal(sig.value.questions, 0,
+    `a template bot's own links must not read as questions, got ${sig.value.questions} of ${sig.value.sample}`);
+  assert.equal(sig.band, BAND.LOW);
+  assert.match(sig.evidence, /^0 of 60 comments/);
+});
+
+test('authenticity: a question in link TEXT still counts, and help-seeking reads the same stripped body', () => {
+  // The two halves of this signal deliberately see identical text: whatever
+  // the author actually typed, with every link target removed. A question
+  // someone wrote as the label of a link is still their question; a phrase
+  // that exists only inside a url was written by nobody.
+  const rand = rng(67);
+  const stamps = humanTimestamps({ rand, days: 300, activeHours: WAKING_HOURS });
+  const comments = stamps.map((at, i) => comment({
+    id: `lk${i}`,
+    at,
+    group: `g${i % 12}`,
+    body: i % 2 === 0
+      // Asked in the link text, buried behind a query string: still a question.
+      ? `${randomText(rand)} [does anyone know how to fix this?](https://example.com/a/b?q=1&r=2)`
+      // "how do i" only ever appears inside the url: not help-seeking.
+      : `${randomText(rand)} see reddit.com/r/x/how-do-i-do-this/?context=3`,
+    thread: `t3_lk${Math.floor(i / 3)}`,
+  }));
+
+  const sig = findSignal(scoreAccount(profileOf({ comments })).authenticity, 'asks-questions');
+  const half = Math.floor(comments.length / 2);
+  assert.ok(Math.abs(sig.value.questions - half) <= 1,
+    `only the link-text questions should count, got ${sig.value.questions} of ${sig.value.sample}`);
+  assert.ok(sig.value.helpSeeking >= half - 1,
+    `"does anyone know" in link text is help-seeking, got ${sig.value.helpSeeking}`);
 });
 
 test('automation: a fetch window under three days cannot claim a sleep cycle', () => {

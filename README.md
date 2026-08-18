@@ -16,7 +16,7 @@ things the browser cannot do: a Claude read of what an account actually argues,
 and a lookup cache shared between your machines. Nothing requires it.
 
 ```
-npm test        # 106 tests, and they pass with NO node_modules installed
+npm test        # 110 tests, and they pass with NO node_modules installed
 npm install     # only needed for the optional server's one dependency
 npm start       # the optional server
 ```
@@ -221,10 +221,13 @@ The headline never rounds a moderate band down to an all-clear either, and it
 calls the paid-poster shape out by name — a reader glancing at "low automation"
 would otherwise take it as an exoneration.
 
-## Two false positives, both found against live accounts
+## Four false positives, all found against live accounts
 
-The test suite passed through both of these. They were found by running the
-thing against real accounts, which is the only reason they are fixed.
+The test suite passed through every one of these — 106 green tests while two of
+them were live. They were found by running the thing against real accounts,
+which is the only reason they are fixed. Each one now has a test that fails
+without its fix; that is the actual deliverable, because the suite being green
+is what let them survive in the first place.
 
 **A forged 12-year dormancy.** Comments and posts are fetched as *separate*
 newest-first windows with different depths. An account with 1.59M comments
@@ -252,26 +255,69 @@ human eventually lands a comment in every hour of the day across insomnia,
 travel and timezone changes, and a strict-zero test would call them a bot for
 it.
 
+**A query string counted as a question.** `asks-questions` was
+`body.includes('?')` against the raw body, so every `?context=3` and
+`message/compose/?to=` in a bot's own boilerplate read as curiosity. Live on
+2026-08-17, before the fix: **u/RemindMeBot 295 of 299 comments "ask a
+question", u/RepostSleuthBot 299 of 299** — the maximum on the one signal whose
+entire purpose is positive evidence of a *person*, awarded to two template bots.
+`stripUrls()` in `stats.js` now removes markdown link targets, anything with a
+scheme, and bare `host.tld/path` tokens before the test; both accounts scored
+**0 of 299** on the same live data afterwards, and two humans moved 118→107 and
+15→14. That ratio is the whole point: the defect was invisible on humans and
+total on the adversary, which is exactly the shape a suite of hand-built
+fixtures cannot see.
+
+Two details are load-bearing. The link **text** survives, because
+`[does anyone know?](url)` is a question its author wrote. And the help-seeking
+patterns run over the *same stripped body*, so both halves of the signal read
+what the author actually typed rather than one reading the raw text and the
+other not.
+
+**A confident zero from a window no gap could fit in.** `dormancy-revival`
+(weight 3, the heaviest agenda signal) gated only on item *count*. 299 comments
+spanning 0.0 days clear that easily, and it then reported "longest silence is 0
+days, below the 120-day threshold" — arithmetically the only sentence available,
+presented as a finding. Across the 25 accounts in `EVALUATION.md` it returned a
+clean `low` 25 times and `insufficient-data` never, so a weight-3 signal was a
+near-constant zero diluting every other agenda signal. It now measures the span
+of the reliable window first and returns `unmeasured()` below
+`MIN_DORMANCY_GAP_DAYS`, the way `posting-hour-dead-zone` has always gated on
+`MIN_SPAN_DAYS_FOR_HOUR_PROFILE`.
+
+The gate is on the **span alone, deliberately not on `coverage.truncated`**. A
+complete nine-day history cannot hold a 120-day silence either, so gating on
+truncation would have left the bug live for precisely the young accounts this
+axis gets pointed at — and a young account looking clean on the heaviest agenda
+signal is the failure mode worth caring about. There is a test for the complete
+case specifically, so nobody narrows it back.
+
 ## What it actually scored on a live thread
 
 [`EVALUATION.md`](EVALUATION.md) is the 2026-08-05 run against a real
 r/politics thread (236 authors, 25 accounts scored end-to-end) with eight
 self-declared bots used as ground truth. The good news is the headline: no
 human scored above `low` on automation and no bot scored `low` — the bands do
-not overlap. Three defects it turned up, none of which the 106 tests can see:
+not overlap. Three defects it turned up, none of which the 106 tests of the day
+could see:
 
 * **The users endpoint is a frozen 2025-03-25 snapshot, not a lagging one**, so
   `fetchAccount` returns `null` for every account created since — **14.8% of
   that thread**, and disproportionately the new accounts most worth checking.
   The scoring core does not need that blob; a stream-derived profile scores
   fine with `karma-velocity` degrading to `insufficient-data` on its own.
-* **`asks-questions` counts `?` inside URL query strings**, which moves a human
-  by a point or two and takes RemindMeBot from 0% to 100% — a false positive
-  shaped exactly like the adversary, on the axis meant to vouch for people.
-* **`dormancy-revival` reports a confident weight-3 zero from windows too short
-  to contain a 120-day gap** (AutoModerator's spans 0.0 days), where
-  `posting-hour-dead-zone` correctly says `insufficient-data` from the same
-  window.
+* ~~**`asks-questions` counts `?` inside URL query strings**~~ — **fixed**, see
+  the section above. It was moving a human by a point or two and taking
+  RemindMeBot from 0% to 100%.
+* ~~**`dormancy-revival` reports a confident weight-3 zero from windows too
+  short to contain a 120-day gap**~~ — **fixed**, see the section above.
+
+One thing the second fix does *not* address, and which the live re-run turned
+up: u/sneakpeekbot still reads 94 of 299 after URL stripping, because its
+template quotes other people's post titles (`#2: [Any News On The CRKD Drum
+Kit?]`). Those are real questions asked by real people — just not by the account
+being scored. Counting text an account is quoting as its own words is a
+different defect from counting its URLs, and it is not fixed here.
 
 ## A bug only the real runtime could find
 
@@ -579,7 +625,7 @@ source's own unit.
 ## Tests
 
 ```
-npm test                                  # both suites, 106 tests
+npm test                                  # both suites, 110 tests
 node --test test/scoring.test.js           # one file
 ```
 

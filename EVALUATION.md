@@ -126,6 +126,15 @@ adversary, on the one axis that is supposed to vouch for people.
 **Recommended fix:** strip URLs before the `?` test. One line, and the numbers
 above are the test case.
 
+**FIXED 2026-08-17 (JIO-290).** `stripUrls()` in `scoring/stats.js` runs before
+both the `?` test and the help-seeking patterns. Re-measured live the same day:
+u/RemindMeBot 295 of 299 comments -> **0 of 299**, u/RepostSleuthBot 299 -> **0**,
+u/bigbjarne 118 -> 107 and u/KevinGreeneSolar 15 -> 14. u/sneakpeekbot lands at
+94 of 299, not the 23 estimated here, and the residue is not URLs: its template
+quotes other people's post titles (`#2: [Any News On The CRKD Drum Kit?]`).
+Counting quoted third-party text as the account's own words is a separate
+defect and is still open.
+
 ## Finding 3 — `dormancy-revival` returns a confident zero from windows too short to hold a gap
 
 The heaviest agenda signal (weight 3) looks for a ≥120-day silence.
@@ -155,6 +164,14 @@ weight-3 signal is a near-constant zero that dilutes every other agenda signal.
 **Recommended fix:** `unmeasured()` when the reliable window is shorter than
 `MIN_DORMANCY_GAP_DAYS`, the way the hour profile already gates on
 `MIN_SPAN_DAYS_FOR_HOUR_PROFILE`.
+
+**FIXED 2026-08-17 (JIO-290).** `dormancyRevivalSignal()` measures the span of
+the reliable window and returns `unmeasured()` below `MIN_DORMANCY_GAP_DAYS`.
+The gate is on the span alone and deliberately NOT on `coverage.truncated` — a
+complete nine-day history cannot hold a 120-day silence either, and gating on
+truncation would have left the defect live for young accounts. Live the same
+day: RemindMeBot, RepostSleuthBot, AutoModerator and sneakpeekbot all now report
+`insufficient-data` here instead of a weight-3 zero.
 
 ## Finding 4 — the automation ceiling: declared bots top out at "moderate"
 

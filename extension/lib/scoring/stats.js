@@ -116,15 +116,51 @@ export function longestZeroRunCircular(counts) {
 // ---------------------------------------------------------------------------
 
 /**
+ * Remove every link from a body, leaving only what the author actually typed.
+ *
+ * Load-bearing, and not merely cosmetic (JIO-290, EVALUATION.md Finding 2):
+ * `asks-questions` was `body.includes('?')`, so a markdown link with a query
+ * string counted as a question. u/RemindMeBot scored 100/100 on the one signal
+ * whose whole purpose is positive evidence of a PERSON, on the strength of
+ * `?context=3` and two `message/compose/?to=` links. Three shapes are stripped
+ * because bot boilerplate uses all three:
+ *
+ *   * markdown link targets, including protocol-relative ones (`](/message/…)`)
+ *     which neither of the other two rules would see;
+ *   * anything with a scheme, `https://…` through `mailto:`;
+ *   * bare `host.tld/path` tokens, which need the slash — a domain alone can
+ *     end a sentence, and requiring the path is what keeps "see example.com?"
+ *     a question while `wolframalpha.com/input/?i=` is not.
+ *
+ * The link TEXT survives on purpose: `[does anyone know?](url)` is a question
+ * its author wrote, and dropping it would trade one blind spot for another.
+ *
+ * `normalizeWords()` below shares this rather than keeping its own narrower
+ * `https?://` strip, so there is one definition of "this is a link, not
+ * something a person said". A/B'd against three live accounts before landing:
+ * every band and every axis score identical, with u/RemindMeBot's duplicate
+ * similarity moving 0.912 -> 0.915 and its stock-phrase count 308 -> 314 —
+ * marginally MORE template detected, because the link boilerplate that used to
+ * survive as stray words no longer dilutes the shingles.
+ */
+export function stripUrls(text) {
+  if (typeof text !== 'string') return '';
+  return text
+    .replace(/\]\([^\s)]*/g, '](')
+    .replace(/\b[a-z][a-z0-9+.-]*:\/\/\S+/gi, ' ')
+    .replace(/\bmailto:\S+/gi, ' ')
+    .replace(/\b[\w-]+(?:\.[\w-]+)+\/\S*/g, ' ');
+}
+
+/**
  * Words, lowercased, with urls, quoted text and punctuation removed. Quotes
  * are dropped because a reply that quotes its parent otherwise looks like a
  * near-duplicate of whatever it is answering.
  */
 export function normalizeWords(text) {
   if (typeof text !== 'string') return [];
-  return text
+  return stripUrls(text)
     .toLowerCase()
-    .replace(/https?:\/\/\S+/g, ' ')
     .replace(/^&gt;.*$/gm, ' ')
     .replace(/^>.*$/gm, ' ')
     .replace(/[^a-z0-9'\s]/g, ' ')

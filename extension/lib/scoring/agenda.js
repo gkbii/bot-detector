@@ -300,6 +300,33 @@ function dormancyRevivalSignal(profile) {
     });
   }
 
+  // A gap this signal could report has to FIT in the window we can see. The
+  // item-count gate above is not that check: 299 comments spanning 0.0 days
+  // clear it easily, and the signal then reported "longest silence is 0 days,
+  // below the 120-day threshold" — arithmetically the only sentence it could
+  // have produced (JIO-290, EVALUATION.md Finding 3). Across 25 live accounts
+  // it returned a clean `low` 25 times and `insufficient-data` never, so the
+  // heaviest agenda signal (weight 3) was a near-constant zero diluting every
+  // other one. That is the README's rule 3 inverted: absence of evidence
+  // scored as evidence of absence.
+  //
+  // The gate is on the SPAN and nothing else — deliberately not on
+  // `coverage.truncated`. A complete nine-day history cannot hold a 120-day
+  // silence either, so gating on truncation would leave the bug live for
+  // exactly the young accounts this axis is most often pointed at.
+  // `posting-hour-dead-zone` has always had the equivalent guard
+  // (MIN_SPAN_DAYS_FOR_HOUR_PROFILE); this is the same shape.
+  const spanDays = (timeline[timeline.length - 1].createdUtc - timeline[0].createdUtc) / SECONDS_PER_DAY;
+  if (spanDays < MIN_DORMANCY_GAP_DAYS) {
+    return unmeasured({
+      key,
+      label,
+      weight,
+      value: { spanDays },
+      evidence: `The ${timeline.length} items in the reliable window span only ${spanDays < 1 ? `${Math.round(spanDays * 24)} hours` : `${spanDays.toFixed(1)} days`} — a ${MIN_DORMANCY_GAP_DAYS}-day silence could not fit inside it, so this says nothing either way.`,
+    });
+  }
+
   let best = null;
   for (let i = 1; i < timeline.length; i += 1) {
     const gapDays = (timeline[i].createdUtc - timeline[i - 1].createdUtc) / SECONDS_PER_DAY;

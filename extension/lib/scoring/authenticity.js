@@ -18,7 +18,7 @@
 import { commentsOldestFirst, groupHistogram } from '../sources/profile.js';
 import { buildAxis, signal, unmeasured } from './axis.js';
 import {
-  clamp01, normalizedEntropy, pct, plural, rescale,
+  clamp01, normalizedEntropy, pct, plural, rescale, stripUrls,
 } from './stats.js';
 
 const MIN_COMMENTS = 10;
@@ -210,6 +210,23 @@ function topicalBreadthSignal(profile) {
   });
 }
 
+/**
+ * ASKS QUESTIONS — someone who asks for things they do not know.
+ *
+ * URLS ARE REMOVED FIRST, and that single line is the whole reason this signal
+ * means anything (JIO-290, EVALUATION.md Finding 2). The test used to be
+ * `body.includes('?')` against the raw body, so every query string counted:
+ * u/RemindMeBot scored 100/100 and u/RepostSleuthBot 93/100 without either
+ * asking a single question, off `?context=3` and `message/compose/?to=` links
+ * in their own boilerplate. Humans drifted 1-2 points, so the suite and every
+ * hand-check looked fine — the false positive was shaped exactly like the
+ * adversary, on the one axis that exists to VOUCH for people.
+ *
+ * The help-seeking patterns run over the stripped body too, deliberately: they
+ * are English phrases, and a phrase that only occurs inside a link target
+ * (`/r/AskDocs/how-do-i-...`) was not said by anyone. Both halves of this
+ * signal therefore see the same text — what the author actually typed.
+ */
 function questionSignal(profile) {
   const key = 'asks-questions';
   const label = 'Asks questions';
@@ -224,7 +241,8 @@ function questionSignal(profile) {
 
   let questions = 0;
   let helpSeeking = 0;
-  for (const body of bodies) {
+  for (const raw of bodies) {
+    const body = stripUrls(raw);
     if (body.includes('?')) questions += 1;
     if (HELP_SEEKING_PATTERNS.some((re) => re.test(body))) helpSeeking += 1;
   }
