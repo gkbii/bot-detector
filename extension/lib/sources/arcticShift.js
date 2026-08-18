@@ -53,8 +53,29 @@
  *     calls all returned 200 — permissive, but real.
  *
  *  4. AN UNKNOWN ACCOUNT IS `{"data":[]}` WITH HTTP 200, not a 404. So
- *     "no such account" is an empty array, and `fetchAccount` returns null for
- *     it rather than throwing.
+ *     "no such account" is an empty array — but see the next section: an empty
+ *     array from `/api/users/search` alone does NOT mean the account does not
+ *     exist.
+ *
+ * ### `/api/users/search` IS A FROZEN SNAPSHOT, NOT A LAGGING ONE
+ *
+ * This is the difference between a delay and a cutoff, and it decides the
+ * whole shape of `fetchAccount`. Measured over the 236 authors of one live
+ * thread (EVALUATION.md, Finding 1): every one of the 201 indexed accounts
+ * carried the SAME `comment_stats_updated_at` of 2025-03-25, the newest
+ * `earliest_comment_at` among them was 2025-03-14, and 0 of 196 had a
+ * `last_comment_at` within a week. It is not refreshed; it was taken once.
+ *
+ * So an account whose first comment postdates that snapshot does not exist to
+ * this endpoint, however active it is right now — 35 of those 236 authors
+ * (14.8%) returned empty from it while `/api/comments/search` served their
+ * comments normally. A re-probe on 2026-08-16 put it at 20.0%, and THE GROWTH
+ * IS THE PROOF: lag shrinks, a cutoff widens every day. The blind spot is
+ * therefore exactly the population most worth checking, because a brand-new
+ * account is the shape astroturf takes.
+ *
+ * Hence the fallback below: a users-index miss is not an answer about the
+ * account, so we ask the streams before believing it.
  *
  * ### Documented fallback, deliberately not implemented
  *
@@ -96,6 +117,18 @@ const DEFAULT_BACKOFF_SECONDS = 2;
 const USERNAME_PATTERN = /^[A-Za-z0-9_-]{1,20}$/;
 
 /**
+ * What the user is told when the profile came from the streams alone. It is a
+ * `coverage.errors` entry because that is the one channel every consumer
+ * already renders (the badge lists them verbatim), and because the rule here
+ * is that a bound which fires says so out loud. It names the cause rather than
+ * the symptom: "not in the index" is a fact about our source, not about them.
+ */
+const USERS_INDEX_MISS = 'users-index: no entry for this account — the index is a frozen '
+  + '2025-03-25 snapshot, so accounts created since are absent from it however active they are. '
+  + 'Scored from its comment and post streams alone: no karma, no lifetime totals, and the age '
+  + 'is a floor rather than a total.';
+
+/**
  * Fetch and normalize one account.
  *
  * @param {string} username           bare name, or `u/name`, or `/u/name`
@@ -108,8 +141,10 @@ const USERNAME_PATTERN = /^[A-Za-z0-9_-]{1,20}$/;
  *                                    tests control the clock
  * @param {Function} [opts.sleep]     ms => Promise, injected so backoff is
  *                                    testable without actually waiting
- * @returns {Promise<import('./profile.js').AccountProfile|null>} null if no
- *          such account
+ * @returns {Promise<import('./profile.js').AccountProfile|null>} null only when
+ *          the users index AND both streams come back empty — a users-index
+ *          miss on its own is the frozen-snapshot cutoff, not an absent
+ *          account, and yields a stream-derived profile instead
  */
 export async function fetchAccount(username, opts = {}) {
   const {
@@ -147,15 +182,18 @@ export async function fetchAccount(username, opts = {}) {
   };
 
   // --- identity + lifetime stats -----------------------------------------
-  // This one is not optional: without it we have no karma, no account age and
-  // no totals to measure truncation against, which is a different (and much
-  // weaker) object than an AccountProfile. A failure here throws.
+  // This gives us karma, account age and the totals we measure truncation
+  // against. A REQUEST failure here still throws — we cannot tell a broken
+  // endpoint from an absent account, and guessing would turn an outage into a
+  // stream of confidently thin profiles. An EMPTY RESULT is different: it is
+  // the frozen-snapshot cutoff documented in the header, so we carry on
+  // without the blob rather than reporting the account as nonexistent.
   const users = await requestData(ctx, '/api/users/search', { author: name });
   const meta = Array.isArray(users) && users.length ? users[0] : null;
-  if (!meta) return null;
 
-  const stats = meta._meta ?? {};
+  const stats = meta?._meta ?? {};
   const errors = [];
+  if (!meta) errors.push(USERS_INDEX_MISS);
 
   // --- history ------------------------------------------------------------
   // These two ARE optional. A profile with karma and age but no comment bodies
@@ -169,6 +207,11 @@ export async function fetchAccount(username, opts = {}) {
   const comments = rawComments.map(normalizeComment);
   const posts = rawPosts.map(normalizePost);
 
+  // The account is absent only when NOTHING knows about it. An index miss with
+  // a served stream is the snapshot cutoff; an index miss with both streams
+  // empty is a deleted, suspended or mistyped name, and stays null.
+  if (!meta && comments.length === 0 && posts.length === 0) return null;
+
   const oldestFetchedUtc = minTimestamp([
     ...comments.map((c) => c.createdUtc),
     ...posts.map((p) => p.createdUtc),
@@ -179,6 +222,15 @@ export async function fetchAccount(username, opts = {}) {
     commentsTotal: pickNumber(stats.num_comments),
     postsFetched: posts.length,
     postsTotal: pickNumber(stats.num_posts),
+    // A stream that came back holding exactly as many items as we asked for
+    // stopped because OUR limit ran out, not because the account did. With no
+    // totals to compare against that is the only proof of truncation
+    // available, and it has to be reported: without it a stream-derived
+    // profile claims a complete history, and `reliableTimelineStart()` then
+    // trusts a 40-minute comment window merged with a years-old post — the
+    // forged-dormancy failure it exists to prevent.
+    filledCommentLimit: filledLimit(rawComments.length, commentLimit),
+    filledPostLimit: filledLimit(rawPosts.length, postLimit),
     oldestFetchedUtc,
     sources: [SOURCE_NAME],
     errors,
@@ -187,13 +239,21 @@ export async function fetchAccount(username, opts = {}) {
 
   return buildProfile({
     platform: PLATFORMS.REDDIT,
-    username: meta.author ?? name,
-    id: meta.id ?? null,
+    username: meta?.author ?? name,
+    id: meta?.id ?? null,
     fetchedAt: now,
-    firstSeenUtc: minTimestamp([
-      pickNumber(stats.earliest_comment_at),
-      pickNumber(stats.earliest_post_at),
-    ]),
+    // Without the blob the oldest item we retrieved is the earliest activity
+    // we can see. It is a FLOOR on the account's age, not the age: if the
+    // stream filled our limit there is older history we never asked for, and
+    // `coverage.truncated` says so. Understating age is the safe direction —
+    // it can only send the verdict towards `insufficient-data`, never towards
+    // a clean score (see the README section on this fallback).
+    firstSeenUtc: meta
+      ? minTimestamp([
+        pickNumber(stats.earliest_comment_at),
+        pickNumber(stats.earliest_post_at),
+      ])
+      : oldestFetchedUtc,
     karma: {
       post: pickNumber(stats.post_karma),
       comment: pickNumber(stats.comment_karma),
@@ -405,6 +465,19 @@ function isAbort(err) {
 
 function pickNumber(value) {
   return Number.isFinite(value) ? value : null;
+}
+
+/**
+ * Did this stream stop because our own limit ran out? `collect()` can only
+ * reach `wanted` items by filling up, so equality is the test. An account
+ * holding exactly `wanted` items reads as filled too — a false positive that
+ * costs a "truncated" flag we cannot disprove, which is the direction to err
+ * in: over-reporting truncation discards data, under-reporting it invents
+ * silence that was never there.
+ */
+function filledLimit(fetched, limit) {
+  const wanted = Math.max(0, Math.floor(limit ?? 0));
+  return wanted > 0 && fetched >= wanted;
 }
 
 function str(value) {

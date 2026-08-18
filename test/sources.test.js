@@ -4,6 +4,9 @@ import assert from 'node:assert/strict';
 import {
   MAX_REQUESTS_PER_LOOKUP, fetchAccount, normalizeUsername,
 } from '../extension/lib/sources/arcticShift.js';
+import { reliableTimelineStart } from '../extension/lib/sources/profile.js';
+import { scoreAccount } from '../extension/lib/scoring/index.js';
+import { BAND } from '../extension/lib/scoring/axis.js';
 
 /**
  * No network in tests. The fixtures below are REAL arctic-shift payloads
@@ -233,8 +236,173 @@ test('coverage does not claim truncation when the whole history came back', asyn
 // ---------------------------------------------------------------------------
 
 test('an unknown account is null, not a throw (the API answers 200 with an empty array)', async () => {
-  const fetchImpl = scriptedFetch({ '/api/users/search': [jsonResponse({ data: [] })] });
+  // Absence now has to be agreed by all three endpoints, not asserted by the
+  // users index alone — see the pair of tests below. The empty streams here
+  // are what makes this account genuinely unknown.
+  const fetchImpl = scriptedFetch({
+    '/api/users/search': [jsonResponse({ data: [] })],
+    '/api/comments/search': [jsonResponse({ data: [] })],
+    '/api/posts/search': [jsonResponse({ data: [] })],
+  });
+
   assert.equal(await fetchAccount('zzz_no_such_user_qqq', baseOpts(fetchImpl)), null);
+  assert.deepEqual(
+    fetchImpl.calls.map((c) => c.path).sort(),
+    ['/api/comments/search', '/api/posts/search', '/api/users/search'],
+    'the streams must be asked before an account is called absent',
+  );
+});
+
+// ---------------------------------------------------------------------------
+// The users index misses an account it has never heard of — EVALUATION.md
+// Finding 1. `/api/users/search` is a frozen 2025-03-25 snapshot, so 14.8% of
+// one live thread's authors (20.0% on a 2026-08-16 re-probe) returned empty
+// from it while their comments served normally. Before this fix every one of
+// them got the grey "no data" badge, whose text blames deletion, suspension or
+// a typo. All 110 tests of the day passed straight through it.
+// ---------------------------------------------------------------------------
+
+/** A stream of comments ending `at`, one every `stepSeconds`, newest first. */
+function commentStream(count, { endAt = 1785948140, stepSeconds = 3600, prefix = 'sd' } = {}) {
+  return Array.from({ length: count }, (_, i) => ({
+    ...COMMENT_REPLY,
+    id: `${prefix}${i}`,
+    created_utc: endAt - i * stepSeconds,
+    subreddit: `sub${i % 12}`,
+    body: `an ordinary sentence about number ${i} with several plain words in it`,
+  }));
+}
+
+function missingFromIndex(routes) {
+  return scriptedFetch({ '/api/users/search': [jsonResponse({ data: [] })], ...routes });
+}
+
+test('an account missing from the users index is built from its streams, not reported absent', async () => {
+  const fetchImpl = missingFromIndex({
+    '/api/comments/search': [jsonResponse({ data: commentStream(40) })],
+    '/api/posts/search': [jsonResponse({ data: [POST_VISIBLE] })],
+  });
+
+  const profile = await fetchAccount('newAccount', baseOpts(fetchImpl));
+
+  assert.ok(profile, 'an index miss with a served stream is not an absent account');
+  assert.equal(profile.username, 'newAccount', 'the requested name stands in for the index one');
+  assert.equal(profile.id, null);
+  assert.equal(profile.comments.length, 40);
+  assert.equal(profile.posts.length, 1);
+
+  // Rule 1 of profile.js: null, never zero, for anything the source did not
+  // give us. A karma of 0 here would read three modules away as "fine".
+  assert.deepEqual(profile.karma, { post: null, comment: null, total: null });
+  assert.deepEqual(profile.counts, { comments: null, posts: null });
+
+  // Age comes from the oldest thing we actually retrieved.
+  assert.equal(profile.firstSeenUtc, Math.min(1785948140 - 39 * 3600, POST_VISIBLE.created_utc));
+  assert.ok(Number.isFinite(profile.accountAgeDays));
+
+  // The fallback names itself. The badge renders coverage.errors verbatim, so
+  // this is what the reader is told instead of nothing.
+  assert.equal(profile.coverage.errors.length, 1);
+  assert.match(profile.coverage.errors[0], /^users-index: /);
+  assert.match(profile.coverage.errors[0], /floor/);
+  assert.deepEqual([...profile.coverage.sources], ['arctic-shift']);
+});
+
+test('a stream-derived profile that exhausted both streams is not called truncated', async () => {
+  const fetchImpl = missingFromIndex({
+    '/api/comments/search': [jsonResponse({ data: commentStream(40) })],
+    '/api/posts/search': [jsonResponse({ data: [POST_VISIBLE] })],
+  });
+
+  const { coverage } = await fetchAccount('newAccount', baseOpts(fetchImpl));
+
+  assert.equal(coverage.commentsTotal, null, 'there is no total without the index blob');
+  assert.equal(coverage.truncated, false, '40 of a requested 100 means the account ran out, not us');
+});
+
+test('a stream-derived profile that filled our own limit reports truncation', async () => {
+  // Without this the fallback would claim a complete history purely because
+  // the totals blob is missing, and reliableTimelineStart() would then trust a
+  // 100-comment window merged with a years-old post — the forged-dormancy
+  // failure of EVALUATION.md Finding 3, re-entered through the new door.
+  const fetchImpl = missingFromIndex({
+    '/api/comments/search': [jsonResponse({ data: commentStream(100, { stepSeconds: 60 }) })],
+    '/api/posts/search': [jsonResponse({ data: [] })],
+  });
+
+  const profile = await fetchAccount('prolific', baseOpts(fetchImpl));
+
+  assert.equal(profile.comments.length, 100);
+  assert.equal(profile.coverage.truncated, true,
+    'a stream that filled the limit we set is proof there is more we did not ask for');
+  assert.equal(reliableTimelineStart(profile), profile.coverage.oldestFetchedUtc,
+    'and the reliable window stops where our own window does');
+});
+
+test('an index miss with an empty comment stream but a served post stream still scores', async () => {
+  const fetchImpl = missingFromIndex({
+    '/api/comments/search': [jsonResponse({ data: [] })],
+    '/api/posts/search': [jsonResponse({ data: [POST_VISIBLE, POST_HIDDEN_SCORE] })],
+  });
+
+  const profile = await fetchAccount('posterOnly', baseOpts(fetchImpl));
+
+  assert.ok(profile, 'posts alone are still evidence the account exists');
+  assert.equal(profile.comments.length, 0);
+  assert.equal(profile.posts.length, 2);
+});
+
+test('a users-endpoint FAILURE still throws — only an empty result falls back', async () => {
+  // An outage and an absent account are different facts. Falling back on a
+  // 500 would turn a broken endpoint into a stream of confidently thin
+  // profiles that all look like young accounts.
+  const fetchImpl = scriptedFetch({
+    '/api/users/search': () => jsonResponse({ data: null, error: 'boom' }, { status: 500 }),
+    '/api/comments/search': [jsonResponse({ data: commentStream(40) })],
+    '/api/posts/search': [jsonResponse({ data: [] })],
+  });
+
+  await assert.rejects(() => fetchAccount('newAccount', baseOpts(fetchImpl)), /boom/);
+});
+
+test('the stream-derived profile scores, with karma-velocity reporting what it lost', async () => {
+  // The seam working as designed: one signal (weight 1 of 12.5) says what it
+  // could not measure instead of the whole lookup vanishing.
+  const fetchImpl = missingFromIndex({
+    '/api/comments/search': [jsonResponse({
+      data: commentStream(40, { stepSeconds: 6 * 3600 }), // 40 comments over 10 days
+    })],
+    '/api/posts/search': [jsonResponse({ data: [] })],
+  });
+
+  const profile = await fetchAccount('newAccount', baseOpts(fetchImpl, { now: 1785948140 + 5 * 86400 }));
+  const verdict = scoreAccount(profile);
+  const karmaVelocity = verdict.automation.signals.find((s) => s.key === 'karma-velocity');
+
+  assert.equal(karmaVelocity.band, BAND.INSUFFICIENT);
+  assert.match(karmaVelocity.evidence, /No karma total or account age available/);
+  assert.notEqual(verdict.automation.band, BAND.INSUFFICIENT,
+    'losing the weakest signal must not lose the axis');
+});
+
+test('a prolific account seen only through a short window is insufficient-data, not a verdict', async () => {
+  // The deliberate decision behind the stream-derived age. `firstSeenUtc` is
+  // the oldest item we retrieved, so for an OLD account whose window filled up
+  // it understates the age and MIN_HISTORY_DAYS gates the whole verdict.
+  // That is the answer we want: what we hold is 100 comments spanning 100
+  // minutes, and scoring that would be a verdict on our own pagination. The
+  // gate says so in words rather than issuing a clean band.
+  const fetchImpl = missingFromIndex({
+    '/api/comments/search': [jsonResponse({ data: commentStream(100, { stepSeconds: 60 }) })],
+    '/api/posts/search': [jsonResponse({ data: [] })],
+  });
+
+  const verdict = scoreAccount(await fetchAccount('prolific', baseOpts(fetchImpl)));
+
+  for (const axis of ['automation', 'agenda', 'authenticity']) {
+    assert.equal(verdict[axis].band, BAND.INSUFFICIENT, `${axis} must not report a band`);
+  }
+  assert.match(verdict.headline, /Not enough history/);
 });
 
 test('a malformed username is null without spending a request', async () => {

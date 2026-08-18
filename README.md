@@ -16,7 +16,7 @@ things the browser cannot do: a Claude read of what an account actually argues,
 and a lookup cache shared between your machines. Nothing requires it.
 
 ```
-npm test        # 110 tests, and they pass with NO node_modules installed
+npm test        # 117 tests, and they pass with NO node_modules installed
 npm install     # only needed for the optional server's one dependency
 npm start       # the optional server
 ```
@@ -129,7 +129,9 @@ exclusive — but we page with `before = oldest + 1` and dedupe by id anyway,
 because an exclusive cursor on a non-unique key silently drops any sibling
 sharing that exact second. Overlap is cheap; a hole is invisible. An unknown
 account is `{"data":[]}` with HTTP 200 rather than a 404, so "no such account"
-is an empty array and `fetchAccount` returns `null` for it.
+is an empty array — but an empty array from the *users* endpoint alone does not
+mean the account is unknown, and `fetchAccount` no longer treats it that way.
+See [The blind spot](#the-blind-spot-an-account-the-index-has-never-heard-of).
 
 `https://api.pullpush.io` was also verified serving the same ground on
 2026-08-05 and is documented in that header as the escape hatch if arctic-shift
@@ -204,9 +206,21 @@ Three rules live in `axis.js` rather than in each scorer's good intentions:
 A report over 100 of an account's 2,568 comments has to say so, and it does —
 on the verdict and in the headline sentence. `profile.js` derives `truncated`
 itself so no caller can forget it, and reports truncation only when it can be
-*proven*: the upstream totals blob can lag the live history (verified: an
-account whose newest comment was that day carried totals last recomputed 16
-months earlier), so "complete" is never asserted as a positive claim.
+*proven*, so "complete" is never asserted as a positive claim. The upstream
+totals blob is not recomputed live — it is a **frozen 2025-03-25 snapshot**,
+which is why an account whose newest comment arrived the same day still carried
+totals stamped 16 months earlier — so it can only ever prove that history is
+*missing*, never that we hold all of it.
+
+There is a second proof, and it is the only one available when there is no
+totals blob at all: **a stream that came back holding exactly as many items as
+we asked for stopped because our limit ran out, not because the account did.**
+That is what `filledCommentLimit` / `filledPostLimit` carry, and they are
+consulted only where a total is absent, because where a total exists it is the
+better evidence. Without them the stream-derived profile below would claim a
+complete history purely because the blob was missing, and every consumer that
+asks "is this window trustworthy" — `reliableTimelineStart()` above all — would
+believe it.
 
 `insufficient-data` is its own state everywhere — its own band, its own visibly
 neutral grey dashed badge reading "no data", and an all-or-nothing gate across
@@ -292,6 +306,65 @@ axis gets pointed at — and a young account looking clean on the heaviest agend
 signal is the failure mode worth caring about. There is a test for the complete
 case specifically, so nobody narrows it back.
 
+## The blind spot: an account the index has never heard of
+
+The defects above are false positives. This one is the opposite and it is
+worse, because a false positive is at least visible: **the newest 15–20% of a
+live thread got no verdict at all**, and the badge blamed the account for it.
+
+`fetchAccount` used to treat an empty `/api/users/search` as "no such account"
+and return `null` — one line, `if (!meta) return null`. Against a real
+r/politics thread on 2026-08-05, **35 of 236 authors (14.8%) returned empty
+from that endpoint while `/api/comments/search` served their comments
+normally.** They were not deleted, suspended or mistyped. They were posting at
+the time we asked.
+
+**It is a cutoff, not a lag, and that is the whole point.** Every one of the
+201 indexed accounts in that thread carried the *same*
+`comment_stats_updated_at` — 2025-03-25. The newest `earliest_comment_at` among
+them was 2025-03-14, and 0 of 196 had commented within a week of the probe.
+That is not a stats blob being recomputed slowly; it is a snapshot taken once.
+A re-probe on 2026-08-16 measured **20.0%**, up from 14.8% eleven days earlier,
+and **the growth is the proof**: a lag shrinks, a cutoff widens every day that
+passes. So the blind spot is not random — it is *exactly* the population most
+worth checking, because a brand-new account is the shape astroturf takes.
+
+The fix is that **the users index does not get to decide whether an account
+exists**. On a miss we ask the comment and post streams anyway and, if either
+serves anything, assemble the profile from those alone. Live, after the fix,
+`u/runnertrailsBay` — the loudest voice in that thread and one of the 35 —
+scores `automation low 12 · agenda low 2 · authenticity moderate 55` off 145
+comments and no index entry at all.
+
+Four things are load-bearing:
+
+* **Absence has to be agreed by all three endpoints.** An index miss with empty
+  streams is still `null`, because a deleted or mistyped name has to stay
+  distinguishable from a new one. Splitting that single test in two is the fix
+  in miniature, and both halves are asserted.
+* **A request failure still throws; only an *empty result* falls back.** An
+  outage and an absent account are different facts. Falling back on a 500 would
+  quietly convert a broken endpoint into a stream of confident-looking thin
+  profiles that all resemble young accounts — the exact reading the tool is
+  meant to be careful about.
+* **`karma` stays `null`, never `0`**, per rule 1 of `profile.js`, and
+  `karma-velocity` (weight 1 of 12.5) degrades to `insufficient-data` *on its
+  own* with no special-casing. That is the seam working: one signal reports what
+  it could not measure instead of the whole lookup vanishing.
+* **`firstSeenUtc` from the oldest retrieved item is a *floor*, not an age**,
+  and `coverage.errors` says so in the words the badge renders. This was decided
+  deliberately rather than fallen into: for an old, prolific, comment-only
+  account whose window filled up, the understated age trips `MIN_HISTORY_DAYS`
+  and gates the whole verdict to `insufficient-data`. That is the answer we
+  want. What we actually hold in that case is 300 comments spanning forty
+  minutes, and scoring it would be a verdict on our own pagination rather than
+  on the account — the same mistake as the forged dormancy above, arriving
+  through a different door. There is a test asserting the gate fires, so nobody
+  "fixes" it into a clean band later.
+
+Understating age is also the safe direction on its own terms: it can only ever
+push a verdict *towards* `insufficient-data`, never towards a clean score.
+
 ## What it actually scored on a live thread
 
 [`EVALUATION.md`](EVALUATION.md) is the 2026-08-05 run against a real
@@ -301,11 +374,13 @@ human scored above `low` on automation and no bot scored `low` — the bands do
 not overlap. Three defects it turned up, none of which the 106 tests of the day
 could see:
 
-* **The users endpoint is a frozen 2025-03-25 snapshot, not a lagging one**, so
-  `fetchAccount` returns `null` for every account created since — **14.8% of
-  that thread**, and disproportionately the new accounts most worth checking.
-  The scoring core does not need that blob; a stream-derived profile scores
-  fine with `karma-velocity` degrading to `insufficient-data` on its own.
+* ~~**The users endpoint is a frozen 2025-03-25 snapshot, not a lagging one**,
+  so `fetchAccount` returns `null` for every account created since~~ —
+  **fixed**, see the section above. It was **14.8% of that thread** on
+  2026-08-05 and **20.0%** on a 2026-08-16 re-probe, disproportionately the new
+  accounts most worth checking; the growth between those two figures is what
+  proves it is a cutoff rather than a lag. The scoring core never needed that
+  blob.
 * ~~**`asks-questions` counts `?` inside URL query strings**~~ — **fixed**, see
   the section above. It was moving a human by a point or two and taking
   RemindMeBot from 0% to 100%.
@@ -438,9 +513,10 @@ then the reload arrow on the extension's card in `chrome://extensions`.
   the account has too little history to score (fewer than 15 comments, or under
   14 days), and see [Coverage is part of every
   verdict](#coverage-is-part-of-every-verdict) for why that is deliberately not
-  reported as a clean score. Accounts created after 2025-03-25 can also come
-  back empty — that is an upstream data limitation, documented in
-  [`EVALUATION.md`](EVALUATION.md).
+  reported as a clean score. An account created after 2025-03-25 is missing
+  from the upstream users index, but is no longer reported as absent for it —
+  it is scored from its comment and post streams, with the missing index entry
+  named in the badge's coverage list.
 * The content script renders a neutral "unavailable" badge and never touches
   Reddit's own DOM when something goes wrong, so a broken lookup can degrade
   the badge but cannot break the page.
@@ -625,7 +701,7 @@ source's own unit.
 ## Tests
 
 ```
-npm test                                  # both suites, 110 tests
+npm test                                  # both suites, 117 tests
 node --test test/scoring.test.js           # one file
 ```
 

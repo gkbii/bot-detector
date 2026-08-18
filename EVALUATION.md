@@ -98,6 +98,28 @@ it could not measure instead of the whole lookup vanishing.
 misses, with `karma: null` and a `coverage.errors` entry naming why. Not a
 guess — the run above is the real code producing the real output.
 
+**FIXED 2026-08-17 (JIO-291).** `fetchAccount` asks the comment and post
+streams before believing an index miss, and returns `null` only when all three
+endpoints agree the account is absent. Re-measured live the same day:
+`u/runnertrailsBay` — one of the 35 — scores **`automation low 12 · agenda low
+2 · authenticity moderate 55`** off 145 comments with no index entry at all
+(agenda and automation exactly as predicted above; authenticity 55 rather than
+56 because JIO-290's URL-stripping landed in between). A re-probe on 2026-08-16
+put the blind spot at **20.0%**, up from the 14.8% measured here on 2026-08-05
+— a lag shrinks, a cutoff widens, and that growth is the evidence.
+
+Three things the fix decides, rather than falls into. A users-endpoint *request
+failure* still throws: an outage is not an absent account, and falling back on
+it would produce a stream of confident-looking thin profiles. `firstSeenUtc`
+from the oldest retrieved item is a **floor**, so an old prolific account whose
+window filled up trips `MIN_HISTORY_DAYS` and is gated to `insufficient-data` —
+deliberately, because what we hold in that case is 300 comments spanning forty
+minutes and scoring it would be a verdict on our own pagination. And a stream
+that filled the limit we set now reports `coverage.truncated` on that basis
+alone, since with no totals blob it is the only proof available and without it
+the merged timeline would look complete — Finding 3's forged dormancy arriving
+through a different door.
+
 ## Finding 2 — `asks-questions` counts URL query strings, and it fires on bots
 
 `authenticity.js`'s question signal is `body.includes('?')`. A markdown link

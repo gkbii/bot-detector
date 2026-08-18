@@ -63,16 +63,25 @@ export function buildCoverage({
   sources = [],
   errors = [],
   hitRequestCeiling = false,
+  filledCommentLimit = false,
+  filledPostLimit = false,
 } = {}) {
-  // Truncation is a lower bound on purpose. `commentsTotal` comes from a
-  // periodically-refreshed stats blob upstream, so it can LAG the live history
-  // (verified 2026-08-05: an account whose newest comment was that day carried
-  // totals last recomputed 16 months earlier). We therefore report truncation
-  // when we can prove it, and never report "complete" as a positive claim.
+  // Truncation is a lower bound on purpose. `commentsTotal` comes from an
+  // upstream stats blob that is not recomputed live (verified 2026-08-05: an
+  // account whose newest comment was that day carried totals stamped 16 months
+  // earlier), so it can only ever prove that we are MISSING history, never
+  // that we have it all. We therefore report truncation when we can prove it,
+  // and never report "complete" as a positive claim.
+  //
+  // When there is no total at all — the stream-derived profile built when the
+  // users index has no entry — the only remaining proof is our own limit
+  // filling up. `filled*Limit` carries it, and it is consulted ONLY in that
+  // case: where a total exists it is the better evidence, and an account
+  // holding exactly as many items as we asked for is genuinely complete.
   const truncated = Boolean(
     hitRequestCeiling
-      || (Number.isFinite(commentsTotal) && commentsFetched < commentsTotal)
-      || (Number.isFinite(postsTotal) && postsFetched < postsTotal),
+      || (Number.isFinite(commentsTotal) ? commentsFetched < commentsTotal : filledCommentLimit)
+      || (Number.isFinite(postsTotal) ? postsFetched < postsTotal : filledPostLimit),
   );
 
   return Object.freeze({
