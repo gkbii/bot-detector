@@ -78,6 +78,30 @@ Coverage rides on every verdict for the same reason: a report over 100 of an
 account's 2,568 comments says so, in the headline sentence, and `profile`
 derives that itself so no caller downstream can forget it.
 
+## An empty answer from `archive` is not an answer about the account
+
+`archive` is three endpoints rather than one: an index of accounts carrying
+karma and lifetime totals, and two newest-first streams of comments and posts.
+The index turns out to have been taken once, in March 2025, and never
+refreshed since — so an account whose first comment came after that date does
+not exist to it, however busy it is today. Treating that empty answer as "no
+such account" is one line of code, and it cost 35 of one live thread's 236
+authors their verdict: badged as deleted, suspended or mistyped while the
+endpoint next door served their comments perfectly normally. A re-probe eleven
+days later put it at one author in five, and that growth is the proof it is a
+cutoff and not a delay — a lag shrinks, a cutoff widens every day. The blind
+spot was therefore precisely the newest accounts, which is the shape a bought
+account takes.
+
+Absence now has to be agreed by all three endpoints before `profile` reports
+it. A miss in the index alone yields a profile assembled from the streams
+alone, carrying what that costs out loud: no karma, an age that is a floor
+rather than a total — which can only push a verdict towards `gate`, never
+towards a clean score — and a line on the badge that names our source instead
+of blaming the person. A request that *fails* still fails, because an outage is
+not an absent account, and falling back on one would turn a broken endpoint
+into a stream of confident-looking thin profiles.
+
 ## Two signals once fired on the shape of our own pagination
 
 `profile` is not a naive merge of what came back, and the guard in it was
