@@ -42,7 +42,8 @@
  *     `before=1761856696` returned items strictly older with zero overlap.
  *     We nonetheless page with `before = oldest + 1` and dedupe by id, because
  *     an exclusive cursor on a non-unique key silently DROPS any sibling
- *     sharing that exact second. Overlap is cheap; a hole is invisible.
+ *     sharing that exact second. Overlap is cheap; a hole is invisible — but
+ *     it is not free, and the next section is what it costs.
  *
  *  3. THROTTLING LOOKS LIKE A CLIENT ERROR. Two parallel requests produced
  *     HTTP 422 with `{"data":null,"error":"Timeout. Maybe slow down a bit"}`.
@@ -56,6 +57,51 @@
  *     "no such account" is an empty array — but see the next section: an empty
  *     array from `/api/users/search` alone does NOT mean the account does not
  *     exist.
+ *
+ * ### PAGING, THE BOUNDARY ROW AND WHY THE COUNT LIES
+ *
+ * The deliberate overlap above has a consequence that is easy to miss and was
+ * missed: **every page after the first arrives holding one row we already
+ * have.** `before = oldest + 1` is inclusive of `oldest`, so the dedupe throws
+ * that row away, and a page of 100 contributes 99. A stream paged to 300 fills
+ * every page it asks for and still ends on 299.
+ *
+ * Which is why `collect()` returns why it stopped, and why NOTHING may re-derive
+ * that from the row count. JIO-291: `buildCoverage` was handed
+ * `fetched >= limit`, which is never true on a deep stream, so
+ * `coverage.truncated` came back FALSE for an account whose history we had
+ * barely opened. Where the users index has an entry, `num_comments` covers for
+ * it. Where it does not — the frozen-snapshot miss below, which is by
+ * construction the newest and most suspect accounts — nothing does, and
+ * `reliableTimelineStart()` gates solely on `coverage.truncated`, so it
+ * returned null and the raw timeline was trusted whole. That is JIO-290's
+ * forged dormancy arriving through the door the users-index fallback opened.
+ *
+ * Live on 2026-08-18, before the fix: six index-missed authors of one thread
+ * (Calm_Emphasis_5974, HunterSpecial1549, Admirable-Gold3447, Avalon_Within,
+ * SpartyParty9119, Due_Degree2802) each fetched 299 of a requested 300,
+ * reported `truncated: false`, and each had real history below the cursor.
+ *
+ * Two things follow, and both are load-bearing:
+ *
+ *  - PAGE SIZE IS CONSTANT, not `wanted - fetched`. A page sized to exactly
+ *    what is left comes back one short, and the shortfall then asks for a
+ *    1-row page that can only be the duplicate again — 5 requests to deliver
+ *    299. A full page absorbs the overlap and the overshoot is sliced off: 4
+ *    requests, 300 rows.
+ *  - THE SLICE IS ITSELF A TRUNCATION, and the first cut of this fix missed
+ *    it. A full page can carry us past `wanted` and run the source dry in the
+ *    same request; the stream is then genuinely exhausted while the view we
+ *    return is not. Live on 2026-08-18, u/Calm_Emphasis_5974 paged
+ *    100/99/99/89 to 387 rows, the last page was short, and 87 rows went in
+ *    the bin behind a `truncated: false` — the original defect wearing a
+ *    different hat, and green tests all the way through.
+ *  - THE TEST THAT DID NOT CATCH IT PASSED. `pages a 300-comment request into
+ *    three requests` served a fresh non-overlapping page per call, ignoring
+ *    `before` entirely, so the fixture had no boundary row to dedupe. A stub
+ *    that does not honour the cursor cannot observe a cursor bug. The
+ *    regression tests below page a real history through a `before`-honouring
+ *    stub, which is the only shape that can.
  *
  * ### `/api/users/search` IS A FROZEN SNAPSHOT, NOT A LAGGING ONE
  *
@@ -104,8 +150,10 @@ const DEFAULT_POST_LIMIT = 100;
  * knob: one badge render must never be able to become a scraping loop, whether
  * through a pagination bug, a cursor that stops advancing, or an account with
  * a pathological history. Retries count against it too, so a source that is
- * failing cannot spin either. 300 comments + 100 posts + 1 identity call = 5
- * requests, so this leaves headroom for a few retries and nothing more.
+ * failing cannot spin either. 300 comments is 4 requests once the deduped
+ * boundary row is accounted for (see PAGING above), plus 1 for 100 posts and 1
+ * identity call = 6, so this leaves headroom for a few retries and nothing
+ * more.
  */
 export const MAX_REQUESTS_PER_LOOKUP = 12;
 
@@ -201,8 +249,10 @@ export async function fetchAccount(username, opts = {}) {
   // they could not measure. So a failure is recorded in coverage.errors and
   // the lookup continues — that is the same "name what you couldn't" rule the
   // truncation flag exists for.
-  const rawComments = await collect(ctx, 'comments', name, commentLimit, errors);
-  const rawPosts = await collect(ctx, 'posts', name, postLimit, errors);
+  const { rows: rawComments, incomplete: commentsIncomplete } =
+    await collect(ctx, 'comments', name, commentLimit, errors);
+  const { rows: rawPosts, incomplete: postsIncomplete } =
+    await collect(ctx, 'posts', name, postLimit, errors);
 
   const comments = rawComments.map(normalizeComment);
   const posts = rawPosts.map(normalizePost);
@@ -222,15 +272,17 @@ export async function fetchAccount(username, opts = {}) {
     commentsTotal: pickNumber(stats.num_comments),
     postsFetched: posts.length,
     postsTotal: pickNumber(stats.num_posts),
-    // A stream that came back holding exactly as many items as we asked for
-    // stopped because OUR limit ran out, not because the account did. With no
-    // totals to compare against that is the only proof of truncation
-    // available, and it has to be reported: without it a stream-derived
+    // Whether each stream ran out on its own, straight from the pager that
+    // knows. This used to be re-derived here as `fetched >= limit`, which is
+    // the JIO-291 defect: pagination overlaps the boundary second on purpose
+    // and dedupes it, so a deep stream lands one row short of every limit it
+    // actually filled, and the comparison reads "the account ran out" on the
+    // exact accounts with the most history. Without this a stream-derived
     // profile claims a complete history, and `reliableTimelineStart()` then
     // trusts a 40-minute comment window merged with a years-old post — the
     // forged-dormancy failure it exists to prevent.
-    filledCommentLimit: filledLimit(rawComments.length, commentLimit),
-    filledPostLimit: filledLimit(rawPosts.length, postLimit),
+    commentsIncomplete,
+    postsIncomplete,
     oldestFetchedUtc,
     sources: [SOURCE_NAME],
     errors,
@@ -313,17 +365,42 @@ export function normalizeUsername(input) {
 // Paging
 // ---------------------------------------------------------------------------
 
+/**
+ * Page one stream down to `limit` items.
+ *
+ * Returns the rows AND whether we stopped for a reason of our own rather than
+ * because the source ran out of history. That second value is the whole point
+ * of returning a pair: the caller used to re-derive it by comparing the row
+ * count against `limit`, and a row count is arithmetic about our own paging,
+ * not evidence about the account. See PAGING, THE BOUNDARY ROW AND WHY THE
+ * COUNT LIES in the header.
+ *
+ * @returns {Promise<{rows: object[], incomplete: boolean}>} `incomplete` is
+ *          true unless the API itself said there was nothing older.
+ */
 async function collect(ctx, kind, author, limit, errors) {
   const wanted = Math.max(0, Math.floor(limit ?? 0));
-  if (wanted === 0) return [];
+  if (wanted === 0) return { rows: [], incomplete: false };
 
   const path = kind === 'comments' ? '/api/comments/search' : '/api/posts/search';
+
+  // CONSTANT, deliberately not `wanted - out.length`. Every cursor step
+  // re-serves the boundary second (`before = oldest + 1`) and we dedupe that
+  // row away, so a page sized to exactly what is left always comes back one
+  // row short — and the shortfall then asks for a 1-row page which can only
+  // be that same duplicate again. A full page absorbs the overlap instead;
+  // the overshoot is trimmed by the slice at the end.
+  const pageSize = Math.min(PAGE_SIZE, wanted);
+
   const out = [];
   const seen = new Set();
   let before = null;
+  // Only the API saying "nothing older" proves we have the whole stream.
+  // Every other exit — our limit, a stall, a failed request — leaves us
+  // holding a partial view, and coverage has to say so.
+  let sourceExhausted = false;
 
   while (out.length < wanted) {
-    const pageSize = Math.min(PAGE_SIZE, wanted - out.length);
     let rows;
     try {
       rows = await requestData(ctx, path, {
@@ -338,7 +415,10 @@ async function collect(ctx, kind, author, limit, errors) {
       break;
     }
 
-    if (!Array.isArray(rows) || rows.length === 0) break;
+    if (!Array.isArray(rows) || rows.length === 0) {
+      sourceExhausted = true;
+      break;
+    }
 
     let added = 0;
     for (const row of rows) {
@@ -352,20 +432,37 @@ async function collect(ctx, kind, author, limit, errors) {
 
     // Stall guard. `before = oldest + 1` re-includes the boundary second, so
     // if an entire page shares one timestamp the cursor cannot advance and we
-    // would page forever. Zero NEW rows means we are done, whatever the API
-    // keeps handing back. (The request ceiling is the outer net; this is the
-    // one that stops us wasting it.)
+    // would page forever. Zero NEW rows means we stop, whatever the API keeps
+    // handing back. (The request ceiling is the outer net; this is the one
+    // that stops us wasting it.) NOT exhaustion: the API never said there was
+    // nothing older, it said the same thing twice, so this stream stays
+    // incomplete.
     if (added === 0) break;
 
     const oldest = minTimestamp(rows.map((r) => pickNumber(r.created_utc)));
-    if (oldest == null) break;
+    if (oldest == null) break; // no cursor to advance: also not exhaustion
+
     before = oldest + 1;
 
-    // Short page => the source is out of history.
-    if (rows.length < pageSize) break;
+    // Short page => the source is out of history. This is the ONE exit that
+    // is a statement by the API about the account rather than about us.
+    if (rows.length < pageSize) {
+      sourceExhausted = true;
+      break;
+    }
   }
 
-  return out.slice(0, wanted);
+  // Two ways to hold a partial view, and BOTH have been live. The source not
+  // saying "nothing older" is the obvious one. The other is the slice on this
+  // line: a full page can carry us past `wanted` and run the source dry in the
+  // same request, and then we discard the overshoot ourselves. Live on
+  // 2026-08-18, u/Calm_Emphasis_5974 paged 100/99/99/89 to 387 rows, the last
+  // page was short — so the source WAS exhausted — and 87 rows went in the
+  // bin behind a `truncated: false`. A bound that fires says so.
+  return {
+    rows: out.slice(0, wanted),
+    incomplete: !sourceExhausted || out.length > wanted,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -465,19 +562,6 @@ function isAbort(err) {
 
 function pickNumber(value) {
   return Number.isFinite(value) ? value : null;
-}
-
-/**
- * Did this stream stop because our own limit ran out? `collect()` can only
- * reach `wanted` items by filling up, so equality is the test. An account
- * holding exactly `wanted` items reads as filled too — a false positive that
- * costs a "truncated" flag we cannot disprove, which is the direction to err
- * in: over-reporting truncation discards data, under-reporting it invents
- * silence that was never there.
- */
-function filledLimit(fetched, limit) {
-  const wanted = Math.max(0, Math.floor(limit ?? 0));
-  return wanted > 0 && fetched >= wanted;
 }
 
 function str(value) {

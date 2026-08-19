@@ -63,8 +63,8 @@ export function buildCoverage({
   sources = [],
   errors = [],
   hitRequestCeiling = false,
-  filledCommentLimit = false,
-  filledPostLimit = false,
+  commentsIncomplete = false,
+  postsIncomplete = false,
 } = {}) {
   // Truncation is a lower bound on purpose. `commentsTotal` comes from an
   // upstream stats blob that is not recomputed live (verified 2026-08-05: an
@@ -73,15 +73,25 @@ export function buildCoverage({
   // that we have it all. We therefore report truncation when we can prove it,
   // and never report "complete" as a positive claim.
   //
-  // When there is no total at all — the stream-derived profile built when the
-  // users index has no entry — the only remaining proof is our own limit
-  // filling up. `filled*Limit` carries it, and it is consulted ONLY in that
-  // case: where a total exists it is the better evidence, and an account
-  // holding exactly as many items as we asked for is genuinely complete.
+  // Which is why the two kinds of evidence are OR'd rather than ranked. They
+  // fail in opposite directions and neither dominates: a total proves nothing
+  // when it is stale-low — a frozen 2025-03-25 snapshot of an account that has
+  // commented since reports a count our own limit can exceed, and
+  // `fetched < total` then reads as "we have it all" over a 300-of-5000 window
+  // — while `*Incomplete` is blind to how much is missing and reports nothing
+  // for a profile the fetcher never had to page. Either one saying "partial"
+  // is proof; only both staying silent is the absence of it.
+  //
+  // `*Incomplete` comes from the pager, which knows why it stopped. It must
+  // never be re-derived from a row count (JIO-291): pagination deliberately
+  // overlaps the boundary second and dedupes it, so a stream that filled every
+  // page still lands one row short of the limit it filled.
   const truncated = Boolean(
     hitRequestCeiling
-      || (Number.isFinite(commentsTotal) ? commentsFetched < commentsTotal : filledCommentLimit)
-      || (Number.isFinite(postsTotal) ? postsFetched < postsTotal : filledPostLimit),
+      || commentsIncomplete
+      || postsIncomplete
+      || (Number.isFinite(commentsTotal) && commentsFetched < commentsTotal)
+      || (Number.isFinite(postsTotal) && postsFetched < postsTotal),
   );
 
   return Object.freeze({

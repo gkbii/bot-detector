@@ -425,6 +425,10 @@ test('accepts u/name and /u/name forms', () => {
 // ---------------------------------------------------------------------------
 
 test('pages a 300-comment request into three requests using the before cursor', async () => {
+  // NOTE: this stub ignores `before` and serves a fresh non-overlapping page
+  // per call, so it exercises the cursor MECHANICS and nothing else. It cannot
+  // observe the boundary row, which is how JIO-291 passed 117 tests — see the
+  // `before`-honouring stub in the JIO-291 block below.
   const page = (start) => Array.from({ length: 100 }, (_, i) => ({
     ...COMMENT_REPLY, id: `c${start - i}`, created_utc: start - i * 60,
   }));
@@ -458,6 +462,146 @@ test('pages a 300-comment request into three requests using the before cursor', 
 
   assert.equal(fetchImpl.calls.filter((c) => c.path === '/api/posts/search').length, 0,
     'a zero limit fetches nothing');
+});
+
+// ---------------------------------------------------------------------------
+// JIO-291. The cursor is `oldest + 1` ON PURPOSE, so every page after the
+// first re-serves one row we already hold and the dedupe drops it: a stream
+// paged to 300 fills every page and lands on 299. `buildCoverage` was handed
+// `fetched >= limit` to decide truncation, which is therefore never true on a
+// deep stream — so `coverage.truncated` read FALSE for the accounts with the
+// MOST history. On the indexed path `num_comments` covered for it; on the
+// stream-derived path of the fix above nothing did, and
+// `reliableTimelineStart()` gates solely on `truncated`, so the raw timeline
+// was trusted whole. Live on 2026-08-18, six index-missed authors of one
+// thread each fetched 299, reported truncated:false, and each had real history
+// below the cursor.
+//
+// The 117 tests of the day passed straight through it. `pages a 300-comment
+// request into three requests` above serves a fresh non-overlapping page per
+// call and ignores `before`, so its fixture has no boundary row to dedupe, and
+// `a stream-derived profile that filled our own limit` pins commentLimit to
+// 100 and is answered in a single page — neither one ever paginates a real
+// history. A stub that does not honour the cursor cannot observe a cursor bug,
+// which is why these use one that does.
+// ---------------------------------------------------------------------------
+
+/**
+ * A stub that answers `before` the way the live API does: EXCLUSIVE (`<`), so
+ * `before = oldest + 1` really does hand back the boundary row again. Anything
+ * looser than this is what let JIO-291 through.
+ */
+function pagedHistory(count, { endAt = 1785948140, stepSeconds = 60 } = {}) {
+  const history = Array.from({ length: count }, (_, i) => ({
+    ...COMMENT_REPLY, id: `p${i}`, created_utc: endAt - i * stepSeconds,
+  }));
+  return (parsed) => {
+    const limit = Number(parsed.searchParams.get('limit'));
+    const before = parsed.searchParams.get('before');
+    const pool = before == null
+      ? history
+      : history.filter((row) => row.created_utc < Number(before));
+    return jsonResponse({ data: pool.slice(0, limit) });
+  };
+}
+
+test('a deep stream paged to our limit reports truncation, and delivers every row asked for', async () => {
+  const fetchImpl = missingFromIndex({
+    '/api/comments/search': pagedHistory(5000),
+    '/api/posts/search': [jsonResponse({ data: [] })],
+  });
+
+  const profile = await fetchAccount('deep', baseOpts(fetchImpl, { commentLimit: 300, postLimit: 0 }));
+
+  assert.equal(profile.comments.length, 300,
+    '299 is the boundary row lost at each page break, not the account running out');
+  assert.equal(new Set(profile.comments.map((c) => c.id)).size, 300);
+
+  assert.equal(profile.coverage.truncated, true,
+    'we stopped because OUR limit ran out; a count one short of it must not read as the account running out');
+  assert.equal(reliableTimelineStart(profile), profile.coverage.oldestFetchedUtc,
+    'and the reliable window stops at our cursor rather than trusting 300 of 5000 as a whole life');
+
+  const commentCalls = fetchImpl.calls.filter((c) => c.path === '/api/comments/search');
+  assert.equal(commentCalls.length, 4,
+    'a constant page absorbs the overlap: 4 full pages, not 3 full ones then a 2-row and a 1-row chase');
+  assert.deepEqual([...new Set(commentCalls.map((c) => c.params.limit))], ['100'],
+    'page size must not shrink to what is left — the last row of it is always the duplicate');
+});
+
+test('a stream that genuinely runs out short of our limit is still not called truncated', async () => {
+  // The other direction, and the reason this is not just "always report
+  // truncated". A short page IS the API saying there is nothing older, and
+  // that is the one exit that proves completeness.
+  const fetchImpl = missingFromIndex({
+    '/api/comments/search': pagedHistory(250),
+    '/api/posts/search': [jsonResponse({ data: [] })],
+  });
+
+  const profile = await fetchAccount('finite', baseOpts(fetchImpl, { commentLimit: 300, postLimit: 0 }));
+
+  assert.equal(profile.comments.length, 250, 'every row of a finite history, none lost at a page break');
+  assert.equal(profile.coverage.truncated, false, 'the account ran out, not us');
+  assert.equal(reliableTimelineStart(profile), null, 'so the whole timeline is reliable');
+});
+
+test('the slice that trims the overshoot is itself a truncation and says so', async () => {
+  // A full page can carry us past `wanted` and run the source dry in the SAME
+  // request: the stream really is exhausted, but the view we hand back is not,
+  // because we then throw the overshoot away. Live on 2026-08-18,
+  // u/Calm_Emphasis_5974 paged 100/99/99/89 to 387 rows and 87 of them were
+  // sliced off behind a `truncated: false`. The first cut of the JIO-291 fix
+  // shipped this and the suite was green.
+  const fetchImpl = missingFromIndex({
+    '/api/comments/search': pagedHistory(387),
+    '/api/posts/search': [jsonResponse({ data: [] })],
+  });
+
+  const profile = await fetchAccount('overshoot', baseOpts(fetchImpl, { commentLimit: 300, postLimit: 0 }));
+
+  assert.equal(profile.comments.length, 300);
+  assert.equal(profile.coverage.truncated, true,
+    'the source ran out, but we discarded 87 rows to honour our own limit');
+  assert.equal(reliableTimelineStart(profile), profile.coverage.oldestFetchedUtc);
+});
+
+test('an account holding exactly the limit we asked for is complete, not truncated', async () => {
+  // The boundary between the two tests above. 300 of exactly 300 is the whole
+  // account: the last page is short AND there is no overshoot to discard.
+  const fetchImpl = missingFromIndex({
+    '/api/comments/search': pagedHistory(300),
+    '/api/posts/search': [jsonResponse({ data: [] })],
+  });
+
+  const profile = await fetchAccount('exact', baseOpts(fetchImpl, { commentLimit: 300, postLimit: 0 }));
+
+  assert.equal(profile.comments.length, 300);
+  assert.equal(profile.coverage.truncated, false);
+  assert.equal(reliableTimelineStart(profile), null);
+});
+
+test('a stale-low lifetime total cannot certify a paged stream as complete', async () => {
+  // The users index is a frozen 2025-03-25 snapshot, so `num_comments` for an
+  // account that has commented since is LOW — low enough that our own 300 can
+  // exceed it, at which point `fetched < total` reads as "we have it all".
+  // Truncation is a lower bound: either kind of evidence saying "partial" is
+  // proof, and only both staying silent is the absence of it.
+  const stale = {
+    data: [{ ...USER_PAYLOAD.data[0], _meta: { ...USER_PAYLOAD.data[0]._meta, num_comments: 50, num_posts: 0 } }],
+  };
+  const fetchImpl = scriptedFetch({
+    '/api/users/search': [jsonResponse(stale)],
+    '/api/comments/search': pagedHistory(5000),
+    '/api/posts/search': [jsonResponse({ data: [] })],
+  });
+
+  const profile = await fetchAccount('stale', baseOpts(fetchImpl, { commentLimit: 300, postLimit: 0 }));
+
+  assert.equal(profile.comments.length, 300);
+  assert.ok(profile.coverage.commentsFetched > profile.coverage.commentsTotal,
+    'the premise: we hold more than the index believes exists');
+  assert.equal(profile.coverage.truncated, true,
+    'a total we have already exceeded proves nothing about what is left');
 });
 
 test('deduplicates the boundary second re-served by the overlapping cursor', async () => {

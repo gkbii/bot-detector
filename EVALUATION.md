@@ -115,10 +115,78 @@ from the oldest retrieved item is a **floor**, so an old prolific account whose
 window filled up trips `MIN_HISTORY_DAYS` and is gated to `insufficient-data` —
 deliberately, because what we hold in that case is 300 comments spanning forty
 minutes and scoring it would be a verdict on our own pagination. And a stream
-that filled the limit we set now reports `coverage.truncated` on that basis
-alone, since with no totals blob it is the only proof available and without it
-the merged timeline would look complete — Finding 3's forged dormancy arriving
-through a different door.
+that stopped for a reason of our own now reports `coverage.truncated` on that
+basis alone, since with no totals blob it is the only proof available and
+without it the merged timeline would look complete — Finding 3's forged dormancy
+arriving through a different door. *The first version of that last check counted
+rows and did not work at all; see Finding 1a.*
+
+## Finding 1a — the truncation flag that Finding 1 added never fired on a real account
+
+Found by audit on 2026-08-18, one day after the fix above, and it is worth
+reading as a unit with it: the check that was supposed to close the
+forged-dormancy door was `rawComments.length >= commentLimit`, and on live data
+that comparison is **never true**.
+
+The cause is a deliberate decision two hundred lines away. Pagination uses
+`before = oldest + 1` rather than `before = oldest`, because the cursor is
+exclusive (`<`) on a **non-unique** key, so an exact cursor silently drops any
+sibling sharing that second — overlap is cheap, a hole is invisible. The price
+is that every page after the first arrives holding one row we already have, the
+dedupe throws it away, and **a stream paged to 300 fills every page it asks for
+and ends on 299.** `299 >= 300` is false, so `coverage.truncated` came back
+`false` for the accounts with the *most* history.
+
+Where the users index has an entry, `num_comments` covers for it —
+`u/spez` read 299 of 2568 and was correctly truncated. Where it does not, which
+by Finding 1's own argument is exactly the newest and most suspect accounts,
+nothing did. `reliableTimelineStart()` gates solely on `coverage.truncated`, so
+it returned `null` and the entire raw timeline was trusted as complete. Finding
+3's forged dormancy, reached through the door Finding 1 had just opened.
+
+Measured live on 2026-08-18 across six index-missed authors of the same thread
+— `Calm_Emphasis_5974`, `HunterSpecial1549`, `Admirable-Gold3447`,
+`Avalon_Within`, `SpartyParty9119`, `Due_Degree2802` — **6 of 6 fetched 299,
+reported `truncated: false`, and had real history below the cursor.**
+
+**FIXED 2026-08-18 (JIO-291).** Three changes, and the middle one is the point:
+
+* `collect()` returns **why it stopped** alongside the rows, and nothing
+  re-derives that from a row count. A count is arithmetic about our own paging;
+  only a short or empty page is the API making a statement about the account.
+* Page size is **constant**, not `wanted - fetched`. A page sized to exactly
+  what is left comes back one short, and the shortfall then asks for a one-row
+  page that can only be the duplicate again — five requests to deliver 299. A
+  full page absorbs the overlap: four requests, 300 rows.
+* `buildCoverage` **OR**s the two kinds of evidence instead of ranking them.
+  They fail in opposite directions: a frozen-snapshot `num_comments` can be
+  stale-*low* enough that our own 300 exceeds it, at which point
+  `fetched < total` reads as "we have it all" over a 300-of-5000 window.
+
+Re-measured live after the fix, same six accounts: all six now fetch the full
+300, report `truncated: true`, and carry a real `reliableTimelineStart` instead
+of `null`. `u/spez` is unchanged. The other direction holds too —
+`u/Calm_Emphasis_5974` asked for 900 comments and 900 posts returns its entire
+387 and 65, `truncated: false`, `reliableTimelineStart` `null`.
+
+**Two lessons, both already this repo's rules, both broken anyway.**
+
+*A stub that does not honour the cursor cannot observe a cursor bug.* All 117
+tests passed. `pages a 300-comment request into three requests` served a fresh
+non-overlapping page per call and ignored `before` outright; `a stream-derived
+profile that filled our own limit` pinned `commentLimit` to 100 and was answered
+in a single page. Neither ever paginated a real history, so neither could see
+the boundary row. The regression tests use a stub that answers `before`
+exclusively, the way the live API does.
+
+*And the first cut of this very fix shipped the same defect wearing a different
+hat.* Slicing the overshoot back to `wanted` is **itself** a truncation, and a
+full page can carry us past the limit and run the source dry in the same
+request — the stream is genuinely exhausted while the view we return is not.
+`u/Calm_Emphasis_5974` paged 100/99/99/89 to 387 rows, the last page was short,
+and 87 rows went in the bin behind a `truncated: false`. Green tests all the way
+through; caught only by running it against the live API. A bound that fires says
+so out loud, and the slice is a bound.
 
 ## Finding 2 — `asks-questions` counts URL query strings, and it fires on bots
 
@@ -236,3 +304,8 @@ document should be read as evidence that the agenda axis works.
 Sample size is 25 accounts in one thread on one subreddit on one day. Findings 1
 through 3 are defects that reproduce deterministically; the band separation in
 the headline table is a single observation, not a measured error rate.
+
+Finding 1a is not from this run at all — it is a defect in Finding 1's own fix,
+found by auditing it a day later and measured against the live API on
+2026-08-18. It is filed here rather than in a ticket because a fix that reopens
+the hole it closed belongs next to the finding it claims to have closed.
