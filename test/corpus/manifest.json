@@ -1,0 +1,1139 @@
+{
+ "capturedWith": "scripts/capture-corpus.mjs",
+ "humanSelection": {
+  "threadId": "1vg75om",
+  "sampledBefore": 1785956280,
+  "commentsRetrieved": 496,
+  "distinctAuthors": 235,
+  "rule": "authors of the 496-comment sample window, by descending comment count in it, ties by username; skipped only when scoreAccount returns insufficient-data",
+  "ranked": [
+   {
+    "author": "bigbjarne",
+    "comments": 22
+   },
+   {
+    "author": "Donkletown",
+    "comments": 17
+   },
+   {
+    "author": "runnertrailsBay",
+    "comments": 16
+   },
+   {
+    "author": "Hartacus",
+    "comments": 15
+   },
+   {
+    "author": "Qrahe",
+    "comments": 13
+   },
+   {
+    "author": "KevinGreeneSolar",
+    "comments": 9
+   },
+   {
+    "author": "MundaneFacts",
+    "comments": 7
+   },
+   {
+    "author": "Parahelix",
+    "comments": 7
+   },
+   {
+    "author": "batmansthebomb",
+    "comments": 6
+   },
+   {
+    "author": "DooberBooberDoo",
+    "comments": 6
+   },
+   {
+    "author": "TCBloo",
+    "comments": 6
+   },
+   {
+    "author": "Tobeck",
+    "comments": 6
+   },
+   {
+    "author": "WhatTheHali24",
+    "comments": 6
+   },
+   {
+    "author": "___AirBuddDwyer___",
+    "comments": 5
+   },
+   {
+    "author": "Biscopiphany",
+    "comments": 5
+   },
+   {
+    "author": "ADELTAx",
+    "comments": 4
+   },
+   {
+    "author": "Aubenabee",
+    "comments": 4
+   },
+   {
+    "author": "Eyeball1844",
+    "comments": 4
+   },
+   {
+    "author": "GrapefruitExpress208",
+    "comments": 4
+   },
+   {
+    "author": "HungryCurrency8481",
+    "comments": 4
+   },
+   {
+    "author": "Jupiter_Crush",
+    "comments": 4
+   },
+   {
+    "author": "randomnighmare",
+    "comments": 4
+   },
+   {
+    "author": "RedditTrespasser",
+    "comments": 4
+   },
+   {
+    "author": "sulaymanf",
+    "comments": 4
+   },
+   {
+    "author": "AcademicPublius",
+    "comments": 3
+   }
+  ]
+ },
+ "captured": [
+  {
+   "username": "___AirBuddDwyer___",
+   "class": "human",
+   "capturedAt": 1787155732,
+   "comments": 300,
+   "posts": 6,
+   "declaredBy": null,
+   "declarationNote": null,
+   "real": {
+    "automation": {
+     "band": "low",
+     "score": 7
+    },
+    "agenda": {
+     "band": "low",
+     "score": 13
+    },
+    "authenticity": {
+     "band": "high",
+     "score": 66
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "low",
+     "score": 7
+    },
+    "agenda": {
+     "band": "low",
+     "score": 13
+    },
+    "authenticity": {
+     "band": "high",
+     "score": 66
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "ADELTAx",
+   "class": "human",
+   "capturedAt": 1787155798,
+   "comments": 300,
+   "posts": 42,
+   "declaredBy": null,
+   "declarationNote": null,
+   "real": {
+    "automation": {
+     "band": "low",
+     "score": 0
+    },
+    "agenda": {
+     "band": "low",
+     "score": 7
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 55
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "low",
+     "score": 0
+    },
+    "agenda": {
+     "band": "low",
+     "score": 5
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 55
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "AmputatorBot",
+   "class": "bot",
+   "capturedAt": 1787030510,
+   "comments": 299,
+   "posts": 17,
+   "declaredBy": "self-declaration",
+   "declarationNote": "296 of 299 committed comments declare it a bot in words",
+   "real": {
+    "automation": {
+     "band": "moderate",
+     "score": 60
+    },
+    "agenda": {
+     "band": "moderate",
+     "score": 58
+    },
+    "authenticity": {
+     "band": "low",
+     "score": 25
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "moderate",
+     "score": 60
+    },
+    "agenda": {
+     "band": "moderate",
+     "score": 58
+    },
+    "authenticity": {
+     "band": "low",
+     "score": 25
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "Anti-ThisBot-IB",
+   "class": "bot",
+   "capturedAt": 1787030733,
+   "comments": 299,
+   "posts": 0,
+   "declaredBy": "self-declaration",
+   "declarationNote": "299 of 299 committed comments declare it a bot in words",
+   "real": {
+    "automation": {
+     "band": "moderate",
+     "score": 35
+    },
+    "agenda": {
+     "band": "moderate",
+     "score": 36
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 32
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "moderate",
+     "score": 35
+    },
+    "agenda": {
+     "band": "moderate",
+     "score": 36
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 32
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "Aubenabee",
+   "class": "human",
+   "capturedAt": 1787155848,
+   "comments": 300,
+   "posts": 73,
+   "declaredBy": null,
+   "declarationNote": null,
+   "real": {
+    "automation": {
+     "band": "low",
+     "score": 0
+    },
+    "agenda": {
+     "band": "low",
+     "score": 14
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 61
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "low",
+     "score": 0
+    },
+    "agenda": {
+     "band": "low",
+     "score": 14
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 61
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "AutoModerator",
+   "class": "bot",
+   "capturedAt": 1787030317,
+   "comments": 296,
+   "posts": 100,
+   "declaredBy": "self-declaration",
+   "declarationNote": "296 of 296 committed comments declare it a bot in words",
+   "real": {
+    "automation": {
+     "band": "moderate",
+     "score": 63
+    },
+    "agenda": {
+     "band": "moderate",
+     "score": 64
+    },
+    "authenticity": {
+     "band": "low",
+     "score": 29
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "moderate",
+     "score": 63
+    },
+    "agenda": {
+     "band": "moderate",
+     "score": 64
+    },
+    "authenticity": {
+     "band": "low",
+     "score": 29
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "batmansthebomb",
+   "class": "human",
+   "capturedAt": 1787155432,
+   "comments": 300,
+   "posts": 100,
+   "declaredBy": null,
+   "declarationNote": null,
+   "real": {
+    "automation": {
+     "band": "low",
+     "score": 5
+    },
+    "agenda": {
+     "band": "low",
+     "score": 3
+    },
+    "authenticity": {
+     "band": "high",
+     "score": 66
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "low",
+     "score": 5
+    },
+    "agenda": {
+     "band": "low",
+     "score": 3
+    },
+    "authenticity": {
+     "band": "high",
+     "score": 66
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "bigbjarne",
+   "class": "human",
+   "capturedAt": 1787154948,
+   "comments": 300,
+   "posts": 66,
+   "declaredBy": null,
+   "declarationNote": null,
+   "real": {
+    "automation": {
+     "band": "low",
+     "score": 2
+    },
+    "agenda": {
+     "band": "low",
+     "score": 27
+    },
+    "authenticity": {
+     "band": "high",
+     "score": 81
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "low",
+     "score": 0
+    },
+    "agenda": {
+     "band": "low",
+     "score": 13
+    },
+    "authenticity": {
+     "band": "high",
+     "score": 81
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "Biscopiphany",
+   "class": "human",
+   "capturedAt": 1787155753,
+   "comments": 198,
+   "posts": 3,
+   "declaredBy": null,
+   "declarationNote": null,
+   "real": {
+    "automation": {
+     "band": "low",
+     "score": 9
+    },
+    "agenda": {
+     "band": "low",
+     "score": 0
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 59
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "low",
+     "score": 9
+    },
+    "agenda": {
+     "band": "low",
+     "score": 0
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 59
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "Donkletown",
+   "class": "human",
+   "capturedAt": 1787154980,
+   "comments": 300,
+   "posts": 9,
+   "declaredBy": null,
+   "declarationNote": null,
+   "real": {
+    "automation": {
+     "band": "low",
+     "score": 0
+    },
+    "agenda": {
+     "band": "low",
+     "score": 8
+    },
+    "authenticity": {
+     "band": "high",
+     "score": 70
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "low",
+     "score": 0
+    },
+    "agenda": {
+     "band": "low",
+     "score": 2
+    },
+    "authenticity": {
+     "band": "high",
+     "score": 70
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "DooberBooberDoo",
+   "class": "human",
+   "capturedAt": 1787155492,
+   "comments": 300,
+   "posts": 100,
+   "declaredBy": null,
+   "declarationNote": null,
+   "real": {
+    "automation": {
+     "band": "low",
+     "score": 5
+    },
+    "agenda": {
+     "band": "low",
+     "score": 1
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 53
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "low",
+     "score": 5
+    },
+    "agenda": {
+     "band": "low",
+     "score": 1
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 53
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "Hartacus",
+   "class": "human",
+   "capturedAt": 1787155062,
+   "comments": 100,
+   "posts": 17,
+   "declaredBy": null,
+   "declarationNote": null,
+   "real": {
+    "automation": {
+     "band": "low",
+     "score": 9
+    },
+    "agenda": {
+     "band": "low",
+     "score": 28
+    },
+    "authenticity": {
+     "band": "high",
+     "score": 71
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "low",
+     "score": 3
+    },
+    "agenda": {
+     "band": "low",
+     "score": 19
+    },
+    "authenticity": {
+     "band": "high",
+     "score": 71
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "KevinGreeneSolar",
+   "class": "human",
+   "capturedAt": 1787155254,
+   "comments": 135,
+   "posts": 0,
+   "declaredBy": null,
+   "declarationNote": null,
+   "real": {
+    "automation": {
+     "band": "low",
+     "score": 9
+    },
+    "agenda": {
+     "band": "low",
+     "score": 11
+    },
+    "authenticity": {
+     "band": "high",
+     "score": 65
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "low",
+     "score": 5
+    },
+    "agenda": {
+     "band": "low",
+     "score": 11
+    },
+    "authenticity": {
+     "band": "high",
+     "score": 65
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "MundaneFacts",
+   "class": "human",
+   "capturedAt": 1787155302,
+   "comments": 300,
+   "posts": 5,
+   "declaredBy": null,
+   "declarationNote": null,
+   "real": {
+    "automation": {
+     "band": "low",
+     "score": 17
+    },
+    "agenda": {
+     "band": "low",
+     "score": 5
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 57
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "low",
+     "score": 17
+    },
+    "agenda": {
+     "band": "low",
+     "score": 5
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 57
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "Parahelix",
+   "class": "human",
+   "capturedAt": 1787155387,
+   "comments": 300,
+   "posts": 23,
+   "declaredBy": null,
+   "declarationNote": null,
+   "real": {
+    "automation": {
+     "band": "low",
+     "score": 1
+    },
+    "agenda": {
+     "band": "low",
+     "score": 3
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 59
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "low",
+     "score": 0
+    },
+    "agenda": {
+     "band": "low",
+     "score": 0
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 59
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "Qrahe",
+   "class": "human",
+   "capturedAt": 1787155172,
+   "comments": 300,
+   "posts": 27,
+   "declaredBy": null,
+   "declarationNote": null,
+   "real": {
+    "automation": {
+     "band": "low",
+     "score": 0
+    },
+    "agenda": {
+     "band": "low",
+     "score": 0
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 38
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "low",
+     "score": 0
+    },
+    "agenda": {
+     "band": "low",
+     "score": 0
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 38
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "RemindMeBot",
+   "class": "bot",
+   "capturedAt": 1787030332,
+   "comments": 299,
+   "posts": 1,
+   "declaredBy": "evaluation-md",
+   "declarationNote": "no pattern matches its text; admitted on the 2026-08-05 hand-read — EVALUATION.md headline and Finding 2 — \"u/RemindMeBot is not in dispute\"",
+   "real": {
+    "automation": {
+     "band": "moderate",
+     "score": 62
+    },
+    "agenda": {
+     "band": "moderate",
+     "score": 36
+    },
+    "authenticity": {
+     "band": "low",
+     "score": 25
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "moderate",
+     "score": 62
+    },
+    "agenda": {
+     "band": "moderate",
+     "score": 36
+    },
+    "authenticity": {
+     "band": "low",
+     "score": 25
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "RepostSleuthBot",
+   "class": "bot",
+   "capturedAt": 1787030352,
+   "comments": 299,
+   "posts": 6,
+   "declaredBy": "evaluation-md",
+   "declarationNote": "no pattern matches its text; admitted on the 2026-08-05 hand-read — EVALUATION.md Finding 2 — 93/100 \"asks a question\", all of them URLs",
+   "real": {
+    "automation": {
+     "band": "high",
+     "score": 76
+    },
+    "agenda": {
+     "band": "moderate",
+     "score": 64
+    },
+    "authenticity": {
+     "band": "low",
+     "score": 25
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "high",
+     "score": 76
+    },
+    "agenda": {
+     "band": "moderate",
+     "score": 64
+    },
+    "authenticity": {
+     "band": "low",
+     "score": 25
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "runnertrailsBay",
+   "class": "human",
+   "capturedAt": 1787155000,
+   "comments": 145,
+   "posts": 0,
+   "declaredBy": null,
+   "declarationNote": null,
+   "real": {
+    "automation": {
+     "band": "low",
+     "score": 12
+    },
+    "agenda": {
+     "band": "low",
+     "score": 2
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 55
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "low",
+     "score": 8
+    },
+    "agenda": {
+     "band": "low",
+     "score": 0
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 55
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "same_subreddit_bot",
+   "class": "bot",
+   "capturedAt": 1787154726,
+   "comments": 300,
+   "posts": 0,
+   "declaredBy": "self-declaration",
+   "declarationNote": "300 of 300 committed comments declare it a bot in words",
+   "real": {
+    "automation": {
+     "band": "moderate",
+     "score": 51
+    },
+    "agenda": {
+     "band": "moderate",
+     "score": 36
+    },
+    "authenticity": {
+     "band": "low",
+     "score": 25
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "moderate",
+     "score": 51
+    },
+    "agenda": {
+     "band": "moderate",
+     "score": 36
+    },
+    "authenticity": {
+     "band": "low",
+     "score": 25
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "sneakpeekbot",
+   "class": "bot",
+   "capturedAt": 1787030406,
+   "comments": 299,
+   "posts": 23,
+   "declaredBy": "evaluation-md",
+   "declarationNote": "no pattern matches its text; admitted on the 2026-08-05 hand-read — EVALUATION.md Finding 2 and the JIO-290 re-measure",
+   "real": {
+    "automation": {
+     "band": "moderate",
+     "score": 47
+    },
+    "agenda": {
+     "band": "moderate",
+     "score": 36
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 38
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "moderate",
+     "score": 47
+    },
+    "agenda": {
+     "band": "moderate",
+     "score": 36
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 38
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "sub_doesnt_exist_bot",
+   "class": "bot",
+   "capturedAt": 1787154846,
+   "comments": 300,
+   "posts": 0,
+   "declaredBy": "self-declaration",
+   "declarationNote": "300 of 300 committed comments declare it a bot in words",
+   "real": {
+    "automation": {
+     "band": "moderate",
+     "score": 53
+    },
+    "agenda": {
+     "band": "moderate",
+     "score": 36
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 38
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "moderate",
+     "score": 53
+    },
+    "agenda": {
+     "band": "moderate",
+     "score": 36
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 38
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "TCBloo",
+   "class": "human",
+   "capturedAt": 1787155514,
+   "comments": 300,
+   "posts": 100,
+   "declaredBy": null,
+   "declarationNote": null,
+   "real": {
+    "automation": {
+     "band": "low",
+     "score": 1
+    },
+    "agenda": {
+     "band": "low",
+     "score": 5
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 55
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "low",
+     "score": 1
+    },
+    "agenda": {
+     "band": "low",
+     "score": 5
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 55
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "Tobeck",
+   "class": "human",
+   "capturedAt": 1787155563,
+   "comments": 300,
+   "posts": 100,
+   "declaredBy": null,
+   "declarationNote": null,
+   "real": {
+    "automation": {
+     "band": "low",
+     "score": 5
+    },
+    "agenda": {
+     "band": "low",
+     "score": 10
+    },
+    "authenticity": {
+     "band": "high",
+     "score": 69
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "low",
+     "score": 5
+    },
+    "agenda": {
+     "band": "low",
+     "score": 10
+    },
+    "authenticity": {
+     "band": "high",
+     "score": 69
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
+   "username": "WhatTheHali24",
+   "class": "human",
+   "capturedAt": 1787155628,
+   "comments": 300,
+   "posts": 46,
+   "declaredBy": null,
+   "declarationNote": null,
+   "real": {
+    "automation": {
+     "band": "low",
+     "score": 0
+    },
+    "agenda": {
+     "band": "low",
+     "score": 0
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 59
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "low",
+     "score": 0
+    },
+    "agenda": {
+     "band": "low",
+     "score": 0
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 59
+    }
+   },
+   "synthesisWarnings": []
+  }
+ ],
+ "botsRejected": [
+  {
+   "username": "alphabet_order_bot",
+   "reason": "no self-declaration in 299 comments and not one of the four EVALUATION.md names"
+  },
+  {
+   "username": "B0tRank",
+   "reason": "no self-declaration in 299 comments and not one of the four EVALUATION.md names"
+  },
+  {
+   "username": "converter-bot",
+   "reason": "no self-declaration in 299 comments and not one of the four EVALUATION.md names"
+  },
+  {
+   "username": "FriesWithThatShake",
+   "reason": "insufficient-data: Not enough history to judge this account. Only 1 comments available (need 15). Too little history to say anything — this is not a clean result, it is no result."
+  },
+  {
+   "username": "haikusbot",
+   "reason": "no self-declaration in 299 comments and not one of the four EVALUATION.md names"
+  },
+  {
+   "username": "LimbRetrieval-Bot",
+   "reason": "no self-declaration in 299 comments and not one of the four EVALUATION.md names"
+  },
+  {
+   "username": "of_have_bot",
+   "reason": "no self-declaration in 299 comments and not one of the four EVALUATION.md names"
+  },
+  {
+   "username": "SaveVideo",
+   "reason": "no self-declaration in 100 comments and not one of the four EVALUATION.md names"
+  },
+  {
+   "username": "timee_bot",
+   "reason": "no self-declaration in 299 comments and not one of the four EVALUATION.md names"
+  },
+  {
+   "username": "WhyNotCollegeBoard",
+   "reason": "no self-declaration in 300 comments and not one of the four EVALUATION.md names"
+  },
+  {
+   "username": "WikiSummarizerBot",
+   "reason": "no self-declaration in 299 comments and not one of the four EVALUATION.md names"
+  }
+ ],
+ "bots": [
+  "AutoModerator",
+  "RemindMeBot",
+  "RepostSleuthBot",
+  "sneakpeekbot",
+  "AmputatorBot",
+  "Anti-ThisBot-IB",
+  "same_subreddit_bot",
+  "sub_doesnt_exist_bot"
+ ],
+ "humans": [
+  "bigbjarne",
+  "Donkletown",
+  "runnertrailsBay",
+  "Hartacus",
+  "Qrahe",
+  "KevinGreeneSolar",
+  "MundaneFacts",
+  "Parahelix",
+  "batmansthebomb",
+  "DooberBooberDoo",
+  "TCBloo",
+  "Tobeck",
+  "WhatTheHali24",
+  "___AirBuddDwyer___",
+  "Biscopiphany",
+  "ADELTAx",
+  "Aubenabee"
+ ]
+}

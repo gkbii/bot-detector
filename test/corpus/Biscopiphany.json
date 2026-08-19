@@ -1,0 +1,2048 @@
+{
+ "username": "Biscopiphany",
+ "class": "human",
+ "capturedAt": 1787155753,
+ "bodies": "synthesised-length-matched",
+ "declaredBy": null,
+ "declarationNote": null,
+ "declarations": 0,
+ "profile": {
+  "platform": "reddit",
+  "username": "Biscopiphany",
+  "id": null,
+  "fetchedAt": 1787155753,
+  "accountAgeDays": 44.09728009259259,
+  "firstSeenUtc": 1783345748,
+  "karma": {
+   "post": null,
+   "comment": null,
+   "total": null
+  },
+  "counts": {
+   "comments": null,
+   "posts": null
+  },
+  "comments": [
+   {
+    "id": "p4huw3a",
+    "createdUtc": 1787087167,
+    "group": "NYCmovies",
+    "body": "headl val st tin cr dah ar prair burr",
+    "score": 1,
+    "threadId": "t3_1vrtsej",
+    "parentId": "t1_p4g0ipx",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4hur84",
+    "createdUtc": 1787087130,
+    "group": "NYCmovies",
+    "body": "va map qui sycamo map sandb cli va shel saddl heathe ravin oa tar rudde",
+    "score": 1,
+    "threadId": "t3_1vrtsej",
+    "parentId": "t1_p4g0e8z",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4a64co",
+    "createdUtc": 1786996094,
+    "group": "VisitingIceland",
+    "body": "stra mant att emb eag lock te folia quar flann harb do brist sto finc lighthous timbe burro sil as dus linte lobb vin horizo popla pebbl quart yarro fiel quart orchar awnin ste fleec haze",
+    "score": 3,
+    "threadId": "t3_1vqam2m",
+    "parentId": "t1_p446530",
+    "isTopLevel": false
+   },
+   {
+    "id": "p45fid3",
+    "createdUtc": 1786936649,
+    "group": "astoria",
+    "body": "summ clov o anch re lar ta woodla tho stairw heath a sorr te sto amb sed gard carp mant dai filame sorre lobb?",
+    "score": 7,
+    "threadId": "t3_1vq2zls",
+    "parentId": "t1_p445d8k",
+    "isTopLevel": false
+   },
+   {
+    "id": "p42we2n",
+    "createdUtc": 1786907204,
+    "group": "astoria",
+    "body": "cave buck morta arbo",
+    "score": 10,
+    "threadId": "t3_1vq2zls",
+    "parentId": "t1_p42v003",
+    "isTopLevel": false
+   },
+   {
+    "id": "p3y9pyv",
+    "createdUtc": 1786845730,
+    "group": "mildlyinteresting",
+    "body": "t ce estu pl cac hu fr",
+    "score": 1,
+    "threadId": "t3_1vpfpcr",
+    "parentId": "t1_p3xcf9m",
+    "isTopLevel": false
+   },
+   {
+    "id": "p3y7yd8",
+    "createdUtc": 1786845082,
+    "group": "okbuddycinephile",
+    "body": "gul founta mort estua sa sin tundr scaffol mes torren cella bucke ironwoo mis gat boar paddl mos coas scaffol wago popla",
+    "score": 2,
+    "threadId": "t3_1vph2pr",
+    "parentId": "t1_p3xt6w1",
+    "isTopLevel": false
+   },
+   {
+    "id": "p3vymq4",
+    "createdUtc": 1786819035,
+    "group": "TopCharacterTropes",
+    "body": "aspe timbe",
+    "score": 3,
+    "threadId": "t3_1vp4w49",
+    "parentId": "t1_p3v87gh",
+    "isTopLevel": false
+   },
+   {
+    "id": "p3vn6tf",
+    "createdUtc": 1786815853,
+    "group": "AskReddit",
+    "body": "d frec shin ironw tun weatherv bris ket ca prai fl buc loc br scaff lic",
+    "score": 11,
+    "threadId": "t3_1vp5wfp",
+    "parentId": "t1_p3vky6w",
+    "isTopLevel": false
+   },
+   {
+    "id": "p3tnw5w",
+    "createdUtc": 1786793694,
+    "group": "AskReddit",
+    "body": "cab wha lobb crysta cotto atti",
+    "score": 4,
+    "threadId": "t3_1vokufh",
+    "parentId": "t1_p3rorys",
+    "isTopLevel": false
+   },
+   {
+    "id": "p3p9mvn",
+    "createdUtc": 1786733658,
+    "group": "VisitingIceland",
+    "body": "thre sto slo spru fie cab flee atl lich trou de pebb sla cany torre marigo mo sa sla bran fro stipp cab cryst a sandb ciste for chimn bad cushi do cab dit lock satch bund cli pa chap pebb amb lob bould stipp kno estua gutt fidd grani thimb parc ir cha tho cre",
+    "score": 2,
+    "threadId": "t3_1vo3v49",
+    "parentId": "t1_p3p8k5n",
+    "isTopLevel": false
+   },
+   {
+    "id": "p3p2z00",
+    "createdUtc": 1786731927,
+    "group": "VisitingIceland",
+    "body": "pad wic laven doorw sum lighthou bad ga fer gla mirr burr headla compa pewt du shing yarr",
+    "score": 2,
+    "threadId": "t3_1vo3v49",
+    "parentId": "t1_p3nonec",
+    "isTopLevel": false
+   },
+   {
+    "id": "p3c3aya",
+    "createdUtc": 1786574731,
+    "group": "VisitingIceland",
+    "body": "thr mine fen ga ga gin d cro fin re mosa bir lar stra row o canv marigo be horiz gard nett pa pewt curta veran sorr gla nett slo gutt cre tind fath woodla toolsh cind re wag twi",
+    "score": 1,
+    "threadId": "t3_1vmnped",
+    "parentId": "t1_p3bz6fg",
+    "isTopLevel": false
+   },
+   {
+    "id": "p3c2v5z",
+    "createdUtc": 1786574596,
+    "group": "VisitingIceland",
+    "body": "rowaneee",
+    "score": 2,
+    "threadId": "t3_1vms553",
+    "parentId": "t1_p3c2h42",
+    "isTopLevel": false
+   },
+   {
+    "id": "p3bzacq",
+    "createdUtc": 1786573506,
+    "group": "VisitingIceland",
+    "body": "cre sycamo kno wha vi app latti horiz dit hear wind hon bo thre sla va outcr ced arbo pin fountai stoo cres slop canva candl crat sea rafte sycamor troug autum bras fabri hedg pastur boulde",
+    "score": 30,
+    "threadId": "t3_1vms553",
+    "parentId": "t3_1vms553",
+    "isTopLevel": true
+   },
+   {
+    "id": "p3bniq3",
+    "createdUtc": 1786570095,
+    "group": "VisitingIceland",
+    "body": "pewt mi sha inl chann thist lich bir slo o pa st o ciste cact vau inl burr ravi spru bould stairw awni thimb brack app mosa lin mille",
+    "score": 1,
+    "threadId": "t3_1vmnped",
+    "parentId": "t3_1vmnped",
+    "isTopLevel": true
+   },
+   {
+    "id": "p37yui8",
+    "createdUtc": 1786534366,
+    "group": "VisitingIceland",
+    "body": "shutt sapli padd thick brist toolsh mort folia clove garde daw flagston ironwoo doc trelli thistl gat dia fabri appl linte furro saplin bea ceda chal daw handl as saddl pebbl",
+    "score": 2,
+    "threadId": "t3_1utql1r",
+    "parentId": "t1_p37ykfg",
+    "isTopLevel": false
+   },
+   {
+    "id": "p37yb0e",
+    "createdUtc": 1786534159,
+    "group": "VisitingIceland",
+    "body": "cab trou cor fla bol",
+    "score": 1,
+    "threadId": "t3_1utql1r",
+    "parentId": "t1_p37xjlw",
+    "isTopLevel": false
+   },
+   {
+    "id": "p377ajd",
+    "createdUtc": 1786521785,
+    "group": "protectUSelections",
+    "body": "estua mosa fli pastu host sle lavend bridg tinde cana willo wago railin handl ravin forg ceda fer lila fer turre haze arbo strea stov oa embe cotto nettl prairi blanke kettl stippl fabri",
+    "score": 3,
+    "threadId": "t3_1vlydnn",
+    "parentId": "t3_1vlydnn",
+    "isTopLevel": true
+   },
+   {
+    "id": "p2xn0fe",
+    "createdUtc": 1786403826,
+    "group": "VisitingIceland",
+    "body": "ravin cora knol coppe alde candl cana pewte popla woodlan sil prairi handl fleec toolshe iri fleec appl lavende ditc caver flagston stippl hatc gully frost",
+    "score": 2,
+    "threadId": "t3_1utql1r",
+    "parentId": "t1_p2xk4pa",
+    "isTopLevel": false
+   },
+   {
+    "id": "p2dyicz",
+    "createdUtc": 1786155683,
+    "group": "TikTokCringe",
+    "body": "bra q waterco bis sat lave d gaz net a su bl",
+    "score": 1,
+    "threadId": "t3_1vhwvzf",
+    "parentId": "t3_1vhwvzf",
+    "isTopLevel": true
+   },
+   {
+    "id": "p2dlstz",
+    "createdUtc": 1786151262,
+    "group": "totalwar",
+    "body": "crowneeeeeeeeee",
+    "score": 1,
+    "threadId": "t3_1vhtiaq",
+    "parentId": "t3_1vhtiaq",
+    "isTopLevel": true
+   },
+   {
+    "id": "p2d6yxa",
+    "createdUtc": 1786146207,
+    "group": "television",
+    "body": "yarr sto flagsto re thick cushi att buck fie cobbl mirro outcro beaco rop jett glas crat gull platea garde harbo quarr ree alde spir mantl fenne ston larc linte dom troug lumbe timbe lumbe",
+    "score": -1,
+    "threadId": "t3_1vifxjn",
+    "parentId": "t1_p2d3nx4",
+    "isTopLevel": false
+   },
+   {
+    "id": "p2czawm",
+    "createdUtc": 1786143702,
+    "group": "politics",
+    "body": "buck clov dai fla gul barr hon sed cind bamb brack spi holl heath shingl saddl sorre rop",
+    "score": 6,
+    "threadId": "t3_1vidla2",
+    "parentId": "t1_p2csvzv",
+    "isTopLevel": false
+   },
+   {
+    "id": "p2cyzmp",
+    "createdUtc": 1786143602,
+    "group": "politics",
+    "body": "cha fie fli weatherva slo ar bo bould cand stipp lil rudde gull marigol pebbl cella polle biscui atla ferr dais?",
+    "score": 2,
+    "threadId": "t3_1vidla2",
+    "parentId": "t1_p2cjwl8",
+    "isTopLevel": false
+   },
+   {
+    "id": "p2cd7bk",
+    "createdUtc": 1786136972,
+    "group": "politics",
+    "body": "lightho d str stair satc th stu gra ho marig door jasmi buck estua ho",
+    "score": 1,
+    "threadId": "t3_1vi36n9",
+    "parentId": "t1_p2c6tmx",
+    "isTopLevel": false
+   },
+   {
+    "id": "p2c4gch",
+    "createdUtc": 1786134557,
+    "group": "confusing_perspective",
+    "body": "chim val fount da pill atl cott lante waln dai bo gla por outcr vau haz tind kno chap satch mar stairw a lock te pill for",
+    "score": -1,
+    "threadId": "t3_1vhzzbc",
+    "parentId": "t1_p2a7gcp",
+    "isTopLevel": false
+   },
+   {
+    "id": "p2c48os",
+    "createdUtc": 1786134499,
+    "group": "confusing_perspective",
+    "body": "spr bl bisc ar ca s qua weatherv sp wal fab fr brid stre toolsh ciste miner cave",
+    "score": 0,
+    "threadId": "t3_1vhzzbc",
+    "parentId": "t1_p29cw4v",
+    "isTopLevel": false
+   },
+   {
+    "id": "p2bs461",
+    "createdUtc": 1786131230,
+    "group": "politics",
+    "body": "handl spruc larc satche beaco vin gutte popla locke arro ironwoo cana tinde cupboar mille sea bell lumber lumber rowan harbor yarrow cable brook hamlet broom meadow saddle carpet rowan bamboo creek wharf knoll inlet lobby window mineral cupboard kiln",
+    "score": -2,
+    "threadId": "t3_1vi36n9",
+    "parentId": "t1_p2bo5kk",
+    "isTopLevel": false
+   },
+   {
+    "id": "p2be218",
+    "createdUtc": 1786127541,
+    "group": "politics",
+    "body": "fin founta trell cave lighthou si gaze be kil outcro embe bridg curren thimbl",
+    "score": 2,
+    "threadId": "t3_1vi36n9",
+    "parentId": "t1_p2ah2k1",
+    "isTopLevel": false
+   },
+   {
+    "id": "p2bdihp",
+    "createdUtc": 1786127401,
+    "group": "politics",
+    "body": "shing holl feath beaco mirro mos cora weathervan walnu summi popla hamle chimne delt hatc popla glacie quart hatc",
+    "score": 3,
+    "threadId": "t3_1vi36r7",
+    "parentId": "t1_p2an7bb",
+    "isTopLevel": false
+   },
+   {
+    "id": "p2axpvk",
+    "createdUtc": 1786123354,
+    "group": "entertainment",
+    "body": "arro verand bea ree trelli mos cinde ree kil clove flanne cotto fros finc sil mille arro gazeb atla platea stoo minera carpe arro hollo bronz boulder",
+    "score": 2,
+    "threadId": "t3_1vi2mn5",
+    "parentId": "t1_p2aik6f",
+    "isTopLevel": false
+   },
+   {
+    "id": "p2awdlf",
+    "createdUtc": 1786123015,
+    "group": "nyc",
+    "body": "de te bo stairw de mar rudd bir mo nett bo o gro freck doorw ravi pilla flas as grave freckl boar lumbe larc compas cabi eagl rowa morta furro awnin porc mirro woodlan slee appl",
+    "score": 9,
+    "threadId": "t3_1vhzu7x",
+    "parentId": "t1_p2a5kou",
+    "isTopLevel": false
+   },
+   {
+    "id": "p2av75n",
+    "createdUtc": 1786122716,
+    "group": "NYCmovies",
+    "body": "lante bas del mar sycamo flagsto headla coa ho cha i qui pebb lavend ald holl freck turr bo shing gazeb swal woodlan orchar broo nettl sandba tea shel pantr slee cupboar crow woodlan rudde pilla",
+    "score": -3,
+    "threadId": "t3_1vi5li7",
+    "parentId": "t1_p2aqkr4",
+    "isTopLevel": false
+   },
+   {
+    "id": "p27qcl9",
+    "createdUtc": 1786083607,
+    "group": "VisitingIceland",
+    "body": "sapli sto fie gau asp blo nick sapli spi tund sa stairw gard pill sandb dit heath tidepo hear nett mi trest lavend blank gutt ironwo shutt du clov swa do marigo biscu vau boa bas tunn sto miner canv i jasmi toolsh cre ax doorw gla gab woodla canv de flagsto ar fer ironwo bould gaze mo dai bristl broo dus dahli",
+    "score": 1,
+    "threadId": "t3_1vhpdi4",
+    "parentId": "t3_1vhpdi4",
+    "isTopLevel": true
+   },
+   {
+    "id": "p271e90",
+    "createdUtc": 1786073123,
+    "group": "astoria",
+    "body": "v can p bun freck del fe parc me rid shing carp rivul quar weatherva miner pi horiz",
+    "score": 1,
+    "threadId": "t3_1vhk1p5",
+    "parentId": "t3_1vhk1p5",
+    "isTopLevel": true
+   },
+   {
+    "id": "p259bpt",
+    "createdUtc": 1786052532,
+    "group": "mildlyinfuriating",
+    "body": "hon app du harb holl raili de pewt lock mant ironwo canv tundr char tar spruc burro inle oa bea boulde",
+    "score": 12,
+    "threadId": "t3_1vhgfro",
+    "parentId": "t1_p251onx",
+    "isTopLevel": false
+   },
+   {
+    "id": "p24wbe5",
+    "createdUtc": 1786049026,
+    "group": "politics",
+    "body": "trou te watercour headla marb hear sa ald di cact fer tunne chal stippl filamen thimbl gazeb bel channe bras mosai lobb iri shingl yarro threa appl slee slee drif glas garde?",
+    "score": 192,
+    "threadId": "t3_1vhd9h7",
+    "parentId": "t1_p24a2pk",
+    "isTopLevel": false
+   },
+   {
+    "id": "p22qrol",
+    "createdUtc": 1786029490,
+    "group": "politics",
+    "body": "amb doorw fenn junip dahl rivul tho du bra poll brack curta cave dus caver chal?",
+    "score": 4,
+    "threadId": "t3_1vh2n10",
+    "parentId": "t3_1vh2n10",
+    "isTopLevel": true
+   },
+   {
+    "id": "p1wukhr",
+    "createdUtc": 1785956157,
+    "group": "politics",
+    "body": "haml carp di thimb jet wha gul bad turr lighthou flann blo nettl",
+    "score": 1,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1wst9u",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1wokfw",
+    "createdUtc": 1785954653,
+    "group": "politics",
+    "body": "curre pa slo flann sag boulde larc lanter pastur flin ceda wago mille badg prairi prairi awnin cactu junipe hoo vin granit thimbl platea strea lavende outcro mes branc flanne horizo stov",
+    "score": 0,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1vtazx",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1wnmu9",
+    "createdUtc": 1785954426,
+    "group": "politics",
+    "body": "jet wag cab fro flann ravin tea crat mapl thicke heathe drif burro cushio stov vin doc ambe branc ston rapid swal doc cree spruc flas ree bel ferr nicke spruc tea lighthous finc?",
+    "score": 2,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1vvp8w",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1wn6im",
+    "createdUtc": 1785954315,
+    "group": "politics",
+    "body": "trest gla parc lin sed tund weatherva bad raft marb sa chap satch waln bro sum sorr kno gutt trest pill fro mosa vi spru grani weatherva si poll fli bron lavend st flann sycamo sandb trell fenn quar cre sto thimb cany hand she hon sto torre be sed folia si toolsh weatherva curta o cryst de pebb filame watercour for jasmi re lante shing cott ald arr lante re nick canv flagsto miner brack hut summi sag",
+    "score": 1,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1w0h6g",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1wmob9",
+    "createdUtc": 1785954190,
+    "group": "politics",
+    "body": "o am cob hori haz rivul du emb sle",
+    "score": 1,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1vzejr",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1vjpqm",
+    "createdUtc": 1785944587,
+    "group": "politics",
+    "body": "will bad glaci va arb eag led arr glaci fli cor hut haz fin sto spru terra flagsto flagsto ta plate bran sorr arr da ga jasmi trou jasmi fidd lar st stre doorw lumb ho mosa lante emb row gro bra lumb chimn orcha sto lighthou quar sandb lighthou thist bund furr toolsh weatherva cushi glaci scaffo dai dit doorw flagsto emb sle lavend sorr jet lavend cany stairw holl stre fla furr da ree",
+    "score": 8,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1viut0",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1vgn7h",
+    "createdUtc": 1785943819,
+    "group": "politics",
+    "body": "flanne inle thicke flin garde yarro bundl shingl chal sea mis summi bea towe mos polle atla toolshe towe valle gull aspe quil ste stran as foye sag furro fer foye bol cabi paddl cla rushe curren timbe chape aspen pine fathom cavern sedge dusk",
+    "score": 0,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1vfeqn",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1vg2vn",
+    "createdUtc": 1785943679,
+    "group": "politics",
+    "body": "walnute swale",
+    "score": 3,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1vfc1g",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1vdxza",
+    "createdUtc": 1785943141,
+    "group": "politics",
+    "body": "brack sorr cryst orcha thimb mead thre stoo des oa shingl tundr cotto glacie nettl",
+    "score": 0,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1vd9hh",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1vdor2",
+    "createdUtc": 1785943077,
+    "group": "politics",
+    "body": "cha wag stairw sto latti jet satch holl vau host cott iri windo",
+    "score": 2,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1vdch7",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1vaer4",
+    "createdUtc": 1785942234,
+    "group": "politics",
+    "body": "m gl satc keyst ce satc i bra ironw prair thist swa fe arb nett autu eag sycamo folia marigo cell kett cor glaci i watercour bro boa eag ciste raft a",
+    "score": 2,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1v6hvk",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1v9t55",
+    "createdUtc": 1785942080,
+    "group": "politics",
+    "body": "nett timb fla ki ta founta va i bra curta ir cact atl raili woodla lich sla pastu beac mead anch cushi handl mille suma clif cabl curren canva coas dais dus basi ridg alde fros chape fountai swal des tar marigol ste embe lobb chape",
+    "score": 4,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1v9e1p",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1v8ww7",
+    "createdUtc": 1785941851,
+    "group": "politics",
+    "body": "not sure if curre rudd lob bron woodla sto flagsto tho pill pebb fe rudd ga por de dun cotto biscui stov sycamor thor glad rafte linte",
+    "score": 5,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1v8o3u",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1v82sk",
+    "createdUtc": 1785941637,
+    "group": "politics",
+    "body": "spi cobb ir vau map haml biscu padd awni toolsh stuc di ir tunn cre ciste pa vall flann veran sin du orcha gutt cushi cab gab bamb canv doorw bir prair can carp flee she sycamo do freck fie sum lin gaze pebb beac sla bould birc pastur curren fer des tea watercours popla",
+    "score": 3,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1v7ojo",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1v7k6g",
+    "createdUtc": 1785941504,
+    "group": "politics",
+    "body": "raft st heath tidepo sed weatherva pa marigo sapli mi mosa fe rudd lante gul thimb fenn sto nett raili canv lint haz hut ar marigo watercour sed va trell bould she qui du bo mosa bro be boa pi lil gab terra qui hut pa gaze va tow filame host kett shing raili gard shutt app thre for gro tind boa du brist copp ho latti summi",
+    "score": 8,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1v70re",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1v5w3e",
+    "createdUtc": 1785941071,
+    "group": "politics",
+    "body": "sto lighthou she cushi heath cell stairw stuc sa lavend bas row de pill blo gutt raili sycamo ir quar for pant wag foy do app gutt o fie tho rid estua cupboa",
+    "score": 9,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1v581y",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1v5fta",
+    "createdUtc": 1785940953,
+    "group": "politics",
+    "body": "li brack cl satch quar bro quar toolsh bund mosa sha arr canv freck clov outcr jet cl nick pa hear quar fin lich bund waln arr raft tunn vi foy founta fenn lint pewt prair att be stuc wind mead pastu heath foy cany gra cott flee pastu qui weatherva slo i harb spru blank dahl ho rid vall sha",
+    "score": 25,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1v3ku4",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1v4cr2",
+    "createdUtc": 1785940660,
+    "group": "politics",
+    "body": "turr pant dit cl woodla gra led ta cha raft stre mirr estua nick junip headla sla lante filame thick fla cl barr kno bracke sea cla curren watercours mirro daw boar fatho swal stairwa lighthous lumbe hoste sandba fer boar kil thistl",
+    "score": 23,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1v41nx",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1v3wti",
+    "createdUtc": 1785940545,
+    "group": "politics",
+    "body": "sha satch tidepoo hamle birc burro curtai cactu cres as",
+    "score": 6,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1v36se",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1v3mfy",
+    "createdUtc": 1785940469,
+    "group": "politics",
+    "body": "spru weatherva del toolsh cand trou se gab mort twi o stra cab cryst gra fro fenn fer rudd cell vall harb stre gla st te sadd cupboa clif slee granit flas blanke lighthous sycamor thicke heart cotto",
+    "score": 39,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1v3dcf",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1v3ck4",
+    "createdUtc": 1785940398,
+    "group": "politics",
+    "body": "gabl plaz finc dais moo crysta broo rop appl troug crysta fer thimbl appl ditc delt broo sea slee bloo awnin lavende ree polle branc chal chimne slee mis pastur channe hamle wago eagl fiel stucc coppe mantl gutte fountai verand moo marigol quart sil broo bucke char burro van hollo keyston vaul spindl terrac mars lumbe cedar",
+    "score": 3,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1v2qi9",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1v2o6s",
+    "createdUtc": 1785940220,
+    "group": "politics",
+    "body": "cact du ki gul se miner jet du spind ki quar gutt tho hutc platea minera outcro carpe blanke mille",
+    "score": 10,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1v2hdx",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1v21ko",
+    "createdUtc": 1785940054,
+    "group": "politics",
+    "body": "o padd cre asp glaci inl da cres pewte quil pewte dom vin boulde garde jasmin marigol plaz canva carpe tidepoo rapid vin sil heart des dia morta atti twin handl shingl handl as whar gutte barre twin hamle basi swal suma shutte turre doc knol candl",
+    "score": 95,
+    "threadId": "t3_1vg75om",
+    "parentId": "t1_p1uvi6h",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1qkqjt",
+    "createdUtc": 1785880761,
+    "group": "politics",
+    "body": "bristl rop kettl coas stov fatho cabi spruc bol pilla hoste quil turre slat cupboar sycamor clif bol lanter tar coppe plaz burro cella as",
+    "score": 2,
+    "threadId": "t3_1vfa50d",
+    "parentId": "t1_p1n9cem",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1qfpod",
+    "createdUtc": 1785879354,
+    "group": "PeterExplainsTheJoke",
+    "body": "cl qui beac embe pan rushe vin",
+    "score": 11,
+    "threadId": "t3_1vflgmc",
+    "parentId": "t1_p1qdz8y",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1nrt23",
+    "createdUtc": 1785854737,
+    "group": "politics",
+    "body": "f sadd gab chimn sla estua poll bould boa jasmi waln",
+    "score": 27,
+    "threadId": "t3_1vfb9r0",
+    "parentId": "t1_p1nr2hj",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1nfwvy",
+    "createdUtc": 1785851534,
+    "group": "politics",
+    "body": "bould quar sapli hat tidepo flann me candl char kil bundl",
+    "score": 4,
+    "threadId": "t3_1vf73po",
+    "parentId": "t1_p1mxgng",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1j6lz7",
+    "createdUtc": 1785793775,
+    "group": "SipsTea",
+    "body": "arbo fer tunnel ditch",
+    "score": 7,
+    "threadId": "t3_1vehx7r",
+    "parentId": "t1_p1ikmvu",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1hacnr",
+    "createdUtc": 1785776046,
+    "group": "gaming",
+    "body": "mar fidd tidepo sto ho ravi parc poll blank lighthou copp haz for stra anch slo wha sycamo emb stuc wick will fie jasmi parc ki orcha bould terra hon raili me rid cre o gul harb jet be lin cact ta cott sorr st outcr freck tho be glaci harb atl bro parc flee cab qui hollo des mille flanne arbo fenne curren?",
+    "score": 3,
+    "threadId": "t3_1veh3y6",
+    "parentId": "t1_p1gv17n",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1gdn17",
+    "createdUtc": 1785767662,
+    "group": "newjersey",
+    "body": "juni gard",
+    "score": 20,
+    "threadId": "t3_1vedsvp",
+    "parentId": "t1_p1garzs",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1g3f1i",
+    "createdUtc": 1785764842,
+    "group": "AskReddit",
+    "body": "jasm past cha vau stairw fath curre?",
+    "score": 1,
+    "threadId": "t3_1vedqv7",
+    "parentId": "t1_p1g2b9b",
+    "isTopLevel": false
+   },
+   {
+    "id": "p1a7bo3",
+    "createdUtc": 1785689275,
+    "group": "politics",
+    "body": "ironwo blank furr ki anch bran da be cand bron se biscu tunn holl sha clov sto curre pi lante ging gaug watercours pin troug glas mille parce ledg ferr doorwa fountai chape twin alde mosai foliag rivule gaug mos iv swal line spindl cla timbe ceda popla slop bridg yarro sil rapid aspe nettl basi rapid lumbe tunne platea ree oa cupboar locke pan",
+    "score": 4,
+    "threadId": "t3_1vdmf6h",
+    "parentId": "t1_p1a5b1n",
+    "isTopLevel": false
+   },
+   {
+    "id": "p0xrmsc",
+    "createdUtc": 1785526825,
+    "group": "gaming",
+    "body": "emb can brack clov doorwa bea des arro bol bracke boulde knol thistl cana",
+    "score": 1,
+    "threadId": "t3_1vbqmfa",
+    "parentId": "t1_p0wbedp",
+    "isTopLevel": false
+   },
+   {
+    "id": "p0vp1tn",
+    "createdUtc": 1785507424,
+    "group": "SipsTea",
+    "body": "glaci bro timbe windo freckl dun pebbl cres pan flanne",
+    "score": 2,
+    "threadId": "t3_1vbdai4",
+    "parentId": "t1_p0swybt",
+    "isTopLevel": false
+   },
+   {
+    "id": "p0vojsc",
+    "createdUtc": 1785507290,
+    "group": "gaming",
+    "body": "yar man terr ce hol sycam bun ha cush can sh terr su sl tin cryst foy fe emb sle curta grani curre mosa mead rivul dahl rivul",
+    "score": 2,
+    "threadId": "t3_1vbqmfa",
+    "parentId": "t1_p0vo7kd",
+    "isTopLevel": false
+   },
+   {
+    "id": "p0vnr79",
+    "createdUtc": 1785507079,
+    "group": "gaming",
+    "body": "quar thre mirr orcha tho lock inl sto stuc flee mo prairi prairi cabi lanter locke cella dais ston awnin hedg stucc grat chal terrac furro arro chimne appl bras line beaco arc ceda ironwoo fer saddl",
+    "score": 6,
+    "threadId": "t3_1vbqmfa",
+    "parentId": "t1_p0vmzil",
+    "isTopLevel": false
+   },
+   {
+    "id": "p0vlya8",
+    "createdUtc": 1785506591,
+    "group": "louisck",
+    "body": "cact lock del me cany curta si estua sa o cab cott emb arro linte sine daw trestl slee ravin carpe tunne estuar iv",
+    "score": 2,
+    "threadId": "t3_1v7esbw",
+    "parentId": "t3_1v7esbw",
+    "isTopLevel": true
+   },
+   {
+    "id": "p0vldyv",
+    "createdUtc": 1785506437,
+    "group": "gaming",
+    "body": "fe vall sha dri vau mant fidd pastu ciste gab anch flagsto brist stairw ho twi do clove coas torren fiel hoo parce heathe bundl grov shutte embe junipe dun plaz turre ancho whar toolshe des",
+    "score": 5,
+    "threadId": "t3_1vbqmfa",
+    "parentId": "t1_p0vfy1a",
+    "isTopLevel": false
+   },
+   {
+    "id": "p0vkxuy",
+    "createdUtc": 1785506315,
+    "group": "nyc",
+    "body": "arr haz parc sum re summ ald carp pla cany gaze torre ro si app stre lar sha sedg mirro arbo coppe verand ree",
+    "score": 17,
+    "threadId": "t3_1vbrmhp",
+    "parentId": "t3_1vbrmhp",
+    "isTopLevel": true
+   },
+   {
+    "id": "p0r3hx0",
+    "createdUtc": 1785446779,
+    "group": "NYCmovies",
+    "body": "cha stipp map rivul sycamo dahl ta cand blo watercour ir du mirr gard asp cryst shutt sum si sum fer blo cab cab ki raft raili cro summ spind miner lint se tund flagsto gard rid minera tinde",
+    "score": 1,
+    "threadId": "t3_1vb1xnw",
+    "parentId": "t1_p0qfvk6",
+    "isTopLevel": false
+   },
+   {
+    "id": "p0qdx7d",
+    "createdUtc": 1785440076,
+    "group": "NYCmovies",
+    "body": "poll emb dri cell cab stuc pa turr yarr fer pewt hon ar fabr cre do estua qui blo fabr cact re nick will blo pa sle map thist brack thre des pin curtai boulde torren ston lobb weathervan arbo iv branc threa as mes haze beaco ditc tidepoo satche glas basi axl marigol whar",
+    "score": 3,
+    "threadId": "t3_1vb1xnw",
+    "parentId": "t1_p0q8n37",
+    "isTopLevel": false
+   },
+   {
+    "id": "p0q8e3i",
+    "createdUtc": 1785438638,
+    "group": "NYCmovies",
+    "body": "slopee lockete ridge grate grate drift marble ginger swale beacon yarrow tunnel flask",
+    "score": 3,
+    "threadId": "t3_1vb1xnw",
+    "parentId": "t1_p0q7dnb",
+    "isTopLevel": false
+   },
+   {
+    "id": "p0q6sul",
+    "createdUtc": 1785438221,
+    "group": "NYCmovies",
+    "body": "veran thist will de me hut folia do pill asp map stre canv att pebb asp",
+    "score": 4,
+    "threadId": "t3_1vb1xnw",
+    "parentId": "t3_1vb1xnw",
+    "isTopLevel": true
+   },
+   {
+    "id": "p0pxfz4",
+    "createdUtc": 1785435827,
+    "group": "NYCmovies",
+    "body": "lin cl gl tools cac hea sl s s will marb lob o ax pewt ki blank horiz canv bund sorr tidepo",
+    "score": 4,
+    "threadId": "t3_1vb1lz2",
+    "parentId": "t3_1vb1lz2",
+    "isTopLevel": true
+   },
+   {
+    "id": "p0hqk4w",
+    "createdUtc": 1785340931,
+    "group": "generationology",
+    "body": "lighthous stov marigol sage crest cable",
+    "score": 1,
+    "threadId": "t3_1v9v0h8",
+    "parentId": "t1_p0hqetx",
+    "isTopLevel": false
+   },
+   {
+    "id": "p0hqbho",
+    "createdUtc": 1785340868,
+    "group": "generationology",
+    "body": "bea toolshe satche estuar torren swal knol arbo cla cobbl ridg hone trelli handl badg candl flin yarro furro glas canva cactus quill pantry canyon",
+    "score": 0,
+    "threadId": "t3_1v9v0h8",
+    "parentId": "t1_p0hq4um",
+    "isTopLevel": false
+   },
+   {
+    "id": "p0hpa80",
+    "createdUtc": 1785340608,
+    "group": "generationology",
+    "body": "cabi orchar hamle saplin eagl ceda van kettl gravel larch",
+    "score": 0,
+    "threadId": "t3_1v9v0h8",
+    "parentId": "t1_p0hp441",
+    "isTopLevel": false
+   },
+   {
+    "id": "p0hovdy",
+    "createdUtc": 1785340504,
+    "group": "generationology",
+    "body": "mant thre chal hatc canyo pastur bambo cree thicke knol grat bundl tidepoo sorre boulde popla turre sea twin canyo vin vin slop gaug candl clove morta crow eagl sorre shingl clove gutte pin orchar blanke spindl bloo grov tar dus twin saplin nettl des mars ledg pantr ledg liche bronz stran grat mis bambo bloo crysta willo curtai stran alde moo meado bundl towe larc rowa tundr gull coppe bambo cushio pastur popla des blanke compas cana canyo tidepoo woodlan yarro locke moo bridg ginge heart bambo ginge stov sandba atti hoste fabri cinde cora pebbl cobbl dahli stairwa walnu ridg feathe rushe bucke",
+    "score": 1,
+    "threadId": "t3_1v9v0h8",
+    "parentId": "t1_p0ho4vu",
+    "isTopLevel": false
+   },
+   {
+    "id": "p0hn8fj",
+    "createdUtc": 1785340096,
+    "group": "generationology",
+    "body": "fount sh ga cl chim door tools weatherv chim brid att cl",
+    "score": 1,
+    "threadId": "t3_1v9v0h8",
+    "parentId": "t1_p0hjwzh",
+    "isTopLevel": false
+   },
+   {
+    "id": "p0hgqms",
+    "createdUtc": 1785338454,
+    "group": "generationology",
+    "body": "dais glad hollo feathe parce chimne slee plaz pewte ledg axl lila stucc oa spir slee grov iri cister saddl bundl junipe chape kil marigol turret tundra chart lintel?",
+    "score": 10,
+    "threadId": "t3_1v9v0h8",
+    "parentId": "t1_p0hgef5",
+    "isTopLevel": false
+   },
+   {
+    "id": "p0afo3e",
+    "createdUtc": 1785254987,
+    "group": "VisitingIceland",
+    "body": "stre rid de cact barr pebb du thist lumb for re asp raft mi bro gro bro cany chimn quar anch barr lante mo flann o sa gab turr scaffol freckl summi",
+    "score": 12,
+    "threadId": "t3_1v92pkq",
+    "parentId": "t3_1v92pkq",
+    "isTopLevel": true
+   },
+   {
+    "id": "p09if40",
+    "createdUtc": 1785246311,
+    "group": "LoveIslandUSA_",
+    "body": "stairw pant cli lin pastu latti fleec dahli grat mis terrac ceda stran hoo hone boulde compas toolshe spir eagl fer linte bloo slop fros gaug forg sea lumbe thicke burro alde outcro mantl headlan lanter dia cora haze",
+    "score": 29,
+    "threadId": "t3_1v8mvyk",
+    "parentId": "t1_p07ctpw",
+    "isTopLevel": false
+   },
+   {
+    "id": "p03kky8",
+    "createdUtc": 1785173110,
+    "group": "politics",
+    "body": "founta locke garde dus daw pewte fleec porc marbl badg boar hutc tinde dun hutc nettl flanne parce shel marigol threa porc",
+    "score": 6,
+    "threadId": "t3_1v84pqs",
+    "parentId": "t1_p03eyjn",
+    "isTopLevel": false
+   },
+   {
+    "id": "p02oin4",
+    "createdUtc": 1785165031,
+    "group": "meirl",
+    "body": "autumne cedar jetty cellar moss",
+    "score": 1,
+    "threadId": "t3_1v804ss",
+    "parentId": "t1_p02kj6v",
+    "isTopLevel": false
+   },
+   {
+    "id": "ozzor1m",
+    "createdUtc": 1785122573,
+    "group": "whatisit",
+    "body": "di pa hand rush sa si brid mirr mo sum cli o ho kno folia flann fidd sto slo cobbl doorwa heart saddl strea cabi strea jasmin carpe broo tundr?",
+    "score": 3,
+    "threadId": "t3_1v7l9ig",
+    "parentId": "t1_ozz1rag",
+    "isTopLevel": false
+   },
+   {
+    "id": "ozy3jvw",
+    "createdUtc": 1785103124,
+    "group": "NYCapartments",
+    "body": "rush blank",
+    "score": 1,
+    "threadId": "t3_1v7fcen",
+    "parentId": "t3_1v7fcen",
+    "isTopLevel": true
+   },
+   {
+    "id": "ozw7usk",
+    "createdUtc": 1785084319,
+    "group": "VisitingIceland",
+    "body": "blank poll me marigo mo mi fer bra weatherva gul curre lar hon beac ravi curta filame sadd raft burr hand fli se sycamo buck rid bra clov bad bron hat stipp keysto awni ced cha brid lob mirr tund cli latti do lock gla stipp blank nett fro sha asp kno cha stipp rivul heath veran trell fin brist blo ir pill grav poll carp vau sin map heath polle meado chimne thistl grave ditc orchar crysta arro willo tidepoo garde lattic pantr forg fountai stairwa plaz flagston tidepoo atla flas sandba hoste ginge",
+    "score": 1,
+    "threadId": "t3_1utql1r",
+    "parentId": "t1_ozw0idy",
+    "isTopLevel": false
+   },
+   {
+    "id": "ozv9e16",
+    "createdUtc": 1785074587,
+    "group": "VisitingIceland",
+    "body": "ax gla gla marigo si re arr yarr rapi folia row ho watercour va cand flee cor grav si lock del curre trell terra bo mirr sed mo re freck sla curta bo trest flagsto app terra bund lighthou eag cro clov blo estua vall lob biscu hed map cott swa hand glad rushe whar mos beaco gazeb ditc gazeb troug burro broo marigol bloo arc channe swal fabri willo wago larc cabi strea sea lobb mis shutte broo turre rivule timbe slee compas bambo drif candl vaul gaug ree larc pastur granit ston walnu cinde ree swal estuar saddl grave bristl timbe lighthous gutte oa hoste hollo strea canva tea swal badg shel mos alde embe handl?",
+    "score": 1,
+    "threadId": "t3_1utql1r",
+    "parentId": "t3_1utql1r",
+    "isTopLevel": true
+   },
+   {
+    "id": "ozmi62k",
+    "createdUtc": 1784954335,
+    "group": "MadeMeSmile",
+    "body": "cr st aut stuc tunn gra lighthou weatherva curta ta blank trell weatherva summ blo",
+    "score": 3,
+    "threadId": "t3_1v5oecm",
+    "parentId": "t1_ozkpqh1",
+    "isTopLevel": false
+   },
+   {
+    "id": "ozmftcc",
+    "createdUtc": 1784953321,
+    "group": "PcBuild",
+    "body": "cop mine estu cupbo va dr spin gut",
+    "score": 1,
+    "threadId": "t3_1v5ftwo",
+    "parentId": "t3_1v5ftwo",
+    "isTopLevel": true
+   },
+   {
+    "id": "ozlrwsa",
+    "createdUtc": 1784944046,
+    "group": "politics",
+    "body": "cab estua turr yarr headlan flanne hoste quarr grov boulde rafte channe stran arro cree porc lanter flanne morta",
+    "score": 2,
+    "threadId": "t3_1v5k92m",
+    "parentId": "t1_ozlm7i8",
+    "isTopLevel": false
+   },
+   {
+    "id": "ozljcuk",
+    "createdUtc": 1784941011,
+    "group": "politics",
+    "body": "headla sum bas stuc se tunn shing trest flann lante si watercour re dom freckl cobbl pantr turre junipe chimne yarro linte",
+    "score": 4,
+    "threadId": "t3_1v5k92m",
+    "parentId": "t1_ozlipxf",
+    "isTopLevel": false
+   },
+   {
+    "id": "ozl2dju",
+    "createdUtc": 1784935237,
+    "group": "politics",
+    "body": "li wh frec brac sl sand bea gran gr stra satch di sle thist orcha headla sed ironwo",
+    "score": -3,
+    "threadId": "t3_1v5k92m",
+    "parentId": "t1_ozksc9z",
+    "isTopLevel": false
+   },
+   {
+    "id": "ozidv83",
+    "createdUtc": 1784909303,
+    "group": "AskReddit",
+    "body": "i outc gl m gr hu harb parc gard veran cell",
+    "score": 1,
+    "threadId": "t3_1v4p82p",
+    "parentId": "t1_ozi43id",
+    "isTopLevel": false
+   },
+   {
+    "id": "ozfsbmw",
+    "createdUtc": 1784876245,
+    "group": "gaming",
+    "body": "shut parc compa sto lock ir rush ir estua",
+    "score": 7,
+    "threadId": "t3_1v51aod",
+    "parentId": "t1_ozfb8y2",
+    "isTopLevel": false
+   },
+   {
+    "id": "ozfr7hm",
+    "createdUtc": 1784875726,
+    "group": "TikTokCringe",
+    "body": "woodla bund cab gra cro mo fli feath cact lint tidepo vall bran grani map popl bra shing se fli basi ditc towe hamle nettl cactu van locke mars badg barre arc walnu",
+    "score": 130,
+    "threadId": "t3_1v4vkub",
+    "parentId": "t1_ozflle4",
+    "isTopLevel": false
+   },
+   {
+    "id": "ozf68p6",
+    "createdUtc": 1784866393,
+    "group": "AskReddit",
+    "body": "locke fatho estuar stucc tar lila fabri mirro desk millet",
+    "score": 0,
+    "threadId": "t3_1v4p82p",
+    "parentId": "t1_ozedkkr",
+    "isTopLevel": false
+   },
+   {
+    "id": "ozdpogq",
+    "createdUtc": 1784848032,
+    "group": "astoria",
+    "body": "edit: gro cupboa flagsto timb cro cott da summ sed map mar ho flann hut cab me ar pill cott barr a folia emb sle cushi hand pastu cre beac row dahl scaffo sha dit heath grani ging da di sandb pebb pa miner sil bronz fiddl quart ston cree saddl",
+    "score": 18,
+    "threadId": "t3_1v4odur",
+    "parentId": "t1_ozdi6v3",
+    "isTopLevel": false
+   },
+   {
+    "id": "ozdl9nq",
+    "createdUtc": 1784846647,
+    "group": "LoveIslandUSA_",
+    "body": "wicke spir tunne cupboar compas railin anchor",
+    "score": 26,
+    "threadId": "t3_1v4s6o9",
+    "parentId": "t1_ozdjyym",
+    "isTopLevel": false
+   },
+   {
+    "id": "ozcupgk",
+    "createdUtc": 1784839142,
+    "group": "AskReddit",
+    "body": "bamb curre rush vau rudd ax knol harbo sine garde weathervan granit cla curren spindl gazeb cres burro iri granit eagl rapid cella ree shutte bel slop sag summi coas stippl burro toolshe troug kettl blanke paddl verand?",
+    "score": -2,
+    "threadId": "t3_1v4p82p",
+    "parentId": "t3_1v4p82p",
+    "isTopLevel": true
+   },
+   {
+    "id": "ozci7rl",
+    "createdUtc": 1784835902,
+    "group": "astoria",
+    "body": "cr cist be gaze lante barr inl brid twi hear keysto",
+    "score": 93,
+    "threadId": "t3_1v4odur",
+    "parentId": "t3_1v4odur",
+    "isTopLevel": true
+   },
+   {
+    "id": "ozchg8s",
+    "createdUtc": 1784835704,
+    "group": "LoveIslandUSA_",
+    "body": "she foy del chimne cla tundr biscui thor mes horizo forg",
+    "score": 58,
+    "threadId": "t3_1v4nhto",
+    "parentId": "t1_ozchcr3",
+    "isTopLevel": false
+   },
+   {
+    "id": "ozcfyzi",
+    "createdUtc": 1784835319,
+    "group": "LoveIslandUSA_",
+    "body": "gau cha be lighthou heath ravi mo compa cryst thimb spru fidd spind awni flann tidepo cushi pla lavend copp blo pebb fla grav cro inl sadd bro swa i cab ga wick ho horiz lil do biscu led cra toolsh sto cre brid fabr sycamo sto cli gla awni haz mo rivul grani sla bad furr st hon lich chimn crat",
+    "score": 106,
+    "threadId": "t3_1v4nhto",
+    "parentId": "t1_ozcdxke",
+    "isTopLevel": false
+   },
+   {
+    "id": "ozaxto3",
+    "createdUtc": 1784821703,
+    "group": "NYCmovies",
+    "body": "sor outc tun scaff hed watercour pi turr burr waln bould biscu cha popl ro cha orcha stairw heath bron tho sin fath anch thre rid sorr arr o cor pill hon curre vau inl row sa lil ging gla cab anch clov sorr trest att cobb sycamo folia wick sum watercour bra bad raili stra heath doorw ironwo wick ax bro stipp sapli trell hon sin brid torre bo",
+    "score": 1,
+    "threadId": "t3_1v4gyu9",
+    "parentId": "t1_ozax6ns",
+    "isTopLevel": false
+   },
+   {
+    "id": "ozawr70",
+    "createdUtc": 1784821433,
+    "group": "NYCmovies",
+    "body": "mill turr dit foy mosa thimb rid bro dit mill awni vi she foy bro mant plate brist cell cor lob furr fenn glaci fli curre ravi cro spru ced carp spi cell gab weatherva led wind cand atl fin inl re rid du gra satch ho chann si kett plate kett spru can nett fidd flagsto canv flagsto bo doorw thimb gaze jasmi trell o bo cand stuc watercour re cor miner sapli me thist ho clov wha bad ro sla cact she pill cra brack prair spind gaze mant autu foy marigo cott popl blanke cupboar lavende",
+    "score": 13,
+    "threadId": "t3_1v4gyu9",
+    "parentId": "t3_1v4gyu9",
+    "isTopLevel": true
+   },
+   {
+    "id": "oz9rmfi",
+    "createdUtc": 1784810142,
+    "group": "politics",
+    "body": "spin r gaz sla pla va awni bron fie att att nick outcr cupboa cand di stairw va lil",
+    "score": 0,
+    "threadId": "t3_1v4av6b",
+    "parentId": "t1_oz9eur1",
+    "isTopLevel": false
+   },
+   {
+    "id": "oz8amhj",
+    "createdUtc": 1784786961,
+    "group": "circlejerknyc",
+    "body": "trest de bund blank filame atl biscu pant tow lumb fro blank prair estua bro marigo will se cobb poll lumb lante mead mar cre pant cli cl o filame kett tund be lich haz",
+    "score": -3,
+    "threadId": "t3_1v3hvej",
+    "parentId": "t3_1v3hvej",
+    "isTopLevel": true
+   },
+   {
+    "id": "oz89ilh",
+    "createdUtc": 1784786447,
+    "group": "NonPoliticalTwitter",
+    "body": "pa biscu cab fidd doorw gab trest cobb blanke shel cree",
+    "score": 1,
+    "threadId": "t3_1uzpgk5",
+    "parentId": "t1_oz74dvt",
+    "isTopLevel": false
+   },
+   {
+    "id": "oz85rdc",
+    "createdUtc": 1784784707,
+    "group": "GotMeHooked",
+    "body": "vi ald hear twi me torre lavend quar lavende caver woodlan marbl glas orchar cobbl chape granit burro stucc heathe awnin birc jasmin bristl birc troug inle compas ambe sine whar iri canyo biscui porc",
+    "score": 7,
+    "threadId": "t3_1v3l6po",
+    "parentId": "t1_oz7s1ce",
+    "isTopLevel": false
+   },
+   {
+    "id": "oz85hs1",
+    "createdUtc": 1784784584,
+    "group": "GotMeHooked",
+    "body": "chann chimn amb bron tho anch shutt led ki twi terra tidepo stre spind brack slo tund curre tho latti cro thre host arro compas gaug pebbl flin gull turre bracke jett fiddl",
+    "score": 2,
+    "threadId": "t3_1v3l6po",
+    "parentId": "t1_oz6qg2j",
+    "isTopLevel": false
+   },
+   {
+    "id": "oz84t3o",
+    "createdUtc": 1784784268,
+    "group": "GotMeHooked",
+    "body": "cli do cupboa cushio mosai tea clove hamle bloo carpe tundr crat basi stran bracke dais woodlan wago curtai pilla cres minera crysta",
+    "score": 6,
+    "threadId": "t3_1v3l6po",
+    "parentId": "t1_oz54oeb",
+    "isTopLevel": false
+   },
+   {
+    "id": "oz7zaou",
+    "createdUtc": 1784781845,
+    "group": "LoveIslandcookout",
+    "body": "coa holl birc gabl ston porc ree canva chape stran ferr meado",
+    "score": 11,
+    "threadId": "t3_1v3ym2c",
+    "parentId": "t1_oz7gzmc",
+    "isTopLevel": false
+   },
+   {
+    "id": "oz5clcq",
+    "createdUtc": 1784751455,
+    "group": "gaming",
+    "body": "cha sin mant re sag ditc cabi kettl flagston ston birc freckl hatc cister parce cree ferr quil flanne polle rafte suma dia bambo coas chimne ambe mille caver cotto sea harbo valle van rowa",
+    "score": 1,
+    "threadId": "t3_1v3rcnr",
+    "parentId": "t3_1v3rcnr",
+    "isTopLevel": true
+   },
+   {
+    "id": "oz373xy",
+    "createdUtc": 1784732136,
+    "group": "memes",
+    "body": "lar inl latti padd sapli fidd curre map trest fla atl wha bra cor i se ravi ga curta mirr chimn cl be hed cushi gutt shing do mosa si sle timb fenn atl bra mo plate app re mosa lumb sla ki row meado filamen wicke lavende fountai compas timbe curren knol feathe porc keyston arbo ree glas ledg knol beaco awnin cora turre dais spir strea tea ginge ree marbl nettl morta swal paddl towe handl weathervan flanne ledg mos glacie foye axl flanne iv spruc verand cla twin jasmin ree locke axl thistl arbo crysta sea sedg bambo?",
+    "score": 1,
+    "threadId": "t3_1v30xir",
+    "parentId": "t1_oz35zw8",
+    "isTopLevel": false
+   },
+   {
+    "id": "oz2xea6",
+    "createdUtc": 1784729617,
+    "group": "memes",
+    "body": "tar cister dahli delt delt stucc sea gazeb quil haze badg dom saplin shingl ceda ancho arro larc cres yarro fabri flin thicke grat shingl scaffol popla pastur flagston van sil marbl keyston cora appl liche verand iv rivule broo foliag fenne gazeb popla parce crat stucc haze foye tinde orchar summi crat autum foye rop fiddle autumn attic knoll ledge coral pasture field cinder watercourse vine crate rushes lintel turret wagon pasture marble compass doorway carpet",
+    "score": 1,
+    "threadId": "t3_1v30xir",
+    "parentId": "t1_oz2l4cp",
+    "isTopLevel": false
+   },
+   {
+    "id": "oz29oup",
+    "createdUtc": 1784722743,
+    "group": "memes",
+    "body": "stuc ging cha gul quar tunn sorr folia fer mill ald keysto compa poll estua shutt cl tundr",
+    "score": 2,
+    "threadId": "t3_1v30xir",
+    "parentId": "t1_oz1a9ic",
+    "isTopLevel": false
+   },
+   {
+    "id": "oz0wrrb",
+    "createdUtc": 1784700989,
+    "group": "memes",
+    "body": "horizo saddl cobbl fiddl bras rudde bel twin quil chimne",
+    "score": 2,
+    "threadId": "t3_1v30xir",
+    "parentId": "t1_oz0c911",
+    "isTopLevel": false
+   },
+   {
+    "id": "oz0w2ff",
+    "createdUtc": 1784700663,
+    "group": "memes",
+    "body": "tunn hand fla sadd founta ciste mosa ta iv dais cister haze bridg oa dahli tundr freckl ston hoste terrac toolshe pewte mirro ginge broo",
+    "score": 0,
+    "threadId": "t3_1v30xir",
+    "parentId": "t1_oz0phkv",
+    "isTopLevel": false
+   },
+   {
+    "id": "oz0vtkj",
+    "createdUtc": 1784700547,
+    "group": "memes",
+    "body": "lob fla filame sha slo arr estua bro arro bracke satche handl embe dus torren lanter lanter shutte van marbl bundl railin alde",
+    "score": 0,
+    "threadId": "t3_1v30xir",
+    "parentId": "t1_oz0b2r7",
+    "isTopLevel": false
+   },
+   {
+    "id": "oz0v195",
+    "createdUtc": 1784700180,
+    "group": "memes",
+    "body": "larc estuar shingl lumbe hollo ste caver atla fer tunne towe terrac ste gutte ambe stippl alde cinde fiel",
+    "score": 2,
+    "threadId": "t3_1v30xir",
+    "parentId": "t1_oz0fab0",
+    "isTopLevel": false
+   },
+   {
+    "id": "oyzmiaa",
+    "createdUtc": 1784683084,
+    "group": "politics",
+    "body": "lila tunne nettl lattic morta cabin chalk rafter hollow",
+    "score": 2,
+    "threadId": "t3_1v2vh09",
+    "parentId": "t1_oyzj764",
+    "isTopLevel": false
+   },
+   {
+    "id": "oyydvtd",
+    "createdUtc": 1784669348,
+    "group": "politics",
+    "body": "mars thor summi grave broo pin scaffol glacie hone line trestl keyston junipe hedg slee stucc canva pebbl polle grat cobbl bridge keystone",
+    "score": 1,
+    "threadId": "t3_1v2m6is",
+    "parentId": "t1_oyyb6fm",
+    "isTopLevel": false
+   },
+   {
+    "id": "oyyd615",
+    "createdUtc": 1784669149,
+    "group": "politics",
+    "body": "p sum sadd flann copp ging me del",
+    "score": 46,
+    "threadId": "t3_1v2m6is",
+    "parentId": "t1_oyxtzva",
+    "isTopLevel": false
+   },
+   {
+    "id": "oyy9rvh",
+    "createdUtc": 1784668224,
+    "group": "politics",
+    "body": "caver lumbe ree cabl as cushion horizon",
+    "score": 1,
+    "threadId": "t3_1v2m6is",
+    "parentId": "t1_oyw8c35",
+    "isTopLevel": false
+   },
+   {
+    "id": "oyy4h0u",
+    "createdUtc": 1784666809,
+    "group": "politics",
+    "body": "comp terr o cell lob",
+    "score": 6,
+    "threadId": "t3_1v2u69s",
+    "parentId": "t1_oyy3ov2",
+    "isTopLevel": false
+   },
+   {
+    "id": "oyy430v",
+    "createdUtc": 1784666704,
+    "group": "politics",
+    "body": "cindereeee valleyeeee",
+    "score": 4,
+    "threadId": "t3_1v2u69s",
+    "parentId": "t1_oyy1tei",
+    "isTopLevel": false
+   },
+   {
+    "id": "oywp2o5",
+    "createdUtc": 1784653554,
+    "group": "politics",
+    "body": "eag ta for ston fatho hone tinde pebbl appl doc railin orchar mos harbo curtai hutc ree slee pewte ceda plaz quil rushe barre filamen mosai autum arc glad bambo canva cree cabl hoste sine estuar",
+    "score": 10,
+    "threadId": "t3_1v2h9f7",
+    "parentId": "t1_oyvd7ai",
+    "isTopLevel": false
+   },
+   {
+    "id": "oywl0j9",
+    "createdUtc": 1784652516,
+    "group": "politics",
+    "body": "pastu gab thist fe satch app tunn pastu lin bambo heart channe twin gull",
+    "score": 1,
+    "threadId": "t3_1v2fhl2",
+    "parentId": "t1_oyuw777",
+    "isTopLevel": false
+   },
+   {
+    "id": "oytke6g",
+    "createdUtc": 1784613847,
+    "group": "IWantToAskAnAmerican",
+    "body": "trell scaffo fro grani broo weathervan burro thicke lighthous channe cora boulde boar mes van plaz scaffol valle lila heathe foye flin pastur wago biscui ancho ravin aspe bucke cora thistl thor bol cotto fros?",
+    "score": 1,
+    "threadId": "t3_1v25kuh",
+    "parentId": "t1_oytk6vx",
+    "isTopLevel": false
+   },
+   {
+    "id": "oytj0fi",
+    "createdUtc": 1784613190,
+    "group": "IWantToAskAnAmerican",
+    "body": "autum sandba wago heart marigol mosai des valle iv mis des basi sea ginge knol threa foye quarr aspe bracket daisy feather",
+    "score": 2,
+    "threadId": "t3_1v25kuh",
+    "parentId": "t1_oytiwol",
+    "isTopLevel": false
+   },
+   {
+    "id": "oytg3eb",
+    "createdUtc": 1784611798,
+    "group": "NYCmovies",
+    "body": "pla torre sto pebb cany lin do arb fenn harb torre host scaffo flee att burr gaze sycamo sorr cott stre row cli da parc cand freck bamb bas tunn trou cact tho cupboa terra mead fla do satch led fer bould ravi qui asp hed lich awni cro torre hed sto fe nett harb jet rush heath yarr chimn feath ald fie autu ste mis",
+    "score": 3,
+    "threadId": "t3_1v22lys",
+    "parentId": "t1_oys5sxi",
+    "isTopLevel": false
+   },
+   {
+    "id": "oytehur",
+    "createdUtc": 1784611061,
+    "group": "IWantToAskAnAmerican",
+    "body": "awni amb be foy gutt jet junip veran estua trou latti stre rush fiel dun arc bridg drif jett arbo dais gaug gabl foliag eagl bridg ree eagl oa valle barre beaco vaul cora atti broo heart alde saplin garde ancho beaco moo",
+    "score": 3,
+    "threadId": "t3_1v25kuh",
+    "parentId": "t1_oyt7a67",
+    "isTopLevel": false
+   },
+   {
+    "id": "oyqc2ij",
+    "createdUtc": 1784575246,
+    "group": "LoveIslandUSA_",
+    "body": "parcel canal hostel hamlet",
+    "score": 30,
+    "threadId": "t3_1v1t0ea",
+    "parentId": "t1_oyq6klh",
+    "isTopLevel": false
+   },
+   {
+    "id": "oyo30c2",
+    "createdUtc": 1784553780,
+    "group": "mildlyinfuriating",
+    "body": "drifte channele diale coaste beame pillar bracket crown ledge rudder pine",
+    "score": 3,
+    "threadId": "t3_1v1k6or",
+    "parentId": "t1_oyo1xoe",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxwr1g5",
+    "createdUtc": 1784216875,
+    "group": "PeterExplainsTheJoke",
+    "body": "knolleeeee",
+    "score": 2,
+    "threadId": "t3_1uy65e7",
+    "parentId": "t1_oxwqenw",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxwo85s",
+    "createdUtc": 1784216178,
+    "group": "PeterExplainsTheJoke",
+    "body": "host horiz ki pebb popl rapi pill fla hedg pin hoste cister",
+    "score": 1,
+    "threadId": "t3_1uy3u5n",
+    "parentId": "t1_oxwo0ip",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxwnr83",
+    "createdUtc": 1784216060,
+    "group": "PeterExplainsTheJoke",
+    "body": "rush shing founta estua brist stre mant lante ald lavend kno ald app stra bro i stra blo ciste pa spru she dahl dri wick curta terra slo founta st st ro a lighthou lil tho fenn sandb thist junipe iri mantl vin candl stov foliag spindl",
+    "score": 1,
+    "threadId": "t3_1uy3u5n",
+    "parentId": "t1_oxwnc1g",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxwn6mf",
+    "createdUtc": 1784215916,
+    "group": "PeterExplainsTheJoke",
+    "body": "folia tind ir weatherva turr cor veran hat vi flee hut blo for ced del furr she hut ironwo dit brack badg terrac",
+    "score": 1,
+    "threadId": "t3_1uy65e7",
+    "parentId": "t1_oxwmwd9",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxwlmon",
+    "createdUtc": 1784215527,
+    "group": "PeterExplainsTheJoke",
+    "body": "shaleee walnutee bundleee featheree fabricee inletee watercourseee stuccoee hedgeee vaultee boardee thicketee sorrelee slopeee flintee domeee ditchee bronzeee beamee reedee ironwoodee fieldee burrowee canyonee spindleee horizonee valleyee lumberee rowanee hollowe ashe silte vaulte vanee cedare chalke marigolde currente paddlee mirrore ambere marigolde wagone meadowe mantlee gullye irise cratee gullye bolte rushese",
+    "score": 1,
+    "threadId": "t3_1uy3u5n",
+    "parentId": "t1_oxwkv75",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxwkiuj",
+    "createdUtc": 1784215248,
+    "group": "NYCapartments",
+    "body": "comp ho cany junip gab compa marigo?",
+    "score": 1,
+    "threadId": "t3_1uy49j8",
+    "parentId": "t3_1uy49j8",
+    "isTopLevel": true
+   },
+   {
+    "id": "oxwic79",
+    "createdUtc": 1784214697,
+    "group": "PeterExplainsTheJoke",
+    "body": "oa ferr shel carpe rivule mineral stoop rowan",
+    "score": 1,
+    "threadId": "t3_1uy3u5n",
+    "parentId": "t1_oxwi830",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxwgs1s",
+    "createdUtc": 1784214294,
+    "group": "PeterExplainsTheJoke",
+    "body": "fro forg gat sine carpe canva tundr feathe quart trestl canyo gaug fiddl axl stippl sag mirro rop prairi van pewte polle thistl troug polle foliag mapl lobb lobb stippl pantr ste quarr paddl shingl oa bel ridg kil railin hoste rudde sycamor canva feathe thistl ledg curren gabl doc quarr valle gazeb whar chal sedg chape horizo channe garde chimne outcro line porc hoste chape tinde kettl troug mos mis hamle ree ston rudde cella ceda atla barre shel?",
+    "score": 1,
+    "threadId": "t3_1uy3u5n",
+    "parentId": "t1_oxwfcxl",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxwe3ug",
+    "createdUtc": 1784213606,
+    "group": "PeterExplainsTheJoke",
+    "body": "lumbe doorwa van sag weathervan trelli polle slat ste turre headland sandbar mist tower dahlia marigold board amber oak flannel bell mist stove tinder mesa beam branch",
+    "score": 1,
+    "threadId": "t3_1uy3u5n",
+    "parentId": "t1_oxwdw8o",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxwdfe5",
+    "createdUtc": 1784213432,
+    "group": "PeterExplainsTheJoke",
+    "body": "ax thick chimn pa wind thick cha bro tidepo hear tunn thist si fe trell yarr map rapi mi i marigo fro tind cushi waln foliag cla kil toolshe torren coas",
+    "score": 1,
+    "threadId": "t3_1uy3u5n",
+    "parentId": "t1_oxwcxsc",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxwc408",
+    "createdUtc": 1784213096,
+    "group": "PeterExplainsTheJoke",
+    "body": "stairw wick gra toolsh emb glaci blo fabr mar coa gau pa chann terra tind filame gla ree pantr compas grave?",
+    "score": 1,
+    "threadId": "t3_1uy3u5n",
+    "parentId": "t1_oxwbvh3",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxwap8i",
+    "createdUtc": 1784212731,
+    "group": "PeterExplainsTheJoke",
+    "body": "rapi ciste trou ki inl wha nick por hatc pewte grat knol orchar stippl cupboar hollo shingl cree fleec pebbl glad cister kettl pewte trestl crow fenne timbe glas des foye tidepoo broo cla ancho dom orchar cabi junipe des haze mille grov quarr coas crat compas scaffol swal flin heart fabri thor weathervan minera whar feathe ree larc minera hedg flanne cla cabl lila?",
+    "score": 1,
+    "threadId": "t3_1uy3u5n",
+    "parentId": "t1_oxw8m5h",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxw70sx",
+    "createdUtc": 1784211763,
+    "group": "PeterExplainsTheJoke",
+    "body": "woodla spi ki cell beac do feath lint ir waln ta hed eag canv sin trest ciste arb cra fath dri ravi dit cor fli brist bra sle marb parc summ chann lighthou raft hat jet flann ced be buck bran tunn ro cha clov lighthou a walnu sandba liche cla doorwa ceda bundl compas inle quil saddl weathervan?",
+    "score": 1,
+    "threadId": "t3_1uy3u5n",
+    "parentId": "t1_oxw6ldf",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxw5x0y",
+    "createdUtc": 1784211469,
+    "group": "MapPorn",
+    "body": "hedg gutte gabl cobbl stairwa pewte dus bloo rivule popla hollo clove bristl cabi basi gull oa stov gabl ceda stairwa gazeb boulde locke stoo bol slee turre bridg pantr bucke cabl valle hoop tidepool?",
+    "score": 4,
+    "threadId": "t3_1uy2mzf",
+    "parentId": "t1_oxw5nlk",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxw5nvy",
+    "createdUtc": 1784211401,
+    "group": "PeterExplainsTheJoke",
+    "body": "ironwo wag do del ga holl fe mant pant fleec eagl lila stran sedg keyston bundl clif junipe harbo thimbl",
+    "score": 1,
+    "threadId": "t3_1uy3u5n",
+    "parentId": "t1_oxw5hmd",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxw4xz4",
+    "createdUtc": 1784211208,
+    "group": "PeterExplainsTheJoke",
+    "body": "fe re freck sa ced watercour wago rapid terrac pantr plaz pilla?",
+    "score": 2,
+    "threadId": "t3_1uy3u5n",
+    "parentId": "t1_oxw42ow",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxw3oo5",
+    "createdUtc": 1784210867,
+    "group": "PeterExplainsTheJoke",
+    "body": "spi be ced parc atl gla brist flann cobbl hollo thistl nettl suma summi candl oa bloo rushe thicke stippl ambe orchar dus birc cla",
+    "score": 2,
+    "threadId": "t3_1uy3mah",
+    "parentId": "t1_oxw2fcd",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxw3ayk",
+    "createdUtc": 1784210764,
+    "group": "PeterExplainsTheJoke",
+    "body": "willo hone vine canal arrow mantle sapling lintel vault?",
+    "score": 21,
+    "threadId": "t3_1uy3mah",
+    "parentId": "t1_oxw1u2j",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxw2tty",
+    "createdUtc": 1784210634,
+    "group": "PoursTea",
+    "body": "tar blanket rowan tundra strand ash?",
+    "score": 0,
+    "threadId": "t3_1uy347b",
+    "parentId": "t3_1uy347b",
+    "isTopLevel": true
+   },
+   {
+    "id": "oxw2j7t",
+    "createdUtc": 1784210552,
+    "group": "MapPorn",
+    "body": "sp pla marig?",
+    "score": 7,
+    "threadId": "t3_1uy2mzf",
+    "parentId": "t1_oxw1zdb",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxw0le8",
+    "createdUtc": 1784210024,
+    "group": "AskReddit",
+    "body": "stairwa ferr glacie swal railin gabl axl watercours pine rowan",
+    "score": 2,
+    "threadId": "t3_1uy3bf8",
+    "parentId": "t1_oxvyz3t",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxvzzwf",
+    "createdUtc": 1784209859,
+    "group": "AskReddit",
+    "body": "pebb spind bas heath pantr",
+    "score": 3,
+    "threadId": "t3_1uy3bf8",
+    "parentId": "t1_oxvz8z4",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxu8zn0",
+    "createdUtc": 1784184620,
+    "group": "LoveIslandUSA_",
+    "body": "hu g watercou fid keyst latt tools inl heath fidd",
+    "score": 51,
+    "threadId": "t3_1uxu2gz",
+    "parentId": "t1_oxu7mtc",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxqersd",
+    "createdUtc": 1784140651,
+    "group": "politics",
+    "body": "kno eag estua verand flas prairi flanne polle bea basi quarr pewte iri mos fleec bronz pan tar yarro ditc stucc dus freckl alde stucc lumbe carpe char sine keyston mis",
+    "score": 116,
+    "threadId": "t3_1uxcn0j",
+    "parentId": "t1_oxqahzb",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxpe09n",
+    "createdUtc": 1784131547,
+    "group": "nyc",
+    "body": "raili ar inl woodla be ciste lumb bron mill haml o ki da cab tow spind ir clov cand bron sto tind basi fatho flas timbe hoo",
+    "score": 39,
+    "threadId": "t3_1ux994f",
+    "parentId": "t1_oxp8fxu",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxofi12",
+    "createdUtc": 1784122514,
+    "group": "CompanyOfHeroes",
+    "body": "sorr raili compa spind hat sto hed ki ki emb bund bould do vaul hoste dom ridg coas atti rudde dahli platea outcro spir ree stairwa line?",
+    "score": 0,
+    "threadId": "t3_1ux42ui",
+    "parentId": "t1_oxodp9c",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxmb99i",
+    "createdUtc": 1784090261,
+    "group": "politics",
+    "body": "biscui freckl haze",
+    "score": 5,
+    "threadId": "t3_1uwms79",
+    "parentId": "t1_oxlz5oe",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxkk6y3",
+    "createdUtc": 1784068545,
+    "group": "NYCapartments",
+    "body": "shut win d m fabr ciste",
+    "score": 1,
+    "threadId": "t3_1uvq0e4",
+    "parentId": "t1_oxkciag",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxiwatk",
+    "createdUtc": 1784053257,
+    "group": "AskReddit",
+    "body": "stucc ceda feathe blanke clif shingl summi oa boulde compas verand drif boar sil thimbl tar slop sycamor boar burro shal headlan woodlan fer ferr knol sil pilla line compas watercours pebbl mis sag dais twin prairi platea locke bundl forg bristl channe nicke crat boulde ledg chape fenne delt parce bol hoo sea turre rudde knol bundl aspen daisy crest dune trough burrow fleece arrow copper rope strand",
+    "score": 9,
+    "threadId": "t3_1uwgq7c",
+    "parentId": "t3_1uwgq7c",
+    "isTopLevel": true
+   },
+   {
+    "id": "oxhbk4g",
+    "createdUtc": 1784038960,
+    "group": "CompanyOfHeroes",
+    "body": "trest du junip heath chap stuc sandb feath orcha canv lil de por tind pill vall tow thistl minera troug cobbl locke",
+    "score": 3,
+    "threadId": "t3_1uvtp29",
+    "parentId": "t1_oxgu0q3",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxh7c9s",
+    "createdUtc": 1784037803,
+    "group": "NYCapartments",
+    "body": "founta ga hear pant ro ging rivul shutt sin ho sorr brid lante cro biscu slee vaul",
+    "score": 9,
+    "threadId": "t3_1uvq0e4",
+    "parentId": "t1_oxehyl3",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxh66um",
+    "createdUtc": 1784037482,
+    "group": "LoveIslandUSA_",
+    "body": "cott compa coa stre mant stre yarr lighthou torre o pla ho forg boar keyston autum compas fiddl ancho dia fenne canva",
+    "score": 22,
+    "threadId": "t3_1uw1wc9",
+    "parentId": "t3_1uw1wc9",
+    "isTopLevel": true
+   },
+   {
+    "id": "oxh0a7o",
+    "createdUtc": 1784035792,
+    "group": "LoveIslandUSA_",
+    "body": "bisc anch haml toolsh carp fie pla bir cli thre slo",
+    "score": 3,
+    "threadId": "t3_1uw3l6h",
+    "parentId": "t1_oxgpkpb",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxfboj0",
+    "createdUtc": 1784010317,
+    "group": "LoveIslandUSA_",
+    "body": "keysto ta foliag gutte des garde rudde mars shal gat lattic popla mos iv delt clove meado liche",
+    "score": 2,
+    "threadId": "t3_1uvoy2j",
+    "parentId": "t1_oxfbka8",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxfbep2",
+    "createdUtc": 1784010186,
+    "group": "LoveIslandUSA_",
+    "body": "watercour ax popl rid wha jasmi grani terra bad weatherva o map inl lob pastu sto bund cobb cushio parce pebbl lighthous fleec paddl broo line shutte sea kettl bea mantl inle aspe cushio line eagl rushe shal cupboar outcro woodlan van lumbe arc shal",
+    "score": 3,
+    "threadId": "t3_1uvoy2j",
+    "parentId": "t1_oxfaw86",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxfakq7",
+    "createdUtc": 1784009785,
+    "group": "LoveIslandUSA_",
+    "body": "flagst pan sorr swa harb filame curta gro waln du app",
+    "score": 4,
+    "threadId": "t3_1uvoy2j",
+    "parentId": "t1_oxe8ygj",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxfa05u",
+    "createdUtc": 1784009511,
+    "group": "TheAlters",
+    "body": "lob coa bron va lante headla vi fli dri keysto ravi o tho sla toolshe plaz",
+    "score": 3,
+    "threadId": "t3_1uvlqe6",
+    "parentId": "t1_oxenmwc",
+    "isTopLevel": false
+   },
+   {
+    "id": "oxb47jw",
+    "createdUtc": 1783962484,
+    "group": "AskReddit",
+    "body": "mille clif quil pewte boar trelli lattic ceda dia fiel tea hamle wicke mapl vin gull rapid cree pebbl mirro arro des autum channe ditc bundl arro sea headlan sorre hoste lila pewte broo gull stran feathe chimne grov dahli sine sil hoo locke oa sine quartz cinder current vine shale badge arrow tidepool rapids stoop pine stucco honey gravel",
+    "score": -1,
+    "threadId": "t3_1uvh6dm",
+    "parentId": "t1_oxb20x6",
+    "isTopLevel": false
+   },
+   {
+    "id": "owy782f",
+    "createdUtc": 1783798768,
+    "group": "PoursTea",
+    "body": "bund rid cha mosa lumb fla gra arr ki eag freck hat anch popl chap saddl compas towe cora morta tinde",
+    "score": 3,
+    "threadId": "t3_1uti06f",
+    "parentId": "t1_owxamni",
+    "isTopLevel": false
+   },
+   {
+    "id": "owx8s4t",
+    "createdUtc": 1783788871,
+    "group": "PoursTea",
+    "body": "sadd grani amb thre fountai char",
+    "score": 3,
+    "threadId": "t3_1uti06f",
+    "parentId": "t1_owx2jwd",
+    "isTopLevel": false
+   },
+   {
+    "id": "owuo6ge",
+    "createdUtc": 1783753353,
+    "group": "loveisland",
+    "body": "dais nickel apple",
+    "score": 1,
+    "threadId": "t3_1uscmq4",
+    "parentId": "t1_owmvnus",
+    "isTopLevel": false
+   },
+   {
+    "id": "owunzx1",
+    "createdUtc": 1783753264,
+    "group": "loveisland",
+    "body": "summ dai cab fath orcha haze",
+    "score": 1,
+    "threadId": "t3_1uscmq4",
+    "parentId": "t1_owp0ig2",
+    "isTopLevel": false
+   },
+   {
+    "id": "owtx39g",
+    "createdUtc": 1783741102,
+    "group": "jobhunting",
+    "body": "brist tho quar fenn di coa keysto grav fro padd gul map nick lob gau ir flagsto autu pewt bro vau be vaul slat garde pantr glas broo popla moo mos ceda pastur vin bundl pebbl coppe dus stucc junipe curtai blanke windo compas bloo stippl arbo wago fiel ambe glas railin",
+    "score": 3,
+    "threadId": "t3_1uszgxg",
+    "parentId": "t1_owticd5",
+    "isTopLevel": false
+   },
+   {
+    "id": "owsp4tu",
+    "createdUtc": 1783725429,
+    "group": "jobhunting",
+    "body": "char satche bridg slee fiddl fabri hatc swal suma",
+    "score": 6,
+    "threadId": "t3_1uszgxg",
+    "parentId": "t1_owsezxz",
+    "isTopLevel": false
+   },
+   {
+    "id": "ows7vjf",
+    "createdUtc": 1783720080,
+    "group": "business",
+    "body": "turr flann popl",
+    "score": 1,
+    "threadId": "t3_1ure4qm",
+    "parentId": "t1_ows2iqs",
+    "isTopLevel": false
+   },
+   {
+    "id": "owrzsdp",
+    "createdUtc": 1783717815,
+    "group": "CompanyOfHeroes",
+    "body": "pewt pastu prair trell flagsto prair fie fidd glaci hand cli hon tow thist lumb marb yarr towe cabi curtai broo thor paddl linte watercours saddl ambe sedg granit flanne bras compas iri platea mille pewte sea hoste foliag",
+    "score": 27,
+    "threadId": "t3_1uswi4o",
+    "parentId": "t1_owrufp1",
+    "isTopLevel": false
+   },
+   {
+    "id": "owpsq3q",
+    "createdUtc": 1783697384,
+    "group": "business",
+    "body": "dit chimn tunn o fabr grav emb gra pla satch tidepo furr ging trest sapli tund clov bo yarr biscu va pi stre fidd re bad bo chimn cell lante fro tunn flee lighthou wind tund cell doorw feath harb jasmi arb hed trou pebb tunn blo compas marigol handl ston shutte hollo dais beaco hoste garde outcro ston pan ravin gull stran alde lobb slat coppe pantr pewte shingl kettl wicke gutte atti cla boar pin rushe whar rowa arro pan lanter fiddl saplin whar bucke arbo torren toolshe stran yarro dun flagston sil dais atla axl heathe van quil pin hollo alde thor granit sag ree iri bucke yarro spindl cella fiddl trestl atla clif daw popla horizo pin ravin slop doorwa polle badg cree watercours arc as gat canva oa bel feathe oa bea birc linte bracke vaul tundr dom line paddl filamen lobb walnu tundr shal cana foye paddl slee hoste popla heart quarr fiel sine rapid broo morta tundr trestl autum fatho fountai sil blanke sedg prairi pin hoo ridg rowa dus walnu mille thor?",
+    "score": 0,
+    "threadId": "t3_1ure4qm",
+    "parentId": "t1_owpqzj6",
+    "isTopLevel": false
+   },
+   {
+    "id": "owp73sg",
+    "createdUtc": 1783691704,
+    "group": "business",
+    "body": "quar curta popl ald cha spru watercour mead will rush asp cushi mi cab pill ax ar kett gau tidepo cind hat bra cact slo a she toolsh me cab burr rid pebb de willo bel boulde strea cister sea hoste mille ree cupboar stucc cupboar ferr sine gat oa cree arbo horizo grov hamle willo willo hutc dus arbo quart shutte thor fiddl hedg threa lobb scaffol cobbl sedg stran candl caver glad chimne mosai dus thor finc fatho quart tunne shal tundr coppe dais bras mars fer timbe fountai pantr bundl ambe scaffol finc boulde tea cana towe oa stoo orchar",
+    "score": 1,
+    "threadId": "t3_1ure4qm",
+    "parentId": "t1_own6z2m",
+    "isTopLevel": false
+   },
+   {
+    "id": "owp620d",
+    "createdUtc": 1783691415,
+    "group": "NYCapartments",
+    "body": "i ar bro swa cott spi cre app bron cryst del quar buck lumb ciste cha pastu yarr bro vi canv shing miner fabr du summ fie keysto quar delt ston garde junipe cres doc arbo cinde caver aspe slop harbo dais fenne nicke",
+    "score": 5,
+    "threadId": "t3_1usc2xp",
+    "parentId": "t1_ownrr8g",
+    "isTopLevel": false
+   },
+   {
+    "id": "owmpvgw",
+    "createdUtc": 1783655258,
+    "group": "NYCapartments",
+    "body": "ca this plate cand buck anch mill shutt eag raft ald o freck ironwo shutt tunn be marb marb grav vi outcr o she marigo cupboa bamb pebb pill kno rid she parc boa gard gutt rivul arr va",
+    "score": 6,
+    "threadId": "t3_1usc2xp",
+    "parentId": "t3_1usc2xp",
+    "isTopLevel": true
+   },
+   {
+    "id": "owmch7c",
+    "createdUtc": 1783650387,
+    "group": "business",
+    "body": "kno miner bir lock bamb summ sandb ki tunn rid gau trell mo hed foy fro lavend arb glaci quar wag feath quar hut me hut sin brist mort raft du gul bran host awni led cab sandb doorw stra cobb rudd fath spind bo arr del sadd timb o host turr cell kett bel glad ferr daw oa pin atla quil blanke vin dahli torren grave carpe ambe pin chal minera ditc ambe rowa ironwoo ste doorwa woodlan",
+    "score": 1,
+    "threadId": "t3_1ure4qm",
+    "parentId": "t1_owf6c3y",
+    "isTopLevel": false
+   },
+   {
+    "id": "owm5as1",
+    "createdUtc": 1783647960,
+    "group": "newjersey",
+    "body": "de prair thor quil drif fatho?",
+    "score": -1,
+    "threadId": "t3_1us4pvo",
+    "parentId": "t1_owl2c0x",
+    "isTopLevel": false
+   },
+   {
+    "id": "owi4d5n",
+    "createdUtc": 1783608882,
+    "group": "FoodNYC",
+    "body": "crowne clovere dusk delta",
+    "score": 2,
+    "threadId": "t3_1uqg8ei",
+    "parentId": "t3_1uqg8ei",
+    "isTopLevel": true
+   },
+   {
+    "id": "ow3pe26",
+    "createdUtc": 1783438474,
+    "group": "AskReddit",
+    "body": "cushi fenn trell ciste ging feath rudd lob pin cabi kettl pewte",
+    "score": 1,
+    "threadId": "t3_1upxogx",
+    "parentId": "t3_1upxogx",
+    "isTopLevel": true
+   },
+   {
+    "id": "ovvo6yu",
+    "createdUtc": 1783345748,
+    "group": "LoveIslandUSA",
+    "body": "headl s gra anc bea par bam je fi co qua bris fl d gr pan mir val blan glac jasm s turr stairw prair",
+    "score": 0,
+    "threadId": "t3_1uox0p2",
+    "parentId": "t1_ovvmsqz",
+    "isTopLevel": false
+   }
+  ],
+  "posts": [
+   {
+    "id": "1vs1ggg",
+    "createdUtc": 1787085883,
+    "group": "astoria",
+    "title": "Am I too picky, or has Lincoln Market’s meat quality gone downhill?",
+    "score": null,
+    "replyCount": 0
+   },
+   {
+    "id": "1vq2zls",
+    "createdUtc": 1786901167,
+    "group": "astoria",
+    "title": "Wild Tomatoes growing on sidewalk in Astoria? lol",
+    "score": 85,
+    "replyCount": 31
+   },
+   {
+    "id": "1voglzv",
+    "createdUtc": 1786734881,
+    "group": "thatbandofhers",
+    "title": "Most People: “If I could go back in time, I’d kill hitler!” Me: “I’d warn them…”",
+    "score": 114,
+    "replyCount": 6
+   }
+  ],
+  "coverage": {
+   "commentsFetched": 198,
+   "commentsTotal": null,
+   "postsFetched": 3,
+   "postsTotal": null,
+   "truncated": false,
+   "oldestFetchedUtc": 1783345748,
+   "sources": [
+    "arctic-shift"
+   ],
+   "errors": [
+    "users-index: no entry for this account — the index is a frozen 2025-03-25 snapshot, so accounts created since are absent from it however active they are. Scored from its comment and post streams alone: no karma, no lifetime totals, and the age is a floor rather than a total."
+   ]
+  }
+ }
+}

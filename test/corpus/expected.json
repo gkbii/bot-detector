@@ -1,0 +1,354 @@
+{
+ "byUsername": {
+  "ADELTAx": {
+   "automation": {
+    "band": "low",
+    "score": 0
+   },
+   "agenda": {
+    "band": "low",
+    "score": 5
+   },
+   "authenticity": {
+    "band": "moderate",
+    "score": 55
+   }
+  },
+  "AmputatorBot": {
+   "automation": {
+    "band": "moderate",
+    "score": 60
+   },
+   "agenda": {
+    "band": "moderate",
+    "score": 58
+   },
+   "authenticity": {
+    "band": "low",
+    "score": 25
+   }
+  },
+  "Anti-ThisBot-IB": {
+   "automation": {
+    "band": "moderate",
+    "score": 35
+   },
+   "agenda": {
+    "band": "moderate",
+    "score": 36
+   },
+   "authenticity": {
+    "band": "moderate",
+    "score": 32
+   }
+  },
+  "Aubenabee": {
+   "automation": {
+    "band": "low",
+    "score": 0
+   },
+   "agenda": {
+    "band": "low",
+    "score": 14
+   },
+   "authenticity": {
+    "band": "moderate",
+    "score": 61
+   }
+  },
+  "AutoModerator": {
+   "automation": {
+    "band": "moderate",
+    "score": 63
+   },
+   "agenda": {
+    "band": "moderate",
+    "score": 64
+   },
+   "authenticity": {
+    "band": "low",
+    "score": 29
+   }
+  },
+  "Biscopiphany": {
+   "automation": {
+    "band": "low",
+    "score": 9
+   },
+   "agenda": {
+    "band": "low",
+    "score": 0
+   },
+   "authenticity": {
+    "band": "moderate",
+    "score": 59
+   }
+  },
+  "Donkletown": {
+   "automation": {
+    "band": "low",
+    "score": 0
+   },
+   "agenda": {
+    "band": "low",
+    "score": 2
+   },
+   "authenticity": {
+    "band": "high",
+    "score": 70
+   }
+  },
+  "DooberBooberDoo": {
+   "automation": {
+    "band": "low",
+    "score": 5
+   },
+   "agenda": {
+    "band": "low",
+    "score": 1
+   },
+   "authenticity": {
+    "band": "moderate",
+    "score": 53
+   }
+  },
+  "Hartacus": {
+   "automation": {
+    "band": "low",
+    "score": 3
+   },
+   "agenda": {
+    "band": "low",
+    "score": 19
+   },
+   "authenticity": {
+    "band": "high",
+    "score": 71
+   }
+  },
+  "KevinGreeneSolar": {
+   "automation": {
+    "band": "low",
+    "score": 5
+   },
+   "agenda": {
+    "band": "low",
+    "score": 11
+   },
+   "authenticity": {
+    "band": "high",
+    "score": 65
+   }
+  },
+  "MundaneFacts": {
+   "automation": {
+    "band": "low",
+    "score": 17
+   },
+   "agenda": {
+    "band": "low",
+    "score": 5
+   },
+   "authenticity": {
+    "band": "moderate",
+    "score": 57
+   }
+  },
+  "Parahelix": {
+   "automation": {
+    "band": "low",
+    "score": 0
+   },
+   "agenda": {
+    "band": "low",
+    "score": 0
+   },
+   "authenticity": {
+    "band": "moderate",
+    "score": 59
+   }
+  },
+  "Qrahe": {
+   "automation": {
+    "band": "low",
+    "score": 0
+   },
+   "agenda": {
+    "band": "low",
+    "score": 0
+   },
+   "authenticity": {
+    "band": "moderate",
+    "score": 38
+   }
+  },
+  "RemindMeBot": {
+   "automation": {
+    "band": "moderate",
+    "score": 62
+   },
+   "agenda": {
+    "band": "moderate",
+    "score": 36
+   },
+   "authenticity": {
+    "band": "low",
+    "score": 25
+   }
+  },
+  "RepostSleuthBot": {
+   "automation": {
+    "band": "high",
+    "score": 76
+   },
+   "agenda": {
+    "band": "moderate",
+    "score": 64
+   },
+   "authenticity": {
+    "band": "low",
+    "score": 25
+   }
+  },
+  "TCBloo": {
+   "automation": {
+    "band": "low",
+    "score": 1
+   },
+   "agenda": {
+    "band": "low",
+    "score": 5
+   },
+   "authenticity": {
+    "band": "moderate",
+    "score": 55
+   }
+  },
+  "Tobeck": {
+   "automation": {
+    "band": "low",
+    "score": 5
+   },
+   "agenda": {
+    "band": "low",
+    "score": 10
+   },
+   "authenticity": {
+    "band": "high",
+    "score": 69
+   }
+  },
+  "WhatTheHali24": {
+   "automation": {
+    "band": "low",
+    "score": 0
+   },
+   "agenda": {
+    "band": "low",
+    "score": 0
+   },
+   "authenticity": {
+    "band": "moderate",
+    "score": 59
+   }
+  },
+  "___AirBuddDwyer___": {
+   "automation": {
+    "band": "low",
+    "score": 7
+   },
+   "agenda": {
+    "band": "low",
+    "score": 13
+   },
+   "authenticity": {
+    "band": "high",
+    "score": 66
+   }
+  },
+  "batmansthebomb": {
+   "automation": {
+    "band": "low",
+    "score": 5
+   },
+   "agenda": {
+    "band": "low",
+    "score": 3
+   },
+   "authenticity": {
+    "band": "high",
+    "score": 66
+   }
+  },
+  "bigbjarne": {
+   "automation": {
+    "band": "low",
+    "score": 0
+   },
+   "agenda": {
+    "band": "low",
+    "score": 13
+   },
+   "authenticity": {
+    "band": "high",
+    "score": 81
+   }
+  },
+  "runnertrailsBay": {
+   "automation": {
+    "band": "low",
+    "score": 8
+   },
+   "agenda": {
+    "band": "low",
+    "score": 0
+   },
+   "authenticity": {
+    "band": "moderate",
+    "score": 55
+   }
+  },
+  "same_subreddit_bot": {
+   "automation": {
+    "band": "moderate",
+    "score": 51
+   },
+   "agenda": {
+    "band": "moderate",
+    "score": 36
+   },
+   "authenticity": {
+    "band": "low",
+    "score": 25
+   }
+  },
+  "sneakpeekbot": {
+   "automation": {
+    "band": "moderate",
+    "score": 47
+   },
+   "agenda": {
+    "band": "moderate",
+    "score": 36
+   },
+   "authenticity": {
+    "band": "moderate",
+    "score": 38
+   }
+  },
+  "sub_doesnt_exist_bot": {
+   "automation": {
+    "band": "moderate",
+    "score": 53
+   },
+   "agenda": {
+    "band": "moderate",
+    "score": 36
+   },
+   "authenticity": {
+    "band": "moderate",
+    "score": 38
+   }
+  }
+ }
+}

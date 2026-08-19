@@ -38,12 +38,23 @@
     "node": ">=22"
   },
   "//scripts": [
-    "Both globs are needed: test/ holds the shared core's suite and server/test/",
-    "the backend's. A single test/*.test.js glob silently skips the server."
+    "Both test globs are needed: test/ holds the shared core's suite and",
+    "server/test/ the backend's. A single test/*.test.js glob silently skips",
+    "the server.",
+    "",
+    "`evaluate` reprints EVALUATION.md's headline band table from the 25",
+    "profiles frozen in test/corpus/ and exits non-zero if any of the 75 scores",
+    "moved. It reads nothing but JSON -- no network, no node_modules -- so",
+    "'the 17-human / 8-bot separation is not regressed' is a command rather",
+    "than a hand re-measure (JIO-343). `capture:corpus` is the ONLY script here",
+    "that goes to the network; it is not part of `test` and is run by hand when",
+    "the corpus is deliberately refreshed."
   ],
   "scripts": {
     "start": "node server/index.js",
     "dev": "node --watch server/index.js",
-    "test": "node --test test/*.test.js server/test/*.test.js"
+    "test": "node --test test/*.test.js server/test/*.test.js",
+    "evaluate": "node scripts/evaluate.mjs",
+    "capture:corpus": "node scripts/capture-corpus.mjs"
   }
 }

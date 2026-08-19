@@ -16,7 +16,7 @@ things the browser cannot do: a Claude read of what an account actually argues,
 and a lookup cache shared between your machines. Nothing requires it.
 
 ```
-npm test        # 117 tests, and they pass with NO node_modules installed
+npm test        # 134 tests, and they pass with NO node_modules installed
 npm install     # only needed for the optional server's one dependency
 npm start       # the optional server
 ```
@@ -61,7 +61,13 @@ bot-detector/
     agenda.js                the Claude call, with citation verification
     cache.js                 node:sqlite — profiles / verdicts / LLM reads, three TTLs
     username.js              normalisation as a security boundary (this value enters a URL)
+  scripts/                   NOT shipped, NOT imported by anything, NOT run by npm test
+    capture-corpus.mjs       the one script here that fetches; rebuilds test/corpus/
+    evaluate.mjs             reprints EVALUATION.md's band table from test/corpus/, offline
+    lib/bot-declaration.mjs  what counts as "this account declares itself a bot", and why twice
+    lib/synthetic-bodies.mjs length-matched stand-ins for the 17 humans' comment text
   test/                      the shared core's suite
+  test/corpus/               25 frozen buildProfile outputs — the evaluation as a diff
   server/test/               the backend's suite
   docs/                      the diagram and feature list this project's public page is generated from
     architecture.md          one mermaid flowchart, stable node ids, and the reasoning
@@ -213,14 +219,50 @@ totals stamped 16 months earlier — so it can only ever prove that history is
 *missing*, never that we hold all of it.
 
 There is a second proof, and it is the only one available when there is no
-totals blob at all: **a stream that came back holding exactly as many items as
-we asked for stopped because our limit ran out, not because the account did.**
-That is what `filledCommentLimit` / `filledPostLimit` carry, and they are
-consulted only where a total is absent, because where a total exists it is the
-better evidence. Without them the stream-derived profile below would claim a
-complete history purely because the blob was missing, and every consumer that
-asks "is this window trustworthy" — `reliableTimelineStart()` above all — would
-believe it.
+totals blob at all — but it cannot be a row count. **Only the API itself saying
+"nothing older" proves a stream ran out**, so `collect()` returns *why* it
+stopped alongside the rows, and `commentsIncomplete` / `postsIncomplete` carry
+that answer into `buildCoverage()`. Nothing re-derives it from a length.
+
+The first version of this check did re-derive it — `rawComments.length >=
+commentLimit` — and on live data that comparison is never true (JIO-291,
+EVALUATION.md Finding 1a). Paging uses `before = oldest + 1` rather than
+`before = oldest` on purpose: the cursor is exclusive on a **non-unique** key,
+so an exact cursor silently drops any sibling sharing that second. Overlap is
+cheap; a hole is invisible. The price is that every page after the first
+re-serves one row we already hold, the dedupe throws it away, and a stream
+paged to 300 fills every page it asks for and ends on 299. `299 >= 300` is
+false, so `truncated` came back **false for the accounts with the most
+history** — and only where the frozen totals blob has no entry to cover for it,
+which by this section's own argument is exactly the newest and most suspect
+accounts. `reliableTimelineStart()` gates solely on `coverage.truncated`, so it
+returned null and the entire raw timeline was trusted as complete: the forged
+12-year dormancy below reached straight back through the door this check had
+just opened. Live on 2026-08-18, six index-missed authors of one thread
+(u/Calm_Emphasis_5974 among them) each fetched 299, reported `truncated:
+false`, and had real history below the cursor.
+
+**The two kinds of evidence are OR'd, not ranked**, because they fail in
+opposite directions and neither dominates. A stale-*low* `num_comments` — the
+snapshot is frozen, and an account that has commented since can report a count
+our own 300 exceeds — turns `fetched < total` into "we have it all" over a
+300-of-5,000 window. `*Incomplete`, in the other direction, is blind to *how
+much* is missing and says nothing at all about a profile the fetcher never had
+to page. Either one saying "partial" is proof; only both staying silent is the
+absence of it.
+
+Two smaller things in the pager exist for the same reason. Page size is
+**constant** rather than `wanted - fetched`, because a page sized to exactly
+what is left comes back one row short, and the shortfall then asks for a
+one-row page that can only be the duplicate again — five requests to deliver
+299. And a full page can carry us past the limit *and* run the source dry in
+the same request, so discarding the overshoot is itself a truncation and is
+reported as one: u/Calm_Emphasis_5974 paged 100/99/99/89 to 387 rows, the last
+page was short — so the source *was* exhausted — and 87 rows went in the bin
+behind a `truncated: false`. That was the first cut of the fix shipping the
+same defect wearing a different hat, with a green suite behind it. It was
+caught by running the thing against the live API, which is the only way any of
+this has ever been caught.
 
 `insufficient-data` is its own state everywhere — its own band, its own visibly
 neutral grey dashed badge reading "no data", and an all-or-nothing gate across
@@ -393,6 +435,121 @@ template quotes other people's post titles (`#2: [Any News On The CRKD Drum
 Kit?]`). Those are real questions asked by real people — just not by the account
 being scored. Counting text an account is quoting as its own words is a
 different defect from counting its URLs, and it is not fixed here.
+
+## That table, frozen: `npm run evaluate`
+
+EVALUATION.md's headline band table came from a live run on 2026-08-05, and
+**not one of the 25 profiles behind it was kept**. So "the 17-human / 8-bot
+separation is not regressed" was a sentence, not a command: every reweighting
+proposed after it was unfalsifiable, and when JIO-290 changed two signals the
+re-measure that followed could not rule out having moved the one result the
+evaluation actually claimed.
+
+`test/corpus/` fixes that. It holds those 25 accounts as serialised
+`buildProfile` output — the real fetch, frozen — and:
+
+```
+npm run evaluate                # the table, the invariants, and a diff. exit 1 if anything moved
+npm run evaluate -- --detail    # one line per account
+npm run evaluate -- --update    # accept today's scores as the new baseline
+node scripts/capture-corpus.mjs # the ONLY script here that touches the network
+```
+
+`scoreAccount` is pure and the corpus is JSON, so `evaluate` is arithmetic on
+disk: no network, no `node_modules`, and `test/corpus.test.js` asserts that at
+the import graph, because "just refresh it if it's stale" is exactly the change
+that would look helpful.
+
+**What it reproduces, and what it does not.** Re-captured across 2026-08-18/19
+and scored by today's code, the automation column comes back *exactly* as
+EVALUATION.md printed it — `low ×17` for the humans, `moderate ×7, high ×1` for
+the bots — and the separation the whole evaluation rested on holds with room to
+spare: the humans top out at 17, the lowest bot is 35, and nothing sits in
+between. The other two columns have moved. The bots' agenda column was `low ×6,
+moderate ×2` and is now `moderate ×8` — including all four of the accounts
+EVALUATION.md hand-read itself — and their authenticity column went from `low
+×3, moderate ×5` to `low ×5, moderate ×3`. That is not a regression this corpus
+caught, because there was no baseline to catch it against; it is sixteen months
+of fresh history, JIO-290's two signal changes and JIO-291's truncation fix all
+surfacing at once. It is written down here rather than quietly re-baselined,
+because a table that lives only in prose is exactly how a move this size stays
+invisible. `expected.json` freezes *today's* numbers, so the next one is a diff.
+
+**It is re-derived, not recovered, and that is the first thing to know.** Of the
+25 accounts, EVALUATION.md names seven: three humans and four bots. The scratch
+script that picked the rest did not survive the run, so fourteen human names and
+four bot names are simply gone. The humans are therefore re-sampled from the
+same thread by a rule fixed before any account was fetched — the authors of the
+496-comment sample window, by how many comments they left in it, ties by
+username — which is content-blind and cannot be tuned to produce a clean table.
+Re-fetching that window returns 496 comments and 235 distinct non-deleted
+authors against the 496 and 236 recorded on the day, and the three humans
+EVALUATION.md does name fall out at ranks 1, 3 and 6 unprompted. That is the
+only corroboration available and it is not the same thing as the original 17.
+
+**Bot bodies are real; human bodies are not.** Nobody's privacy is at stake in
+`u/RemindMeBot`'s boilerplate, and the bot half is precisely where the wording
+*is* the evidence — Finding 2 is a claim about the characters in a URL. The
+other seventeen are real people who argued about one r/politics thread and never
+agreed to have it committed to a public repository, so their comment bodies are
+replaced with length-matched filler. Not lorem ipsum: five things in the scoring
+core read a body, and `scripts/lib/synthetic-bodies.mjs` reproduces four of them
+exactly — the trimmed character length (`length-uniformity`), the normalised
+word count, whether `stripUrls(body)` holds a `?`, and which `self-correction`
+or help-seeking phrase matched, injected in canonical form. The fifth,
+cross-comment shingle overlap, cannot survive and is not claimed to: the capture
+scores the real profile *and* the synthesised one and writes **both** verdicts
+into `manifest.json`, so the price of that substitution is a number in the
+repository rather than an assurance in a comment.
+
+One thing is deliberately *not* substituted, and it belongs here rather than in
+a code comment: the humans' **post titles are committed verbatim** — 717 of
+them across 15 of the 17 accounts. No scoring signal reads a title (`.title`
+appears nowhere under `extension/lib/` outside the source adapter), and
+blanking them would remove the only human-readable handle on what a frozen post
+actually was. They are kept for that reason and it is a defensible trade, but
+they are still real sentences written by real people in a public repository,
+which is a cost this section owes the reader plainly.
+
+How large that price can get is measured rather than guessed, and it is the
+reason the bots keep their text. Run the same synthesis over `u/AutoModerator`'s
+real 296 comments as a check: `length-uniformity` comes out bit-identical (CV
+0.647, mean 718 characters), `asks-questions` bit-identical (35 of 296), and
+`self-correction` bit-identical — while `near-duplicate-bodies` falls from 64 of
+200 compared, peak similarity 1.00, to **zero**, and `stock-phrasing` from 615
+recurring six-word phrases covering all 296 comments (the top one being "am a
+bot and this action") to **none**. Automation moderate 63 → 41, agenda moderate
+64 → low 28. On a template account, synthesising the bodies deletes the
+evidence. On the humans, whose real values on both signals are already at the
+floor, it costs what `manifest.json` says it costs — and nothing else in the
+corpus is affected, because every other signal reads timestamps, groups, thread
+positions and vote scores, none of which are touched.
+
+**A bot has to prove it is one, and there are two ways because one was not
+enough.** "Declares itself a bot in its own comment text" is the only ground
+truth Reddit offers, so `scripts/lib/bot-declaration.mjs` checks it against the
+committed bodies on every test run rather than trusting a label written once.
+Then `u/RemindMeBot` failed it — across 299 comments. Its boilerplate says "I
+will be messaging you in 5 hours", "CLICK THIS LINK to send a PM", and
+"RemindMeBot is switching to username summons"; the only place the word "bot"
+appears is inside its own name. Admitting it on that would be reading the
+username, and `u/KevinGreeneSolar` two sections up is what reading usernames
+costs. So the four accounts EVALUATION.md hand-read are admitted **by citation
+to that hand-read**, the other four earn it from their text, and every corpus
+file records which. What is deliberately not available is a pattern loosened
+until the accounts we wanted fit through it.
+
+**A green `npm run evaluate` is a regression check and nothing more.** It
+compares today's code against a fixed input, which means it is blind to the
+archive changing, to the fetch window changing, and to both classes of defect
+this repo has actually shipped: the forged 12-year dormancy and the unbound
+`globalThis.fetch`, each of which passed a fully green suite. Re-capture with
+`node scripts/capture-corpus.mjs --force` and re-read the accounts by hand
+before claiming anything about live behaviour. The capture is deliberately not
+part of `npm test` — it is the one thing here that fetches, it paces itself
+because arctic-shift answers throttling with a 422, and it resumes per account
+rather than per run, because a 25-account capture that has to start over is one
+nobody finishes.
 
 ## A bug only the real runtime could find
 
@@ -723,13 +880,17 @@ source's own unit.
 ## Tests
 
 ```
-npm test                                  # both suites, 117 tests
+npm test                                  # both suites, 134 tests
 node --test test/scoring.test.js           # one file
+npm run evaluate                          # EVALUATION.md's band table, off frozen profiles
 ```
 
 `test/` covers the shared core, `server/test/` the backend — and both globs are
 in the `test` script on purpose, because a single `test/*.test.js` silently skips
-the server. `scoreAccount` is a pure function (no network, no `Date.now()`, no
+the server. `test/corpus.test.js` is the odd one out: it scores the 25 frozen
+accounts in `test/corpus/` and fails if any of their 75 scores moved, which is
+the same check `npm run evaluate` prints as a table. See ["that table,
+frozen"](#that-table-frozen-npm-run-evaluate) for what it can and cannot see. `scoreAccount` is a pure function (no network, no `Date.now()`, no
 storage — the only clock is `profile.fetchedAt`, captured by the source
 adapter), which is what makes every case in it testable for free with a
 hand-built profile.

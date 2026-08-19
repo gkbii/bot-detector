@@ -1,0 +1,3041 @@
+{
+ "username": "same_subreddit_bot",
+ "class": "bot",
+ "capturedAt": 1787154726,
+ "bodies": "real",
+ "declaredBy": "self-declaration",
+ "declarationNote": "300 of 300 committed comments declare it a bot in words",
+ "declarations": 300,
+ "profile": {
+  "platform": "reddit",
+  "username": "same_subreddit_bot",
+  "id": "959rvuku",
+  "fetchedAt": 1787154726,
+  "accountAgeDays": 2085.255925925926,
+  "firstSeenUtc": 1606988614,
+  "karma": {
+   "post": null,
+   "comment": 128510,
+   "total": 128510
+  },
+  "counts": {
+   "comments": 17283,
+   "posts": null
+  },
+  "comments": [
+   {
+    "id": "jridnlk",
+    "createdUtc": 1689061885,
+    "group": "WtSSTaDaMiT",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14wewwg",
+    "parentId": "t1_jridn0w",
+    "isTopLevel": false
+   },
+   {
+    "id": "jric1nz",
+    "createdUtc": 1689060547,
+    "group": "shrinkflation",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14vfjz8",
+    "parentId": "t1_jric0zj",
+    "isTopLevel": false
+   },
+   {
+    "id": "jribfjo",
+    "createdUtc": 1689060043,
+    "group": "dubai",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14vyqlg",
+    "parentId": "t1_jribexv",
+    "isTopLevel": false
+   },
+   {
+    "id": "jri5pfo",
+    "createdUtc": 1689055619,
+    "group": "Unexpected",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 5,
+    "threadId": "t3_14w4tyx",
+    "parentId": "t1_jri5oj9",
+    "isTopLevel": false
+   },
+   {
+    "id": "jri1uxs",
+    "createdUtc": 1689052884,
+    "group": "foundtheSHUTTHEFUCKUP",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_141vveh",
+    "parentId": "t1_jri1u47",
+    "isTopLevel": false
+   },
+   {
+    "id": "jrhz5t4",
+    "createdUtc": 1689051105,
+    "group": "freefolk",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14vzz4j",
+    "parentId": "t1_jrhz54i",
+    "isTopLevel": false
+   },
+   {
+    "id": "jrgug7a",
+    "createdUtc": 1689030852,
+    "group": "nosafetysmokingfirst",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 14,
+    "threadId": "t3_14vtjjk",
+    "parentId": "t1_jrguf98",
+    "isTopLevel": false
+   },
+   {
+    "id": "jrgt2l2",
+    "createdUtc": 1689030253,
+    "group": "50and60plusGW",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 0,
+    "threadId": "t3_14vt3gu",
+    "parentId": "t1_jrgt1ly",
+    "isTopLevel": false
+   },
+   {
+    "id": "jrgmshc",
+    "createdUtc": 1689027525,
+    "group": "13or30",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14w13gf",
+    "parentId": "t1_jrgmrdy",
+    "isTopLevel": false
+   },
+   {
+    "id": "jrfmuz2",
+    "createdUtc": 1689013438,
+    "group": "linkiscute",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14vm45x",
+    "parentId": "t1_jrfmtx1",
+    "isTopLevel": false
+   },
+   {
+    "id": "jrepi7z",
+    "createdUtc": 1689000261,
+    "group": "beetlejuicing",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 0,
+    "threadId": "t3_14tg1cb",
+    "parentId": "t1_jreph5i",
+    "isTopLevel": false
+   },
+   {
+    "id": "jrelu37",
+    "createdUtc": 1688998679,
+    "group": "Unexpected",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14vl7hr",
+    "parentId": "t1_jrelt1u",
+    "isTopLevel": false
+   },
+   {
+    "id": "jrdhl17",
+    "createdUtc": 1688971955,
+    "group": "Giraffesdontexist",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14uwqyk",
+    "parentId": "t1_jrdhk8l",
+    "isTopLevel": false
+   },
+   {
+    "id": "jrdb2tq",
+    "createdUtc": 1688967080,
+    "group": "DeathBattleMatchups",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14vhhz0",
+    "parentId": "t1_jrdb1zv",
+    "isTopLevel": false
+   },
+   {
+    "id": "jrd9ehc",
+    "createdUtc": 1688965904,
+    "group": "amex",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 22,
+    "threadId": "t3_14veuqk",
+    "parentId": "t1_jrd9dio",
+    "isTopLevel": false
+   },
+   {
+    "id": "jrcr75j",
+    "createdUtc": 1688955503,
+    "group": "iamverysmart",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 9,
+    "threadId": "t3_14va3vt",
+    "parentId": "t1_jrcr66d",
+    "isTopLevel": false
+   },
+   {
+    "id": "jrcp0sn",
+    "createdUtc": 1688954382,
+    "group": "Vapidiful",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14uy2c5",
+    "parentId": "t1_jrcozor",
+    "isTopLevel": false
+   },
+   {
+    "id": "jrcoxkv",
+    "createdUtc": 1688954337,
+    "group": "Vapidiful",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14uy2c5",
+    "parentId": "t1_jrcowin",
+    "isTopLevel": false
+   },
+   {
+    "id": "jrcboty",
+    "createdUtc": 1688947872,
+    "group": "Vapidiful",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14uy2c5",
+    "parentId": "t1_jrcbny3",
+    "isTopLevel": false
+   },
+   {
+    "id": "jrc95us",
+    "createdUtc": 1688946669,
+    "group": "LetsTalkBam",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 23,
+    "threadId": "t3_14vbuew",
+    "parentId": "t1_jrc94ws",
+    "isTopLevel": false
+   },
+   {
+    "id": "jrc1q6a",
+    "createdUtc": 1688943184,
+    "group": "saudiarabia",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14v7lz4",
+    "parentId": "t1_jrc1p4r",
+    "isTopLevel": false
+   },
+   {
+    "id": "jrbv4ws",
+    "createdUtc": 1688940136,
+    "group": "foundthecapsulecat",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14v440d",
+    "parentId": "t1_jrbv3ze",
+    "isTopLevel": false
+   },
+   {
+    "id": "jra0l7c",
+    "createdUtc": 1688911763,
+    "group": "findomsupportgroup",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14uyt61",
+    "parentId": "t1_jra0jy7",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr9sqzy",
+    "createdUtc": 1688907801,
+    "group": "perfectlycutscreams",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_114jl7d",
+    "parentId": "t1_jr9sq4y",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr9olw9",
+    "createdUtc": 1688905313,
+    "group": "teefies",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14uwy3a",
+    "parentId": "t1_jr9okw7",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr9nuyx",
+    "createdUtc": 1688904844,
+    "group": "programminghorror",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": -38,
+    "threadId": "t3_14uq6d5",
+    "parentId": "t1_jr9nu72",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr9l79a",
+    "createdUtc": 1688903102,
+    "group": "kothibanglacheck",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14u692o",
+    "parentId": "t1_jr9l6k2",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr9g8bx",
+    "createdUtc": 1688899435,
+    "group": "teefies",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 6,
+    "threadId": "t3_14uv7ql",
+    "parentId": "t1_jr9g7mg",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr9785q",
+    "createdUtc": 1688891740,
+    "group": "SubsIFellFor",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14k0i2j",
+    "parentId": "t1_jr977ew",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr94bc7",
+    "createdUtc": 1688889278,
+    "group": "confidentlyincorrect",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 9,
+    "threadId": "t3_14umgwk",
+    "parentId": "t1_jr94atx",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr8o0gn",
+    "createdUtc": 1688877370,
+    "group": "woooosh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 9,
+    "threadId": "t3_14uheei",
+    "parentId": "t1_jr8nzjx",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr7dw2i",
+    "createdUtc": 1688853787,
+    "group": "gifsthatendtoosoon",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14ub8s9",
+    "parentId": "t1_jr7durd",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr7bkg7",
+    "createdUtc": 1688852792,
+    "group": "deadheadcirclejerk",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14s9wsl",
+    "parentId": "t1_jr7bj9d",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr722kg",
+    "createdUtc": 1688848840,
+    "group": "feliceherrig_1",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_y9x3by",
+    "parentId": "t1_jr721g3",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr669i0",
+    "createdUtc": 1688835147,
+    "group": "suddenlybi",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14u93nr",
+    "parentId": "t1_jr668gn",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr5mqvg",
+    "createdUtc": 1688826531,
+    "group": "Undertale",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14tfypr",
+    "parentId": "t1_jr5mpsh",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr5m56d",
+    "createdUtc": 1688826245,
+    "group": "ShitAmericansSay",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 10,
+    "threadId": "t3_14u0q09",
+    "parentId": "t1_jr5m484",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr54q22",
+    "createdUtc": 1688816644,
+    "group": "mildlyinfuriating",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 8,
+    "threadId": "t3_14u1p14",
+    "parentId": "t1_jr54p4q",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr4yhw1",
+    "createdUtc": 1688811970,
+    "group": "killthecameraman",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14t4j9e",
+    "parentId": "t1_jr4ygz7",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr4pcl3",
+    "createdUtc": 1688804078,
+    "group": "catbongos",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": -3,
+    "threadId": "t3_14tsqj8",
+    "parentId": "t1_jr4pc19",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr4msfl",
+    "createdUtc": 1688801952,
+    "group": "killthecameraman",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14t4j9e",
+    "parentId": "t1_jr4mrtd",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr4ls9f",
+    "createdUtc": 1688801142,
+    "group": "shittyfoodporn",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 8,
+    "threadId": "t3_14tx073",
+    "parentId": "t1_jr4lrng",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr4knef",
+    "createdUtc": 1688800224,
+    "group": "KGBENG",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 4,
+    "threadId": "t3_14tncij",
+    "parentId": "t1_jr4kmty",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr4ex8s",
+    "createdUtc": 1688795827,
+    "group": "foundthemobileuser",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14tb5su",
+    "parentId": "t1_jr4ewnv",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr46rgs",
+    "createdUtc": 1688790419,
+    "group": "whoosh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14m8z9m",
+    "parentId": "t1_jr46q5n",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr3c7hv",
+    "createdUtc": 1688774524,
+    "group": "found50000",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14suq98",
+    "parentId": "t1_jr3c6f9",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr39pgx",
+    "createdUtc": 1688773356,
+    "group": "BatmanArkham",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14tfcnp",
+    "parentId": "t1_jr39o91",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr3534y",
+    "createdUtc": 1688771249,
+    "group": "Austin",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": -11,
+    "threadId": "t3_14tmc53",
+    "parentId": "t1_jr35246",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr2yds3",
+    "createdUtc": 1688768261,
+    "group": "espresso",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14tbc9v",
+    "parentId": "t1_jr2ycss",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr2m8mh",
+    "createdUtc": 1688763147,
+    "group": "foundwishiwasarobot1",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14tj1v0",
+    "parentId": "t1_jr2m6r9",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr0ijhi",
+    "createdUtc": 1688731722,
+    "group": "Foundtheplaneuser",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 5,
+    "threadId": "t3_14sabww",
+    "parentId": "t1_jr0iih6",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr0ibr3",
+    "createdUtc": 1688731598,
+    "group": "eu_nvr",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14sjk8r",
+    "parentId": "t1_jr0iawx",
+    "isTopLevel": false
+   },
+   {
+    "id": "jr08hzm",
+    "createdUtc": 1688725171,
+    "group": "mildlyinfuriating",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14t23ck",
+    "parentId": "t1_jr08hb1",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqy862j",
+    "createdUtc": 1688682575,
+    "group": "lostlostredditors",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14s5w91",
+    "parentId": "t1_jqy84v8",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqy1gbb",
+    "createdUtc": 1688679757,
+    "group": "foundjustarandomgirl",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 4,
+    "threadId": "t3_14rvhlp",
+    "parentId": "t1_jqy1f3k",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqxn9nu",
+    "createdUtc": 1688674246,
+    "group": "197",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 48,
+    "threadId": "t3_14sb9ny",
+    "parentId": "t1_jqxn8kd",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqx3uvs",
+    "createdUtc": 1688666754,
+    "group": "confidentlyincorrect",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14rzpoc",
+    "parentId": "t1_jqx3tn6",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqv9h1k",
+    "createdUtc": 1688634932,
+    "group": "foundthemobileuser",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14r94l1",
+    "parentId": "t1_jqv9gcf",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqv8znp",
+    "createdUtc": 1688634526,
+    "group": "shittyskylines",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 6,
+    "threadId": "t3_14rj4ws",
+    "parentId": "t1_jqv8z4f",
+    "isTopLevel": false
+   },
+   {
+    "id": "jquvql3",
+    "createdUtc": 1688623894,
+    "group": "woooosh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14ppfe2",
+    "parentId": "t1_jquvpjy",
+    "isTopLevel": false
+   },
+   {
+    "id": "jquom37",
+    "createdUtc": 1688619031,
+    "group": "spicypillows",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 5,
+    "threadId": "t3_14rou7e",
+    "parentId": "t1_jquol3j",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqumrbu",
+    "createdUtc": 1688617865,
+    "group": "quityourbullshit",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": -2,
+    "threadId": "t3_14rokrl",
+    "parentId": "t1_jqumqkl",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqudtv6",
+    "createdUtc": 1688612849,
+    "group": "woooosh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 29,
+    "threadId": "t3_14rs9hv",
+    "parentId": "t1_jqudstx",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqtzdfr",
+    "createdUtc": 1688605733,
+    "group": "unexpectedfuturama",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14j4h9r",
+    "parentId": "t1_jqtzca6",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqs3j32",
+    "createdUtc": 1688577674,
+    "group": "foundthemobileuser",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 0,
+    "threadId": "t3_14r94l1",
+    "parentId": "t1_jqs3hzi",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqr4gx9",
+    "createdUtc": 1688562968,
+    "group": "WhiskerFireworks",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 0,
+    "threadId": "t3_14r8ups",
+    "parentId": "t1_jqr4g08",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqr3pl6",
+    "createdUtc": 1688562594,
+    "group": "ihavereddit",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 4,
+    "threadId": "t3_14q5gpd",
+    "parentId": "t1_jqr3oqa",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqqybkp",
+    "createdUtc": 1688559716,
+    "group": "skamtebord",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_g05wws",
+    "parentId": "t1_jqqyakv",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqqr5f3",
+    "createdUtc": 1688555134,
+    "group": "okbuddybeamng",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14qgkpv",
+    "parentId": "t1_jqqr4iv",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqqo7jp",
+    "createdUtc": 1688552949,
+    "group": "ShitAmericansSay",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": -5,
+    "threadId": "t3_14qo6gq",
+    "parentId": "t1_jqqo6yy",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqqafxi",
+    "createdUtc": 1688541519,
+    "group": "StupidFood",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14qp4zf",
+    "parentId": "t1_jqqaf5c",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqq9wty",
+    "createdUtc": 1688541083,
+    "group": "ShitAmericansSay",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14qnfml",
+    "parentId": "t1_jqq9w91",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqq90ip",
+    "createdUtc": 1688540388,
+    "group": "iamverybadass",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14q0toh",
+    "parentId": "t1_jqq8zp8",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqq48eh",
+    "createdUtc": 1688536738,
+    "group": "FoundKhromatyk",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14qp7ca",
+    "parentId": "t1_jqq47s6",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqq2f7u",
+    "createdUtc": 1688535408,
+    "group": "ihavesex",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": -6,
+    "threadId": "t3_14qto42",
+    "parentId": "t1_jqq2eib",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqpz1cu",
+    "createdUtc": 1688533049,
+    "group": "Angryupvote",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14qrxce",
+    "parentId": "t1_jqpz0cx",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqo34bm",
+    "createdUtc": 1688498549,
+    "group": "AskElectricians",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14qg2lt",
+    "parentId": "t1_jqo333y",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqnreqa",
+    "createdUtc": 1688493616,
+    "group": "TurnipPrices",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14qhx2d",
+    "parentId": "t1_jqnrdka",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqnq52k",
+    "createdUtc": 1688493083,
+    "group": "stanley_liminal",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14qkx3r",
+    "parentId": "t1_jqnq41j",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqn9rw3",
+    "createdUtc": 1688486320,
+    "group": "forbiddensnacks",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14q486q",
+    "parentId": "t1_jqn9qp0",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqm9jz8",
+    "createdUtc": 1688467675,
+    "group": "DesirePath",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 28,
+    "threadId": "t3_14q5osw",
+    "parentId": "t1_jqm9j88",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqm8m0c",
+    "createdUtc": 1688466943,
+    "group": "beards",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14q0tua",
+    "parentId": "t1_jqm8l4b",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqm7j8r",
+    "createdUtc": 1688466088,
+    "group": "ProductivePorn",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14qbcc3",
+    "parentId": "t1_jqm7ia5",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqm4u30",
+    "createdUtc": 1688463828,
+    "group": "CODWarzone",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14pshwh",
+    "parentId": "t1_jqm4t3u",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqlyz5f",
+    "createdUtc": 1688458866,
+    "group": "ShitAmericansSay",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14pwcrq",
+    "parentId": "t1_jqlyy7r",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqlxkdf",
+    "createdUtc": 1688457707,
+    "group": "foundnikfemboy",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14m9t73",
+    "parentId": "t1_jqlxjkf",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqlp6l7",
+    "createdUtc": 1688451234,
+    "group": "mendrawingwomen",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14pgeqf",
+    "parentId": "t1_jqlp5vr",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqkyvd0",
+    "createdUtc": 1688435507,
+    "group": "shid_and_camed",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 7,
+    "threadId": "t3_14pk3bq",
+    "parentId": "t1_jqkyuhm",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqkrqyo",
+    "createdUtc": 1688431849,
+    "group": "Bbwmilf",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14pzaap",
+    "parentId": "t1_jqkrpxg",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqkp1ih",
+    "createdUtc": 1688430477,
+    "group": "ChristianSwingers",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14pyojd",
+    "parentId": "t1_jqkp0as",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqknuem",
+    "createdUtc": 1688429881,
+    "group": "DOG",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14pla5o",
+    "parentId": "t1_jqkntcq",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqkcgm4",
+    "createdUtc": 1688424453,
+    "group": "RealDogoArgentinos",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14px8jv",
+    "parentId": "t1_jqkcfk4",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqk8xar",
+    "createdUtc": 1688422814,
+    "group": "FoundFenefinan",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14p7mcx",
+    "parentId": "t1_jqk8w5c",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqk8gt0",
+    "createdUtc": 1688422604,
+    "group": "Barotrauma",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 9,
+    "threadId": "t3_14peuxq",
+    "parentId": "t1_jqk8fia",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqk4vq7",
+    "createdUtc": 1688421010,
+    "group": "vexillologycirclejerk",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 31,
+    "threadId": "t3_14pvug4",
+    "parentId": "t1_jqk4uj3",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqk0xj7",
+    "createdUtc": 1688419325,
+    "group": "sadcringe",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 48,
+    "threadId": "t3_14pjwfe",
+    "parentId": "t1_jqk0wh8",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqhhs5e",
+    "createdUtc": 1688376436,
+    "group": "DeathBattleMatchups",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 0,
+    "threadId": "t3_14p4fc4",
+    "parentId": "t1_jqhhroc",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqhgiru",
+    "createdUtc": 1688375361,
+    "group": "NamFlashbacks",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14opeyn",
+    "parentId": "t1_jqhgi04",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqhbab4",
+    "createdUtc": 1688370927,
+    "group": "cateatingvegans",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14osmel",
+    "parentId": "t1_jqhb9l5",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqgz33y",
+    "createdUtc": 1688361697,
+    "group": "SideProject",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14p9gp1",
+    "parentId": "t1_jqgz2b9",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqgo8bm",
+    "createdUtc": 1688354961,
+    "group": "whoosh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 0,
+    "threadId": "t3_14ivrio",
+    "parentId": "t1_jqgo7hw",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqglvqz",
+    "createdUtc": 1688353642,
+    "group": "natureismetal",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14p3o6w",
+    "parentId": "t1_jqglull",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqf38xv",
+    "createdUtc": 1688327422,
+    "group": "foundthemobileuser",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14oixc4",
+    "parentId": "t1_jqf37qe",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqduiyk",
+    "createdUtc": 1688307934,
+    "group": "rustyrails",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14o4gxt",
+    "parentId": "t1_jqduhq8",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqdqdw2",
+    "createdUtc": 1688305973,
+    "group": "countryballs_comics",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14oloqv",
+    "parentId": "t1_jqdqcy5",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqdh3le",
+    "createdUtc": 1688300998,
+    "group": "Badfaketexts",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 9,
+    "threadId": "t3_14omzii",
+    "parentId": "t1_jqdh2r9",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqd18vd",
+    "createdUtc": 1688288882,
+    "group": "YABUJIN",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14msq91",
+    "parentId": "t1_jqd17zh",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqcwfl8",
+    "createdUtc": 1688284744,
+    "group": "Playable",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14o491a",
+    "parentId": "t1_jqcwf16",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqctgwr",
+    "createdUtc": 1688282281,
+    "group": "TheRealJoke",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14hnpqb",
+    "parentId": "t1_jqctg6i",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqcmrqr",
+    "createdUtc": 1688277037,
+    "group": "rblxcringeasf",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_145pzml",
+    "parentId": "t1_jqcmqxg",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqcmkid",
+    "createdUtc": 1688276885,
+    "group": "PastorArrested",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14nu6fz",
+    "parentId": "t1_jqcmju0",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqcmctz",
+    "createdUtc": 1688276728,
+    "group": "Dallas",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14h31ad",
+    "parentId": "t1_jqcmc2w",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqcljok",
+    "createdUtc": 1688276138,
+    "group": "FoundFenefinan",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14of3w0",
+    "parentId": "t1_jqcliyk",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqcbkfg",
+    "createdUtc": 1688269519,
+    "group": "teenagersbuthot",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14odxvk",
+    "parentId": "t1_jqcbjom",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqca9kh",
+    "createdUtc": 1688268740,
+    "group": "FuckTheS",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14nfkrx",
+    "parentId": "t1_jqca8lb",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqc69cr",
+    "createdUtc": 1688266425,
+    "group": "FoundFenefinan",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 8,
+    "threadId": "t3_14ocwsy",
+    "parentId": "t1_jqc68hm",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqc11wr",
+    "createdUtc": 1688263515,
+    "group": "atheism",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14l8e3q",
+    "parentId": "t1_jqc10t9",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqbyder",
+    "createdUtc": 1688262071,
+    "group": "foundNarrow_Image_",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 6,
+    "threadId": "t3_14oa31q",
+    "parentId": "t1_jqbycck",
+    "isTopLevel": false
+   },
+   {
+    "id": "jqbifrr",
+    "createdUtc": 1688253859,
+    "group": "foundsatan",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 0,
+    "threadId": "t3_14nlc5f",
+    "parentId": "t1_jqbiept",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq98kem",
+    "createdUtc": 1688217386,
+    "group": "dontputyourdickinthat",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14nkptp",
+    "parentId": "t1_jq98j5s",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq8ymaa",
+    "createdUtc": 1688211387,
+    "group": "woooosh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14ngz25",
+    "parentId": "t1_jq8ylly",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq8uw0c",
+    "createdUtc": 1688208661,
+    "group": "woooosh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14ngz25",
+    "parentId": "t1_jq8uvbx",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq8udsd",
+    "createdUtc": 1688208260,
+    "group": "woooosh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 4,
+    "threadId": "t3_14ngz25",
+    "parentId": "t1_jq8ucvn",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq8noek",
+    "createdUtc": 1688202588,
+    "group": "foundnikfemboy",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 6,
+    "threadId": "t3_14ngnr6",
+    "parentId": "t1_jq8nnsb",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq8monl",
+    "createdUtc": 1688201738,
+    "group": "woooosh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 4,
+    "threadId": "t3_14ngz25",
+    "parentId": "t1_jq8mnvf",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq8li2u",
+    "createdUtc": 1688200734,
+    "group": "Badfaketexts",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 14,
+    "threadId": "t3_14npqsc",
+    "parentId": "t1_jq8lhfy",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq8hxae",
+    "createdUtc": 1688197732,
+    "group": "scaryeddie",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14n6uh5",
+    "parentId": "t1_jq8hwjf",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq8hw6e",
+    "createdUtc": 1688197706,
+    "group": "scaryeddie",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_13zqulg",
+    "parentId": "t1_jq8hvh3",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq8g4c6",
+    "createdUtc": 1688196246,
+    "group": "ClothingStartups",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14non3q",
+    "parentId": "t1_jq8g3mb",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq8fo34",
+    "createdUtc": 1688195885,
+    "group": "FreeKarma4All",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14nojai",
+    "parentId": "t1_jq8fnh3",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq8bqw1",
+    "createdUtc": 1688192786,
+    "group": "woooosh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14ng0hd",
+    "parentId": "t1_jq8bq7r",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq8ayhw",
+    "createdUtc": 1688192193,
+    "group": "woooosh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 6,
+    "threadId": "t3_14ngz25",
+    "parentId": "t1_jq8axk5",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq8a9b9",
+    "createdUtc": 1688191665,
+    "group": "pehchaanstreetschool",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14nnai0",
+    "parentId": "t1_jq8a8cm",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq7jgow",
+    "createdUtc": 1688175498,
+    "group": "foundSirLlama123",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14nc2yz",
+    "parentId": "t1_jq7jfum",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq7fjkp",
+    "createdUtc": 1688173483,
+    "group": "woooosh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 14,
+    "threadId": "t3_14ngz25",
+    "parentId": "t1_jq7fiex",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq7dk6j",
+    "createdUtc": 1688172495,
+    "group": "OneBlackBraincell",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14mot9i",
+    "parentId": "t1_jq7diwb",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq6if74",
+    "createdUtc": 1688158509,
+    "group": "test",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_agi5zf",
+    "parentId": "t1_jq6idsp",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq5blh6",
+    "createdUtc": 1688141967,
+    "group": "woooosh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 7,
+    "threadId": "t3_14mk2sb",
+    "parentId": "t1_jq5bk7z",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq54942",
+    "createdUtc": 1688139236,
+    "group": "GCSE",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14msga3",
+    "parentId": "t1_jq547nd",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq4or5s",
+    "createdUtc": 1688133142,
+    "group": "FuckImOld",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 10,
+    "threadId": "t3_14mxe3u",
+    "parentId": "t1_jq4oq4y",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq4fhfk",
+    "createdUtc": 1688128874,
+    "group": "SubSimGPT2Interactive",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 5,
+    "threadId": "t3_14mz0qs",
+    "parentId": "t1_jq4fgc5",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq4c0qw",
+    "createdUtc": 1688127073,
+    "group": "NoahGetTheBoat",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 10,
+    "threadId": "t3_14mszbn",
+    "parentId": "t1_jq4bzwi",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq45vv2",
+    "createdUtc": 1688123543,
+    "group": "TheRealJoke",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 12,
+    "threadId": "t3_14mxb6i",
+    "parentId": "t1_jq45uqd",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq421ix",
+    "createdUtc": 1688121002,
+    "group": "foundsatan",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14j1sn8",
+    "parentId": "t1_jq420ll",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq3tkiy",
+    "createdUtc": 1688114296,
+    "group": "DiWHY",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14mj4gv",
+    "parentId": "t1_jq3tjje",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq3sp2a",
+    "createdUtc": 1688113579,
+    "group": "GCSE",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 37,
+    "threadId": "t3_14msga3",
+    "parentId": "t1_jq3soew",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq3ot7a",
+    "createdUtc": 1688110505,
+    "group": "ExplainTheJoke",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 14,
+    "threadId": "t3_14mclog",
+    "parentId": "t1_jq3oska",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq3flbg",
+    "createdUtc": 1688103782,
+    "group": "Minecraftbuilds",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14mg6ia",
+    "parentId": "t1_jq3fkgx",
+    "isTopLevel": false
+   },
+   {
+    "id": "jq2ox8f",
+    "createdUtc": 1688089175,
+    "group": "memesopdidnotlike",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14m57qw",
+    "parentId": "t1_jq2ow2d",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpzoi0j",
+    "createdUtc": 1688045276,
+    "group": "nope",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14lwfmw",
+    "parentId": "t1_jpzogse",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpzgxqs",
+    "createdUtc": 1688041575,
+    "group": "confusingperspective",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14m3f44",
+    "parentId": "t1_jpzgwvr",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpzf5d4",
+    "createdUtc": 1688040606,
+    "group": "ihavesex",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14lsu4n",
+    "parentId": "t1_jpzf4gz",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpz3zk4",
+    "createdUtc": 1688033323,
+    "group": "LSD",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 4,
+    "threadId": "t3_14let1z",
+    "parentId": "t1_jpz3yua",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpz1czm",
+    "createdUtc": 1688031239,
+    "group": "Btechtards",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": -9,
+    "threadId": "t3_14lvb8l",
+    "parentId": "t1_jpz1cdf",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpyl3yh",
+    "createdUtc": 1688018234,
+    "group": "likeus",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14l81a6",
+    "parentId": "t1_jpyl38d",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpyer8d",
+    "createdUtc": 1688014116,
+    "group": "Angryupvote",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 8,
+    "threadId": "t3_14l7ppb",
+    "parentId": "t1_jpyeqdu",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpy6rqk",
+    "createdUtc": 1688009630,
+    "group": "AngryDownvote",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_wbpq24",
+    "parentId": "t1_jpy6qw5",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpxy4j2",
+    "createdUtc": 1688005340,
+    "group": "found70shutthefuckup",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14ks0nf",
+    "parentId": "t1_jpxy3fk",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpwtya5",
+    "createdUtc": 1687987688,
+    "group": "SubsTakenLiterally",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 17,
+    "threadId": "t3_14lbes3",
+    "parentId": "t1_jpwtx7j",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpv5tf4",
+    "createdUtc": 1687964822,
+    "group": "foundthemobileuser",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 0,
+    "threadId": "t3_146qiwb",
+    "parentId": "t1_jpv5sbt",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpuvvl8",
+    "createdUtc": 1687960794,
+    "group": "AskOldPeople",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 11,
+    "threadId": "t3_14l8f5g",
+    "parentId": "t1_jpuvujy",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpuow62",
+    "createdUtc": 1687957715,
+    "group": "okbuddychicanery",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 6,
+    "threadId": "t3_14l2ol3",
+    "parentId": "t1_jpuova2",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpuj8fd",
+    "createdUtc": 1687954891,
+    "group": "UpvoteBecauseButt",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 7,
+    "threadId": "t3_14kv416",
+    "parentId": "t1_jpuj7ih",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpucz2z",
+    "createdUtc": 1687951323,
+    "group": "engrish",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14kscjv",
+    "parentId": "t1_jpucy2f",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpu299j",
+    "createdUtc": 1687943389,
+    "group": "PMDDpartners",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14khohh",
+    "parentId": "t1_jpu28nj",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpu1rm4",
+    "createdUtc": 1687942986,
+    "group": "CatsWhoSmoke",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_tq4asl",
+    "parentId": "t1_jpu1r2u",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpu0m6f",
+    "createdUtc": 1687942019,
+    "group": "found50000",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14ks1xr",
+    "parentId": "t1_jpu0lpn",
+    "isTopLevel": false
+   },
+   {
+    "id": "jptyvyj",
+    "createdUtc": 1687940546,
+    "group": "foundsatan",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 12,
+    "threadId": "t3_14krg68",
+    "parentId": "t1_jptyv50",
+    "isTopLevel": false
+   },
+   {
+    "id": "jptw21i",
+    "createdUtc": 1687938206,
+    "group": "UsernameChecksOut",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_jrhii8",
+    "parentId": "t1_jptw18u",
+    "isTopLevel": false
+   },
+   {
+    "id": "jptumur",
+    "createdUtc": 1687937054,
+    "group": "portalfanswhen",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 0,
+    "threadId": "t3_14k6neu",
+    "parentId": "t1_jptum2s",
+    "isTopLevel": false
+   },
+   {
+    "id": "jptr6jv",
+    "createdUtc": 1687934376,
+    "group": "JustGuysBeingDudes",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14kf5d9",
+    "parentId": "t1_jptr5tk",
+    "isTopLevel": false
+   },
+   {
+    "id": "jptia0e",
+    "createdUtc": 1687928183,
+    "group": "engrish",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14ko5ig",
+    "parentId": "t1_jpti8xr",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpsps76",
+    "createdUtc": 1687913632,
+    "group": "woooosh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14khexz",
+    "parentId": "t1_jpspr82",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpsckt4",
+    "createdUtc": 1687907760,
+    "group": "weeviltime",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14k8fax",
+    "parentId": "t1_jpscjhy",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpqx10i",
+    "createdUtc": 1687887493,
+    "group": "portalfanswhen",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": -1,
+    "threadId": "t3_14k6neu",
+    "parentId": "t1_jpqwzyr",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpqkdzj",
+    "createdUtc": 1687882613,
+    "group": "foundodd_tale4768",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 0,
+    "threadId": "t3_13im809",
+    "parentId": "t1_jpqkct8",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpqijq1",
+    "createdUtc": 1687881878,
+    "group": "StupidFood",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 32,
+    "threadId": "t3_14keu79",
+    "parentId": "t1_jpqiigq",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpptdwi",
+    "createdUtc": 1687871300,
+    "group": "iamverysmart",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14jxegr",
+    "parentId": "t1_jpptcso",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpprjhn",
+    "createdUtc": 1687870382,
+    "group": "portalfanswhen",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": -4,
+    "threadId": "t3_14k6neu",
+    "parentId": "t1_jpprief",
+    "isTopLevel": false
+   },
+   {
+    "id": "jppjcf7",
+    "createdUtc": 1687865846,
+    "group": "subsithoughtifellfor",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14js8rr",
+    "parentId": "t1_jppjbiv",
+    "isTopLevel": false
+   },
+   {
+    "id": "jppejk8",
+    "createdUtc": 1687862698,
+    "group": "iamverysmart",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 13,
+    "threadId": "t3_14jxegr",
+    "parentId": "t1_jppeix0",
+    "isTopLevel": false
+   },
+   {
+    "id": "jppajp7",
+    "createdUtc": 1687859679,
+    "group": "EuroPreppers",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14j1iyb",
+    "parentId": "t1_jppaiz8",
+    "isTopLevel": false
+   },
+   {
+    "id": "jppafyi",
+    "createdUtc": 1687859598,
+    "group": "KaiCenat",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_13zqq8g",
+    "parentId": "t1_jppaf9z",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpp3cmz",
+    "createdUtc": 1687853670,
+    "group": "memesITA",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14k4pv9",
+    "parentId": "t1_jpp3bpm",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpos8yj",
+    "createdUtc": 1687845002,
+    "group": "photomath",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14k4v94",
+    "parentId": "t1_jpos7zj",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpoq5yr",
+    "createdUtc": 1687843536,
+    "group": "BeatMeToIt",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": -1,
+    "threadId": "t3_14fjxuf",
+    "parentId": "t1_jpoq54a",
+    "isTopLevel": false
+   },
+   {
+    "id": "jplsj7r",
+    "createdUtc": 1687796287,
+    "group": "Angryupvote",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14j2gjs",
+    "parentId": "t1_jplsi23",
+    "isTopLevel": false
+   },
+   {
+    "id": "jplnlyf",
+    "createdUtc": 1687794342,
+    "group": "Austria",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 4,
+    "threadId": "t3_14jkrcp",
+    "parentId": "t1_jplnkvz",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpln8dh",
+    "createdUtc": 1687794192,
+    "group": "mapporncirclejerk",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14j9dw8",
+    "parentId": "t1_jpln75s",
+    "isTopLevel": false
+   },
+   {
+    "id": "jplirqf",
+    "createdUtc": 1687792375,
+    "group": "Austria",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14jars6",
+    "parentId": "t1_jpliqo8",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpkdf1q",
+    "createdUtc": 1687767442,
+    "group": "dontputyourdickinthat",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14j0984",
+    "parentId": "t1_jpkdein",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpk4gtd",
+    "createdUtc": 1687760034,
+    "group": "mediocreToolCovers",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14j91os",
+    "parentId": "t1_jpk4g7p",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpjxpqb",
+    "createdUtc": 1687755143,
+    "group": "wii",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14imkv8",
+    "parentId": "t1_jpjxovt",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpjns1l",
+    "createdUtc": 1687749096,
+    "group": "elderscrollsonline",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 5,
+    "threadId": "t3_14ix262",
+    "parentId": "t1_jpjnqwl",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpjnbqi",
+    "createdUtc": 1687748848,
+    "group": "NoahGetTheBoat",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14itwws",
+    "parentId": "t1_jpjnaqn",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpj2k23",
+    "createdUtc": 1687738187,
+    "group": "whoosh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14iwziz",
+    "parentId": "t1_jpj2j4z",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpiqe76",
+    "createdUtc": 1687732314,
+    "group": "DoPutYourDickInThat",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14343ae",
+    "parentId": "t1_jpiqd33",
+    "isTopLevel": false
+   },
+   {
+    "id": "jphsib5",
+    "createdUtc": 1687717333,
+    "group": "YourJokeButWorse",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 14,
+    "threadId": "t3_14ijep4",
+    "parentId": "t1_jphsh2v",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpgd7qi",
+    "createdUtc": 1687691646,
+    "group": "woooosh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": -115,
+    "threadId": "t3_14iil3h",
+    "parentId": "t1_jpgd73l",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpg3s8c",
+    "createdUtc": 1687683813,
+    "group": "foundthemobileuser",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_ceksny",
+    "parentId": "t1_jpg3rmx",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpg2zxt",
+    "createdUtc": 1687683149,
+    "group": "ihavesex",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14bzim6",
+    "parentId": "t1_jpg2zet",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpg2llx",
+    "createdUtc": 1687682810,
+    "group": "ihavesex",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14bzim6",
+    "parentId": "t1_jpg2ky4",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpg186w",
+    "createdUtc": 1687681632,
+    "group": "ShitAmericansSay",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14i5h78",
+    "parentId": "t1_jpg17jt",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpfu1v2",
+    "createdUtc": 1687675689,
+    "group": "agedlikemilk",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14i8c6t",
+    "parentId": "t1_jpfu17q",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpfm9ag",
+    "createdUtc": 1687669797,
+    "group": "PizzaCrimes",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14hx82a",
+    "parentId": "t1_jpfm8j0",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpfe1b3",
+    "createdUtc": 1687664471,
+    "group": "Youmo",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14hotlp",
+    "parentId": "t1_jpfe0an",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpfcdm5",
+    "createdUtc": 1687663486,
+    "group": "foundsatan",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 5,
+    "threadId": "t3_14hoype",
+    "parentId": "t1_jpfcclj",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpf4mx8",
+    "createdUtc": 1687659079,
+    "group": "LICENSEPLATES",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14hvd84",
+    "parentId": "t1_jpf4m15",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpeum6c",
+    "createdUtc": 1687653587,
+    "group": "found70percentbanana",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 33,
+    "threadId": "t3_14i4kia",
+    "parentId": "t1_jpeul46",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpehrtp",
+    "createdUtc": 1687646929,
+    "group": "found70percentbanana",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 12,
+    "threadId": "t3_14i4kia",
+    "parentId": "t1_jpehqry",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpdyvbe",
+    "createdUtc": 1687637875,
+    "group": "foundthemobileuser",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14hukx5",
+    "parentId": "t1_jpdyu3d",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpdirgm",
+    "createdUtc": 1687630474,
+    "group": "found70percentbanana",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_13zdb5j",
+    "parentId": "t1_jpdiqbo",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpcezd9",
+    "createdUtc": 1687611971,
+    "group": "WeWantPlates",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14hkeqh",
+    "parentId": "t1_jpceyjw",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpbzuea",
+    "createdUtc": 1687601622,
+    "group": "aphextwin",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14h1clf",
+    "parentId": "t1_jpbztqu",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpbz1x3",
+    "createdUtc": 1687600949,
+    "group": "MyPeopleNeedMe",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14gvtlw",
+    "parentId": "t1_jpbz1dh",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpbwdf0",
+    "createdUtc": 1687598609,
+    "group": "freemagic",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 5,
+    "threadId": "t3_14hgm3q",
+    "parentId": "t1_jpbwcik",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpbvck9",
+    "createdUtc": 1687597711,
+    "group": "Unexplained",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14hab34",
+    "parentId": "t1_jpbvbnd",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpbtvyi",
+    "createdUtc": 1687596458,
+    "group": "woooosh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 5,
+    "threadId": "t3_14hh5it",
+    "parentId": "t1_jpbtvfn",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpbqq54",
+    "createdUtc": 1687593760,
+    "group": "ShitAmericansSay",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14gu7v6",
+    "parentId": "t1_jpbqp8j",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpbfozs",
+    "createdUtc": 1687585104,
+    "group": "dubai",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14h3aae",
+    "parentId": "t1_jpbfo64",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpbd1hf",
+    "createdUtc": 1687583249,
+    "group": "Lal_Salaam",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14hgbht",
+    "parentId": "t1_jpbd0jc",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpbb8h9",
+    "createdUtc": 1687582032,
+    "group": "nope",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14gusxq",
+    "parentId": "t1_jpbb79h",
+    "isTopLevel": false
+   },
+   {
+    "id": "jpafgum",
+    "createdUtc": 1687564703,
+    "group": "found70percentbanana",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 6,
+    "threadId": "t3_14hdh7v",
+    "parentId": "t1_jpaffy2",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp99urw",
+    "createdUtc": 1687546606,
+    "group": "unexpecteditcrowd",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 8,
+    "threadId": "t3_14gxx8t",
+    "parentId": "t1_jp99to1",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp85onn",
+    "createdUtc": 1687530324,
+    "group": "teefies",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14gzn7g",
+    "parentId": "t1_jp85njh",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp7sv0p",
+    "createdUtc": 1687524356,
+    "group": "RidingBBC",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14gxnrz",
+    "parentId": "t1_jp7stxu",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp7hwou",
+    "createdUtc": 1687517822,
+    "group": "ShitAmericansSay",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": -22,
+    "threadId": "t3_14gta02",
+    "parentId": "t1_jp7hvot",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp73go2",
+    "createdUtc": 1687505998,
+    "group": "DarwinAwards",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 31,
+    "threadId": "t3_14gflhy",
+    "parentId": "t1_jp73g3d",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp72t2d",
+    "createdUtc": 1687505453,
+    "group": "tragedeigh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14go1aw",
+    "parentId": "t1_jp72sko",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp729a3",
+    "createdUtc": 1687504994,
+    "group": "Angryupvote",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14gf0o8",
+    "parentId": "t1_jp72894",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp71mjx",
+    "createdUtc": 1687504480,
+    "group": "Angryupvote",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14gh92x",
+    "parentId": "t1_jp71lnd",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp6vdi7",
+    "createdUtc": 1687499685,
+    "group": "indonesia",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14gma6n",
+    "parentId": "t1_jp6vcf8",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp6qewd",
+    "createdUtc": 1687496282,
+    "group": "Angryupvote",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 14,
+    "threadId": "t3_14gh92x",
+    "parentId": "t1_jp6qdyw",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp6pbn6",
+    "createdUtc": 1687495583,
+    "group": "DrakeTheType",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14g786k",
+    "parentId": "t1_jp6pan4",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp4pw2a",
+    "createdUtc": 1687462296,
+    "group": "ImTheMainCharacter",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14g4j10",
+    "parentId": "t1_jp4punb",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp4kf68",
+    "createdUtc": 1687460140,
+    "group": "ImTheMainCharacter",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14g4h65",
+    "parentId": "t1_jp4kdlb",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp4g6c0",
+    "createdUtc": 1687458463,
+    "group": "MyPeopleNeedMe",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 5,
+    "threadId": "t3_14g0jjr",
+    "parentId": "t1_jp4g53p",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp4dwkm",
+    "createdUtc": 1687457571,
+    "group": "mauerstrassenwetten",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 8,
+    "threadId": "t3_14g3fi7",
+    "parentId": "t1_jp4dvcq",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp3ouoj",
+    "createdUtc": 1687447298,
+    "group": "okbuddytrailblazer",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14g4wcx",
+    "parentId": "t1_jp3otfz",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp31r6y",
+    "createdUtc": 1687436867,
+    "group": "forbiddensnacks",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 23,
+    "threadId": "t3_14g23mv",
+    "parentId": "t1_jp31qcv",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp2ywx4",
+    "createdUtc": 1687435290,
+    "group": "AsABlackMan",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": -2,
+    "threadId": "t3_14fgtzq",
+    "parentId": "t1_jp2yvvy",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp2l4sh",
+    "createdUtc": 1687425455,
+    "group": "mildlyinfuriating",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14fr8p4",
+    "parentId": "t1_jp2l411",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp2j5ti",
+    "createdUtc": 1687423761,
+    "group": "4chan",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": -14,
+    "threadId": "t3_14fr4mx",
+    "parentId": "t1_jp2j590",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp2gn4j",
+    "createdUtc": 1687421586,
+    "group": "whatsthisplant",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14fazhn",
+    "parentId": "t1_jp2gmgx",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp2evms",
+    "createdUtc": 1687420100,
+    "group": "iamveryrandom",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_13sb8vu",
+    "parentId": "t1_jp2euo6",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp2aqlj",
+    "createdUtc": 1687416750,
+    "group": "foundthemobileuser",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14foot3",
+    "parentId": "t1_jp2apzy",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp2a0kf",
+    "createdUtc": 1687416192,
+    "group": "ShitAmericansSay",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 8,
+    "threadId": "t3_14fd93h",
+    "parentId": "t1_jp29zj9",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp22kzc",
+    "createdUtc": 1687410855,
+    "group": "AlternateAngles",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14f3t5b",
+    "parentId": "t1_jp22k9r",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp1uncp",
+    "createdUtc": 1687406005,
+    "group": "nope",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14flxfm",
+    "parentId": "t1_jp1umhi",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp1gx1e",
+    "createdUtc": 1687398836,
+    "group": "oddlyspecific",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14ersaj",
+    "parentId": "t1_jp1gvss",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp0y333",
+    "createdUtc": 1687389794,
+    "group": "found70percentbanana",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 36,
+    "threadId": "t3_14fln6l",
+    "parentId": "t1_jp0y23e",
+    "isTopLevel": false
+   },
+   {
+    "id": "jp0dygf",
+    "createdUtc": 1687381107,
+    "group": "memes",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 6,
+    "threadId": "t3_14f6dtg",
+    "parentId": "t1_jp0dxdr",
+    "isTopLevel": false
+   },
+   {
+    "id": "jozipk6",
+    "createdUtc": 1687368746,
+    "group": "eu_nvr",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": -46,
+    "threadId": "t3_14fae23",
+    "parentId": "t1_joziobe",
+    "isTopLevel": false
+   },
+   {
+    "id": "joyj4tx",
+    "createdUtc": 1687354199,
+    "group": "IndianGaming",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 7,
+    "threadId": "t3_14f2fbs",
+    "parentId": "t1_joyj3w5",
+    "isTopLevel": false
+   },
+   {
+    "id": "joyccwi",
+    "createdUtc": 1687350805,
+    "group": "19684",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14exrgw",
+    "parentId": "t1_joycbxy",
+    "isTopLevel": false
+   },
+   {
+    "id": "joy5gve",
+    "createdUtc": 1687346873,
+    "group": "foundpensodiforse",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14f2kz5",
+    "parentId": "t1_joy5fyu",
+    "isTopLevel": false
+   },
+   {
+    "id": "joxove4",
+    "createdUtc": 1687333723,
+    "group": "foundCanadianApple",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14ed5kf",
+    "parentId": "t1_joxouem",
+    "isTopLevel": false
+   },
+   {
+    "id": "joxosui",
+    "createdUtc": 1687333663,
+    "group": "foundCanadianApple",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14e7kre",
+    "parentId": "t1_joxos85",
+    "isTopLevel": false
+   },
+   {
+    "id": "joxj4ro",
+    "createdUtc": 1687329063,
+    "group": "Portal",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14eka3q",
+    "parentId": "t1_joxj3t2",
+    "isTopLevel": false
+   },
+   {
+    "id": "joxabaz",
+    "createdUtc": 1687322810,
+    "group": "oddlyspecific",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14ersaj",
+    "parentId": "t1_joxaa82",
+    "isTopLevel": false
+   },
+   {
+    "id": "jox6bhf",
+    "createdUtc": 1687320353,
+    "group": "confusingperspective",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 14,
+    "threadId": "t3_14ek3wt",
+    "parentId": "t1_jox6aog",
+    "isTopLevel": false
+   },
+   {
+    "id": "jowsdfb",
+    "createdUtc": 1687312830,
+    "group": "FashionReps",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14eu2vt",
+    "parentId": "t1_jowsci0",
+    "isTopLevel": false
+   },
+   {
+    "id": "jou2mxk",
+    "createdUtc": 1687271562,
+    "group": "YouShouldKnow",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14did2w",
+    "parentId": "t1_jou2lrt",
+    "isTopLevel": false
+   },
+   {
+    "id": "jou0c9k",
+    "createdUtc": 1687270560,
+    "group": "oddlyspecific",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 4,
+    "threadId": "t3_14dr2tu",
+    "parentId": "t1_jou0b7v",
+    "isTopLevel": false
+   },
+   {
+    "id": "jotv2im",
+    "createdUtc": 1687268174,
+    "group": "TradingView",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_ngtqwj",
+    "parentId": "t1_jotv1f9",
+    "isTopLevel": false
+   },
+   {
+    "id": "jot7cll",
+    "createdUtc": 1687253055,
+    "group": "foundthemobileuser",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14dqcfs",
+    "parentId": "t1_jot7bqw",
+    "isTopLevel": false
+   },
+   {
+    "id": "jot56ib",
+    "createdUtc": 1687251139,
+    "group": "woooosh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": -1,
+    "threadId": "t3_14djj05",
+    "parentId": "t1_jot55nh",
+    "isTopLevel": false
+   },
+   {
+    "id": "josp2oo",
+    "createdUtc": 1687238136,
+    "group": "BarbaraWalters4Scale",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 16,
+    "threadId": "t3_14dse1b",
+    "parentId": "t1_josp1sa",
+    "isTopLevel": false
+   },
+   {
+    "id": "josmh5d",
+    "createdUtc": 1687236351,
+    "group": "memesopdidnotlike",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 0,
+    "threadId": "t3_14dtozy",
+    "parentId": "t1_josmg1x",
+    "isTopLevel": false
+   },
+   {
+    "id": "jorwgd8",
+    "createdUtc": 1687222080,
+    "group": "okbuddyphd",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 21,
+    "threadId": "t3_14dk6ni",
+    "parentId": "t1_jorwfj2",
+    "isTopLevel": false
+   },
+   {
+    "id": "jorsz0v",
+    "createdUtc": 1687220375,
+    "group": "MoldyMemes",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14diu4k",
+    "parentId": "t1_jorsxzs",
+    "isTopLevel": false
+   },
+   {
+    "id": "jor6n9i",
+    "createdUtc": 1687210011,
+    "group": "imaginarymaps",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14dow07",
+    "parentId": "t1_jor6m15",
+    "isTopLevel": false
+   },
+   {
+    "id": "jor48jm",
+    "createdUtc": 1687208982,
+    "group": "succulents",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14dpckl",
+    "parentId": "t1_jor47cg",
+    "isTopLevel": false
+   },
+   {
+    "id": "joq3jts",
+    "createdUtc": 1687194120,
+    "group": "YourJokeButWorse",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14d5icd",
+    "parentId": "t1_joq3imd",
+    "isTopLevel": false
+   },
+   {
+    "id": "jopzgbr",
+    "createdUtc": 1687192466,
+    "group": "notliketheothergirls",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14db65t",
+    "parentId": "t1_jopzf3p",
+    "isTopLevel": false
+   },
+   {
+    "id": "jopbx2x",
+    "createdUtc": 1687182383,
+    "group": "AbsoluteUnits",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14d5b7d",
+    "parentId": "t1_jopbw4f",
+    "isTopLevel": false
+   },
+   {
+    "id": "jop8dwp",
+    "createdUtc": 1687180625,
+    "group": "LawSchool",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14dd7v2",
+    "parentId": "t1_jop8cxo",
+    "isTopLevel": false
+   },
+   {
+    "id": "jootwcr",
+    "createdUtc": 1687171743,
+    "group": "SipsTea",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 4,
+    "threadId": "t3_14daoqn",
+    "parentId": "t1_jootvbz",
+    "isTopLevel": false
+   },
+   {
+    "id": "joon3gi",
+    "createdUtc": 1687166003,
+    "group": "woooosh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14d6u73",
+    "parentId": "t1_joon2z7",
+    "isTopLevel": false
+   },
+   {
+    "id": "jood2f8",
+    "createdUtc": 1687157281,
+    "group": "WatchPeopleDieInside",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14d5trx",
+    "parentId": "t1_jood1hq",
+    "isTopLevel": false
+   },
+   {
+    "id": "jon1s4i",
+    "createdUtc": 1687128977,
+    "group": "classical_circlejerk",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 17,
+    "threadId": "t3_14cv2r7",
+    "parentId": "t1_jon1r8d",
+    "isTopLevel": false
+   },
+   {
+    "id": "jomv865",
+    "createdUtc": 1687125730,
+    "group": "TVTooHigh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14cppdt",
+    "parentId": "t1_jomv783",
+    "isTopLevel": false
+   },
+   {
+    "id": "jomn3ff",
+    "createdUtc": 1687121988,
+    "group": "foundthecapsulecat",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14cntqk",
+    "parentId": "t1_jomn2gb",
+    "isTopLevel": false
+   },
+   {
+    "id": "jol78uw",
+    "createdUtc": 1687098537,
+    "group": "distressingmemes",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 30,
+    "threadId": "t3_14c7hhi",
+    "parentId": "t1_jol77px",
+    "isTopLevel": false
+   },
+   {
+    "id": "jokn570",
+    "createdUtc": 1687086300,
+    "group": "diypedals",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 0,
+    "threadId": "t3_14c7d7i",
+    "parentId": "t1_jokn49s",
+    "isTopLevel": false
+   },
+   {
+    "id": "jokcmai",
+    "createdUtc": 1687077191,
+    "group": "BocchiTheRock",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14c7340",
+    "parentId": "t1_jokclo9",
+    "isTopLevel": false
+   },
+   {
+    "id": "jojh5qe",
+    "createdUtc": 1687054832,
+    "group": "ShitAmericansSay",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14bvr2p",
+    "parentId": "t1_jojh4ts",
+    "isTopLevel": false
+   },
+   {
+    "id": "joirppi",
+    "createdUtc": 1687041178,
+    "group": "JustGuysBeingDudes",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14bsth4",
+    "parentId": "t1_joirosk",
+    "isTopLevel": false
+   },
+   {
+    "id": "joi4xxo",
+    "createdUtc": 1687030284,
+    "group": "roblox",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14b3rdt",
+    "parentId": "t1_joi4wva",
+    "isTopLevel": false
+   },
+   {
+    "id": "jogwp48",
+    "createdUtc": 1687009253,
+    "group": "fifacardcreators",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14brc9l",
+    "parentId": "t1_jogwo26",
+    "isTopLevel": false
+   },
+   {
+    "id": "jogv8yu",
+    "createdUtc": 1687008464,
+    "group": "VXJunkies",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_14bm9a9",
+    "parentId": "t1_jogv82z",
+    "isTopLevel": false
+   },
+   {
+    "id": "jogpcgk",
+    "createdUtc": 1687005005,
+    "group": "pune",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 2,
+    "threadId": "t3_14blhor",
+    "parentId": "t1_jogpbh9",
+    "isTopLevel": false
+   },
+   {
+    "id": "jogjfdr",
+    "createdUtc": 1687000989,
+    "group": "foundsatan",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_149n7wh",
+    "parentId": "t1_jogjekc",
+    "isTopLevel": false
+   },
+   {
+    "id": "jogc8q5",
+    "createdUtc": 1686995033,
+    "group": "AndroidQuestions",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14bmskp",
+    "parentId": "t1_jogc88f",
+    "isTopLevel": false
+   },
+   {
+    "id": "jogbawe",
+    "createdUtc": 1686994159,
+    "group": "szopjatokle",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 35,
+    "threadId": "t3_14bl2gx",
+    "parentId": "t1_jogbafm",
+    "isTopLevel": false
+   },
+   {
+    "id": "jog9z5z",
+    "createdUtc": 1686992938,
+    "group": "nudeladiesart",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 0,
+    "threadId": "t3_14bln0y",
+    "parentId": "t1_jog9yni",
+    "isTopLevel": false
+   },
+   {
+    "id": "jog5eul",
+    "createdUtc": 1686988807,
+    "group": "woooosh",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14agi81",
+    "parentId": "t1_jog5e9m",
+    "isTopLevel": false
+   },
+   {
+    "id": "jog3sxx",
+    "createdUtc": 1686987403,
+    "group": "DiWHY",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 1,
+    "threadId": "t3_14b2euz",
+    "parentId": "t1_jog3rza",
+    "isTopLevel": false
+   },
+   {
+    "id": "jof3rsm",
+    "createdUtc": 1686963703,
+    "group": "brokethechain",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 3,
+    "threadId": "t3_1442f9f",
+    "parentId": "t1_jof3qoa",
+    "isTopLevel": false
+   },
+   {
+    "id": "joel6qd",
+    "createdUtc": 1686954310,
+    "group": "geometrydash",
+    "body": "Yes, that's where we are.\n\n---\n^(🤖 this comment was written by a bot. beep boop 🤖)\n\n^(feel welcome to respond 'Bad bot'/'Good bot', it's useful feedback.)\n^[github](https://github.com/Toldry/RedditAutoCrosspostBot) ^| ^[Rank](https://botranks.com?bot=same_subreddit_bot)",
+    "score": 20,
+    "threadId": "t3_14au8ja",
+    "parentId": "t1_joel5i1",
+    "isTopLevel": false
+   }
+  ],
+  "posts": [],
+  "coverage": {
+   "commentsFetched": 300,
+   "commentsTotal": 17283,
+   "postsFetched": 0,
+   "postsTotal": null,
+   "truncated": true,
+   "oldestFetchedUtc": 1686954310,
+   "sources": [
+    "arctic-shift"
+   ],
+   "errors": []
+  }
+ }
+}
