@@ -23,6 +23,8 @@ flowchart LR
   backend --> shared[(Shared lookup cache)]
   archive --> profile[Account profile]
   profile --> gate[Insufficient-data gate]
+  profile -.->|25 accounts, frozen once by hand| corpus[(Evaluation corpus)]
+  corpus -.->|replayed through the same scorers| gate
   gate -->|too thin to score| verdict[Three bands, side by side]
   gate --> automation[Automation axis]
   gate --> agenda[Agenda axis]
@@ -35,6 +37,7 @@ flowchart LR
   llm -->|only citations that resolve| verdict
   verdict --> cache
   verdict --> badge
+  verdict -.->|band table, diffed against the frozen one| table[Evaluation run]
   badge --> thread
 ```
 
@@ -125,6 +128,49 @@ account from 48 to 62.
 A passing test suite is not evidence this thing works. Any change to the fetch
 window, the pagination or a timing signal deserves a live account before it is
 believed.
+
+## `corpus` turns the headline result into a command
+
+The claim the whole thing rests on is that the axes separate the accounts they
+ought to. That used to be a table in a write-up of one live run, and not one of
+the 25 profiles behind it was kept — so "the separation has not regressed" was a
+sentence rather than something anybody could run, and every later proposal to
+reweight a signal was unfalsifiable.
+
+`corpus` is those 25 accounts frozen as serialised `profile` output: 17 humans
+off a single thread, and 8 declared bots. Nothing between `profile` and
+`verdict` touches the network or keeps state, so replaying the corpus through
+the same scorers is JSON in and arithmetic out — `table` is that run, and a band
+that has moved since the last one is printed as a diff and exits non-zero. As it
+stands the humans score 0–17 on `automation`, the bots 35–76, and nothing at all
+sits in between.
+
+Two things about `corpus` are worth saying out loud rather than leaving in a
+comment. **The humans' words are not in it.** Eight accounts that declare
+themselves bots keep their real text, because there the boilerplate *is* the
+evidence and nobody's privacy is in it; the other seventeen are people who
+argued about politics one afternoon and never agreed to be committed to a public
+repository, so their comment bodies are replaced with filler matched on every
+measurement a signal actually reads — character length, word count, whether a
+question was asked. The one property that cannot survive that swap is repetition
+across comments, so the capture scores the real account *and* the stand-in and
+records both, which puts the price of the substitution in the repository as a
+number instead of an assurance.
+
+**And a bot has to prove it is one.** The ground truth is the account's own
+words — "I am a bot" — checked against the committed text on every run, never a
+label somebody typed once, and never the username: a name-based rule would have
+called `u/KevinGreeneSolar` a marketing account, and it is a person. That bar is
+high enough to be awkward. Eight of ten unmistakable bots never say it in a
+sentence — they publish an opt-out link, a version number or nothing — and
+`u/RemindMeBot` fails it across 299 comments, so it is admitted by citation to a
+hand-read instead. That is why the ground truth here is eight accounts rather
+than eight hundred, and widening the patterns until more fit through would
+destroy the only thing the eight are worth.
+
+None of which makes a green run evidence about live behaviour: it holds the
+input fixed, which is exactly what a regression check is and exactly what an
+evaluation is not. Both defects above passed a fully green suite.
 
 ## `worker` is the only thing that talks to `archive`
 

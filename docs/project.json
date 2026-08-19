@@ -70,6 +70,15 @@
       "detailHtml": "<p>Nothing here needs it, and running without it loses only two things: the judgement pattern-matching cannot make, and a lookup cache shared between machines. The model may cite only the numbered comments it was handed; an unresolvable citation is dropped, a finding with none left is rejected, and nothing survives means no block at all.</p>",
       "detailHtmlSimple": "<p>It works fine without this. Turned on, it asks a model what the account is actually arguing — and the model can only point at comments it was given. Anything it cannot point at is thrown away rather than shown.</p>",
       "nodes": ["provider", "backend", "pack", "llm", "shared", "verdict"]
+    },
+    {
+      "id": "the-result-it-rests-on-frozen",
+      "name": "The Result It Rests On, Frozen and Re-run",
+      "summary": "25 accounts are kept exactly as they were, so the claim that the scores still separate bots from people is a command rather than a sentence.",
+      "summarySimple": "It keeps a set of real accounts, so anyone can check it still tells bots and people apart.",
+      "detailHtml": "<p>The table this rests on came from one live run whose profiles were never kept, which made every later proposal to reweight a signal unfalsifiable. Now 17 humans off one thread and 8 declared bots are re-scored from disk with no network at all, and a band that moved is a diff and a non-zero exit. The humans come out at 0–17 on automation, the bots at 35–76, and nothing sits in between.</p><p>The humans’ own words are not in it — their comment text is swapped for stand-ins matched on every measurement a signal actually reads, and the one property that cannot survive the swap is scored both ways, so the price is a number in the repository rather than an assurance. A bot, meanwhile, has to earn the label from what it wrote. That turned out to be a high bar: eight of ten unmistakable bots never say it in a sentence.</p>",
+      "detailHtmlSimple": "<p>The proof that this works used to be a table printed once, with the workings thrown away. Now it keeps 25 real accounts exactly as they were and re-checks them whenever the scoring changes, complaining if any score moves. The people come out at the bottom of the scale, the bots well above them, and nothing lands in between.</p><p>The people’s actual comments are not kept. They are replaced with stand-in text that measures the same, and what that replacement costs is written down rather than waved away. The bots keep theirs, because a bot has to have said in its own words that it is one.</p>",
+      "nodes": ["profile", "corpus", "table", "automation", "verdict"]
     }
   ],
   "links": [
