@@ -161,6 +161,53 @@ test('a prolific human is not accused of an agenda for having one subject', () =
   }
 });
 
+/**
+ * THE REPLY POLE, AND THE THREE-COMMENT MARGIN IT IS CUT AT (JIO-345).
+ *
+ * `conversation-depth` used to score `1 - rescale(replyShare, …)`, so the five
+ * summon-bots in here — every one of them at 100.0% replies — collected the
+ * maximum vote for humanity the axis can cast, at full weight, produced by the
+ * mechanism that makes them bots. EVALUATION.md Finding 4 named that inversion
+ * and Finding 4d measured it.
+ *
+ * Two things are pinned, because the fix rests on both.
+ *
+ *   1. NO REPLY-BOT VOTES FOR ITS OWN HUMANITY. An account with no top-level
+ *      comment anywhere in the window is `insufficient-data` here.
+ *   2. THE MARGIN IS STILL THREE COMMENTS. Every human in the corpus has at
+ *      least one top-level comment and the thinnest — u/MundaneFacts, 3 of 300
+ *      — is what rules a percentile out and makes the cut categorical. A
+ *      re-capture that dropped that account to zero would silently move a real
+ *      person onto the bot side of a rule that has no threshold to adjust, so
+ *      it fails HERE, by name, rather than as five bot scores that moved.
+ *
+ * `npm run evaluate` covers neither: both are true of signals inside an axis
+ * whose published score can absorb them.
+ */
+test('no frozen reply-bot votes for its own humanity, and the human margin is still three comments', () => {
+  const depthOf = (account) => verdictOf(account).automation.signals
+    .find((sig) => sig.key === 'conversation-depth');
+
+  const replyBots = bots.filter((account) => depthOf(account).value?.topLevel === 0);
+  assert.ok(replyBots.length >= 5,
+    `only ${replyBots.length} frozen bots reply to everything — the population this cut was measured on is gone`);
+  for (const account of replyBots) {
+    const depth = depthOf(account);
+    assert.equal(depth.band, 'insufficient-data',
+      `${account.username} replies to everything and scores ${depth.band} on conversation-depth — the inversion is back`);
+  }
+
+  const thinnest = humans
+    .map((account) => ({ account, depth: depthOf(account) }))
+    .filter((r) => r.depth.value?.topLevel != null)
+    .reduce((a, b) => (b.depth.value.topLevel < a.depth.value.topLevel ? b : a));
+
+  assert.ok(thinnest.depth.value.topLevel > 0,
+    `${thinnest.account.username} now has NO top-level comment in the window, so a person falls on the wrong side of a categorical cut — re-read the capture before touching automation.js`);
+  assert.equal(thinnest.depth.band, 'low',
+    `${thinnest.account.username} is the thinnest human margin (${thinnest.depth.value.topLevel} top-level of ${thinnest.depth.value.sample}) and is no longer measured`);
+});
+
 test('every frozen account still scores exactly what expected.json records', () => {
   assert.ok(expected, 'test/corpus/expected.json is missing — run: npm run evaluate -- --update');
   for (const account of accounts) {
@@ -321,10 +368,24 @@ test('every canonical replacement still matches the pattern it stands in for', (
  * fetch is exactly the change that would look helpful. It matches IMPORTS, not
  * mentions — both files name `capture-corpus.mjs` in prose, and telling a
  * reader where to go is not the same as going there.
+ *
+ * The two `measure-*.mjs` scripts are held to it as well: they are the
+ * published way to reproduce EVALUATION.md Findings 4c and 4d, and a
+ * measurement that quietly re-fetched would be measuring a different window
+ * from the one the finding was written against.
  */
 test('nothing on the evaluate path can reach the network', () => {
   const forbidden = /from\s+['"][^'"]*(?:sources\/arcticShift|capture-corpus)/;
-  for (const rel of ['scripts/evaluate.mjs', 'test/corpus/load.js']) {
+  const paths = [
+    'scripts/evaluate.mjs',
+    'test/corpus/load.js',
+    // The two hand-run measurement scripts make the same no-network claim in
+    // their headers, and a claim in a header is not a check. They are the
+    // reproduction instructions for EVALUATION.md Findings 4c and 4d.
+    'scripts/measure-agenda-shape.mjs',
+    'scripts/measure-reply-share.mjs',
+  ];
+  for (const rel of paths) {
     const src = fs.readFileSync(path.join(ROOT, rel), 'utf8');
     const code = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
     assert.ok(!/\bfetch\s*\(/.test(code), `${rel} calls fetch`);

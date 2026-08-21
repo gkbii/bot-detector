@@ -52,7 +52,8 @@
     "`test`; all three are run by hand. measure-agenda-shape.mjs (JIO-424) is",
     "run by hand too but never fetches: like `evaluate` it reads test/corpus/",
     "and nothing else, which is why it has no script entry to protect it from",
-    "being run by accident."
+    "being run by accident. measure-reply-share.mjs (JIO-345) is the second of",
+    "those and is the same shape: hand-run, no network, no script entry."
   ],
   "scripts": {
     "start": "node server/index.js",

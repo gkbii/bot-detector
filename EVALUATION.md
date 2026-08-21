@@ -287,6 +287,7 @@ compounding reasons, all visible in the signal detail:
   irregular, clumpy spacing typical of a person."*
 * **`conversation-depth` inverts for reply-bots.** RemindMeBot replies to a
   commenter 100% of the time, which the signal reads as conversational.
+  *(FIXED 2026-08-21, JIO-345 — Finding 4d below.)*
 
 Two authenticity signals also actively reward being a bot: `topical-breadth`
 scored `high` for AutoModerator (333 subreddits) and RemindMeBot (175) — running
@@ -317,6 +318,15 @@ and the bots' cell in the table above becomes `moderate x6, high x2` with the
 floor at 39. The ceiling is raised, not removed: the other two bullets
 (`interval-regularity` measuring demand, `conversation-depth` inverting for
 reply-bots) are JIO-329 and are still open.
+
+**THIRD BULLET FIXED 2026-08-21 (JIO-345), and separately from JIO-329.** The
+inversion is closed at the pole where it is demonstrable — an account with no
+top-level comment anywhere in its window is `unmeasured()` rather than a
+full-weight vote for humanity — without withdrawing the discount from ordinary
+reply behaviour, which is the 3.5-weight change Finding 4b priced in real
+people. Five more frozen scores move, all bots, all up, and the bots' cell
+becomes `moderate x5, high x3` with the floor at 44. Finding 4d has the
+measurement. The second bullet, `interval-regularity`, is still open.
 ## Finding 4a — the prolific human the rate signal "cannot see" is real, and most of the accounts it catches are people
 
 Measured live on **2026-08-20**, against the API, by
@@ -750,6 +760,95 @@ it will not have helped either.
 one deliberately did not: the question is about two accounts already frozen, and
 re-fetching them would have changed the very window the ticket was filed
 against.
+
+## Finding 4d — a 100% reply rate scored as evidence of a person, and the whole margin is three comments
+
+Measured on **2026-08-21** by `scripts/measure-reply-share.mjs`, over the 27
+accounts frozen in `test/corpus/`. **No network**, like Finding 4c and unlike
+4a and 4b: `scoreAutomation` is pure and the corpus is JSON, so this is
+arithmetic on disk and reproduces byte-for-byte. Run it rather than trusting
+the tables below.
+
+This is Finding 4's third bullet, asked properly. It was written down a year of
+tickets ago as an observation — *"`conversation-depth` inverts for reply-bots"*
+— and left inside JIO-329, which would have removed the signal outright.
+
+### The measurement
+
+`conversation-depth` scored `strength = 1 - rescale(replyShare, 0.02, 0.3)`. So
+a reply share at or above 30% earned **strength 0**: the maximum vote for
+humanity this axis can cast, at the signal's full weight of 1.5.
+
+| | reply share | top-level comments in the window |
+|---|---|---|
+| 5 summon-bots | **100.0%** (299/299, 300/300) | **zero, all five** |
+| 19 humans | 40.0% – **99.0%** | 3 – 124 |
+| 3 broadcast bots | 8.0% – 21.7% | 234 – 275 |
+
+u/RemindMeBot replies to a summoning commenter 299 times out of 299 and does
+nothing else at all, and collected a full-weight vote for its own humanity for
+it. **The mechanism that makes it a bot is the mechanism that cleared it.**
+Finding 4b measured the identity underneath that from the other side: this
+signal reads **0.000 for ordinary people AND 0.000 for u/RemindMeBot**.
+
+The other pole is fine and is untouched. u/AmputatorBot (21.7%),
+u/AutoModerator (8.4%) and u/RepostSleuthBot (8.0%) all sit below every human
+in the corpus, and never replying at all is genuinely what broadcasting looks
+like.
+
+### Why the cut is categorical rather than a percentile
+
+**The entire separation is 99.0% against 100.0%.** u/MundaneFacts, an ordinary
+r/politics commenter, drops 3 top-level comments in 300; the five bots drop
+none in 300. A threshold drawn anywhere in that gap is a threshold drawn off 19
+human data points at a margin of three comments, and it would not survive the
+twentieth human.
+
+So the rule is not a threshold at all: **no top-level comment anywhere in the
+retrieved window** returns `unmeasured()`. That is a property of the window
+rather than a number somebody picked, and it is the only value in this
+distribution that is not standing inside the margin. axis.js rule 3, applied to
+a POLE of a measurement rather than to a sample that was too thin.
+
+### What moved
+
+Five of the 81 frozen scores, all of them bots, all upward:
+
+| account | automation |
+|---|---|
+| u/RemindMeBot | `moderate 64` → **`high 73`** |
+| u/sub_doesnt_exist_bot | 52 → 58 |
+| u/same_subreddit_bot | 51 → 57 |
+| u/sneakpeekbot | 50 → 57 |
+| u/Anti-ThisBot-IB | 39 → 44 |
+
+**Not one human moved by a single point** — all 19 have top-level comments, so
+for all 19 the signal is measured exactly as it was. The bots' cell in the
+headline table becomes `moderate ×5, high ×3` with the floor at **44**, and the
+gap between the human ceiling (25, u/chilidirigible) and the bot floor widens
+from 14 points to **19**. Finding 4's "seven of eight top out at `moderate`" is
+now five of eight.
+
+### What this does not establish
+
+**A reply-bot that drops one top-level comment in 300 escapes this and still
+collects its zero.** Closing that needs a threshold inside the three-comment
+margin, next to a real account, and nothing in this corpus can justify one. The
+bound is stated in `automation.js` and asserted in `test/scoring.test.js` so it
+stays a stated limit rather than a later discovery.
+
+**The discount below the cut is untouched.** An ordinary reply rate still votes
+for a person at full weight, and every one of the 19 humans still bands `low`
+on this signal. Withdrawing that is JIO-329 — 3.5 of 15.5 weight together with
+`interval-regularity` — and it has a measured cost on real people that this
+change deliberately does not pay: Finding 4b crossed seven live accounts into
+`moderate`, u/chilidirigible among them.
+
+**Eight declared bots, five of which reply.** "No reply-bot in this corpus gets
+a vote for its humanity" is a statement about five accounts. It is not a
+false-negative rate, and the corpus holds no *adversarial* reply-bot — one
+built to look conversational — because no such population is available to
+freeze.
 
 ## What this evaluation does not establish
 

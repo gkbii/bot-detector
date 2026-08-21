@@ -31,7 +31,7 @@
   "Anti-ThisBot-IB": {
    "automation": {
     "band": "moderate",
-    "score": 39
+    "score": 44
    },
    "agenda": {
     "band": "moderate",
@@ -184,8 +184,8 @@
   },
   "RemindMeBot": {
    "automation": {
-    "band": "moderate",
-    "score": 64
+    "band": "high",
+    "score": 73
    },
    "agenda": {
     "band": "moderate",
@@ -339,7 +339,7 @@
   "same_subreddit_bot": {
    "automation": {
     "band": "moderate",
-    "score": 51
+    "score": 57
    },
    "agenda": {
     "band": "moderate",
@@ -353,7 +353,7 @@
   "sneakpeekbot": {
    "automation": {
     "band": "moderate",
-    "score": 50
+    "score": 57
    },
    "agenda": {
     "band": "moderate",
@@ -367,7 +367,7 @@
   "sub_doesnt_exist_bot": {
    "automation": {
     "band": "moderate",
-    "score": 52
+    "score": 58
    },
    "agenda": {
     "band": "moderate",

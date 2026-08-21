@@ -16,7 +16,7 @@ things the browser cannot do: a Claude read of what an account actually argues,
 and a lookup cache shared between your machines. Nothing requires it.
 
 ```
-npm test        # 150 tests, and they pass with NO node_modules installed
+npm test        # 154 tests, and they pass with NO node_modules installed
 npm install     # only needed for the optional server's one dependency
 npm start       # the optional server
 ```
@@ -201,6 +201,15 @@ Revived dormant account, floored at the `moderate` band edge so neither is ever
 silenced. The section on it is below; the short version is that a hobbyist is
 topic-concentrated and posts and leaves, and those two signals alone were
 enough to band two real people.
+
+Two signals in the automation column argue in **one direction only**, and for
+the same reason as each other. Sustained posting throughput is `unmeasured`
+below an ordinary rate, and Never replies to replies is `unmeasured` for an
+account that only ever replies. An ordinary posting rate and an ordinary reply
+rate are both the *absence* of evidence of a machine rather than evidence of a
+person — and a summon-bot has both. There is a section on each below; the short
+version is that scoring either as a clean zero handed u/RemindMeBot a
+full-weight vote for its own humanity.
 
 Three rules live in `axis.js` rather than in each scorer's good intentions:
 
@@ -549,9 +558,10 @@ and a caught human is a false accusation.
 
 **The 82-second window is what fixes the minimum-span guard at 60 seconds, and
 the arithmetic is not close.** Before this signal the five bots measured 10.5
-of the axis's 13.5 weight, with only the hour profile missing. JIO-329 will
-take `conversation-depth` and `interval-regularity` to unmeasured for them too
-— both invert on reply-bots — which is 7.0/13.5 = 0.519, one signal above
+of the axis's 13.5 weight, with only the hour profile missing. Both remaining
+signals invert on reply-bots, and both were then expected to go: JIO-345 has
+since taken `conversation-depth` to unmeasured for those five and JIO-329 would
+take `interval-regularity` as well — which is 7.0/13.5 = 0.519, one signal above
 `MIN_MEASURED_WEIGHT_FRACTION`. Add
 this signal and have it *fire*: 9.0/15.5 = 0.581, and the axis still reports.
 Add it and have it stay silent — which any minimum span of an hour or more
@@ -584,7 +594,8 @@ two narrowed the margin it describes: **the human ceiling on automation is now
 25, not 17** (u/chilidirigible, 3.42/h), against a bot floor of 39. The bands
 still do not overlap and the separation invariant still holds, but 14 points of
 gap is the honest number and 22 was the number a thread sample happened to
-produce. Both cohorts are printed as their own row by `npm run evaluate` so
+produce. (JIO-345 has since taken that floor to 44 and the gap to 19, without
+moving a human — two sections below.) Both cohorts are printed as their own row by `npm run evaluate` so
 that one can never quietly widen the other.
 
 **What it measures that you might not expect it to**, stated because this
@@ -647,6 +658,74 @@ and the weights themselves, **not** `ORDINARY_ITEMS_PER_HOUR` and not the band
 edge — moving `moderate` to 35 would still leave two of the seven above it and
 would silently re-band the other two axes, which have nothing to do with any of
 this.
+
+## Replying to everyone is not evidence of a person
+
+The section above is one of the three reasons EVALUATION.md's Finding 4 gave
+for seven of eight declared bots topping out at `moderate`. This is another of
+them, and it is the one where the tool was not merely blind but **actively
+wrong**.
+
+`conversation-depth` scored `1 - rescale(replyShare, 0.02, 0.3)`. Never
+replying to another commenter reads as broadcasting rather than talking, which
+is true and is the half of the signal that works. But the arithmetic ran both
+ways, so a reply share above 30% earned **strength 0** — the strongest vote for
+humanity this axis can cast, at the signal's full weight. **u/RemindMeBot
+replies to a summoning commenter 299 times out of 299 and does nothing else at
+all, and was cleared by the exact mechanism that makes it a bot.** JIO-405
+measured the same thing from the other side and found the two populations
+identical here: the signal reads **0.000 for ordinary people AND 0.000 for
+u/RemindMeBot**.
+
+**The whole separation is three comments, which is what decides the shape of
+the fix.** Measured over the frozen corpus by `node
+scripts/measure-reply-share.mjs` (no network — it reads `test/corpus/` and
+nothing else): the five summon-bots sit at exactly 100.0% replies, and the 19
+humans run from u/Hartacus at 40.0% up to u/MundaneFacts at **99.0%**. That is
+3 top-level comments in 300 standing between a person and every reply-bot in
+the corpus. A percentile drawn off 19 human data points at a margin that thin
+would not survive the twentieth human, so there is no threshold to pick.
+
+**So the cut is a fact about the window rather than a number.** An account with
+**no top-level comment anywhere in its retrieved history** returns
+`unmeasured()` — axis.js rule 3, applied to a *pole* of a measurement rather
+than to a sample that was too thin. Every human in the corpus clears it; the
+thinnest clears it by three comments and the rest by ten or more. The broadcast
+pole is untouched and still separates: u/AmputatorBot (21.7% replies),
+u/AutoModerator (8.4%) and u/RepostSleuthBot (8.0%) all sit below every human
+in the corpus and are read exactly as before.
+
+**What it moved.** Five of the 81 frozen scores, every one a bot, every one
+upward: u/RemindMeBot `moderate 64 → high 73`, u/sub_doesnt_exist_bot 52 → 58,
+u/same_subreddit_bot 51 → 57, u/sneakpeekbot 50 → 57, u/Anti-ThisBot-IB 39 →
+44. Not one human moved by a point, because all 19 have top-level comments and
+for all 19 the signal is measured exactly as it was. The bot floor rose from 39
+to 44 against an unchanged human ceiling of 25, so the gap widened from 14
+points to 19, and Finding 4's "seven of eight top out at `moderate`" is now
+five of eight.
+
+**A bound that was checked rather than assumed:** taking 1.5 of weight away
+from the five loudest bots could have pushed them under
+`MIN_MEASURED_WEIGHT_FRACTION` and turned the fix into an `insufficient-data`
+verdict for exactly the accounts it was aimed at — the failure mode the
+82-second window produced above. It does not. The worst case is 11.0/15.5 =
+**0.710**, which is 3.25 of weight clear of the gate.
+
+**Two limits, stated here because neither is visible in a passing suite.**
+
+A reply-bot that drops a single top-level comment in 300 escapes this cut and
+still collects its zero. Closing that needs a threshold inside the
+three-comment margin, next to a real account, and nothing in this corpus can
+justify one. `test/scoring.test.js` asserts the escape as well as the catch, so
+it stays a stated bound rather than something found later.
+
+And **the discount below the cut is untouched.** An ordinary reply rate still
+votes for a person at full weight, and all 19 frozen humans still band `low` on
+this signal. Withdrawing *that* is JIO-329 — 3.5 of 15.5 weight, together with
+`interval-regularity` — and it moves the `moderate` band edge from 30 to 22.2
+for every account on the platform, at a measured cost on real people that this
+change deliberately does not pay. The two are separable and this one is the
+half that costs nobody a band.
 
 ## The blind spot: an account the index has never heard of
 
@@ -777,13 +856,15 @@ that would look helpful.
 and scored by the code of that day, the automation column came back *exactly*
 as EVALUATION.md printed it — `low ×17` for the humans, `moderate ×7, high ×1`
 for the bots — and the separation the whole evaluation rested on holds with
-room to spare. It has since moved once, on purpose and in one direction:
-`sustained-posting-rate` took the bots to `moderate ×6, high ×2` and their
-floor from 35 to 39 without touching a single human score, which is the section
-above and is a diff in `expected.json` rather than a paragraph, because that is
-now the point. The thread humans still top out at 17 and the lowest bot is 39.
-The two prolific humans admitted afterwards sit at 14 and 25, so the human
-ceiling across both cohorts is 25 and nothing still sits between 25 and 39. The other two columns have moved for less deliberate
+room to spare. It has since moved twice, both times on purpose and both times
+in one direction. `sustained-posting-rate` took the bots to `moderate ×6,
+high ×2` and their floor from 35 to 39, and JIO-345's reply-pole cut took them
+to `moderate ×5, high ×3` and the floor to 44 — neither touching a single human
+score. Both are sections above and both are a diff in `expected.json` rather
+than a paragraph, because that is now the point. The thread humans still top out
+at 17 and the lowest bot is 44. The two prolific humans admitted afterwards sit
+at 14 and 25, so the human ceiling across both cohorts is 25 and nothing still
+sits between 25 and 44. The other two columns have moved for less deliberate
 reasons. The bots' agenda column was `low ×6, moderate ×2` and is now `moderate
 ×8` — including all four of the accounts EVALUATION.md hand-read itself — and
 their authenticity column went from `low ×3, moderate ×5` to `low ×5, moderate
@@ -1235,7 +1316,7 @@ source's own unit.
 ## Tests
 
 ```
-npm test                                  # both suites, 150 tests
+npm test                                  # both suites, 154 tests
 node --test test/scoring.test.js           # one file
 npm run evaluate                          # EVALUATION.md's band table, off frozen profiles
 ```

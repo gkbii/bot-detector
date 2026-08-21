@@ -132,6 +132,11 @@ const DUPLICATE_JACCARD = 0.55;
 /** Pairwise comparison is O(n^2); 200 newest keeps a badge render instant. */
 const DUPLICATE_MAX_COMPARED = 200;
 
+/** At or below this share of replies, the account is broadcasting, not talking. */
+const BROADCAST_REPLY_SHARE = 0.02;
+/** ...and by this share the signal has spent its argument and reads zero. */
+const CONVERSATIONAL_REPLY_SHARE = 0.3;
+
 export function scoreAutomation(profile) {
   return buildAxis([
     postingHourSignal(profile),
@@ -540,6 +545,44 @@ function duplicateBodySignal(profile) {
  * never replies to another commenter is not having conversations — it is
  * broadcasting. `isTopLevel` is resolved by the source adapter, so this stays
  * platform-neutral.
+ *
+ * ONE POLE, NOT TWO (JIO-345). Never replying is evidence of a machine; the
+ * absence of that is not evidence of a person, and this signal used to cast it
+ * as one. `strength = 1 - rescale(replyShare, …)` handed u/RemindMeBot — which
+ * replies to a summoning commenter 100% of the time and does nothing else at
+ * all — a full-weight vote for humanity, produced by the exact mechanism that
+ * makes it a bot. EVALUATION.md Finding 4 lists that inversion as one of three
+ * reasons seven of eight declared bots top out at `moderate`, and Finding 4b
+ * measured the identity underneath it: this signal reads **0.000 for ordinary
+ * people AND 0.000 for u/RemindMeBot**. A signal that scores the adversary and
+ * the person it is meant to tell apart identically is not measuring either.
+ *
+ * So the top of the range returns `unmeasured()` rather than a clean zero —
+ * axis.js rule 3, applied to a POLE of a measurement rather than to a sample
+ * that was too thin. The broadcast pole is untouched: it separates, and
+ * u/AmputatorBot (21.7% replies), u/AutoModerator (8.4%) and u/RepostSleuthBot
+ * (8.0%) all sit below every human in the corpus and are read there.
+ *
+ * WHERE THE CUT IS, AND WHY IT IS A FACT RATHER THAN A THRESHOLD. Measured
+ * over the 27 frozen accounts by `node scripts/measure-reply-share.mjs`, no
+ * network: the five reply-bots sit at exactly 100.0% (299/299 and 300/300) and
+ * the 19 humans run from u/Hartacus at 40.0% up to u/MundaneFacts at 99.0%.
+ * The entire job is separating 99.0% from 100.0% — a margin of THREE COMMENTS
+ * in 300 — and a percentile drawn off a 19-point distribution would not
+ * survive the twentieth human. The cut is therefore categorical: NO top-level
+ * comment anywhere in the retrieved window. That is a property of the window
+ * rather than a number somebody picked, and it is the one value in this
+ * distribution that is not standing inside the margin.
+ *
+ * THE BOUND, OUT LOUD. A reply-bot that drops a single top-level comment in
+ * 300 escapes this and still collects its zero. Closing that needs a threshold
+ * inside a three-comment margin next to a real account, which is the shape
+ * this repo keeps finding on the wrong side of. And below the cut the discount
+ * is untouched — an ordinary reply rate still votes for a person at full
+ * weight. Withdrawing THAT is JIO-329, 3.5 of 15.5 weight together with
+ * `interval-regularity`, and it has a measured cost on real people that this
+ * change deliberately does not pay: EVALUATION.md Finding 4b crossed seven
+ * live accounts into `moderate`, u/chilidirigible among them.
  */
 function conversationDepthSignal(profile) {
   const key = 'conversation-depth';
@@ -554,18 +597,33 @@ function conversationDepthSignal(profile) {
   }
 
   const replies = known.filter((c) => !c.isTopLevel).length;
+  const topLevel = known.length - replies;
   const replyShare = replies / known.length;
-  const strength = 1 - rescale(replyShare, 0.02, 0.3);
+  const value = {
+    replies, topLevel, sample: known.length, replyShare,
+  };
+
+  if (topLevel === 0) {
+    return unmeasured({
+      key,
+      label,
+      weight,
+      value,
+      evidence: `Every one of the ${known.length} retrieved comments is a reply to another commenter and not one is top-level. A summon-bot replies to everything by definition, and so does a person who only ever joins threads already underway, so this measurement cannot tell those two apart — it is not a clean result on the automation axis. The thing this signal can read is the opposite pole: an account that never replies at all.`,
+    });
+  }
+
+  const strength = 1 - rescale(replyShare, BROADCAST_REPLY_SHARE, CONVERSATIONAL_REPLY_SHARE);
 
   return signal({
     key,
     label,
     weight,
     strength,
-    value: { replies, sample: known.length, replyShare },
+    value,
     evidence: replies === 0
       ? `All ${known.length} comments are top-level responses to a submission; the account has never replied to another commenter.`
-      : `${replies} of ${known.length} comments (${pct(replyShare)}) are replies to other commenters rather than top-level drops.`,
+      : `${replies} of ${known.length} comments (${pct(replyShare)}) are replies to other commenters rather than top-level drops. This signal measures distance from the broadcast pole and nothing else — at or below ${pct(BROADCAST_REPLY_SHARE)} replies an account is broadcasting rather than talking — so a rate above that is the absence of that evidence rather than evidence of a person.`,
   });
 }
 

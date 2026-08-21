@@ -403,6 +403,77 @@ test('automation: an account that never replies to replies is flagged for it', (
   assert.equal(human.band, BAND.LOW);
 });
 
+/**
+ * THE OTHER POLE, WHICH USED TO VOTE THE WRONG WAY (JIO-345).
+ *
+ * A summon-bot replies to a commenter 100% of the time, because that is what
+ * being summoned IS. Under `1 - rescale(replyShare, …)` that earned strength
+ * 0 — the maximum vote for humanity in the axis, at full weight, produced by
+ * the mechanism that makes it a bot. u/RemindMeBot is the real account
+ * (299 of 299 replies, frozen in `test/corpus/`); this is that shape,
+ * hand-built.
+ */
+function replyBotProfile() {
+  const comments = [];
+  for (let i = 0; i < 400; i += 1) {
+    const at = NOW - (400 - i) * 3600 + (i % 7) * 8; // hourly, tiny jitter
+    comments.push(comment({
+      id: `rb${i}`,
+      at,
+      group: `g${i % 6}`,
+      body: `I will message you in 3 days. Click this to send a PM to also be reminded. Reference ${i}.`,
+      score: 1,
+      isTopLevel: false, // summoned, every single time
+    }));
+  }
+  return profileOf({ comments, karma: { post: 5000, comment: 45000, total: 50000 }, firstSeenUtc: NOW - 300 * DAY });
+}
+
+test('automation: replying to everyone is not evidence of a person', () => {
+  const sig = findSignal(scoreAccount(replyBotProfile()).automation, 'conversation-depth');
+
+  assert.equal(sig.value.topLevel, 0, 'the fixture must hold no top-level comment at all');
+  assert.equal(sig.band, BAND.INSUFFICIENT,
+    'a 100% reply rate must be unmeasured, never a measured zero (axis.js rule 3)');
+  assert.equal(sig.strength ?? null, null, 'nothing that reads as a strength may be published here');
+  assert.equal(sig.direction, 'neutral', 'an unmeasured pole must not lean either way');
+  // The evidence has to say what it cannot conclude, not only what it counted.
+  assert.match(sig.evidence, /cannot tell those two apart/);
+  assert.match(sig.evidence, /never replies at all/);
+});
+
+/**
+ * THE BOUND, PINNED. The cut is categorical — no top-level comment ANYWHERE in
+ * the window — because the frozen humans separate from the frozen reply-bots
+ * by three comments in 300, and no percentile drawn off 19 people survives
+ * that margin. What it costs is that ONE top-level comment buys a reply-bot
+ * its measured zero back. That is written down in automation.js and asserted
+ * here, so it stays a stated bound rather than a discovery.
+ */
+test('automation: one top-level comment in 400 is enough to escape the reply-pole cut', () => {
+  const comments = replyBotProfile().comments
+    .map((c, i) => (i === 0 ? { ...c, isTopLevel: true, parentId: c.threadId } : c));
+  const sig = findSignal(scoreAccount(profileOf({ comments })).automation, 'conversation-depth');
+
+  assert.equal(sig.value.topLevel, 1);
+  assert.equal(sig.band, BAND.LOW,
+    'the cut is at zero, so 1-in-400 is still measured — and still scores the zero');
+});
+
+test('automation: the reply-pole cut leaves the broadcast pole and ordinary people alone', () => {
+  // One-and-done, top-level every time: the pole that works, on the account
+  // this project exists to find.
+  const pushed = findSignal(scoreAccount(propagandistProfile()).automation, 'conversation-depth');
+  assert.equal(pushed.band, BAND.HIGH);
+
+  // And a person with real back-and-forth still gets the discount. Withdrawing
+  // THAT is JIO-329, which costs real people a band; it is not this change.
+  const human = findSignal(scoreAccount(genuineProfile()).automation, 'conversation-depth');
+  assert.equal(human.band, BAND.LOW);
+  assert.ok(human.value.topLevel > 0);
+  assert.match(human.evidence, /rather than evidence of a person/);
+});
+
 test('automation: karma velocity is the weakest signal and its evidence admits it', () => {
   const sig = findSignal(scoreAccount(genuineProfile()).automation, 'karma-velocity');
   assert.equal(sig.weight, 1);
