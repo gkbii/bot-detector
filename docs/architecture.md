@@ -125,6 +125,20 @@ sleep cycle — a perfect alibi manufactured by the fetch window. A claim about
 days now needs days of span before it may be made. That one fix moved the
 account from 48 to 62.
 
+**The guard has a price, and `automation` pays it by reading the window twice.**
+Discarding everything past the truncation point is right, and it still disarms the
+heaviest signal in the axis on exactly the accounts that earn it: the more an
+account posts, the less calendar one lookup covers, so the hour histogram goes
+unmeasured and sheer volume buys immunity from the strongest check there is.
+AutoModerator's reliable window is 297 items spanning 82 seconds. So the same
+window is now read as a schedule *and* as a rate — 82 seconds cannot support an
+hour histogram, but 297 items in 82 seconds is a ratio of two things we did
+observe, because throughput survives truncation where a schedule does not. That
+signal only ever accuses: below a pace a person sustains it reports nothing
+rather than a clean zero, since an unremarkable posting rate is not evidence of
+a human, it is what every account on the platform has. It moved five declared
+bots up and no human by a point.
+
 A passing test suite is not evidence this thing works. Any change to the fetch
 window, the pagination or a timing signal deserves a live account before it is
 believed.
@@ -142,7 +156,7 @@ off a single thread, and 8 declared bots. Nothing between `profile` and
 `verdict` touches the network or keeps state, so replaying the corpus through
 the same scorers is JSON in and arithmetic out — `table` is that run, and a band
 that has moved since the last one is printed as a diff and exits non-zero. As it
-stands the humans score 0–17 on `automation`, the bots 35–76, and nothing at all
+stands the humans score 0–17 on `automation`, the bots 39–75, and nothing at all
 sits in between.
 
 Two things about `corpus` are worth saying out loud rather than leaving in a

@@ -40,7 +40,7 @@
       "name": "Three Scores, Never One Number",
       "summary": "Automation, agenda and evidence of a real person are scored separately and never averaged into one.",
       "summarySimple": "It gives three separate scores instead of one, and never blends them together.",
-      "detailHtml": "<p>Someone paid to post talking points has a real account age, organic timing and varied language — clean on every automation signal, which averaging would hide. The third answers who argues in good faith, which a tool that only accuses never does. Twenty-five frozen accounts are re-scored on every change: humans land 0–17 on automation, declared bots 35–76, nothing between.</p>",
+      "detailHtml": "<p>Someone paid to post talking points has a real account age, organic timing and varied language — clean on every automation signal, which averaging would hide. The third answers who argues in good faith, which a tool that only accuses never does. Twenty-five frozen accounts are re-scored on every change: humans land 0–17 on automation, declared bots 39–75, nothing between.</p>",
       "detailHtmlSimple": "<p>A real person paid to push a message looks completely normal on every automation check. Blending the scores would hide them. The third score exists so the tool can also say when someone seems genuine. A set of 25 real accounts is kept exactly as it was, so anyone can check it still tells bots and people apart.</p>",
       "nodes": ["profile", "gate", "automation", "agenda", "authenticity", "verdict", "corpus", "table"]
     },
@@ -58,7 +58,7 @@
       "name": "It Says What It Could Not See",
       "summary": "A report over 100 of 2,568 comments says so, and not enough data is its own visible answer.",
       "summarySimple": "It always says how much it actually looked at, and can answer that it does not know.",
-      "detailHtml": "<p>A thin account gets no score rather than a flattering low one: absence is neither innocence nor guilt. Two signals once fired on its own paging, inventing a twelve-year dormancy.</p><p>The index it reads froze in March 2025, so the newest one in five accounts were called deleted rather than unseen — and are now scored from what can be read.</p>",
+      "detailHtml": "<p>A thin account gets no score rather than a flattering low one: absence is neither innocence nor guilt. Two signals once fired on its own paging, inventing a twelve-year dormancy.</p><p>The index it reads froze in March 2025, so the newest one in five were called deleted rather than unseen, and are now scored from what can be read.</p>",
       "detailHtmlSimple": "<p>It says how much it managed to read, and answers that it does not know rather than guessing — two of its strongest signals once reacted to its own behaviour instead of the account.</p><p>It called people it could not find missing, when the list it checks had stopped being updated. The newest one in five now get an answer.</p>",
       "nodes": ["profile", "gate", "verdict", "badge", "provider", "archive"]
     },
