@@ -68,6 +68,7 @@ bot-detector/
     measure-agenda-shape.mjs offline; ranks the corpus on the two shape signals — EVALUATION.md 4c
     measure-reply-share.mjs  offline; the corpus reply-share spread — EVALUATION.md 4d
     measure-interval-cv.mjs  offline; the corpus interval-CV spread — EVALUATION.md 4e
+    measure-interval-crossing.mjs fetches; who JIO-346 pushed over the edge, live — EVALUATION.md 4e
     evaluate.mjs             reprints EVALUATION.md's band table from test/corpus/, offline
     lib/bot-declaration.mjs  what counts as "this account declares itself a bot", and why twice
     lib/synthetic-bodies.mjs length-matched stand-ins for the 19 humans' comment text
@@ -684,9 +685,12 @@ two narrowed the margin it describes: **the human ceiling on automation is now
 25, not 17** (u/chilidirigible, 3.42/h), against a bot floor of 39. The bands
 still do not overlap and the separation invariant still holds, but 14 points of
 gap is the honest number and 22 was the number a thread sample happened to
-produce. (JIO-345 has since taken that floor to 44 and the gap to 19, without
-moving a human — two sections below.) Both cohorts are printed as their own row by `npm run evaluate` so
-that one can never quietly widen the other.
+produce. (JIO-345 has since taken that floor to 44 and the gap to 19 without
+moving a human, and JIO-346 then took it to 54 — and unlike JIO-345 it *did*
+move the ceiling, from 25 to **29**, so the gap in force is 25 points against a
+ceiling four points nearer the band edge. Both are sections below.) Each cohort
+is printed as its own row by `npm run evaluate` so that one can never quietly
+widen the other.
 
 **What it measures that you might not expect it to**, stated because this
 started life as a bound nobody had checked. A person who genuinely sustains
@@ -743,12 +747,24 @@ was simply the only lens available on the day, because the only prolific human
 then in the corpus was one it happened to measure.
 
 **What that sweep established, and it belongs here rather than only there.**
-JIO-329 removes 3.5 of 15.5 weight, so for an ordinary profile at the common
-measured weight of 13.5 it multiplies the automation score by 13.5/10 = **1.35**
-— and a multiplier on the score is a divisor on the band edge. `moderate` stops
-beginning at 30 and begins at **22.2** on today's scale. Measured against 124
-live accounts, every single one scoring 22–29 today crossed and nothing at 21 or
-below did. The lever that number is sensitive to is `MIN_MEASURED_WEIGHT_FRACTION`
+JIO-329 removes 3.5 of 15.5 weight, so for an ordinary profile at the measured
+weight of 13.5 that was common **when the sweep ran** it multiplies the
+automation score by 13.5/10 = **1.35** — and a multiplier on the score is a
+divisor on the band edge. `moderate` stops beginning at 30 and begins at
+**22.2**. Measured against 124 live accounts, every single one scoring 22–29
+then crossed and nothing at 21 or below did.
+
+**Read those numbers against the scale of the day they were taken, because 2 of
+the 3.5 has since landed.** JIO-346 (below) took `interval-regularity` to
+`unmeasured` for very nearly everybody, so the common human measured weight is
+now **11.5**, not 13.5 — 15 of the 19 frozen humans, and every ordinary account
+in the live arm. 22.2 is the *destination* of all 3.5 of weight, not the edge in
+force now: today's effective edge is about **25.6** for that shape, and JIO-329's
+remaining 1.5 (`conversation-depth` for ordinary repliers) is what carries it
+the rest of the way to 22.2. EVALUATION.md Finding 4e prices that half against
+the new baseline.
+
+The lever the band-edge figure is sensitive to is `MIN_MEASURED_WEIGHT_FRACTION`
 and the weights themselves, **not** `ORDINARY_ITEMS_PER_HOUR` and not the band
 edge — moving `moderate` to 35 would still leave two of the seven above it and
 would silently re-band the other two axes, which have nothing to do with any of
@@ -818,12 +834,14 @@ it stays a stated bound rather than something found later.
 And **the discount below the cut is untouched.** An ordinary reply rate still
 votes for a person at full weight, and all 19 frozen humans still band `low` on
 this signal. Withdrawing *that* is JIO-329 — 3.5 of 15.5 weight, together with
-`interval-regularity` — and it moves the `moderate` band edge from 30 to 22.2
-for every account on the platform, at a measured cost on real people that this
-change deliberately does not pay. The two are separable and this one is the
-half that costs nobody a band. The section below is the other signal in that
-pair, gated the same way and on the same day, and it is **not** free: it moved
-the human ceiling four points.
+`interval-regularity` — and all 3.5 of it moves the `moderate` band edge from 30
+to 22.2 for every account on the platform, at a measured cost on real people
+that this change deliberately does not pay. (**2 of that 3.5 has now landed**,
+in JIO-346 two sections down: the edge is already at roughly 25.6 for the common
+shape, and it is `conversation-depth`'s remaining 1.5 that would take it to
+22.2.) The two are separable and this one is the half that costs nobody a band.
+The section below is the other signal in that pair, gated the same way and on
+the same day, and it is **not** free: it moved the human ceiling four points.
 
 ## An uneven cadence is not evidence of a person
 
@@ -885,16 +903,44 @@ measured-weight case is 9.0/15.5 = **0.581**, still 1.25 of weight clear of
 its own fix.
 
 **And ten humans, which is the part that is not free.** They move +1 to +4 and
-all stay `low`, but **u/chilidirigible's ceiling went 25 → 29, one point under
-the band edge.** That is not an accident of one profile: removing 2 of 15.5
-weight multiplies an ordinary score by 13.5/11.5 = 1.17, and a multiplier on the
-score is a divisor on the band edge, so `moderate` effectively begins at **25.6**
-on the old scale rather than at 30. Nobody in the corpus was standing in the
-26–29 strip and none of the 77 live accounts crossed, but Finding 4b's two arms
-already disagreed about whether that strip is populated inside a single window.
-Two zero-crossing samples are not an empty strip; the band-edge arithmetic is
-the durable half, and it says this change spent most of the human cost JIO-329
-was priced for.
+in the frozen corpus all stay `low`, but **u/chilidirigible's ceiling went
+25 → 29, one point under the band edge.** That is not an accident of one
+profile: removing 2 of 15.5 weight multiplies an ordinary score by `mw/(mw−2)`,
+and a multiplier on the score is a divisor on the band edge. **That edge is
+shape-dependent, not universal.** `30×(mw_pre−2)/mw_pre` across the 19 corpus
+humans as they measure live: **25.2** at a pre-cut weight of 12.5 (three of
+them), **25.6** at 13.5 (fifteen — the common shape), **26.1** at 15.5, which is
+u/chilidirigible's own all-eight-signals shape and so the figure that actually
+governs this account. Thinner profiles fall further — 24.5 at 11, the shape
+three of the eight bots have. Quote 25.6 as the typical edge, not as the edge.
+
+**And one human did cross — live, on the day this landed.** All 19 corpus humans
+were re-fetched 2026-08-21 through the shipped `fetchAccount`
+(`node scripts/measure-interval-crossing.mjs --all-humans`). One crossed:
+**u/chilidirigible scores automation `moderate 30`** today, where reconstructing
+`interval-regularity` at the clamped 0.000 it used to earn at weight 2 puts the
+same fetch at **`low 26`** before the change — bracketed 25.69–26.56 across the
+rounding, so the band is robust to it, and reproduced across four independent
+fetches. So "nobody in the corpus was standing in the 26–29 strip" and "none of
+the 77 live accounts crossed" are both true and **neither is the whole story**:
+`test/corpus/` was captured 2026-08-18 and this account drifted a point in three
+days, and the 77-account sweep's before-scores top out at 24 with
+u/chilidirigible not in that arm at all.
+
+**One of nineteen, and the other eighteen are not close** — the runner-up
+(u/Hartacus, `low 23`) is seven points short. The strip is populated, not
+crowded. But two zero-crossing samples were never evidence that it was empty,
+and the account found standing in it is the same one both of those sentences
+name as the human ceiling.
+
+**Which makes the corpus load-bearing in a way worth saying out loud.** `npm run
+evaluate` gates its exit code on `no human above low, no bot at low`; against a
+corpus re-captured today it would print `BROKEN`, name u/chilidirigible and exit
+1. The separation holds *of a 2026-08-18 snapshot*, at the boundary, on one
+point of drift — not comfortably. EVALUATION.md Finding 4e carries the full
+measurement and the re-capture question, which is George's call and not one to
+settle inside this change. The band-edge arithmetic is still the durable half,
+and it says this change spent most of the human cost JIO-329 was priced for.
 
 **Two bounds, stated because neither is visible in a passing suite.**
 
@@ -1024,15 +1070,24 @@ node scripts/measure-jio329.mjs --corpus # JIO-329's cost, offline; --harvest/--
 node scripts/measure-agenda-shape.mjs    # the agenda hold — EVALUATION.md 4c, offline
 node scripts/measure-reply-share.mjs     # the reply-share spread — EVALUATION.md 4d, offline
 node scripts/measure-interval-cv.mjs     # the interval-CV spread — EVALUATION.md 4e, offline
+node scripts/measure-interval-crossing.mjs # who JIO-346 crossed — EVALUATION.md 4e, LIVE
 ```
 
-`capture-corpus.mjs` and `probe-prolific-humans.mjs` are the only two that
-always touch the network, and neither is part of `npm test`.
-`measure-jio329.mjs` goes either way: `--corpus`, `--variants` and `--report`
-read `test/corpus/` or a state file already on disk and fetch nothing, while
-`--harvest`/`--fetch` go live. `measure-agenda-shape.mjs`,
-`measure-reply-share.mjs` and `measure-interval-cv.mjs` never fetch at all —
-like `evaluate`, they are JSON in and arithmetic out.
+`capture-corpus.mjs`, `probe-prolific-humans.mjs` and
+`measure-interval-crossing.mjs` are the three that always touch the network, and
+none of them is part of `npm test`. `measure-jio329.mjs` goes either way:
+`--corpus`, `--variants` and `--report` read `test/corpus/` or a state file
+already on disk and fetch nothing, while `--harvest`/`--fetch` go live.
+`measure-agenda-shape.mjs`, `measure-reply-share.mjs` and
+`measure-interval-cv.mjs` never fetch at all — like `evaluate`, they are JSON in
+and arithmetic out.
+
+**`measure-interval-crossing.mjs` has to fetch, and that is the finding rather
+than an oversight.** The other three re-measure the frozen corpus, which is what
+makes them reproducible byte-for-byte — and a frozen corpus is exactly what hid
+u/chilidirigible's band crossing for three days. A question about drift cannot
+be answered from the snapshot the drift is measured against, so this one is
+excluded from `test/corpus.test.js`'s no-network allowlist on purpose.
 
 `scoreAccount` is pure and the corpus is JSON, so `evaluate` is arithmetic on
 disk: no network, no `node_modules`, and `test/corpus.test.js` asserts that at

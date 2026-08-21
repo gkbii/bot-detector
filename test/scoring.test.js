@@ -6,7 +6,7 @@ import { scoreAccount } from '../extension/lib/scoring/index.js';
 import {
   BAND, MIN_COMMENTS_FOR_SCORING, MIN_HISTORY_DAYS,
 } from '../extension/lib/scoring/axis.js';
-import { normalizeWords, stripUrls } from '../extension/lib/scoring/stats.js';
+import { normalizeWords, rescale, stripUrls } from '../extension/lib/scoring/stats.js';
 
 const NOW = 1785950000; // 2026-08-05
 const DAY = 86400;
@@ -575,6 +575,35 @@ test('automation: a scheduler jittering past the ceiling buys the same silence a
   assert.ok(loose.value.coefficientOfVariation >= 1.0);
   assert.equal(loose.band, BAND.INSUFFICIENT,
     'and one that jitters past the ceiling is not — the bound this change accepts');
+});
+
+/**
+ * THE RECONSTRUCTION, PINNED. EVALUATION.md Finding 4e publishes a BEFORE score
+ * for u/chilidirigible -- `low 26` against the `moderate 30` it scores live
+ * today -- and calls that a measurement rather than an estimate. It is only a
+ * measurement because the old `1 - rescale(cv, 0.15, 1.0)` CLAMPED: above the
+ * ceiling the pre-JIO-346 strength was not approximately zero, it was exactly
+ * 0.000, so re-adding 2 of weight at that strength recovers the old score with
+ * no modelling in between.
+ *
+ * That identity is what the whole crossing claim rests on, and it lives in a
+ * function this signal no longer calls above 1.0 -- which is exactly the shape
+ * that rots unnoticed. If `rescale` ever stops clamping, or the floor/ceiling
+ * move, the published 26 silently becomes a guess. This says so first.
+ */
+test('automation: the pre-JIO-346 strength above the ceiling was exactly zero, not nearly zero', () => {
+  // The CVs Finding 4e names, plus the poles of the frozen corpus's range.
+  for (const cv of [1.0, 1.01, 1.09, 1.26, 1.665, 2.338, 4.964, 5.292, 16.09, 1e6]) {
+    const oldStrength = 1 - rescale(cv, 0.15, 1.0);
+    assert.equal(oldStrength, 0,
+      `CV ${cv} must reconstruct at exactly 0, not ${oldStrength} — `
+      + 'Finding 4e\'s before-scores are arithmetic only while this holds');
+  }
+
+  // And immediately below the gate it is NOT zero, which is why the mechanical
+  // pole survived the change and u/sub_doesnt_exist_bot (CV 0.94) is still read.
+  assert.ok(1 - rescale(0.94, 0.15, 1.0) > 0,
+    'below the ceiling the old scale still varied — that half was never the problem');
 });
 
 test('automation: karma velocity is the weakest signal and its evidence admits it', () => {

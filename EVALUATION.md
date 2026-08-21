@@ -356,12 +356,13 @@ measurement.
 `interval-regularity` is `unmeasured()` above CV 1.0 — the ceiling its own
 `rescale` already clamped at, where 26 of the 27 frozen accounts sit and every
 one of them scored the identical 0.000. Three more bots cross to `high`, no
-human crosses anything, and the bots' cell becomes **`moderate x2, high x6`
-with the floor at 54** against a human ceiling of 29. Finding 4's headline —
-seven of eight declared bots topping out at `moderate` — is now **two of
-eight**, and all three of its bullets are closed. Finding 4e has the
-measurement, and the human ceiling moved 25 -> 29 to get it, which is the part
-that is not free.
+human in the frozen corpus crosses anything, and the bots' cell becomes
+**`moderate x2, high x6` with the floor at 54** against a human ceiling of 29.
+Finding 4's headline — seven of eight declared bots topping out at `moderate` —
+is now **two of eight**, and all three of its bullets are closed. Finding 4e has
+the measurement, and the human ceiling moved 25 -> 29 to get it, which is the
+part that is not free — including one human who **does** cross on live data
+fetched the same day, which 4e states in full.
 ## Finding 4a — the prolific human the rate signal "cannot see" is real, and most of the accounts it catches are people
 
 Measured live on **2026-08-20**, against the API, by
@@ -940,6 +941,12 @@ accounts frozen in `test/corpus/`. **No network**, like Findings 4c and 4d:
 `scoreAutomation` is pure and the corpus is JSON, so this is arithmetic on disk
 and reproduces byte-for-byte. Run it rather than trusting the tables below.
 
+**One section of this finding is the exception, and it is the important one.**
+*What this does not establish* below rests on a **live** measurement
+(`scripts/measure-interval-crossing.mjs`, which fetches), because it reports a
+band crossing that the frozen corpus is three days too old to show. That part
+does not reproduce byte-for-byte and is dated for that reason.
+
 This is Finding 4's second bullet, asked properly, and it is the last of the
 three. Like the third it had been sitting inside JIO-329, which would have
 removed the signal outright rather than gating the end of it that inverts.
@@ -1044,14 +1051,84 @@ It does not. The worst case in the corpus is **9.0/15.5 = 0.581**
 
 **The human ceiling moved 25 → 29, and that is one point from the band edge.**
 u/chilidirigible is the account, and the four points are not an accident of one
-profile: removing 2 of 15.5 weight multiplies an ordinary score by 13.5/11.5 =
-**1.17**, and a multiplier on the score is a divisor on the band edge, so
-`moderate` now effectively begins at **25.6** on the old scale rather than at
-30. Finding 4b's arithmetic, at a smaller multiplier. Nobody in the corpus was
-standing in the 26–29 strip, and the live re-run above crossed **zero** of its
-77 accounts, but "no crossing was observed in two samples" is not "the strip is
-empty" — Finding 4b's two arms disagreed about exactly that inside one window,
-and the band-edge number is the durable half.
+profile: removing 2 of 15.5 weight multiplies an ordinary score by
+`mw / (mw − 2)`, and a multiplier on the score is a divisor on the band edge, so
+`moderate` begins early by exactly that factor. This is Finding 4b's arithmetic
+at a smaller removal, including the half of it that is easiest to drop:
+**the effective edge is a property of the profile's shape and not only of the
+change.** Re-fetched live on 2026-08-21, the 19 corpus humans carry three
+shapes, and `30 × (mw_pre − 2) / mw_pre` gives each a different edge: **25.2**
+at a pre-cut measured weight of 12.5 (three of them), **25.6** at 13.5 (fifteen
+— the common shape), and **26.1** at 15.5, which is u/chilidirigible's own
+all-eight-signals shape and therefore the number that governs the very account
+this paragraph is about. Thinner profiles fall further: **24.5** at a pre-cut
+weight of 11, the shape three of the eight declared bots have. So 25.6 is the
+typical edge and not the edge — the same qualification Finding 4b made of its
+own 22.2 (×1.35 at 13.5, ×1.39 at 12.5, ×1.29 at 15.5), which is easy to lose
+when the figure is repeated on its own.
+
+**And the 26–29 strip is not empty. It was measured on the day this landed, and
+the account standing in it is the one named above.** All **19** corpus humans
+were re-fetched live on 2026-08-21 through the shipped `fetchAccount` and scored
+by the shipped `scoreAutomation`, and one of them crossed:
+
+| | interval CV | measured weight *after* | before | after |
+|---|---|---|---|---|
+| **u/chilidirigible** | 2.34 | 13.5/15.5 | **`low 26`** | **`moderate 30`** |
+| u/Hartacus (highest non-crossing) | 2.31 | 11.5/15.5 | `low 20` | `low 23` |
+| the other 17 | 1.52 – 5.14 | 10.5 – 11.5 / 15.5 | `low 0` – `low 17` | `low 0` – `low 20` |
+
+(The weights above are what remains *after* the cut, which is 2 less than the
+`mw_pre` the edges in the paragraph above are computed from. 13.5 after = 15.5
+before, and so on.)
+
+The before column reconstructs the signal at the clamped strength 0.000 it used
+to earn at weight 2; bracketing u/chilidirigible's published 30 across its
+rounding gives 25.69–26.56, so the band is robust to it. It crossed, and the
+crossing reproduced across four independent fetches that day.
+
+**One of nineteen, and the other eighteen are not close** — the runner-up lands
+at 23, seven points short. So this is a *narrow* falsification and it is worth
+saying so: the strip is populated, not crowded, which is the same shape of
+answer Finding 4b gave for JIO-329's own 22–29 strip (4.1%).
+
+That reconstruction is exact rather than estimated, and the reason is the same
+clamp this whole finding is about: above CV 1.0 the old strength was not
+*approximately* zero, it was **0.000**, so re-adding 2 of weight at that
+strength recovers the old score with no modelling in between.
+
+That is a **direct falsification of the sentence this section would otherwise
+have ended on**, and both halves are kept here because the gap between them is
+the finding. Nobody in the *frozen* corpus was standing in the strip, and none
+of the 77 accounts in the live re-run above crossed — both true, both checkable,
+and neither able to see this. `test/corpus/` was captured **2026-08-18** and
+u/chilidirigible drifted one point in three days; the 77-account arm's
+before-scores top out at **24**, and u/chilidirigible was never in that arm at
+all — it entered arm B by `--include`, which Finding 4b excludes from its rates
+by design. Two zero-crossing samples were never evidence that the strip is
+empty, and a third one, taken live, has now found the account standing in it.
+
+`node scripts/measure-interval-crossing.mjs --all-humans` is this measurement,
+and unlike the
+three `measure-*.mjs` scripts above **it goes to the network** — necessarily, and
+that is the point rather than a lapse. The frozen corpus is what hid this for
+three days, so a question about drift cannot be asked of the snapshot the drift
+is measured against. It is the one `measure-*` script deliberately left off
+`test/corpus.test.js`'s no-network allowlist, and the guard's own comment says
+so. It re-fetches accounts this repo already names, so it can tell you the
+invariant broke and **cannot** tell you how crowded the strip is; Finding 4b's
+whole-ranking sweep is the tool for that.
+
+**The stake, because it is sharper than a caveat.** `test/corpus/` freezes
+profiles, so `npm run evaluate` prints `Separation on automation — no human
+above low, no bot at low: HOLDS` and exits 0. Against a corpus **re-captured
+today** it would print `BROKEN`, name u/chilidirigible, and exit **1** —
+`evaluate.mjs` gates its exit code on that invariant, so this is a red build and
+not a softer table. The headline separation is therefore not comfortably true;
+it is true *of a 2026-08-18 snapshot*, at exactly the boundary, on one point of
+drift. Whether to re-capture the corpus is a call for the repo's owner rather
+than something to be absorbed quietly here, and it is written down so that the
+day it flips reads as a confirmation instead of a surprise.
 
 **The remaining half of JIO-329 is now priced against this new baseline.**
 Dropping `conversation-depth` for ordinary repliers as well would take

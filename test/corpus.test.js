@@ -373,6 +373,15 @@ test('every canonical replacement still matches the pattern it stands in for', (
  * published way to reproduce EVALUATION.md Findings 4c, 4d and 4e, and a
  * measurement that quietly re-fetched would be measuring a different window
  * from the one the finding was written against.
+ *
+ * `measure-interval-crossing.mjs` is the one `measure-*` script NOT on this
+ * list, and its absence is deliberate rather than an oversight -- adding it
+ * here would be the mistake. It exists to ask whether JIO-346 pushed a real
+ * person over the band edge TODAY, and Finding 4e's answer is yes for
+ * u/chilidirigible, which neither the corpus nor a same-day sweep could see: the
+ * corpus was captured 2026-08-18 and that account drifted the one point that was
+ * the whole margin. A question about drift cannot be answered from the snapshot
+ * the drift is measured against, so that script must fetch.
  */
 test('nothing on the evaluate path can reach the network', () => {
   const forbidden = /from\s+['"][^'"]*(?:sources\/arcticShift|capture-corpus)/;
@@ -392,4 +401,16 @@ test('nothing on the evaluate path can reach the network', () => {
     assert.ok(!/\bfetch\s*\(/.test(code), `${rel} calls fetch`);
     assert.ok(!forbidden.test(code), `${rel} imports something that fetches`);
   }
+
+  // The allowlist above is a list of things that must NOT fetch, so a script
+  // dropping off it is invisible -- and dropping this one off is the specific
+  // regression worth naming.
+  const LIVE = 'scripts/measure-interval-crossing.mjs';
+  assert.ok(!paths.includes(LIVE),
+    `${LIVE} must stay OFF the no-network list — see the note above`);
+  const live = fs.readFileSync(path.join(ROOT, LIVE), 'utf8');
+  assert.ok(forbidden.test(live.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '')),
+    'measure-interval-crossing.mjs must still reach the live API: pointing it at test/corpus/ '
+    + 'would make it agree with the snapshot by construction, which is the exact failure '
+    + 'EVALUATION.md Finding 4e exists to record');
 });
