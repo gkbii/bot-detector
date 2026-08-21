@@ -26,6 +26,11 @@ in dispute.
 | 17 thread humans | **low** ×17 (0–22) | **low** ×17 (0–17) | moderate/high ×17 (33–73) |
 | 8 declared bots | **moderate** ×7, **high** ×1 | low ×6, moderate ×2 | low ×3, moderate ×5 |
 
+*That table is the 2026-08-05 live run and is left exactly as it printed. It
+has moved four times since, every time on purpose and every time in Finding 4;
+`npm run evaluate` reprints today's from the 27 frozen profiles in
+`test/corpus/`, and Finding 4's closing note below carries that output.*
+
 No human scored above `low` on automation and no bot scored `low`. The bands do
 not overlap at all, which is the result that had to hold before anything else
 was worth reporting. The evidence strings are also genuinely readable —
@@ -364,6 +369,89 @@ is now **two of eight**, and all three of its bullets are closed. Finding 4e has
 the measurement, and the human ceiling moved 25 -> 29 to get it, which is the
 part that is not free — including one human who **does** cross on live data
 fetched the same day, which 4e states in full.
+
+**CLOSED 2026-08-21 (JIO-348), and the decision is that the ceiling was resolved
+by signal semantics rather than by moving weights.** That is checkable rather
+than a statement of intent. `BAND_THRESHOLDS = { moderate: 30, high: 65 }` in
+[axis.js](extension/lib/scoring/axis.js) is what it was in `a70e0d6`, the
+scoring core's first commit, and
+`git diff 1c13185~1 HEAD -- extension/lib/scoring/axis.js` — the whole span of
+the four remedies — prints nothing at all. No existing signal's weight moved
+either: `sustained-posting-rate` was *added* at weight 2 and the other three
+remedies are an `unmeasured()` at a pole or a taper. Each of the four changed
+what a signal is allowed to *say*; none changed what a signal is worth, and none
+changed where a band begins.
+
+The distinction is the finding. Closing a ceiling by lowering the `high` edge
+would have moved all 27 accounts, the humans included, and bought the headline
+by making the tool readier to accuse. Restating what a signal can read moves
+only the accounts that signal was wrong about — which is why JIO-345 and
+JIO-347 touched no human automation score at all, and why the one remedy that
+did move humans says so in its own section rather than here.
+
+The four, in the order they landed:
+
+* **JIO-344** (first bullet) — `sustained-posting-rate` added at weight 2,
+  measuring throughput across exactly the window `posting-hour-dead-zone`
+  refuses. Bots' automation cell `moderate x6, high x2`, floor 39. No human
+  moved.
+* **JIO-345** (third bullet) — `conversation-depth` returns `unmeasured()` for
+  an account with no top-level comment anywhere in its window. `moderate x5,
+  high x3`, floor 44. No human moved.
+* **JIO-346** (second bullet) — `interval-regularity` returns `unmeasured()`
+  above CV 1.0, the ceiling its own `rescale` already clamped at. `moderate x2,
+  high x6`, floor 54. Ten humans moved and the human ceiling went 25 -> 29,
+  which is the part that was not free.
+* **JIO-347** (the `topical-breadth` paragraph) — breadth multiplied by items
+  per group, the taper withheld below 45 grouped items. Automation untouched;
+  the bots' *authenticity* cell became `low x8` (3–17).
+
+**The table, re-measured.** `npm run evaluate` on 2026-08-21 against the same 27
+frozen profiles, verbatim (exit 0; `npm test` 167/167 the same day):
+
+```
+                   automation                    agenda               authenticity
+17 thread humans   low ×17 (0–20)                low ×17 (0–13)       moderate ×10, high ×7 (38–81)
+2 prolific humans  low ×2 (16–29)                low ×2 (19–19)       low ×1, moderate ×1 (16–52)
+8 declared bots    moderate ×2, high ×6 (54–89)  moderate ×8 (36–64)  low ×8 (3–17)
+
+Separation on automation — no human above `low`, no bot at `low`: HOLDS
+```
+
+Separation has not regressed; it is wider than on the day this document was
+written. The bots' floor went 35 -> 39 -> 44 -> 54 across the four remedies,
+each step quoted above, while the human ceiling moved exactly once, 25 -> 29 at
+JIO-346. Nothing at all sits in the 25 points between them.
+
+**What did not close, because it is the thing that gets hidden.** JIO-348 asked
+for no declared bot capped at `moderate`, and that is not what landed: it is
+**two of eight** — u/Anti-ThisBot-IB at 54 and u/sub_doesnt_exist_bot at 58,
+down from seven of eight. The change that would have delivered the sentence as
+written is dropping the `high` edge from 65 to 54, and that is the one change
+this finding exists to refuse. It promotes by redefinition rather than by
+evidence, and `BAND_THRESHOLDS` is shared by all three axes, so it would take
+eight thread humans from authenticity `moderate` to `high` and three bots from
+agenda `moderate` to `high` at the same time, on no new measurement whatsoever.
+
+The residual two are the *first* bullet, unchanged. u/Anti-ThisBot-IB's 299
+comments span 2.3 days against that signal's 3-day minimum, so the weight-3
+`posting-hour-dead-zone` is still `insufficient-data` for it; with
+`interval-regularity` and `conversation-depth` also `unmeasured()` by JIO-346
+and JIO-345, only 9.0 of the axis's 15.5 weight is measured for it at all —
+over `axis.js`'s half-weight gate, but not by much. JIO-344 covered that window
+with a weight-2 substitute rather than closing the gap, and a weight-2
+substitute for a weight-3 signal cannot restore the full range.
+u/sub_doesnt_exist_bot is the opposite case and the narrower one: it is the
+single frozen account `interval-regularity` still measures (CV 0.94, Finding
+4e), and it reads `low` there and on `cross-thread-bursts` and `karma-velocity`
+because on those three it genuinely is not extreme.
+
+So the ceiling is a sensitivity limit and no longer a separation risk: both
+survivors sit at least 25 points clear of the highest-scoring human in either
+cohort, and `moderate` on automation was never an all-clear. A reader who wants the number
+to be eight of eight should look for the fourth mechanism, not at
+`BAND_THRESHOLDS`.
+
 ## Finding 4a — the prolific human the rate signal "cannot see" is real, and most of the accounts it catches are people
 
 Measured live on **2026-08-20**, against the API, by

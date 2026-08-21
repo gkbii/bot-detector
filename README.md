@@ -214,14 +214,16 @@ question has no answer yet. The section is below; the short version is that
 u/AutoModerator was in 307 subreddits and took the largest vouch this signal can
 award anybody.
 
-Two signals in the automation column argue in **one direction only**, and for
+Three signals in the automation column argue in **one direction only**, and for
 the same reason as each other. Sustained posting throughput is `unmeasured`
-below an ordinary rate, and Never replies to replies is `unmeasured` for an
-account that only ever replies. An ordinary posting rate and an ordinary reply
-rate are both the *absence* of evidence of a machine rather than evidence of a
-person — and a summon-bot has both. There is a section on each below; the short
-version is that scoring either as a clean zero handed u/RemindMeBot a
-full-weight vote for its own humanity.
+below an ordinary rate, Mechanical posting rhythm is `unmeasured` above an
+uneven one, and Never replies to replies is `unmeasured` for an account that
+only ever replies. An ordinary rate, an uneven cadence and an ordinary reply
+rate are all the *absence* of evidence of a machine rather than evidence of a
+person — and a summon-bot has all three, because it runs when the people
+summoning it say so. There is a section on each below; the short version is
+that scoring any one of them as a clean zero handed u/RemindMeBot a full-weight
+vote for its own humanity.
 
 Three rules live in `axis.js` rather than in each scorer's good intentions:
 
@@ -1233,9 +1235,14 @@ paragraph, because that is now the point. The thread humans now top out at 20
 and the lowest bot is 54. The two prolific humans admitted afterwards sit at 16
 and 29, so the human ceiling across both cohorts is 29 and nothing sits between
 29 and 54 — a wider gap bought at the cost of four points of headroom under the
-band edge, which is the trade the JIO-346 section prices out. The other two columns have moved for less deliberate
-reasons. The bots' agenda column was `low ×6, moderate ×2` and is now `moderate
-×8` — including all four of the accounts EVALUATION.md hand-read itself — and
+band edge, which is the trade the JIO-346 section prices out. **None of the four
+moved a band edge to get there**, which is EVALUATION.md Finding 4's closing
+decision and the one claim in this section a reader can check with a `git diff`:
+`BAND_THRESHOLDS` is unchanged since the scoring core's first commit and
+`axis.js` is untouched across all four remedies.
+
+The other two columns have moved for less deliberate reasons. The bots' agenda
+column was `low ×6, moderate ×2` and is now `moderate ×8` — including all four of the accounts EVALUATION.md hand-read itself — and
 their authenticity column went from `low ×3, moderate ×5` to `low ×5, moderate
 ×3`. That is not a regression this corpus caught, because there was no baseline
 to catch it against; it is sixteen months of fresh history, JIO-290's two
