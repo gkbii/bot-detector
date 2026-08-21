@@ -309,6 +309,69 @@ and the bots' cell in the table above becomes `moderate x6, high x2` with the
 floor at 39. The ceiling is raised, not removed: the other two bullets
 (`interval-regularity` measuring demand, `conversation-depth` inverting for
 reply-bots) are JIO-329 and are still open.
+## Finding 4a — the prolific human the rate signal "cannot see" is real, and most of the accounts it catches are people
+
+Measured live on **2026-08-20**, against the API, by
+`scripts/probe-prolific-humans.mjs`. Reproduce with that script; it is the only
+way this question can be asked, because no re-run of `test/corpus/` can answer
+it — the 17 humans in there are the authors of one r/politics thread and are
+ordinary-volume commenters by construction.
+
+**Sample.** Two content-blind sweeps of 22 subreddits, ~23,000 recent comments,
+16,264 distinct authors. The top of each ranking — 48 accounts, AutoModerator
+excluded as already frozen — was fetched through `fetchAccount` and scored with
+`scoreAccount`. 44 produced a rate. **7 fired the signal. Six of the seven read
+as unmistakably human on a hand-read of their bodies.**
+
+| account | items | span | per hour | hand-read | automation |
+|---|---:|---:|---:|---|---|
+| u/humdingler | 300 | 2.1d | **5.90** | human | low 14 |
+| u/BriackYOLO | 316 | 2.4d | **5.53** | human | low 10 |
+| u/regardus_maximus | 300 | 3.0d | **4.13** | human | low 8 |
+| u/zombawombacomba | 300 | 3.2d | **3.92** | human | low 10 |
+| u/verified-trader | 307 | 3.4d | 3.76 | bot (WSB BanBet) | moderate 40 |
+| u/chilidirigible | 300 | 3.7d | **3.42** | human | low 25 |
+| u/Mg29reaper | 322 | 4.2d | **3.18** | human | low 7 |
+
+**There is no gap.** README says the frozen humans top out at 0.92/h and the
+five bots run 5.5–13,039/h, and that "the gate sits in the gap". The gap is an
+artifact of a corpus with no prolific human in it. u/humdingler, a person
+posting reaction GIFs in r/Superstonk, sustains **5.90/h — above u/RemindMeBot's
+5.5/h**, the slowest of the five bots the signal was added for. The two
+populations overlap, so **no value of `ORDINARY_ITEMS_PER_HOUR` separates
+them**: raising the gate to 6 would silence RemindMeBot and still measure
+u/humdingler.
+
+**The decision is right anyway, for a different reason than the one written
+down.** Every one of the six people stays `low`. What protects them is the
+*shape* of the signal, not the position of its gate — one-directional, floored
+at `RATE_FLOOR_STRENGTH = 0.5`, log-scaled, and weight 2 of 15.5. A human at
+5.90/h earns strength 0.573, i.e. 0.073 above neutral. That is the sentence the
+README should be making, and `ORDINARY_ITEMS_PER_HOUR` should not be moved on
+the strength of this finding.
+
+**What it costs, in the world this signal was built for.** JIO-329 will take
+`conversation-depth` and `interval-regularity` to unmeasured — the same premise
+README uses for its own 9.0/15.5 arithmetic, applied here to humans instead of
+bots. Under it, **u/chilidirigible, a fifteen-year r/anime regular, goes `low
+25` → `moderate 33`**, and the rate signal supplies the last +4 of it (without
+the signal: `low 29`). One real person crosses a band. Projections in this
+paragraph were computed on an instrumented copy with `axis.js`'s `stripInternal`
+bypassed, because published signals expose `band` and not `strength` by design;
+they are not reproducible from the public output.
+
+**A larger effect belongs to JIO-329, not here.** Dropping two signals that read
+**0.0** for ordinary people removes measured zeros from a weighted average and
+therefore raises it. Across the same 44 accounts, **28 scores rise and 2 fall**,
+and u/Mysterious_Sleep7443 crosses `low 23` → `moderate 33` at 0.53/h — a rate
+at which this signal never fires at all. JIO-329 needs its own live re-measure
+before it lands.
+
+**Still open.** The evidence string asserts throughput "above the 3 an hour a
+person keeps up", which is a claim about people that six live accounts refute,
+and it is printed *on the account being judged*. README's "gate sits in the gap"
+says the same thing. Per README's own rule, a prolific human belongs in
+`test/corpus/` — u/humdingler at 5.90/h is the account that pins it.
 
 ## What this evaluation does not establish
 
@@ -328,3 +391,10 @@ Finding 1a is not from this run at all — it is a defect in Finding 1's own fix
 found by auditing it a day later and measured against the live API on
 2026-08-18. It is filed here rather than in a ticket because a fix that reopens
 the hole it closed belongs next to the finding it claims to have closed.
+
+Finding 4a is not from this run either, and it is an audit of Finding 4's fix
+rather than of the original sample: 48 accounts from a content-blind sweep of 22
+subreddits, measured live on 2026-08-20 and classified by hand. Its six humans
+are a demonstration that the population exists, not a measured false-positive
+rate — the sweep was deliberately aimed at the busiest authors on the platform,
+so nothing here says how *common* a >3/h person is among ordinary accounts.

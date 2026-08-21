@@ -62,7 +62,8 @@ bot-detector/
     cache.js                 node:sqlite — profiles / verdicts / LLM reads, three TTLs
     username.js              normalisation as a security boundary (this value enters a URL)
   scripts/                   NOT shipped, NOT imported by anything, NOT run by npm test
-    capture-corpus.mjs       the one script here that fetches; rebuilds test/corpus/
+    capture-corpus.mjs       fetches; rebuilds test/corpus/
+    probe-prolific-humans.mjs fetches; looks for the >3/h person the corpus cannot hold
     evaluate.mjs             reprints EVALUATION.md's band table from test/corpus/, offline
     lib/bot-declaration.mjs  what counts as "this account declares itself a bot", and why twice
     lib/synthetic-bodies.mjs length-matched stand-ins for the 17 humans' comment text
@@ -445,6 +446,15 @@ diluted by the rest of the window, and 30 items is the floor below which the
 signal refuses to call anything a rate. If such an account turns up, it belongs
 in `test/corpus/` before the threshold is touched.
 
+**THIS BOUND FIRED — see EVALUATION.md, Finding 4a.** A content-blind live
+sweep on 2026-08-20 (`node scripts/probe-prolific-humans.mjs`) found seven
+accounts over the gate and **six of them hand-read as people**, topping out at
+5.90/h — above u/RemindMeBot's 5.5/h, so the two populations overlap and the
+"gap" two paragraphs up does not exist. All six still score `low`, because what
+protects them is this signal's shape rather than its gate's position; the
+paragraphs above have not yet been rewritten to say so, and no prolific human
+is in `test/corpus/` yet.
+
 ## The blind spot: an account the index has never heard of
 
 The defects above are false positives. This one is the opposite and it is
@@ -549,8 +559,12 @@ evaluation actually claimed.
 npm run evaluate                # the table, the invariants, and a diff. exit 1 if anything moved
 npm run evaluate -- --detail    # one line per account
 npm run evaluate -- --update    # accept today's scores as the new baseline
-node scripts/capture-corpus.mjs # the ONLY script here that touches the network
+node scripts/capture-corpus.mjs # rebuilds test/corpus/ from the live API
+node scripts/probe-prolific-humans.mjs   # hunts the prolific human — EVALUATION.md 4a
 ```
+
+Those two are the only scripts here that touch the network, and neither is part
+of `npm test`.
 
 `scoreAccount` is pure and the corpus is JSON, so `evaluate` is arithmetic on
 disk: no network, no `node_modules`, and `test/corpus.test.js` asserts that at
