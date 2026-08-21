@@ -168,6 +168,17 @@ A taper rather than dropping the signal outright: on the axis that exists to
 vouch, an unmeasured signal only hands its weight to the others, which would
 have raised every gamed bot's score instead of lowering it.
 
+A live sweep found the corpus margin was the corpus's own — real accounts run
+as low as 2.53 items per group, not 3.08, so the actual gap above the busiest
+bot is 0.47 rather than 1.02, thinner than the frozen numbers suggested but
+still no overlap. The same sweep caught the taper docking a genuine 25-item
+account for looking sitewide when it was really just short: below 45 grouped
+items — the smallest history in which an account could satisfy both reach and
+depth at once — the measure stops describing where an account spent its
+history and starts describing how little of one it has, so the taper is now
+withheld below that floor and the account keeps full reach credit instead of
+paying for its size.
+
 ## `corpus` turns the headline result into a command
 
 The claim the whole thing rests on is that the axes separate the accounts they
