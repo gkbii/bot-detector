@@ -16,7 +16,7 @@ things the browser cannot do: a Claude read of what an account actually argues,
 and a lookup cache shared between your machines. Nothing requires it.
 
 ```
-npm test        # 154 tests, and they pass with NO node_modules installed
+npm test        # 160 tests, and they pass with NO node_modules installed
 npm install     # only needed for the optional server's one dependency
 npm start       # the optional server
 ```
@@ -67,6 +67,7 @@ bot-detector/
     measure-jio329.mjs       fetches; the before/after JIO-329 sweep — EVALUATION.md 4b
     measure-agenda-shape.mjs offline; ranks the corpus on the two shape signals — EVALUATION.md 4c
     measure-reply-share.mjs  offline; the corpus reply-share spread — EVALUATION.md 4d
+    measure-interval-cv.mjs  offline; the corpus interval-CV spread — EVALUATION.md 4e
     evaluate.mjs             reprints EVALUATION.md's band table from test/corpus/, offline
     lib/bot-declaration.mjs  what counts as "this account declares itself a bot", and why twice
     lib/synthetic-bodies.mjs length-matched stand-ins for the 19 humans' comment text
@@ -631,8 +632,8 @@ an ordinary rate is `unmeasured` and never a vote either way. Floored at
 to `SATURATED_ITEMS_PER_HOUR`, so the distance from 3/h to 300/h is what the
 strength is spent on rather than the distance from 3/h to 6/h. And weight 2 of
 15.5. Put together, the 5.90/h human earns strength **0.573** — 0.073 above
-neutral — and scores automation `low 14`. u/humdingler (5.90/h, `low 14`) and
-u/chilidirigible (3.42/h, `low 25`) are frozen in `test/corpus/` and
+neutral — and scores automation `low 16`. u/humdingler (5.90/h, `low 16`) and
+u/chilidirigible (3.42/h, `low 29`) are frozen in `test/corpus/` and
 `test/corpus.test.js` asserts both halves of that: that they still clear the
 gate, and that they are still `low`. A claim about shape is exactly the kind
 that keeps sounding true after it stops being true, so it is pinned to two real
@@ -646,10 +647,10 @@ and a caught human is a false accusation.
 **The 82-second window is what fixes the minimum-span guard at 60 seconds, and
 the arithmetic is not close.** Before this signal the five bots measured 10.5
 of the axis's 13.5 weight, with only the hour profile missing. Both remaining
-signals invert on reply-bots, and both were then expected to go: JIO-345 has
-since taken `conversation-depth` to unmeasured for those five and JIO-329 would
-take `interval-regularity` as well — which is 7.0/13.5 = 0.519, one signal above
-`MIN_MEASURED_WEIGHT_FRACTION`. Add
+signals invert on reply-bots, and both have since gone: JIO-345 took
+`conversation-depth` to unmeasured for those five and JIO-346 has now taken
+`interval-regularity` at the pole where it inverts — which is 7.0/13.5 = 0.519,
+one signal above `MIN_MEASURED_WEIGHT_FRACTION`. Add
 this signal and have it *fire*: 9.0/15.5 = 0.581, and the axis still reports.
 Add it and have it stay silent — which any minimum span of an hour or more
 would do to AutoModerator — and it is 7.0/15.5 = **0.452**, below the gate.
@@ -665,8 +666,10 @@ other 23 hours; this is the average over the whole window and is diluted by
 every quiet stretch in it — an account that drains a queue once a day scores
 there and not here. `interval-regularity` is a coefficient of variation, which
 is unitless on purpose and reports only whether a rhythm is *mechanical*, so a
-summon-driven bot posting as irregularly as the humans summoning it reads clean.
-This asks the question CV deliberately refuses: not how evenly, but how much.
+summon-driven bot posting as irregularly as the humans summoning it is now
+`unmeasured` there (JIO-346) rather than scored clean. This asks the question CV
+deliberately refuses, and asks it of a window CV has to give up on: not how
+evenly, but how much.
 
 **What it moved, and what it did not.** Against the frozen corpus, six scores
 changed and **every one of them is a bot**: AutoModerator `moderate 63 -> high
@@ -708,21 +711,26 @@ evening is diluted by the rest of the window, and 30 items is the floor below
 which the signal refuses to call anything a rate.
 
 **The residue that is still real, and it has a name and a number.** At 3.42/h
-u/chilidirigible scores automation `low 25` — well above the 17 the thread
+u/chilidirigible scores automation `low 29` — well above the 20 the thread
 humans top out at, mostly on `posting-hour-dead-zone`, which for once *does*
 measure them (a 3.7-day window, and a long-running r/anime regular with no
-6-hour quiet stretch in it). Recomputed from that frozen profile under
-JIO-329's premise — `conversation-depth` and `interval-regularity` both going
-unmeasured — they come out **`moderate 32`, and without this signal `low 28`**.
-So this signal supplies the 4 points that cross the band, and JIO-329 supplies
-the rest by removing two measured near-zeros from a weighted average. It is
-written down before JIO-329 lands rather than found afterwards, and
-u/chilidirigible is in the corpus precisely so that `npm run evaluate` fails on
-the day it happens instead of printing `OK`. (Those two projections are not
+6-hour quiet stretch in it). That was `low 25` until JIO-346 took
+`interval-regularity` to unmeasured above CV 1.0; **half of JIO-329's premise
+has now landed, and this account absorbed 4 of its points.** Recomputed from
+the frozen profile with the other half applied — `conversation-depth` going
+unmeasured for ordinary repliers too — they come out **`moderate 32`, and
+without this signal `low 28`**, which are the same two numbers this section
+projected before either change landed. So this signal supplies the 4 points
+that cross the band, and JIO-329 supplies the rest by removing measured
+near-zeros from a weighted average. It was written down before any of it landed
+rather than found afterwards, and u/chilidirigible is in the corpus precisely
+so that `npm run evaluate` fails on the day it happens instead of printing
+`OK` — which it did, on 2026-08-21, twice. (Those two projections are not
 reproducible from the public verdict — `axis.js` publishes `band` and not
 `strength` by design — so they were computed on an instrumented copy of
 `stripInternal`. EVALUATION.md Finding 4a measured 33/29 for the same account
-against its live 2026-08-20 window; 32/28 is the frozen 2026-08-21 one.)
+against its live 2026-08-20 window; 32/28 is the frozen 2026-08-21 one, and it
+reproduced unchanged after JIO-346 spent 2 of the 3.5 weight.)
 
 **"A cost of the two changes together" was the wrong reading, and the sentence
 that said so is gone.** It was true of u/chilidirigible and it does not
@@ -788,8 +796,9 @@ u/same_subreddit_bot 51 → 57, u/sneakpeekbot 50 → 57, u/Anti-ThisBot-IB 39 �
 44. Not one human moved by a point, because all 19 have top-level comments and
 for all 19 the signal is measured exactly as it was. The bot floor rose from 39
 to 44 against an unchanged human ceiling of 25, so the gap widened from 14
-points to 19, and Finding 4's "seven of eight top out at `moderate`" is now
-five of eight.
+points to 19, and Finding 4's "seven of eight top out at `moderate`" became
+five of eight. (JIO-346, the section below, then took it to two of eight — and
+moved the human ceiling, which this change did not.)
 
 **A bound that was checked rather than assumed:** taking 1.5 of weight away
 from the five loudest bots could have pushed them under
@@ -812,7 +821,95 @@ this signal. Withdrawing *that* is JIO-329 — 3.5 of 15.5 weight, together with
 `interval-regularity` — and it moves the `moderate` band edge from 30 to 22.2
 for every account on the platform, at a measured cost on real people that this
 change deliberately does not pay. The two are separable and this one is the
-half that costs nobody a band.
+half that costs nobody a band. The section below is the other signal in that
+pair, gated the same way and on the same day, and it is **not** free: it moved
+the human ceiling four points.
+
+## An uneven cadence is not evidence of a person
+
+The last of Finding 4's three reasons, closed on the same day as the one above
+and in the same shape — and unlike that one, **this one cost real people
+points.**
+
+`interval-regularity` scored `1 - rescale(cv, 0.15, 1.0)`. A cadence too even
+to be anyone's day is a scheduler, which is true and is the half of the signal
+that works. But `rescale` **clamps at its ceiling**, so every account from CV
+1.0 upward earned **strength exactly 0.000** — the strongest vote for humanity
+this axis can cast, at weight 2 — and the badge told them *"that is the
+irregular, clumpy spacing typical of a person"*.
+
+**A summon-driven bot does not own its own rhythm.** u/RemindMeBot posts when
+people ask it to, so its irregularity is its users' irregularity, and the tool
+was reading demand for the account as evidence about the account. Everything
+that arrives on human demand was actively discounted for arriving on human
+demand.
+
+**The number to look at is how many accounts scored the same.** `node
+scripts/measure-interval-cv.mjs` (no network — `test/corpus/` and nothing
+else): **26 of the 27 frozen accounts sit at or above CV 1.0**, all 19 humans
+(1.53 to 5.29) and seven of the eight declared bots (1.08 to 16.09), and every
+one of them scored 0.000. The live arm is starker — re-run against the
+whole-ranking sweep of ten busy subreddits harvested for EVALUATION.md Finding
+4b, **all 77 scored accounts returned strength exactly 0.000**. Not 77
+near-zeros; one constant, 77 times. A signal that returns the same number for a
+content-blind sample of a live platform is not a weak signal, it is an unread
+one.
+
+**So the gate is the ceiling of the existing scale, not a number picked next to
+a population.** At or above CV 1.0 the signal returns `unmeasured()` — axis.js
+rule 3 again, applied to a *pole*. Finding 4d had to reason its way to a
+categorical cut because its margin was three comments wide; here the arithmetic
+had already chosen, because 1.0 is where `rescale` stopped varying. Below it
+nothing changes: the strength still climbs to a full-weight 1.0 at CV 0.15, and
+u/sub_doesnt_exist_bot (CV 0.94) is the one frozen account still measured.
+
+**The alternative, and why it was not built.** The other option on the ticket
+was to measure **response latency** — parent comment to this account's reply —
+which is a rhythm the account genuinely does own. It was probed live rather
+than assumed: `/api/comments/ids?ids=` returns `created_utc` 120 ids at a time
+and all 299 of u/RemindMeBot's parents are comments, so it is buildable. It
+needs a new `AccountProfile` field, a second fetch pass in `arcticShift.js` and
+a re-capture of all 27 frozen profiles before `npm run evaluate` could measure
+it — and PLATFORMS.md's contiguity rule forbids feeding this signal family from
+a payload whose contiguity cannot be proven, which parent timestamps fetched by
+id lookup cannot. That is a ticket of its own if it is ever worth one.
+
+**What it moved.** 17 of the 81 frozen scores. Seven bots: u/RemindMeBot `high
+73 → 89`, u/RepostSleuthBot `high 75 → 89`, u/AutoModerator `high 69 → 82`,
+u/AmputatorBot `moderate 60 → high 71`, u/same_subreddit_bot and u/sneakpeekbot
+both `moderate 57 → high 69`, u/Anti-ThisBot-IB `moderate 44 → 54`. Three of
+those cross a band, the bot floor rises from 44 to 54, and Finding 4's "seven of
+eight top out at `moderate`" becomes **two of eight**. The worst
+measured-weight case is 9.0/15.5 = **0.581**, still 1.25 of weight clear of
+`MIN_MEASURED_WEIGHT_FRACTION`, so no bot was gated into `insufficient-data` by
+its own fix.
+
+**And ten humans, which is the part that is not free.** They move +1 to +4 and
+all stay `low`, but **u/chilidirigible's ceiling went 25 → 29, one point under
+the band edge.** That is not an accident of one profile: removing 2 of 15.5
+weight multiplies an ordinary score by 13.5/11.5 = 1.17, and a multiplier on the
+score is a divisor on the band edge, so `moderate` effectively begins at **25.6**
+on the old scale rather than at 30. Nobody in the corpus was standing in the
+26–29 strip and none of the 77 live accounts crossed, but Finding 4b's two arms
+already disagreed about whether that strip is populated inside a single window.
+Two zero-crossing samples are not an empty strip; the band-edge arithmetic is
+the durable half, and it says this change spent most of the human cost JIO-329
+was priced for.
+
+**Two bounds, stated because neither is visible in a passing suite.**
+
+This signal now says **nothing at all** about 26 of the 27 frozen accounts — 2
+of the axis's 15.5 weight going quiet for very nearly everybody. That is a real
+loss of coverage, not a free fix. It is also the honest reading of what was
+already there, because those 26 scores were the same 0.000 whatever the account
+was.
+
+And **a scheduler that jitters past CV 1.0 buys exactly the silence a person
+gets.** It is not a new hole — it collected a confident vote for its humanity
+before, which was worse — but this does not close it, and no population
+available to this repo holds an adversarial bot to check against.
+`test/scoring.test.js` asserts both sides of the gate, so the escape stays a
+stated bound rather than something found later.
 
 ## The blind spot: an account the index has never heard of
 
@@ -926,15 +1023,16 @@ node scripts/probe-prolific-humans.mjs   # hunts the prolific human — EVALUATI
 node scripts/measure-jio329.mjs --corpus # JIO-329's cost, offline; --harvest/--fetch go live
 node scripts/measure-agenda-shape.mjs    # the agenda hold — EVALUATION.md 4c, offline
 node scripts/measure-reply-share.mjs     # the reply-share spread — EVALUATION.md 4d, offline
+node scripts/measure-interval-cv.mjs     # the interval-CV spread — EVALUATION.md 4e, offline
 ```
 
 `capture-corpus.mjs` and `probe-prolific-humans.mjs` are the only two that
 always touch the network, and neither is part of `npm test`.
 `measure-jio329.mjs` goes either way: `--corpus`, `--variants` and `--report`
 read `test/corpus/` or a state file already on disk and fetch nothing, while
-`--harvest`/`--fetch` go live. `measure-agenda-shape.mjs` and
-`measure-reply-share.mjs` never fetch at all — like `evaluate`, they are JSON in
-and arithmetic out.
+`--harvest`/`--fetch` go live. `measure-agenda-shape.mjs`,
+`measure-reply-share.mjs` and `measure-interval-cv.mjs` never fetch at all —
+like `evaluate`, they are JSON in and arithmetic out.
 
 `scoreAccount` is pure and the corpus is JSON, so `evaluate` is arithmetic on
 disk: no network, no `node_modules`, and `test/corpus.test.js` asserts that at
@@ -945,15 +1043,18 @@ that would look helpful.
 and scored by the code of that day, the automation column came back *exactly*
 as EVALUATION.md printed it — `low ×17` for the humans, `moderate ×7, high ×1`
 for the bots — and the separation the whole evaluation rested on holds with
-room to spare. It has since moved twice, both times on purpose and both times
-in one direction. `sustained-posting-rate` took the bots to `moderate ×6,
-high ×2` and their floor from 35 to 39, and JIO-345's reply-pole cut took them
-to `moderate ×5, high ×3` and the floor to 44 — neither touching a single human
-score. Both are sections above and both are a diff in `expected.json` rather
-than a paragraph, because that is now the point. The thread humans still top out
-at 17 and the lowest bot is 44. The two prolific humans admitted afterwards sit
-at 14 and 25, so the human ceiling across both cohorts is 25 and nothing still
-sits between 25 and 44. The other two columns have moved for less deliberate
+room to spare. It has since moved three times, every time on purpose and
+every time in one direction. `sustained-posting-rate` took the bots to
+`moderate ×6, high ×2` and their floor from 35 to 39; JIO-345's reply-pole cut
+took them to `moderate ×5, high ×3` and the floor to 44, touching no human
+score at all; and JIO-346's cadence-pole cut took them to **`moderate ×2,
+high ×6`** and the floor to **54**, which did move ten humans. All three are
+sections above and all three are a diff in `expected.json` rather than a
+paragraph, because that is now the point. The thread humans now top out at 20
+and the lowest bot is 54. The two prolific humans admitted afterwards sit at 16
+and 29, so the human ceiling across both cohorts is 29 and nothing sits between
+29 and 54 — a wider gap bought at the cost of four points of headroom under the
+band edge, which is the trade the JIO-346 section prices out. The other two columns have moved for less deliberate
 reasons. The bots' agenda column was `low ×6, moderate ×2` and is now `moderate
 ×8` — including all four of the accounts EVALUATION.md hand-read itself — and
 their authenticity column went from `low ×3, moderate ×5` to `low ×5, moderate
@@ -1405,7 +1506,7 @@ source's own unit.
 ## Tests
 
 ```
-npm test                                  # both suites, 154 tests
+npm test                                  # both suites, 160 tests
 node --test test/scoring.test.js           # one file
 npm run evaluate                          # EVALUATION.md's band table, off frozen profiles
 ```

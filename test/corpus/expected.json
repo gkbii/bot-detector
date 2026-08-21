@@ -16,8 +16,8 @@
   },
   "AmputatorBot": {
    "automation": {
-    "band": "moderate",
-    "score": 60
+    "band": "high",
+    "score": 71
    },
    "agenda": {
     "band": "moderate",
@@ -31,7 +31,7 @@
   "Anti-ThisBot-IB": {
    "automation": {
     "band": "moderate",
-    "score": 44
+    "score": 54
    },
    "agenda": {
     "band": "moderate",
@@ -59,7 +59,7 @@
   "AutoModerator": {
    "automation": {
     "band": "high",
-    "score": 69
+    "score": 82
    },
    "agenda": {
     "band": "moderate",
@@ -73,7 +73,7 @@
   "Biscopiphany": {
    "automation": {
     "band": "low",
-    "score": 9
+    "score": 11
    },
    "agenda": {
     "band": "low",
@@ -101,7 +101,7 @@
   "DooberBooberDoo": {
    "automation": {
     "band": "low",
-    "score": 5
+    "score": 6
    },
    "agenda": {
     "band": "low",
@@ -129,7 +129,7 @@
   "KevinGreeneSolar": {
    "automation": {
     "band": "low",
-    "score": 5
+    "score": 6
    },
    "agenda": {
     "band": "low",
@@ -143,7 +143,7 @@
   "MundaneFacts": {
    "automation": {
     "band": "low",
-    "score": 17
+    "score": 20
    },
    "agenda": {
     "band": "low",
@@ -185,7 +185,7 @@
   "RemindMeBot": {
    "automation": {
     "band": "high",
-    "score": 73
+    "score": 89
    },
    "agenda": {
     "band": "moderate",
@@ -199,7 +199,7 @@
   "RepostSleuthBot": {
    "automation": {
     "band": "high",
-    "score": 75
+    "score": 89
    },
    "agenda": {
     "band": "moderate",
@@ -227,7 +227,7 @@
   "Tobeck": {
    "automation": {
     "band": "low",
-    "score": 5
+    "score": 6
    },
    "agenda": {
     "band": "low",
@@ -255,7 +255,7 @@
   "___AirBuddDwyer___": {
    "automation": {
     "band": "low",
-    "score": 7
+    "score": 8
    },
    "agenda": {
     "band": "low",
@@ -269,7 +269,7 @@
   "batmansthebomb": {
    "automation": {
     "band": "low",
-    "score": 5
+    "score": 6
    },
    "agenda": {
     "band": "low",
@@ -297,7 +297,7 @@
   "chilidirigible": {
    "automation": {
     "band": "low",
-    "score": 25
+    "score": 29
    },
    "agenda": {
     "band": "low",
@@ -311,7 +311,7 @@
   "humdingler": {
    "automation": {
     "band": "low",
-    "score": 14
+    "score": 16
    },
    "agenda": {
     "band": "low",
@@ -325,7 +325,7 @@
   "runnertrailsBay": {
    "automation": {
     "band": "low",
-    "score": 8
+    "score": 9
    },
    "agenda": {
     "band": "low",
@@ -338,8 +338,8 @@
   },
   "same_subreddit_bot": {
    "automation": {
-    "band": "moderate",
-    "score": 57
+    "band": "high",
+    "score": 69
    },
    "agenda": {
     "band": "moderate",
@@ -352,8 +352,8 @@
   },
   "sneakpeekbot": {
    "automation": {
-    "band": "moderate",
-    "score": 57
+    "band": "high",
+    "score": 69
    },
    "agenda": {
     "band": "moderate",

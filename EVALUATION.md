@@ -308,6 +308,7 @@ compounding reasons, all visible in the signal detail:
 * **`interval-regularity` measures demand, not the poster.** Summon-driven bots
   are irregular because their humans are. RemindMeBot: *"CV 1.26 … the
   irregular, clumpy spacing typical of a person."*
+  *(FIXED 2026-08-21, JIO-346 — Finding 4e below.)*
 * **`conversation-depth` inverts for reply-bots.** RemindMeBot replies to a
   commenter 100% of the time, which the signal reads as conversational.
   *(FIXED 2026-08-21, JIO-345 — Finding 4d below.)*
@@ -349,7 +350,18 @@ full-weight vote for humanity — without withdrawing the discount from ordinary
 reply behaviour, which is the 3.5-weight change Finding 4b priced in real
 people. Five more frozen scores move, all bots, all up, and the bots' cell
 becomes `moderate x5, high x3` with the floor at 44. Finding 4d has the
-measurement. The second bullet, `interval-regularity`, is still open.
+measurement.
+
+**SECOND BULLET FIXED 2026-08-21 (JIO-346), the same way and on the same day.**
+`interval-regularity` is `unmeasured()` above CV 1.0 — the ceiling its own
+`rescale` already clamped at, where 26 of the 27 frozen accounts sit and every
+one of them scored the identical 0.000. Three more bots cross to `high`, no
+human crosses anything, and the bots' cell becomes **`moderate x2, high x6`
+with the floor at 54** against a human ceiling of 29. Finding 4's headline —
+seven of eight declared bots topping out at `moderate` — is now **two of
+eight**, and all three of its bullets are closed. Finding 4e has the
+measurement, and the human ceiling moved 25 -> 29 to get it, which is the part
+that is not free.
 ## Finding 4a — the prolific human the rate signal "cannot see" is real, and most of the accounts it catches are people
 
 Measured live on **2026-08-20**, against the API, by
@@ -920,6 +932,145 @@ a vote for its humanity" is a statement about five accounts. It is not a
 false-negative rate, and the corpus holds no *adversarial* reply-bot — one
 built to look conversational — because no such population is available to
 freeze.
+
+## Finding 4e — an uneven cadence scored as a person, and 26 of 27 accounts scored the same number
+
+Measured on **2026-08-21** by `scripts/measure-interval-cv.mjs`, over the 27
+accounts frozen in `test/corpus/`. **No network**, like Findings 4c and 4d:
+`scoreAutomation` is pure and the corpus is JSON, so this is arithmetic on disk
+and reproduces byte-for-byte. Run it rather than trusting the tables below.
+
+This is Finding 4's second bullet, asked properly, and it is the last of the
+three. Like the third it had been sitting inside JIO-329, which would have
+removed the signal outright rather than gating the end of it that inverts.
+
+### The measurement
+
+`interval-regularity` scored `strength = 1 - rescale(cv, 0.15, 1.0)`, and
+`rescale` **clamps at its ceiling**. So a CV of 1.0 and a CV of 16.1 both
+produced **strength exactly 0.000**: the maximum vote for humanity this axis
+can cast, at the signal's full weight of 2.
+
+| | interval CV | strength |
+|---|---|---|
+| 19 humans | 1.53 – 5.29 | **0.000, every one** |
+| 7 of the 8 declared bots | 1.08 – 16.09 | **0.000, every one** |
+| u/sub\_doesnt\_exist\_bot | 0.94 | 0.068 |
+
+**26 of the 27 frozen accounts scored the same number.** u/RemindMeBot measures
+CV 1.09 in the frozen window and measured 1.26 in the live 2026-08-05 one
+quoted in Finding 4 — a difference of no consequence, because both sit above
+the ceiling and both produced the same 0.000 and the same badge sentence:
+*"that is the irregular, clumpy spacing typical of a person"*. It got that
+sentence because a summon-driven bot does not own its own
+rhythm. It posts when people ask it to, so the irregularity it is being
+credited for is **its users' and not its own**, and the tool was reading demand
+for the account as evidence about the account. Finding 4b measured the identity
+from the other side and reported it in one line: this signal reads **0.000 for
+ordinary people AND 0.000 for u/RemindMeBot**.
+
+**The live arm says the same thing more starkly.** Re-run against the
+whole-ranking sample harvested for Finding 4b on 2026-08-21 (10 busy
+subreddits, 11,410 comments, 7,345 distinct authors, 80 accounts drawn at even
+ranks from 1 to 7,344, 77 scored): **all 77 scored strength exactly 0.000
+here.** Not 77 near-zeros — 77 identical zeros. A signal that returns one
+constant across a content-blind sweep of a live platform is not a weak signal,
+it is an unread one.
+
+### Why the gate is the ceiling of the scale and not a number next to the corpus
+
+Finding 4d had to draw its cut inside a three-comment margin and solved that by
+making the cut categorical. Here the problem does not arise, because the
+arithmetic had already chosen the number: **1.0 is where `rescale` stops**.
+Above it the function is constant by construction, so the gate is not a
+threshold drawn next to 19 people — it is the point the existing scale itself
+gave up at, restated honestly as `unmeasured()` instead of as a confident zero.
+axis.js rule 3, applied to a POLE, exactly as JIO-345 applied it.
+
+The mechanical pole is untouched, and it is the half that separates. Below 1.0
+the strength climbs to a full-weight 1.0 at CV 0.15, and
+u/sub\_doesnt\_exist\_bot (CV 0.94) is the one frozen account still measured
+here.
+
+### The alternative that was not built, and why
+
+The ticket offered a second option: measure the regularity of **response
+latency** — parent comment to this account's reply — which is a rhythm the
+account genuinely does own. It was probed live on 2026-08-21 rather than
+assumed: `/api/comments/ids?ids=` returns `created_utc`, takes 120 ids per
+request, and all 299 of u/RemindMeBot's parents are `t1_` comments, so it is
+buildable.
+
+It was still not built. It needs a new `AccountProfile` field, a second fetch
+pass in `arcticShift.js` and a **re-capture of all 27 frozen profiles** before
+`npm run evaluate` could measure anything about it — and PLATFORMS.md's
+contiguity rule forbids populating this signal family from a payload whose
+contiguity cannot be proven. Parent timestamps arrive by id lookup with no
+window guarantee at all, which is the same defect Finding 1 found in the hour
+histogram. That is a ticket of its own if it is ever worth one, not a detail to
+be worked around inside this fix.
+
+### What moved
+
+17 of the 81 frozen scores, and the direction is the whole result:
+
+| | automation |
+|---|---|
+| u/RemindMeBot | `high 73` → **`high 89`** |
+| u/RepostSleuthBot | `high 75` → **`high 89`** |
+| u/AutoModerator | `high 69` → **`high 82`** |
+| u/AmputatorBot | `moderate 60` → **`high 71`** |
+| u/same\_subreddit\_bot | `moderate 57` → **`high 69`** |
+| u/sneakpeekbot | `moderate 57` → **`high 69`** |
+| u/Anti-ThisBot-IB | `moderate 44` → `moderate 54` |
+| u/sub\_doesnt\_exist\_bot | 58 → 58 (CV 0.94; still measured) |
+| 10 humans | +1 to +4, **all still `low`** |
+
+Three bots cross to `high`. The bots' cell in the headline table becomes
+`moderate ×2, high ×6` with the floor at **54**, and Finding 4's "seven of
+eight top out at `moderate`" is now **two of eight**. No human crosses a band,
+and all 17 thread humans stay `low` with a ceiling of 20.
+
+**A bound that was checked rather than assumed.** Taking 2 of weight away from
+the loudest bots could have pushed them under `MIN_MEASURED_WEIGHT_FRACTION`
+and answered `insufficient-data` for exactly the accounts the fix was aimed at
+— the failure mode the 82-second window produced for `sustained-posting-rate`.
+It does not. The worst case in the corpus is **9.0/15.5 = 0.581**
+(u/Anti-ThisBot-IB, u/RemindMeBot and u/sneakpeekbot, each with
+`posting-hour-dead-zone` and `conversation-depth` also unmeasured), which is
+1.25 of weight clear of the gate.
+
+### What this does not establish
+
+**The human ceiling moved 25 → 29, and that is one point from the band edge.**
+u/chilidirigible is the account, and the four points are not an accident of one
+profile: removing 2 of 15.5 weight multiplies an ordinary score by 13.5/11.5 =
+**1.17**, and a multiplier on the score is a divisor on the band edge, so
+`moderate` now effectively begins at **25.6** on the old scale rather than at
+30. Finding 4b's arithmetic, at a smaller multiplier. Nobody in the corpus was
+standing in the 26–29 strip, and the live re-run above crossed **zero** of its
+77 accounts, but "no crossing was observed in two samples" is not "the strip is
+empty" — Finding 4b's two arms disagreed about exactly that inside one window,
+and the band-edge number is the durable half.
+
+**The remaining half of JIO-329 is now priced against this new baseline.**
+Dropping `conversation-depth` for ordinary repliers as well would take
+u/chilidirigible from `low 29` to **`moderate 32`** — the same projection
+Finding 4b published before either change landed, reproduced from the frozen
+profile with half of it in place. The 30-to-22.2 band-edge figure in Finding 4b
+was for all 3.5 of weight at once; 2 of it has now been spent, and it bought
+four bots a band rather than costing a person one.
+
+**An adversarial bot that jitters past CV 1.0 buys exactly the silence a person
+gets.** That is not a new hole — it scored a confident 0.000 before, which was
+worse — but the fix does not close it, and no corpus available to this repo
+holds such an account to check against. `test/scoring.test.js` asserts both
+sides of the gate so the escape stays a stated bound rather than a later
+discovery.
+
+**Eight declared bots, all utility bots.** "The tool now reads six of eight as
+`high`" is a statement about eight accounts that announce themselves. It is not
+a detection rate.
 
 ## What this evaluation does not establish
 

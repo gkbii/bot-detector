@@ -483,6 +483,100 @@ test('automation: the reply-pole cut leaves the broadcast pole and ordinary peop
   assert.match(human.evidence, /rather than evidence of a person/);
 });
 
+/**
+ * THE SAME SHAPE ON THE OTHER SIGNAL JIO-329 WOULD HAVE REMOVED (JIO-346).
+ *
+ * `interval-regularity` scored `1 - rescale(cv, 0.15, 1.0)`, and `rescale`
+ * clamps: every account from CV 1.0 up earned the identical strength 0.000, at
+ * weight 2. A summon-driven bot does not own its own cadence — it inherits the
+ * irregularity of the people summoning it — so u/RemindMeBot measured CV 1.26
+ * and was told it had "the irregular, clumpy spacing typical of a person".
+ * Measured over `test/corpus/` by `scripts/measure-interval-cv.mjs`, 26 of the
+ * 27 frozen accounts are above that ceiling: all 19 humans AND seven of the
+ * eight declared bots.
+ */
+function summonedBotProfile() {
+  const rand = rng(23);
+  const comments = [];
+  let at = NOW - 300 * DAY;
+  for (let i = 0; i < 400; i += 1) {
+    // Summons arrive when people ask, so the gaps are the humans' and not the
+    // bot's: a heavy tail, exactly what an ordinary person's cadence looks like.
+    at += Math.round(60 + (rand() ** 4) * 90000);
+    comments.push(comment({
+      id: `sb${i}`,
+      at,
+      group: `g${i % 9}`,
+      body: `I will message you in 3 days. Click this to send a PM to also be reminded. Reference ${i}.`,
+      score: 1,
+      isTopLevel: false,
+    }));
+  }
+  return profileOf({ comments, karma: { post: 5000, comment: 45000, total: 50000 }, firstSeenUtc: NOW - 400 * DAY });
+}
+
+test('automation: an uneven cadence is not evidence of a person', () => {
+  const sig = findSignal(scoreAccount(summonedBotProfile()).automation, 'interval-regularity');
+
+  assert.ok(sig.value.coefficientOfVariation >= 1.0,
+    'the fixture must land above the ceiling rescale() already clamped at');
+  assert.equal(sig.band, BAND.INSUFFICIENT,
+    'a CV past the top of the scale must be unmeasured, never a measured zero (axis.js rule 3)');
+  assert.equal(sig.strength ?? null, null, 'nothing that reads as a strength may be published here');
+  assert.equal(sig.direction, 'neutral', 'an unmeasured pole must not lean either way');
+  // The evidence has to name what it cannot conclude, not only what it counted.
+  assert.match(sig.evidence, /inherits its irregularity from the people summoning it/);
+  assert.match(sig.evidence, /too even to be anyone/);
+});
+
+test('automation: the mechanical pole is untouched, and it is the half that separates', () => {
+  // Hourly to the second, which is nobody's day.
+  const bot = findSignal(scoreAccount(botProfile()).automation, 'interval-regularity');
+  assert.ok(bot.value.coefficientOfVariation < 0.15);
+  assert.equal(bot.band, BAND.HIGH);
+  assert.equal(bot.direction, 'raises');
+  assert.match(bot.evidence, /far lumpier than this/);
+
+  // And a person is not read as one. Both of these were 0.000 before JIO-346;
+  // only the human end changed.
+  const human = findSignal(scoreAccount(genuineProfile()).automation, 'interval-regularity');
+  assert.equal(human.band, BAND.INSUFFICIENT);
+});
+
+/**
+ * THE BOUND, PINNED. The gate is the ceiling of the existing scale rather than
+ * a number drawn next to the 27 frozen accounts, so what it costs is that a
+ * scheduler jittering just past CV 1.0 buys the same silence a person gets.
+ * u/sub_doesnt_exist_bot (CV 0.94) is the one frozen account still measured
+ * here, and the margin between it and the gate is the whole of the protection.
+ * That is written down in automation.js and asserted here so it stays a stated
+ * bound rather than a later discovery.
+ */
+test('automation: a scheduler jittering past the ceiling buys the same silence a person gets', () => {
+  const jittered = (spreadSeconds) => {
+    const rand = rng(29);
+    const comments = [];
+    let at = NOW - 300 * DAY;
+    for (let i = 0; i < 400; i += 1) {
+      at += Math.max(60, Math.round(3600 + (rand() - 0.5) * spreadSeconds));
+      comments.push(comment({
+        id: `jt${i}`, at, group: `g${i % 6}`, score: 1, isTopLevel: true,
+        body: `Great point! I completely agree with this take and think more people should see it. Reference ${i}.`,
+      }));
+    }
+    return findSignal(scoreAccount(profileOf({ comments })).automation, 'interval-regularity');
+  };
+
+  const tight = jittered(2000);
+  assert.ok(tight.value.coefficientOfVariation < 1.0);
+  assert.notEqual(tight.band, BAND.INSUFFICIENT, 'a scheduler inside the scale is still read');
+
+  const loose = jittered(40000);
+  assert.ok(loose.value.coefficientOfVariation >= 1.0);
+  assert.equal(loose.band, BAND.INSUFFICIENT,
+    'and one that jitters past the ceiling is not — the bound this change accepts');
+});
+
 test('automation: karma velocity is the weakest signal and its evidence admits it', () => {
   const sig = findSignal(scoreAccount(genuineProfile()).automation, 'karma-velocity');
   assert.equal(sig.weight, 1);

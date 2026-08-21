@@ -369,8 +369,8 @@ test('every canonical replacement still matches the pattern it stands in for', (
  * mentions — both files name `capture-corpus.mjs` in prose, and telling a
  * reader where to go is not the same as going there.
  *
- * The two `measure-*.mjs` scripts are held to it as well: they are the
- * published way to reproduce EVALUATION.md Findings 4c and 4d, and a
+ * The three `measure-*.mjs` scripts are held to it as well: they are the
+ * published way to reproduce EVALUATION.md Findings 4c, 4d and 4e, and a
  * measurement that quietly re-fetched would be measuring a different window
  * from the one the finding was written against.
  */
@@ -379,11 +379,12 @@ test('nothing on the evaluate path can reach the network', () => {
   const paths = [
     'scripts/evaluate.mjs',
     'test/corpus/load.js',
-    // The two hand-run measurement scripts make the same no-network claim in
+    // The three hand-run measurement scripts make the same no-network claim in
     // their headers, and a claim in a header is not a check. They are the
-    // reproduction instructions for EVALUATION.md Findings 4c and 4d.
+    // reproduction instructions for EVALUATION.md Findings 4c, 4d and 4e.
     'scripts/measure-agenda-shape.mjs',
     'scripts/measure-reply-share.mjs',
+    'scripts/measure-interval-cv.mjs',
   ];
   for (const rel of paths) {
     const src = fs.readFileSync(path.join(ROOT, rel), 'utf8');

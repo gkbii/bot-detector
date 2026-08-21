@@ -120,6 +120,19 @@ const SATURATED_ITEMS_PER_HOUR = 300;
 const RATE_FLOOR_STRENGTH = 0.5;
 
 const MIN_INTERVALS = 10;
+
+/**
+ * The two ends of the cadence scale `interval-regularity` reads, named because
+ * the second one is now a gate and not only a ceiling (JIO-346).
+ *
+ * At or below `MECHANICAL_INTERVAL_CV` the gaps are a scheduler's. At or above
+ * `HUMANLIKE_INTERVAL_CV` the arithmetic already had nothing left to say —
+ * `rescale` clamps, so every CV from 1.0 to infinity produced the identical
+ * strength 0.000. The gate is therefore the point the scale itself stops at,
+ * not a number picked next to a population.
+ */
+const MECHANICAL_INTERVAL_CV = 0.15;
+const HUMANLIKE_INTERVAL_CV = 1.0;
 const MIN_COMMENTS_FOR_LENGTH = 10;
 
 const BURST_GAP_SECONDS = 120;
@@ -305,6 +318,49 @@ function sustainedRateSignal(profile) {
  * with a low coefficient of variation, while a person posts in clumps around
  * their day. CV is unitless, so this says nothing about whether the account is
  * fast or slow, only whether the rhythm is mechanical.
+ *
+ * ONE POLE, NOT TWO (JIO-346), for the same reason `conversation-depth` has
+ * one (JIO-345). An even cadence is evidence of a scheduler; an UNEVEN cadence
+ * is not evidence of a person, because a summon-driven bot does not own its
+ * own rhythm — it inherits the irregularity of whoever summoned it.
+ * u/RemindMeBot posts when people ask it to, so it measured CV 1.26 live (1.09
+ * in the frozen window — both above the ceiling) and was told, at weight 2,
+ * *"that is the irregular, clumpy spacing typical of a person"*. EVALUATION.md Finding 4 named that as the second of the three
+ * reasons declared bots topped out at `moderate`; Finding 4e measured it.
+ *
+ * WHY THE GATE SITS AT `HUMANLIKE_INTERVAL_CV` AND IS NOT A CHOSEN NUMBER.
+ * `rescale(cv, 0.15, 1.0)` clamps at its ceiling, so a CV of 1.0 and a CV of
+ * 16.1 both produced **strength exactly 0.000** — the largest vote for
+ * humanity this signal can cast, handed out identically to a bot and to a
+ * person. Measured by `node scripts/measure-interval-cv.mjs` over the 27
+ * frozen accounts, 26 of them sit at or above 1.0: all 19 humans (1.53 to
+ * 5.29) AND seven of the eight declared bots (1.08 to 16.09). A signal that
+ * scores the adversary and the person it exists to tell apart with the same
+ * number is not measuring either of them, so this end returns `unmeasured()`
+ * rather than a clean zero — axis.js rule 3, applied to a POLE.
+ *
+ * WHY THIS AND NOT RESPONSE LATENCY. The alternative on the ticket was to
+ * measure the gap from a parent comment to this account's reply, which is a
+ * rhythm the account DOES own. It is buildable — probed live 2026-08-21,
+ * `/api/comments/ids` returns `created_utc` 120 ids at a time and all 299 of
+ * u/RemindMeBot's parents are comments — but it needs a new `AccountProfile`
+ * field, a second fetch pass in `arcticShift.js` and a re-capture of all 27
+ * frozen profiles before `npm run evaluate` could measure it, and PLATFORMS.md
+ * ("If this is picked up", condition 1) forbids feeding this signal family
+ * from a payload whose contiguity cannot be proven. Parent timestamps arrive by id lookup with no
+ * window guarantee at all, so that is not a detail to be worked around later.
+ * It is a different ticket if it is ever worth one.
+ *
+ * THE MECHANICAL POLE IS UNTOUCHED, and it is the half that separates. Below
+ * 1.0 the strength climbs to a full-weight 1.0 at CV 0.15, and
+ * u/sub_doesnt_exist_bot (CV 0.94) is the one frozen account still measured
+ * here.
+ *
+ * THE BOUND, OUT LOUD. This signal now says nothing at all about 26 of the 27
+ * frozen accounts, which is 2 of the axis's 15.5 weight going quiet for very
+ * nearly everybody — a real loss of coverage, not a free fix. It is the honest
+ * reading of what was already there: those 26 scores were the same 0.000
+ * whatever the account was.
  */
 function intervalRegularitySignal(profile) {
   const key = 'interval-regularity';
@@ -333,15 +389,27 @@ function intervalRegularitySignal(profile) {
     });
   }
 
-  const strength = 1 - rescale(cv, 0.15, 1.0);
+  const value = { coefficientOfVariation: cv, intervals: intervals.length };
+
+  if (cv >= HUMANLIKE_INTERVAL_CV) {
+    return unmeasured({
+      key,
+      label,
+      weight,
+      value,
+      evidence: `Gaps between consecutive comments vary by ${ratioPct(cv)} of their average (CV ${cv.toFixed(2)}) over ${intervals.length} intervals — an uneven cadence, which this signal cannot read. A bot that works on demand inherits its irregularity from the people summoning it, so an uneven rhythm does not separate it from a person, and it is not a clean result on the automation axis. What this signal can read is the opposite pole: a cadence too even to be anyone's day.`,
+    });
+  }
+
+  const strength = 1 - rescale(cv, MECHANICAL_INTERVAL_CV, HUMANLIKE_INTERVAL_CV);
 
   return signal({
     key,
     label,
     weight,
     strength,
-    value: { coefficientOfVariation: cv, intervals: intervals.length },
-    evidence: `Gaps between consecutive comments vary by ${ratioPct(cv)} of their average (CV ${cv.toFixed(2)}) over ${intervals.length} intervals. ${cv < 0.4 ? 'Human posting is far lumpier than this.' : 'That is the irregular, clumpy spacing typical of a person.'}`,
+    value,
+    evidence: `Gaps between consecutive comments vary by ${ratioPct(cv)} of their average (CV ${cv.toFixed(2)}) over ${intervals.length} intervals. ${cv < 0.4 ? 'Human posting is far lumpier than this.' : `This signal measures distance from the mechanical pole and nothing else — a scheduler runs at a CV near ${MECHANICAL_INTERVAL_CV} — so a cadence looser than that is the absence of that evidence rather than evidence of a person.`}`,
   });
 }
 
