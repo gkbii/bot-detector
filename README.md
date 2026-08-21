@@ -320,17 +320,45 @@ it.
 question", u/RepostSleuthBot 299 of 299** — the maximum on the one signal whose
 entire purpose is positive evidence of a *person*, awarded to two template bots.
 `stripUrls()` in `stats.js` now removes markdown link targets, anything with a
-scheme, and bare `host.tld/path` tokens before the test; both accounts scored
-**0 of 299** on the same live data afterwards, and two humans moved 118→107 and
-15→14. That ratio is the whole point: the defect was invisible on humans and
-total on the adversary, which is exactly the shape a suite of hand-built
-fixtures cannot see.
+scheme, bare `host.tld/path` and `host.tld?a=b` tokens, and root-relative
+`/path?a=b` before the test; both accounts scored **0 of 299** on the same live
+data afterwards, and two humans moved 118→107 and 15→14. That ratio is the
+whole point: the defect was invisible on humans and total on the adversary,
+which is exactly the shape a suite of hand-built fixtures cannot see.
 
 Two details are load-bearing. The link **text** survives, because
 `[does anyone know?](url)` is a question its author wrote. And the help-seeking
 patterns run over the *same stripped body*, so both halves of the signal read
 what the author actually typed rather than one reading the raw text and the
 other not.
+
+**And the same rule, running the other way (JIO-386).** The bare host rule was
+`[\w-]+(?:\.[\w-]+)+/` — two dot-joined word chunks and a slash. A numeric
+ratio is that shape, so `"would you rate it 3.5/10?"` was cut to
+`"would you rate it"`: a *person* lost a genuine question, and `normalizeWords()`
+lost the tokens, on the one signal that is positive evidence of a person. A
+host now has to end in an **alphabetic** top-level label of two or more
+letters, which `3.5/10` and `10.50/hour` fail on `5` and `50` — and so do
+`U.S./Canada`, `A.I./ML` and `v1.2.3/build`, three more things the old rule
+quietly ate. Stated rather than left to be discovered: a bare IPv4 literal with
+a path (`1.1.1.1/help?x=1`) has no alphabetic label anywhere and survives. With
+a scheme it does not, and a scheme is how anyone writes one.
+
+The same fix closes the other direction. Requiring the slash left `?` behind in
+`example.com?utm=1` and `/search?q=cats`, so a query counts as a link tail on
+its own now — but only if it carries an `=`. That is what keeps
+"see example.com?" a question, the promise the slash used to keep, and it is
+what stops the root-relative rule reading `and/or`, `he/she` and `12/25` as
+links.
+
+Worth knowing before trusting the corpus on this one: the rewrite changes **not
+one** of the 7469 stripped bodies in `test/corpus/`, and `npm run evaluate`
+reprints all 81 frozen scores unmoved. That is the no-regression half and
+nothing more. The corpus *cannot* show the fix — its 606 bare-`host.tld?` and
+595 root-relative-`/path?` bodies all sit inside a markdown target or a scheme,
+where an earlier rule already removed them, and the human half is length-matched
+synthetic filler that quotes no ratios. A frozen corpus is evidence a change
+broke nothing; it is never evidence the change did anything.
 
 **A confident zero from a window no gap could fit in.** `dormancy-revival`
 (weight 3, the heaviest agenda signal) gated only on item *count*. 299 comments

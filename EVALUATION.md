@@ -225,6 +225,14 @@ quotes other people's post titles (`#2: [Any News On The CRKD Drum Kit?]`).
 Counting quoted third-party text as the account's own words is a separate
 defect and is still open.
 
+**AMENDED 2026-08-21 (JIO-386).** That fix ran too wide in one direction and
+not wide enough in two others: the bare host rule matched numeric ratios, so
+`"would you rate it 3.5/10?"` lost its question mark, while `example.com?utm=1`
+and `/search?q=cats` kept theirs. A host now needs an alphabetic top-level
+label, and a query counts as a link tail on its own when it carries an `=`.
+Frozen-corpus scores are unmoved by it, which is a no-regression result and not
+a re-measure: no account in `test/corpus/` exhibits either shape.
+
 ## Finding 3 — `dormancy-revival` returns a confident zero from windows too short to hold a gap
 
 The heaviest agenda signal (weight 3) looks for a ≥120-day silence.

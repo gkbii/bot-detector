@@ -6,6 +6,7 @@ import { scoreAccount } from '../extension/lib/scoring/index.js';
 import {
   BAND, MIN_COMMENTS_FOR_SCORING, MIN_HISTORY_DAYS,
 } from '../extension/lib/scoring/axis.js';
+import { normalizeWords, stripUrls } from '../extension/lib/scoring/stats.js';
 
 const NOW = 1785950000; // 2026-08-05
 const DAY = 86400;
@@ -621,6 +622,86 @@ test('authenticity: a question in link TEXT still counts, and help-seeking reads
     `only the link-text questions should count, got ${sig.value.questions} of ${sig.value.sample}`);
   assert.ok(sig.value.helpSeeking >= half - 1,
     `"does anyone know" in link text is help-seeking, got ${sig.value.helpSeeking}`);
+});
+
+// ---------------------------------------------------------------------------
+// JIO-386 — the same rule, running the other way
+// ---------------------------------------------------------------------------
+
+/**
+ * `stripUrls()` erred in both directions at once, and both errors landed on
+ * `asks-questions`, the one signal that is positive evidence of a PERSON.
+ *
+ * The bare host/path rule was `[\w-]+(?:\.[\w-]+)+\/\S*` — two dot-joined
+ * word chunks and a slash. A numeric ratio is exactly that shape, so
+ * "would you rate it 3.5/10?" was cut to "would you rate it" and a human lost
+ * a genuine question AND three tokens. Meanwhile the rule needed the slash, so
+ * `/search?q=cats` and `example.com?utm=1` kept their `?` and read as
+ * curiosity — JIO-290's defect, still open in two shapes.
+ *
+ * The fix is one shape rule: a host ends in an ALPHABETIC top-level label of
+ * two or more letters. `3.5/10` and `10.50/hour` fail it on `5` and `50`, and
+ * so do `U.S./Canada` and `v1.2.3/build`, which the old rule also ate. A query
+ * now counts as a link tail without a path, but only a real one — it must
+ * carry an `=`, so "see example.com?" stays the question the README promises.
+ */
+const STRIP_URL_CASES = [
+  // [ input, must survive in the stripped text, must not survive ]
+  ['would you rate it 3.5/10?', ['3.5/10', '?'], []],
+  ['it costs 10.50/hour, right?', ['10.50/hour', '?'], []],
+  ['the U.S./Canada border, no?', ['U.S./Canada', '?'], []],
+  ['does v1.2.3/build pass?', ['v1.2.3/build', '?'], []],
+  ['and/or, he/she, 12/25 — clear?', ['and/or', 'he/she', '12/25', '?'], []],
+  ['see example.com? I think so', ['example.com?'], []],
+  ['see /search?q=cats for more', ['see', 'for more'], ['?', 'cats']],
+  ['check example.com?utm=1 later', ['check', 'later'], ['?', 'utm']],
+  ['go to reddit.com/r/x/?context=3 now', ['go to', 'now'], ['?', 'context']],
+  ['read en.wikipedia.org/wiki/Foo please', ['read', 'please'], ['wikipedia']],
+  ['watch youtu.be/abc123 tonight', ['watch', 'tonight'], ['youtu']],
+  ['(/message/compose/?to=Bot) is the link', ['is the link'], ['?', 'compose']],
+];
+
+test('stripUrls: a ratio is not a host, and a query string is not a question', () => {
+  for (const [input, survives, removed] of STRIP_URL_CASES) {
+    const stripped = stripUrls(input);
+    for (const fragment of survives) {
+      assert.ok(stripped.includes(fragment),
+        `${JSON.stringify(input)} -> ${JSON.stringify(stripped)} lost ${JSON.stringify(fragment)}`);
+    }
+    for (const fragment of removed) {
+      assert.ok(!stripped.includes(fragment),
+        `${JSON.stringify(input)} -> ${JSON.stringify(stripped)} kept ${JSON.stringify(fragment)}`);
+    }
+  }
+});
+
+test('normalizeWords: a ratio keeps its tokens, a query string contributes none', () => {
+  // The automation axis reads the same stripped text, so the ticket's defect
+  // cost the ratio its words as well as its question mark.
+  assert.deepEqual(normalizeWords('would you rate it 3.5/10?'),
+    ['would', 'you', 'rate', 'it', '3', '5', '10']);
+  assert.deepEqual(normalizeWords('see /search?q=cats for more'), ['see', 'for', 'more']);
+  assert.deepEqual(normalizeWords('check example.com?utm=1 later'), ['check', 'later']);
+});
+
+test('authenticity: a human who quotes ratios keeps the question credit', () => {
+  // The inversion of the RemindMeBot fixture above. Every body here ends in a
+  // real question that happens to contain a ratio; before JIO-386 the bare
+  // host/path rule deleted the ratio, the question mark and everything after
+  // it, and this account asked no questions at all.
+  const rand = rng(386);
+  const stamps = humanTimestamps({ rand, days: 300, activeHours: WAKING_HOURS });
+  const comments = stamps.map((at, i) => comment({
+    id: `rt${i}`,
+    at,
+    group: `g${i % 12}`,
+    body: `${randomText(rand)} would you rate it ${3 + (i % 5)}.5/10?`,
+    thread: `t3_rt${Math.floor(i / 3)}`,
+  }));
+
+  const sig = findSignal(scoreAccount(profileOf({ comments })).authenticity, 'asks-questions');
+  assert.equal(sig.value.questions, comments.length,
+    `every body ends in a question, got ${sig.value.questions} of ${sig.value.sample}`);
 });
 
 test('automation: a fetch window under three days cannot claim a sleep cycle', () => {

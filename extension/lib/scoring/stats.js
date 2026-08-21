@@ -122,18 +122,38 @@ export function longestZeroRunCircular(counts) {
  * `asks-questions` was `body.includes('?')`, so a markdown link with a query
  * string counted as a question. u/RemindMeBot scored 100/100 on the one signal
  * whose whole purpose is positive evidence of a PERSON, on the strength of
- * `?context=3` and two `message/compose/?to=` links. Three shapes are stripped
- * because bot boilerplate uses all three:
+ * `?context=3` and two `message/compose/?to=` links. Four shapes are stripped,
+ * because bot boilerplate uses all four:
  *
  *   * markdown link targets, including protocol-relative ones (`](/message/…)`)
- *     which neither of the other two rules would see;
+ *     which none of the other rules would see;
  *   * anything with a scheme, `https://…` through `mailto:`;
- *   * bare `host.tld/path` tokens, which need the slash — a domain alone can
- *     end a sentence, and requiring the path is what keeps "see example.com?"
- *     a question while `wolframalpha.com/input/?i=` is not.
+ *   * bare `host.tld/path` and `host.tld?a=b` tokens;
+ *   * root-relative `/path?a=b`, which has no host at all.
  *
  * The link TEXT survives on purpose: `[does anyone know?](url)` is a question
  * its author wrote, and dropping it would trade one blind spot for another.
+ *
+ * WHAT MAKES A HOST A HOST (JIO-386). The bare rule was `[\w-]+(?:\.[\w-]+)+/`
+ * — two dot-joined word chunks and a slash — and a numeric ratio is exactly
+ * that shape. "would you rate it 3.5/10?" was cut to "would you rate it", so a
+ * person lost a genuine question on the one signal that is positive evidence
+ * of a person, and `normalizeWords()` lost the tokens too. The rule now asks
+ * for an ALPHABETIC top-level label of two or more letters, which `3.5/10` and
+ * `10.50/hour` fail on `5` and `50` — and so do `U.S./Canada`, `A.I./ML` and
+ * `v1.2.3/build`, three more things the old rule quietly ate. The cost of that
+ * shape rule, stated rather than discovered: a bare IPv4 literal with a path
+ * (`1.1.1.1/help?x=1`) has no alphabetic label anywhere and is NOT stripped.
+ * With a scheme it is, and a scheme is how anyone actually writes one.
+ *
+ * WHAT MAKES A TAIL A LINK. Requiring the slash was JIO-290's own tradeoff,
+ * and it left `?` behind in `example.com?utm=1` and `/search?q=cats` — the
+ * defect JIO-290 fixed, surviving in the two shapes it did not cover. A query
+ * now counts as a link tail on its own, but only if it carries an `=`: that is
+ * what keeps "see example.com?" and "is it example.com?" questions, which is
+ * the promise the slash used to keep. The root-relative rule needs the `=` for
+ * a sharper reason — without it `and/or`, `he/she` and `12/25` are all one
+ * lenient rule away from being links.
  *
  * `normalizeWords()` below shares this rather than keeping its own narrower
  * `https?://` strip, so there is one definition of "this is a link, not
@@ -142,6 +162,16 @@ export function longestZeroRunCircular(counts) {
  * similarity moving 0.912 -> 0.915 and its stock-phrase count 308 -> 314 —
  * marginally MORE template detected, because the link boilerplate that used to
  * survive as stray words no longer dilutes the shingles.
+ *
+ * JIO-386's rewrite was re-A/B'd the same way, over all 7469 bodies in
+ * `test/corpus/`: not one stripped body differs, and `npm run evaluate`
+ * reprints all 81 frozen scores unmoved. That is the no-regression half only.
+ * The corpus CANNOT show the fix — the 606 bodies carrying a bare `host.tld?`
+ * and the 595 carrying a root-relative `/path?` are all inside a markdown
+ * target or a scheme, so an earlier rule had already removed them, and the
+ * human half of the corpus is length-matched synthetic filler that quotes no
+ * ratios. A frozen corpus is proof a change broke nothing, never proof it did
+ * anything; the tests in `test/scoring.test.js` are where the fix is asserted.
  */
 export function stripUrls(text) {
   if (typeof text !== 'string') return '';
@@ -149,7 +179,8 @@ export function stripUrls(text) {
     .replace(/\]\([^\s)]*/g, '](')
     .replace(/\b[a-z][a-z0-9+.-]*:\/\/\S+/gi, ' ')
     .replace(/\bmailto:\S+/gi, ' ')
-    .replace(/\b[\w-]+(?:\.[\w-]+)+\/\S*/g, ' ');
+    .replace(/\b[\w-]+(?:\.[\w-]+)*\.[a-z]{2,}(?:\/\S*|\?[^\s?]*=\S*)/gi, ' ')
+    .replace(/(^|[\s(])\/[\w./-]*\?[^\s?]*=\S*/g, '$1 ');
 }
 
 /**
