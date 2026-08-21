@@ -1,7 +1,8 @@
 /**
- * Capture `test/corpus/` — the frozen evaluation corpus. THE ONLY SCRIPT IN
- * THIS REPO THAT GOES TO THE NETWORK ON PURPOSE, and it is not run by `npm
- * test`, by `npm run evaluate`, or by anything in the extension.
+ * Capture `test/corpus/` — the frozen evaluation corpus. Goes to the network on
+ * purpose; it is not run by `npm test`, by `npm run evaluate`, or by anything
+ * in the extension. `probe-prolific-humans.mjs` is the only other script here
+ * that fetches, and it feeds this one (see PROLIFIC_HUMANS below).
  *
  *   node scripts/capture-corpus.mjs                 # fill in what is missing
  *   node scripts/capture-corpus.mjs --force         # re-capture everything
@@ -68,6 +69,54 @@ const THREAD_ID = '1vg75om';
 const THREAD_SAMPLED_BEFORE = Math.floor(Date.parse('2026-08-05T18:58:00Z') / 1000);
 const THREAD_COMMENT_WINDOW = 496;
 const HUMAN_COUNT = 17;
+
+/**
+ * WHICH POPULATION AN ACCOUNT CAME FROM, written into its corpus file and not
+ * inferred from `class`. There are two human cohorts now and they were chosen
+ * by different rules, so merging them under one label would make the table
+ * claim something neither sample supports.
+ */
+const COHORT_THREAD = 'politics-thread';
+const COHORT_PROLIFIC = 'prolific-probe';
+const COHORT_BOT = 'declared-bot';
+
+/**
+ * THE SECOND HUMAN COHORT (JIO-344). The 17 above are the authors of one
+ * r/politics thread, ranked by comment count in it — ordinary-volume
+ * commenters BY CONSTRUCTION. That made one question permanently unaskable of
+ * this corpus: README's `sustained-posting-rate` section admitted it could not
+ * see "a person who genuinely sustains more than 3 items an hour", and no
+ * re-run of a thread sample can ever produce one.
+ *
+ * So the bound was gone and looked for. `probe-prolific-humans.mjs` ranked
+ * 16,264 authors of 22 subreddits by recent volume, content-blind, and scored
+ * the top 48 through the real path; seven cleared `ORDINARY_ITEMS_PER_HOUR`
+ * and six of the seven hand-read as unmistakably human (EVALUATION.md Finding
+ * 4a). These two are frozen out of that six:
+ *
+ *   u/humdingler      5.90/h — the FASTEST person found, and faster than
+ *                     u/RemindMeBot at 5.5/h. It is the account that proves
+ *                     the two populations overlap, which is the claim README
+ *                     used to deny.
+ *   u/chilidirigible  3.42/h — automation `low 25`, the highest-scoring of the
+ *                     six and the one JIO-329 pushes to `moderate 33` when it
+ *                     takes `conversation-depth` and `interval-regularity` to
+ *                     unmeasured. Without it in here, a real person crossing a
+ *                     band is a thing that happens with `npm run evaluate`
+ *                     still printing OK.
+ *
+ * ADMISSION IS RE-CHECKABLE, like the bot half's. A bot has to declare itself
+ * in its own committed text; a prolific-probe human has to actually FIRE
+ * `sustained-posting-rate` from its own committed timestamps. An account that
+ * quietly drifted under the gate on re-capture would otherwise sit here
+ * pinning nothing at all, and `test/corpus.test.js` re-derives that gate from
+ * the frozen profile rather than trusting this run.
+ *
+ * The hand-read is the part this repo cannot automate and does not pretend to:
+ * it is Finding 4a's, on bodies that were never written to disk. Adding to
+ * this list means running the probe and reading the comments.
+ */
+const PROLIFIC_HUMANS = ['humdingler', 'chilidirigible'];
 
 /**
  * HOW THE 17 ARE CHOSEN, since the original selection is lost: the authors of
@@ -163,7 +212,7 @@ async function main() {
   const bots = [];
   for (const name of BOT_CANDIDATES) {
     if (bots.length >= BOT_COUNT) break;
-    const outcome = await capture(name, 'bot', manifest);
+    const outcome = await capture(name, 'bot', COHORT_BOT, manifest);
     if (outcome.admitted) { bots.push(name); unnote(manifest, 'botsRejected', name); }
     else if (!outcome.filtered) note(manifest, 'botsRejected', { username: name, reason: outcome.reason });
     writeManifest(manifest);
@@ -175,7 +224,7 @@ async function main() {
   const humans = [];
   for (const { author } of manifest.humanSelection.ranked) {
     if (humans.length >= HUMAN_COUNT) break;
-    const outcome = await capture(author, 'human', manifest);
+    const outcome = await capture(author, 'human', COHORT_THREAD, manifest);
     if (outcome.admitted) { humans.push(author); unnote(manifest, 'humansSkipped', author); }
     else if (!outcome.filtered) note(manifest, 'humansSkipped', { username: author, reason: outcome.reason });
     writeManifest(manifest);
@@ -184,13 +233,25 @@ async function main() {
     console.error(`\nBOUND FIRED: only ${humans.length} of ${HUMAN_COUNT} thread humans could be captured from ${manifest.humanSelection.ranked.length} ranked authors.`);
   }
 
+  const prolific = [];
+  for (const name of PROLIFIC_HUMANS) {
+    const outcome = await capture(name, 'human', COHORT_PROLIFIC, manifest);
+    if (outcome.admitted) { prolific.push(name); unnote(manifest, 'prolificSkipped', name); }
+    else if (!outcome.filtered) note(manifest, 'prolificSkipped', { username: name, reason: outcome.reason });
+    writeManifest(manifest);
+  }
+  if (!ONLY && prolific.length < PROLIFIC_HUMANS.length) {
+    console.error(`\nBOUND FIRED: only ${prolific.length} of ${PROLIFIC_HUMANS.length} prolific humans could be captured. The corpus no longer holds a person above ORDINARY_ITEMS_PER_HOUR, so README's claim that the signal's shape protects one is back to being unfalsifiable.`);
+  }
+
   if (!ONLY) {
     manifest.bots = bots;
     manifest.humans = humans;
+    manifest.prolificHumans = prolific;
     writeManifest(manifest);
   }
 
-  console.log(`\ncaptured ${bots.length} bots + ${humans.length} humans into test/corpus/`);
+  console.log(`\ncaptured ${bots.length} bots + ${humans.length} thread humans + ${prolific.length} prolific humans into test/corpus/`);
   console.log('now run: node scripts/evaluate.mjs --update');
 }
 
@@ -200,7 +261,7 @@ async function main() {
  * to fail quietly, because a corpus that is silently 22 accounts still prints
  * a table.
  */
-async function capture(username, klass, manifest) {
+async function capture(username, klass, cohort, manifest) {
   if (ONLY && normalize(ONLY) !== username.toLowerCase()) return { admitted: false, filtered: true, reason: '--only' };
 
   // A REJECTION IS A UNIT OF WORK TOO. Re-fetching 300 comments to re-learn
@@ -208,7 +269,7 @@ async function capture(username, klass, manifest) {
   // twelve requests as capturing an account that does, and this script gets
   // interrupted — arctic-shift throttles, so a full pass is tens of minutes.
   // Resume therefore covers both outcomes; `--force` is how you re-ask.
-  const rejected = [...(manifest.botsRejected ?? []), ...(manifest.humansSkipped ?? [])]
+  const rejected = [...(manifest.botsRejected ?? []), ...(manifest.humansSkipped ?? []), ...(manifest.prolificSkipped ?? [])]
     .find((e) => e.username === username);
   if (rejected && !FORCE) {
     console.log(`- ${username} (rejected by an earlier pass: ${rejected.reason})`);
@@ -255,6 +316,22 @@ async function capture(username, klass, manifest) {
     return { admitted: false, reason: declared.note };
   }
 
+  // The prolific cohort's own admission gate, and the reason it is here rather
+  // than in a comment: this cohort exists ONLY to hold a person the rate
+  // signal actually measures. An account that has slowed below
+  // ORDINARY_ITEMS_PER_HOUR since the probe read it is an ordinary human — a
+  // fine account and a useless one for this job — and letting it in quietly
+  // would leave the corpus claiming a counter-example it no longer contains.
+  if (cohort === COHORT_PROLIFIC) {
+    const rate = realVerdict.automation.signals.find((sig) => sig.key === 'sustained-posting-rate');
+    if (!rate || rate.band === 'insufficient-data') {
+      const seen = rate?.value?.itemsPerHour;
+      const note = `does not fire sustained-posting-rate${Number.isFinite(seen) ? ` (${seen.toFixed(2)}/h)` : ''} — cannot stand in for a prolific human`;
+      console.log(`${note} — skipped`);
+      return { admitted: false, reason: note };
+    }
+  }
+
   let stored = plain(real);
   let synthesisWarnings = [];
   if (klass === 'human') {
@@ -268,6 +345,7 @@ async function capture(username, klass, manifest) {
   fs.writeFileSync(file, `${JSON.stringify({
     username: real.username,
     class: klass,
+    cohort,
     capturedAt: real.fetchedAt,
     bodies: klass === 'bot' ? 'real' : 'synthesised-length-matched',
     declaredBy: declared ? declared.basis : null,
@@ -279,6 +357,7 @@ async function capture(username, klass, manifest) {
   note(manifest, 'captured', {
     username: real.username,
     class: klass,
+    cohort,
     capturedAt: real.fetchedAt,
     comments: real.comments.length,
     posts: real.posts.length,

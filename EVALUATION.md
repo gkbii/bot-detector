@@ -367,11 +367,50 @@ and u/Mysterious_Sleep7443 crosses `low 23` → `moderate 33` at 0.53/h — a ra
 at which this signal never fires at all. JIO-329 needs its own live re-measure
 before it lands.
 
-**Still open.** The evidence string asserts throughput "above the 3 an hour a
-person keeps up", which is a claim about people that six live accounts refute,
-and it is printed *on the account being judged*. README's "gate sits in the gap"
-says the same thing. Per README's own rule, a prolific human belongs in
-`test/corpus/` — u/humdingler at 5.90/h is the account that pins it.
+**Closed on 2026-08-21, in three parts.**
+
+1. *The evidence string.* It asserted throughput "above the 3 an hour a person
+   keeps up" — a claim about people that six live accounts refute, printed *on
+   the account being judged*. It now claims only what was measured: the rate,
+   that this signal begins weighing throughput above 3/h, and that throughput
+   at this level is uncommon and is weighed rather than taken as proof. The
+   unmeasured branch said the same thing ("only reports throughput a person
+   cannot reach") and was reworded with it. `test/scoring.test.js` now fails if
+   either string mentions a person, a human or people at all; the rule is
+   describe the account, not the population.
+2. *README's rationale.* "The gate sits in the gap" is replaced by the
+   shape-based argument this finding actually supports — one-directional,
+   `RATE_FLOOR_STRENGTH = 0.5`, log-scaled to 300/h, weight 2 of 15.5, so the
+   5.90/h human earns strength 0.573 and scores `low 14`.
+   `ORDINARY_ITEMS_PER_HOUR` was **not** moved, for the reason above: there is
+   no separating value.
+3. *The corpus.* u/humdingler and u/chilidirigible are frozen in `test/corpus/`
+   as a second human cohort, `prolific-probe`, held separately from the 17
+   thread humans because they were sampled by a different rule. u/humdingler is
+   the overlap (faster than u/RemindMeBot); u/chilidirigible is the cost. On the
+   frozen 2026-08-21 profile that cost re-measures slightly smaller than it did
+   live here: `low 25` today, **`moderate 32`** under JIO-329's premise and
+   `low 28` without this signal, against the 33/29 recorded above from the
+   2026-08-20 window. The band it crosses and the 4 points this signal supplies
+   are the same either way. Both accounts are `class: "human"`, so the
+   separation invariants cover them, and admission is re-checked from the
+   frozen timestamps rather than trusted — an account that drifts below the
+   gate is refused rather than left in the corpus pinning nothing.
+
+**What admitting them changed, and what it did not.** The separation invariant
+holds: no human above `low`, no bot at `low`. The margin narrows — the human
+ceiling on automation goes **17 → 25** against an unchanged bot floor of 39, so
+the honest gap is 14 points rather than the 22 a thread-only sample produced.
+Nothing else moved; no thread human's score and no bot's score changed by a
+point, because the two new accounts are new rows rather than a reweighting.
+
+**One thing this finding did not go looking for, filed rather than absorbed.**
+Both prolific humans score agenda **`moderate` (55 and 57)** where all 17
+thread humans are `low` (0–19) — `topic-concentration` and `drive-by-ratio`
+both reading `high`. That is what a high-volume single-subreddit hobbyist looks
+like to the agenda axis, it is a different axis from the one this ticket is
+about, and it is a question for its own ticket rather than something to fix
+under a rate signal.
 
 ## What this evaluation does not establish
 
@@ -398,3 +437,5 @@ subreddits, measured live on 2026-08-20 and classified by hand. Its six humans
 are a demonstration that the population exists, not a measured false-positive
 rate — the sweep was deliberately aimed at the busiest authors on the platform,
 so nothing here says how *common* a >3/h person is among ordinary accounts.
+The two now frozen in `test/corpus/` inherit that limit exactly: they make the
+counter-example re-runnable, and two hand-read accounts are still not a rate.

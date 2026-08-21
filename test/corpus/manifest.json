@@ -113,6 +113,7 @@
   {
    "username": "___AirBuddDwyer___",
    "class": "human",
+   "cohort": "politics-thread",
    "capturedAt": 1787155732,
    "comments": 300,
    "posts": 6,
@@ -151,6 +152,7 @@
   {
    "username": "ADELTAx",
    "class": "human",
+   "cohort": "politics-thread",
    "capturedAt": 1787155798,
    "comments": 300,
    "posts": 42,
@@ -189,6 +191,7 @@
   {
    "username": "AmputatorBot",
    "class": "bot",
+   "cohort": "declared-bot",
    "capturedAt": 1787030510,
    "comments": 299,
    "posts": 17,
@@ -227,6 +230,7 @@
   {
    "username": "Anti-ThisBot-IB",
    "class": "bot",
+   "cohort": "declared-bot",
    "capturedAt": 1787030733,
    "comments": 299,
    "posts": 0,
@@ -265,6 +269,7 @@
   {
    "username": "Aubenabee",
    "class": "human",
+   "cohort": "politics-thread",
    "capturedAt": 1787155848,
    "comments": 300,
    "posts": 73,
@@ -303,6 +308,7 @@
   {
    "username": "AutoModerator",
    "class": "bot",
+   "cohort": "declared-bot",
    "capturedAt": 1787030317,
    "comments": 296,
    "posts": 100,
@@ -341,6 +347,7 @@
   {
    "username": "batmansthebomb",
    "class": "human",
+   "cohort": "politics-thread",
    "capturedAt": 1787155432,
    "comments": 300,
    "posts": 100,
@@ -379,6 +386,7 @@
   {
    "username": "bigbjarne",
    "class": "human",
+   "cohort": "politics-thread",
    "capturedAt": 1787154948,
    "comments": 300,
    "posts": 66,
@@ -417,6 +425,7 @@
   {
    "username": "Biscopiphany",
    "class": "human",
+   "cohort": "politics-thread",
    "capturedAt": 1787155753,
    "comments": 198,
    "posts": 3,
@@ -453,8 +462,48 @@
    "synthesisWarnings": []
   },
   {
+   "username": "chilidirigible",
+   "class": "human",
+   "cohort": "prolific-probe",
+   "capturedAt": 1787297544,
+   "comments": 300,
+   "posts": 100,
+   "declaredBy": null,
+   "declarationNote": null,
+   "real": {
+    "automation": {
+     "band": "low",
+     "score": 25
+    },
+    "agenda": {
+     "band": "moderate",
+     "score": 63
+    },
+    "authenticity": {
+     "band": "low",
+     "score": 16
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "low",
+     "score": 25
+    },
+    "agenda": {
+     "band": "moderate",
+     "score": 57
+    },
+    "authenticity": {
+     "band": "low",
+     "score": 16
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
    "username": "Donkletown",
    "class": "human",
+   "cohort": "politics-thread",
    "capturedAt": 1787154980,
    "comments": 300,
    "posts": 9,
@@ -493,6 +542,7 @@
   {
    "username": "DooberBooberDoo",
    "class": "human",
+   "cohort": "politics-thread",
    "capturedAt": 1787155492,
    "comments": 300,
    "posts": 100,
@@ -531,6 +581,7 @@
   {
    "username": "Hartacus",
    "class": "human",
+   "cohort": "politics-thread",
    "capturedAt": 1787155062,
    "comments": 100,
    "posts": 17,
@@ -567,8 +618,48 @@
    "synthesisWarnings": []
   },
   {
+   "username": "humdingler",
+   "class": "human",
+   "cohort": "prolific-probe",
+   "capturedAt": 1787297523,
+   "comments": 300,
+   "posts": 73,
+   "declaredBy": null,
+   "declarationNote": null,
+   "real": {
+    "automation": {
+     "band": "low",
+     "score": 14
+    },
+    "agenda": {
+     "band": "moderate",
+     "score": 55
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 52
+    }
+   },
+   "frozen": {
+    "automation": {
+     "band": "low",
+     "score": 14
+    },
+    "agenda": {
+     "band": "moderate",
+     "score": 55
+    },
+    "authenticity": {
+     "band": "moderate",
+     "score": 52
+    }
+   },
+   "synthesisWarnings": []
+  },
+  {
    "username": "KevinGreeneSolar",
    "class": "human",
+   "cohort": "politics-thread",
    "capturedAt": 1787155254,
    "comments": 135,
    "posts": 0,
@@ -607,6 +698,7 @@
   {
    "username": "MundaneFacts",
    "class": "human",
+   "cohort": "politics-thread",
    "capturedAt": 1787155302,
    "comments": 300,
    "posts": 5,
@@ -645,6 +737,7 @@
   {
    "username": "Parahelix",
    "class": "human",
+   "cohort": "politics-thread",
    "capturedAt": 1787155387,
    "comments": 300,
    "posts": 23,
@@ -683,6 +776,7 @@
   {
    "username": "Qrahe",
    "class": "human",
+   "cohort": "politics-thread",
    "capturedAt": 1787155172,
    "comments": 300,
    "posts": 27,
@@ -721,6 +815,7 @@
   {
    "username": "RemindMeBot",
    "class": "bot",
+   "cohort": "declared-bot",
    "capturedAt": 1787030332,
    "comments": 299,
    "posts": 1,
@@ -759,6 +854,7 @@
   {
    "username": "RepostSleuthBot",
    "class": "bot",
+   "cohort": "declared-bot",
    "capturedAt": 1787030352,
    "comments": 299,
    "posts": 6,
@@ -797,6 +893,7 @@
   {
    "username": "runnertrailsBay",
    "class": "human",
+   "cohort": "politics-thread",
    "capturedAt": 1787155000,
    "comments": 145,
    "posts": 0,
@@ -835,6 +932,7 @@
   {
    "username": "same_subreddit_bot",
    "class": "bot",
+   "cohort": "declared-bot",
    "capturedAt": 1787154726,
    "comments": 300,
    "posts": 0,
@@ -873,6 +971,7 @@
   {
    "username": "sneakpeekbot",
    "class": "bot",
+   "cohort": "declared-bot",
    "capturedAt": 1787030406,
    "comments": 299,
    "posts": 23,
@@ -911,6 +1010,7 @@
   {
    "username": "sub_doesnt_exist_bot",
    "class": "bot",
+   "cohort": "declared-bot",
    "capturedAt": 1787154846,
    "comments": 300,
    "posts": 0,
@@ -949,6 +1049,7 @@
   {
    "username": "TCBloo",
    "class": "human",
+   "cohort": "politics-thread",
    "capturedAt": 1787155514,
    "comments": 300,
    "posts": 100,
@@ -987,6 +1088,7 @@
   {
    "username": "Tobeck",
    "class": "human",
+   "cohort": "politics-thread",
    "capturedAt": 1787155563,
    "comments": 300,
    "posts": 100,
@@ -1025,6 +1127,7 @@
   {
    "username": "WhatTheHali24",
    "class": "human",
+   "cohort": "politics-thread",
    "capturedAt": 1787155628,
    "comments": 300,
    "posts": 46,

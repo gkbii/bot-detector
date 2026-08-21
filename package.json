@@ -42,13 +42,13 @@
     "server/test/ the backend's. A single test/*.test.js glob silently skips",
     "the server.",
     "",
-    "`evaluate` reprints EVALUATION.md's headline band table from the 25",
-    "profiles frozen in test/corpus/ and exits non-zero if any of the 75 scores",
+    "`evaluate` reprints EVALUATION.md's headline band table from the 27",
+    "profiles frozen in test/corpus/ and exits non-zero if any of the 81 scores",
     "moved. It reads nothing but JSON -- no network, no node_modules -- so",
     "'the 17-human / 8-bot separation is not regressed' is a command rather",
-    "than a hand re-measure (JIO-343). `capture:corpus` is the ONLY script here",
-    "that goes to the network; it is not part of `test` and is run by hand when",
-    "the corpus is deliberately refreshed."
+    "than a hand re-measure (JIO-343). `capture:corpus` is one of the two",
+    "scripts here that go to the network -- probe-prolific-humans.mjs is the",
+    "other (JIO-344) -- and neither is part of `test`; both are run by hand."
   ],
   "scripts": {
     "start": "node server/index.js",

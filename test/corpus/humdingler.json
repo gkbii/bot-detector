@@ -1,0 +1,3627 @@
+{
+ "username": "humdingler",
+ "class": "human",
+ "cohort": "prolific-probe",
+ "capturedAt": 1787297523,
+ "bodies": "synthesised-length-matched",
+ "declaredBy": null,
+ "declarationNote": null,
+ "declarations": 0,
+ "profile": {
+  "platform": "reddit",
+  "username": "humdingler",
+  "id": "79lsbtg1",
+  "fetchedAt": 1787297523,
+  "accountAgeDays": 2195.7271296296294,
+  "firstSeenUtc": 1597586699,
+  "karma": {
+   "post": 60738,
+   "comment": 129847,
+   "total": 190585
+  },
+  "counts": {
+   "comments": 4848,
+   "posts": 69
+  },
+  "comments": [
+   {
+    "id": "p4xc27a",
+    "createdUtc": 1787269228,
+    "group": "Superstonk",
+    "body": "moo suma awning terrace gable marigold",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4xbskn",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4xbgov",
+    "createdUtc": 1787269034,
+    "group": "Superstonk",
+    "body": "mea cav bra str sl sum ironw cob sla",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4x9xsv",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4x8xew",
+    "createdUtc": 1787268220,
+    "group": "Superstonk",
+    "body": "bronzee gaugee oake caverne reede currente plazae ledgee keystonee prairiee shingle mesa eagle",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4x76d8",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4x7rz6",
+    "createdUtc": 1787267849,
+    "group": "Superstonk",
+    "body": "sil cla feathe sage kiln basin rivulet silt doorway willow moss gravel atlas fleece vane kiln horizon teal fountain quartz",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t3_1vtd418",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4x770w",
+    "createdUtc": 1787267663,
+    "group": "Superstonk",
+    "body": "clo pi thre curta twi cupboa inl plate thist fro hand spind ir foy mo bould bron holl wind stuc rush",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4x6emi",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4x5szi",
+    "createdUtc": 1787267224,
+    "group": "Superstonk",
+    "body": "ropee wagon prairie foliage bridge birch ledge forge thread spindle tundra stipple frost coral?",
+    "score": null,
+    "threadId": "t3_1vtz34g",
+    "parentId": "t3_1vtz34g",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4x1clc",
+    "createdUtc": 1787265840,
+    "group": "Superstonk",
+    "body": "lavendereeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtuwnu",
+    "parentId": "t1_p4x0jm8",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4x07a8",
+    "createdUtc": 1787265484,
+    "group": "Superstonk",
+    "body": "holloweeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4x045i",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4wzy93",
+    "createdUtc": 1787265407,
+    "group": "Superstonk",
+    "body": "sum atl cor furr dri ald bo do hat rush mirr lob sine nicke pastur iri suma shutte heart",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4wzs4l",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4wztan",
+    "createdUtc": 1787265365,
+    "group": "Superstonk",
+    "body": "wharfeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4v4nwz",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4wyx6k",
+    "createdUtc": 1787265087,
+    "group": "Superstonk",
+    "body": "heathereeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4w2e26",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4wytg3",
+    "createdUtc": 1787265056,
+    "group": "Superstonk",
+    "body": "cob stair sad compa",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4vuoxv",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4wyohf",
+    "createdUtc": 1787265014,
+    "group": "Superstonk",
+    "body": "watercourseeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4wyjv2",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4wydyv",
+    "createdUtc": 1787264925,
+    "group": "Superstonk",
+    "body": "ridg fiddl moo flagston coppe mosaic lichen larch foyer yarrow quarry fountain branch beacon",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4wxrsd",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4wwafc",
+    "createdUtc": 1787264289,
+    "group": "Superstonk",
+    "body": "ravineeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4ww5p3",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4wvx0u",
+    "createdUtc": 1787264177,
+    "group": "Superstonk",
+    "body": "blanketeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtuwnu",
+    "parentId": "t1_p4w8fgd",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4wviu7",
+    "createdUtc": 1787264060,
+    "group": "Superstonk",
+    "body": "wickereeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4wv3ch",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4wu0gn",
+    "createdUtc": 1787263605,
+    "group": "Superstonk",
+    "body": "quartzeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t3_1vtd418",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4wtv79",
+    "createdUtc": 1787263561,
+    "group": "Superstonk",
+    "body": "yar car net h c satch stuc pla hear tind qui for tidepo?",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4w3pt4",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4wtlv1",
+    "createdUtc": 1787263483,
+    "group": "Superstonk",
+    "body": "atl gutt arr twin glad canyo cres flanne mes blanke junipe branc beaco",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4w5w5y",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4wt9kk",
+    "createdUtc": 1787263382,
+    "group": "Superstonk",
+    "body": "atti aspe pebbl mirro stran doorwa bambo dahlia arch ember doorway plaza burrow gravel flagstone basin nickel stone lavender oak dawn yarrow crest fountain board ginger sleet vine coral hollow ginger",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4wmw17",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4wsrpm",
+    "createdUtc": 1787263235,
+    "group": "Superstonk",
+    "body": "trelliseeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtvi5f",
+    "parentId": "t1_p4wqni2",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4wslbp",
+    "createdUtc": 1787263183,
+    "group": "Superstonk",
+    "body": "canaleeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtvi5f",
+    "parentId": "t1_p4whxal",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4wm7ri",
+    "createdUtc": 1787261337,
+    "group": "Superstonk",
+    "body": "cresteeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtugkt",
+    "parentId": "t3_1vtugkt",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4wlqch",
+    "createdUtc": 1787261198,
+    "group": "Superstonk",
+    "body": "..",
+    "score": null,
+    "threadId": "t3_1vtugkt",
+    "parentId": "t1_p4wc8i5",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4wlp2o",
+    "createdUtc": 1787261188,
+    "group": "Superstonk",
+    "body": "..",
+    "score": null,
+    "threadId": "t3_1vtugkt",
+    "parentId": "t1_p4w4xz2",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4wlo3d",
+    "createdUtc": 1787261180,
+    "group": "Superstonk",
+    "body": "..",
+    "score": null,
+    "threadId": "t3_1vtugkt",
+    "parentId": "t1_p4wj6gi",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4wlmrg",
+    "createdUtc": 1787261170,
+    "group": "Superstonk",
+    "body": "can bam thick arr?",
+    "score": null,
+    "threadId": "t3_1vtugkt",
+    "parentId": "t1_p4wcawj",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4wlioc",
+    "createdUtc": 1787261139,
+    "group": "Superstonk",
+    "body": "streameeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtugkt",
+    "parentId": "t1_p4wes5v",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4wlg05",
+    "createdUtc": 1787261118,
+    "group": "Superstonk",
+    "body": "..",
+    "score": null,
+    "threadId": "t3_1vtugkt",
+    "parentId": "t1_p4w41p4",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4wlbzu",
+    "createdUtc": 1787261087,
+    "group": "Superstonk",
+    "body": "dusk eagle crest ash",
+    "score": null,
+    "threadId": "t3_1vtugkt",
+    "parentId": "t1_p4w46is",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4weq1k",
+    "createdUtc": 1787259260,
+    "group": "Superstonk",
+    "body": "cre tunn will mo inl va ditc boulde platea forg kil liche",
+    "score": null,
+    "threadId": "t3_1vtm7gh",
+    "parentId": "t1_p4wejt7",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4v7te8",
+    "createdUtc": 1787248150,
+    "group": "Superstonk",
+    "body": "gullyeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtmzy6",
+    "parentId": "t1_p4v5oe4",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4v7c5i",
+    "createdUtc": 1787248028,
+    "group": "Superstonk",
+    "body": "cor brid summ knol shutte gabl carpe marigol",
+    "score": null,
+    "threadId": "t3_1vtqenw",
+    "parentId": "t3_1vtqenw",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4v77hl",
+    "createdUtc": 1787247996,
+    "group": "Superstonk",
+    "body": "locketeeeee porcheeeee hosteleeee cindereeee",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4v6b34",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4v6bnq",
+    "createdUtc": 1787247775,
+    "group": "Superstonk",
+    "body": "milleteeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4v5953",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4v2prl",
+    "createdUtc": 1787246865,
+    "group": "Superstonk",
+    "body": "verandaeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4v2dgd",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4v1p4y",
+    "createdUtc": 1787246610,
+    "group": "Superstonk",
+    "body": "cree tidepoo flas cinde plaz orchar sine channe rapid ceda valle lighthous ambe bol porc dais burro sine sedg coppe aspe granit boulde sedg linte bundl dus clif windo mos ambe saddl grave plaz marigol rowa broo furrow shelf sapling prairie shingle atlas inlet autumn?",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t3_1vtd418",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4uy0gg",
+    "createdUtc": 1787245676,
+    "group": "Superstonk",
+    "body": "canyonee awninge stovee",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4ubkzp",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4uxu3w",
+    "createdUtc": 1787245632,
+    "group": "Superstonk",
+    "body": "glaci sto folia cha dri ravi plate orcha ar barr horiz ald por jet da trou bro",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4uv721",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4uwmv2",
+    "createdUtc": 1787245326,
+    "group": "Superstonk",
+    "body": "lightho vall slo weatherva cave anch gau",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4uwhlp",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4uwepd",
+    "createdUtc": 1787245267,
+    "group": "Superstonk",
+    "body": "arb chann miner lin flee freck gla fin flee gla a cryst si shing del att will thist asp mar jet parc ced junip padd timb asp ax lavend spi spru del a mi mant trou nett cind fin fabr si cott rop doc inle bundl stran fros sine daw gull ironwoo harbo barre swal flagston",
+    "score": null,
+    "threadId": "t3_1vtnehi",
+    "parentId": "t1_p4uvlc6",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4uu2au",
+    "createdUtc": 1787244682,
+    "group": "Superstonk",
+    "body": "sapli sto basi",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4tpcdo",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4utaiz",
+    "createdUtc": 1787244489,
+    "group": "Superstonk",
+    "body": "fer satch",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4ugtbn",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4urrql",
+    "createdUtc": 1787244107,
+    "group": "Superstonk",
+    "body": "pineeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4ulq9n",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4up0nq",
+    "createdUtc": 1787243403,
+    "group": "Superstonk",
+    "body": "gaugeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtmzy6",
+    "parentId": "t1_p4uovtg",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4uoitq",
+    "createdUtc": 1787243276,
+    "group": "Superstonk",
+    "body": "hutcheeee ropeeeee aldereeee graveleeee twineeeee",
+    "score": null,
+    "threadId": "t3_1vtm7gh",
+    "parentId": "t1_p4umxfp",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4uob7k",
+    "createdUtc": 1787243222,
+    "group": "Superstonk",
+    "body": "charteeeee curtaineeeee milleteeee fountaineeee quarryeeee",
+    "score": null,
+    "threadId": "t3_1vtm7gh",
+    "parentId": "t1_p4un7cn",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4unrs7",
+    "createdUtc": 1787243086,
+    "group": "Superstonk",
+    "body": "cush gaz pop le cot chan wic sand harb sto torre si popl",
+    "score": null,
+    "threadId": "t3_1vtmzy6",
+    "parentId": "t1_p4uktup",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4unl8a",
+    "createdUtc": 1787243040,
+    "group": "Superstonk",
+    "body": "rapidseeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtnd21",
+    "parentId": "t1_p4ulg0l",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4uma5u",
+    "createdUtc": 1787242708,
+    "group": "Superstonk",
+    "body": "crystaleeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4ttdkb",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ulsaf",
+    "createdUtc": 1787242582,
+    "group": "Superstonk",
+    "body": "map inl cryst iv cotto gazeb lanter pantr bea spruc quarr mars wago fer bea grov bucke estuar fiel sea",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4trrk8",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ule1u",
+    "createdUtc": 1787242482,
+    "group": "Superstonk",
+    "body": "i frec marigo keysto mo bro gla thre vi bo cave sed?",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4ttu8k",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ukw3m",
+    "createdUtc": 1787242354,
+    "group": "Superstonk",
+    "body": "canv grav brack tund flagsto can curre quar bould cave ir st ravi inl cre rid cab de harb pa du kett rush sha hand a headla wind sle poll i lil i di pastu lich marb orcha chann thick sycamo bran gab do be headla latti trelli",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4u7n16",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4uk88s",
+    "createdUtc": 1787242184,
+    "group": "Superstonk",
+    "body": "rapi fin mirro ledg cana?",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4ui1dw",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ujus1",
+    "createdUtc": 1787242089,
+    "group": "Superstonk",
+    "body": "est hea cot?",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4ubzbj",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ujmh4",
+    "createdUtc": 1787242030,
+    "group": "Superstonk",
+    "body": "estu br ironw heat a ch row grani burr tow cind fer ta filame stra beac thick blo",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4uhqty",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4uieft",
+    "createdUtc": 1787241716,
+    "group": "Superstonk",
+    "body": "bloomeee estuaryeee timberee weathervaneee cableee bloomee",
+    "score": null,
+    "threadId": "t3_1vtm7gh",
+    "parentId": "t1_p4uh8sq",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ui2bn",
+    "createdUtc": 1787241630,
+    "group": "Superstonk",
+    "body": "horizo crow timbe headlan rowa meado burro vin ree shingl quart bloo locke ravin shal crysta rop birc spruc satche shutte spindl saddl thimbl saplin walnu dun gat estuar willo awnin summi mes alde rapid bracke fountai cora drif iv shal curtai sorre tundr bloo pin rafte doc eagl heart finc twin ree paddl fer sedg scaffol heart carpe mes ironwoo sorre aspe fiddle crown?",
+    "score": null,
+    "threadId": "t3_1vtm7gh",
+    "parentId": "t1_p4ufh28",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ugjbk",
+    "createdUtc": 1787241245,
+    "group": "Superstonk",
+    "body": "hazeleeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtmzy6",
+    "parentId": "t3_1vtmzy6",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4ufqsa",
+    "createdUtc": 1787241045,
+    "group": "Superstonk",
+    "body": "sineweeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtn8mu",
+    "parentId": "t3_1vtn8mu",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4ub7bg",
+    "createdUtc": 1787239895,
+    "group": "Superstonk",
+    "body": "licheneeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4uakjo",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ub1gy",
+    "createdUtc": 1787239854,
+    "group": "Superstonk",
+    "body": "stemeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtm7gh",
+    "parentId": "t1_p4u9eot",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4u9sed",
+    "createdUtc": 1787239537,
+    "group": "Superstonk",
+    "body": "stoveeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4u9my7",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4u96zt",
+    "createdUtc": 1787239386,
+    "group": "Superstonk",
+    "body": "marbleeeee doorwayeeee quarryeee wharfeee marsheee",
+    "score": null,
+    "threadId": "t3_1vtm7gh",
+    "parentId": "t1_p4u7r5u",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4u8uex",
+    "createdUtc": 1787239297,
+    "group": "Superstonk",
+    "body": "ridgeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtkafo",
+    "parentId": "t3_1vtkafo",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4u8b4j",
+    "createdUtc": 1787239159,
+    "group": "Superstonk",
+    "body": "hoopeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtm7gh",
+    "parentId": "t1_p4u7cbq",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4u7lu0",
+    "createdUtc": 1787238979,
+    "group": "Superstonk",
+    "body": "clove ditc crow cabl tundr wago pilla mos grov ferr des marigol rapid pebbl grov pine pane shale dusk broom dune saddle feather",
+    "score": null,
+    "threadId": "t3_1vtm7gh",
+    "parentId": "t3_1vtm7gh",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4u5kk6",
+    "createdUtc": 1787238452,
+    "group": "Superstonk",
+    "body": "tarneeeeeee quarryeeeeeee daisyeeeeeee tunneleeeeeee",
+    "score": null,
+    "threadId": "t3_1vtg77a",
+    "parentId": "t1_p4t631t",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4u51mk",
+    "createdUtc": 1787238315,
+    "group": "Superstonk",
+    "body": "va harb te por cind bir i cind st folia fer a raili lavend fenn mirr cres stov kil heart doorwa birc crat bronz beaco moo trestl",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4u2ktw",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4u4k30",
+    "createdUtc": 1787238188,
+    "group": "Superstonk",
+    "body": "oateeeee ditcheeeee latticeeeee marbleeeee feathereeee",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4u38fv",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4u4bmb",
+    "createdUtc": 1787238126,
+    "group": "Superstonk",
+    "body": "stairwayeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4u3t9r",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4u3kje",
+    "createdUtc": 1787237929,
+    "group": "Superstonk",
+    "body": "burroweeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtf28u",
+    "parentId": "t1_p4tfx2a",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4u391c",
+    "createdUtc": 1787237846,
+    "group": "Superstonk",
+    "body": "furroweeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t3_1vtd418",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4u2xkm",
+    "createdUtc": 1787237764,
+    "group": "Superstonk",
+    "body": "bambooe harbore branche miste trestlee buckete larche candlee cottone flask",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t1_p4u0bsd",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4tzzia",
+    "createdUtc": 1787237004,
+    "group": "Superstonk",
+    "body": "heartheeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtkxi1",
+    "parentId": "t3_1vtkxi1",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4tyhr9",
+    "createdUtc": 1787236609,
+    "group": "Superstonk",
+    "body": "slopeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtkh73",
+    "parentId": "t3_1vtkh73",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4tybcz",
+    "createdUtc": 1787236561,
+    "group": "Superstonk",
+    "body": "furroweeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vtd418",
+    "parentId": "t3_1vtd418",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4rvi41",
+    "createdUtc": 1787207594,
+    "group": "Superstonk",
+    "body": "hoopeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vsxiet",
+    "parentId": "t1_p4rvbeq",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4rta5g",
+    "createdUtc": 1787206527,
+    "group": "Superstonk",
+    "body": "crysta barre rafte kettl satche handl paddl ree mantle?",
+    "score": null,
+    "threadId": "t3_1vtba7p",
+    "parentId": "t3_1vtba7p",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4r4vn4",
+    "createdUtc": 1787196029,
+    "group": "Superstonk",
+    "body": "spruceeeee fleeceeeee mesaeeee ledgeeeee crystaleeee",
+    "score": null,
+    "threadId": "t3_1vsxzrz",
+    "parentId": "t1_p4r4pfy",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4qy39h",
+    "createdUtc": 1787193566,
+    "group": "Superstonk",
+    "body": "carpeteeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vt1ch8",
+    "parentId": "t1_p4qxw3f",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4qvmjp",
+    "createdUtc": 1787192724,
+    "group": "Superstonk",
+    "body": "pastureeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vt1ch8",
+    "parentId": "t1_p4qvgdd",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4qp5re",
+    "createdUtc": 1787190542,
+    "group": "Superstonk",
+    "body": "furro stoo",
+    "score": null,
+    "threadId": "t3_1vt57wi",
+    "parentId": "t1_p4qmf30",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4qkhp6",
+    "createdUtc": 1787189006,
+    "group": "Superstonk",
+    "body": "scaffoldeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4qk85n",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4qk2o9",
+    "createdUtc": 1787188870,
+    "group": "Superstonk",
+    "body": "paddleeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4qjuq3",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4qji1l",
+    "createdUtc": 1787188684,
+    "group": "Superstonk",
+    "body": "junipe gat cactus",
+    "score": null,
+    "threadId": "t3_1vt5acw",
+    "parentId": "t3_1vt5acw",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4qjcge",
+    "createdUtc": 1787188633,
+    "group": "Superstonk",
+    "body": "arboreeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4qilln",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4qj2vz",
+    "createdUtc": 1787188545,
+    "group": "Superstonk",
+    "body": "chapeleeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vt57wi",
+    "parentId": "t3_1vt57wi",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4qght7",
+    "createdUtc": 1787187696,
+    "group": "Superstonk",
+    "body": "bircheeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vt4pq7",
+    "parentId": "t1_p4qg13o",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4qff4x",
+    "createdUtc": 1787187346,
+    "group": "Superstonk",
+    "body": "bracke heart moo gaug garden",
+    "score": null,
+    "threadId": "t3_1vt4pq7",
+    "parentId": "t1_p4qf6jw",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4qf5pp",
+    "createdUtc": 1787187261,
+    "group": "Superstonk",
+    "body": "dia curtai terrac bloo blanke furro slee daw arro tidepoo broo rowa chal kettle channel channel pasture brook",
+    "score": null,
+    "threadId": "t3_1vt4pq7",
+    "parentId": "t3_1vt4pq7",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4qem6c",
+    "createdUtc": 1787187086,
+    "group": "Superstonk",
+    "body": "hosteleeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4qdwl4",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4qe9mr",
+    "createdUtc": 1787186973,
+    "group": "Superstonk",
+    "body": "sycamoreeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4qde4e",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4qczsk",
+    "createdUtc": 1787186559,
+    "group": "Superstonk",
+    "body": "headlandeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4qcsqy",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4qch2z",
+    "createdUtc": 1787186389,
+    "group": "Superstonk",
+    "body": "wagone toolshede steme clovere ferrye marshe tidepoole amber maple boulder rudder attic arrow beam teal harbor nickel oat boulder lighthouse ivy amber",
+    "score": null,
+    "threadId": "t3_1vt44gh",
+    "parentId": "t1_p4qbqbs",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4qc1mo",
+    "createdUtc": 1787186250,
+    "group": "Superstonk",
+    "body": "rivu chan pl g si sapl awn junip",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4qbxl9",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4qb9kr",
+    "createdUtc": 1787185996,
+    "group": "Superstonk",
+    "body": "rapi ciste blo sadd fla del twi thick cha tind feath hut trell cli hed map fenn mant sin padd marb stairw ax mant terra sla lar pebb turr dai latti pant chap lante mill filame sorr rapi stre blo canv stuc quar cli gra sto twi bristl atla harbo sycamor polle rushe?",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4qaepv",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4qagbe",
+    "createdUtc": 1787185732,
+    "group": "Superstonk",
+    "body": "foy gab di va thist thre nett flann hear brist gla map fie brist fiel tunne lila valle lattic heart stran bambo spindl ironwoo fenne",
+    "score": null,
+    "threadId": "t3_1vt44gh",
+    "parentId": "t3_1vt44gh",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4q86of",
+    "createdUtc": 1787185009,
+    "group": "Superstonk",
+    "body": "linteleeee fenneleeee inleteeee graniteeeee",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4q7q9x",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4q7980",
+    "createdUtc": 1787184713,
+    "group": "Superstonk",
+    "body": "asheeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4q6mgf",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4q5yqi",
+    "createdUtc": 1787184301,
+    "group": "Superstonk",
+    "body": "estuaryeeeee candleeeee parceleeee archeeee lineneeee",
+    "score": null,
+    "threadId": "t3_1vt3ezp",
+    "parentId": "t1_p4q4xut",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4q4uyf",
+    "createdUtc": 1787183949,
+    "group": "Superstonk",
+    "body": "brasseeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vt3ezp",
+    "parentId": "t1_p4q4q82",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4q4rzo",
+    "createdUtc": 1787183923,
+    "group": "Superstonk",
+    "body": "strandeeeeee arboreeeeee parceleeeeee mirroreeeee",
+    "score": null,
+    "threadId": "t3_1vt3ezp",
+    "parentId": "t3_1vt3ezp",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4pxkzz",
+    "createdUtc": 1787181639,
+    "group": "Superstonk",
+    "body": "pastureeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vt1ch8",
+    "parentId": "t1_p4pxfel",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4px600",
+    "createdUtc": 1787181510,
+    "group": "Superstonk",
+    "body": "kettl horizo meadow ginger larch desk rope",
+    "score": null,
+    "threadId": "t3_1vszn0j",
+    "parentId": "t1_p4pg31o",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4pwfmi",
+    "createdUtc": 1787181281,
+    "group": "Superstonk",
+    "body": "milleteeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vt1ch8",
+    "parentId": "t1_p4pucd3",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4pwc3e",
+    "createdUtc": 1787181251,
+    "group": "Superstonk",
+    "body": "barreleeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vt1ch8",
+    "parentId": "t1_p4psegx",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4pw06s",
+    "createdUtc": 1787181147,
+    "group": "Superstonk",
+    "body": "pillareeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vt1ch8",
+    "parentId": "t1_p4pvm49",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4puq98",
+    "createdUtc": 1787180752,
+    "group": "Superstonk",
+    "body": "kettleeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vt1ch8",
+    "parentId": "t1_p4pu9vy",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4pu30i",
+    "createdUtc": 1787180554,
+    "group": "Superstonk",
+    "body": "estu latti pi plate gra curta",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4pu0gg",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4pts3n",
+    "createdUtc": 1787180461,
+    "group": "Superstonk",
+    "body": "peb outcr fin qui stipp lighthou tow gla fie holl thist pla watercour sto sa stipp pastu cushi swa host foy grani",
+    "score": null,
+    "threadId": "t3_1vt1ch8",
+    "parentId": "t1_p4ptkaj",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4pswk8",
+    "createdUtc": 1787180196,
+    "group": "Superstonk",
+    "body": "net arr lob me flee thist",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t3_1vsfyu5",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4psm8q",
+    "createdUtc": 1787180110,
+    "group": "Superstonk",
+    "body": "cave?",
+    "score": null,
+    "threadId": "t3_1vt1ch8",
+    "parentId": "t1_p4prpa0",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4psg5h",
+    "createdUtc": 1787180059,
+    "group": "Superstonk",
+    "body": "slopee chapele stipplee bronzee applee jasminee finche junipere honeye woodland anchor bloom attic bundle quartz pillar thistle stove fathom wicker cushion dial",
+    "score": null,
+    "threadId": "t3_1vt1ch8",
+    "parentId": "t1_p4pqcqw",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4prm82",
+    "createdUtc": 1787179811,
+    "group": "Superstonk",
+    "body": "arroweeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vt1ch8",
+    "parentId": "t1_p4prh2f",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4pr46v",
+    "createdUtc": 1787179659,
+    "group": "Superstonk",
+    "body": "coa fer biscu holl grani barr folia sapli cre kno map fidd shutt thist grani fer quar lich hat host fro bir trest popl tunn rivul gaze quar hand i lattic trelli mis marigol turre nicke mosai biscui ginge ston summi mos glas filamen toolshe rushe clove sag stran spir tar fountai cinde fiel vin timbe branc polle",
+    "score": null,
+    "threadId": "t3_1vt1ch8",
+    "parentId": "t1_p4pqllb",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4pq8lp",
+    "createdUtc": 1787179393,
+    "group": "Superstonk",
+    "body": "gul hoo arc bridg des birc coppe cree railin lattic kil pebbl line lighthous foliag bel marigol knol hutc",
+    "score": null,
+    "threadId": "t3_1vsxzrz",
+    "parentId": "t1_p4pq22k",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4pq2w3",
+    "createdUtc": 1787179345,
+    "group": "Superstonk",
+    "body": "rivul miner cre led fenn pastu carpe foye porc dus clif headlan aspe cella cobbl",
+    "score": null,
+    "threadId": "t3_1vt1ch8",
+    "parentId": "t1_p4pp7o3",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ppkbu",
+    "createdUtc": 1787179189,
+    "group": "Superstonk",
+    "body": "bro founta feath a blank cro cact scaffo gul beac junip heart oa junipe meado",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4pofmq",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4pp62h",
+    "createdUtc": 1787179070,
+    "group": "Superstonk",
+    "body": "spru flee cushi dri gard bra sto gau pla sha cha sum kno cre pa plate horiz gau att bad chimn mar woodla compa stra buck o arr fro pill ax woodla row fla de si map cli tind lil beac row hon clov scaffo toolsh be fla gard hed cinde thimbl daw plaz ree bucke iv bristl furro chimne curren haze rafte canyo iv blanke glas arc bundl hedg",
+    "score": null,
+    "threadId": "t3_1vsxzrz",
+    "parentId": "t1_p4pnpn5",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4po8nz",
+    "createdUtc": 1787178790,
+    "group": "Superstonk",
+    "body": "seameeee cedareeee arboreee aldereee ledgeeee",
+    "score": null,
+    "threadId": "t3_1vt1ch8",
+    "parentId": "t3_1vt1ch8",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4plqse",
+    "createdUtc": 1787178042,
+    "group": "Superstonk",
+    "body": "heathereeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vsxzrz",
+    "parentId": "t1_p4plfl6",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4pl4x3",
+    "createdUtc": 1787177862,
+    "group": "Superstonk",
+    "body": "walnuteeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vsxzrz",
+    "parentId": "t1_p4pkurs",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4phe2a",
+    "createdUtc": 1787176773,
+    "group": "Superstonk",
+    "body": "vaneeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vsxzrz",
+    "parentId": "t1_p4pfuup",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4pbbb2",
+    "createdUtc": 1787175064,
+    "group": "Superstonk",
+    "body": "eagleeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vsxzrz",
+    "parentId": "t1_p4pb3ze",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4paker",
+    "createdUtc": 1787174855,
+    "group": "Superstonk",
+    "body": "ho te be tunn mead satch fli lint fabr autu burr woodla mo a thre asp cact cha ravi compa host sto gard tunn chape inle slop shel",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4p90kq",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4pa52t",
+    "createdUtc": 1787174735,
+    "group": "Superstonk",
+    "body": "iriseeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vszn0j",
+    "parentId": "t3_1vszn0j",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4p9pqz",
+    "createdUtc": 1787174617,
+    "group": "Superstonk",
+    "body": "foun latt sp nic bo at frec",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4p7wak",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4p7gxw",
+    "createdUtc": 1787173995,
+    "group": "Superstonk",
+    "body": "threadeeee crowneeee duskeeee archeee bircheee boardeee",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4p79ie",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4p3p6b",
+    "createdUtc": 1787172969,
+    "group": "Superstonk",
+    "body": "saddleeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4p31kq",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4p23j9",
+    "createdUtc": 1787172540,
+    "group": "Superstonk",
+    "body": "cli flee hear vau feath ro can filame kettl bloo",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4p1xfm",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4p1g8x",
+    "createdUtc": 1787172370,
+    "group": "Superstonk",
+    "body": "marbleeeeeeee ridgeeeeeeee spireeeeeee turreteeeeee",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4p19u0",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4p1bb5",
+    "createdUtc": 1787172334,
+    "group": "Superstonk",
+    "body": "pastu pewt sed compa latti as channe spir prairi hone delt as heart?",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t3_1vsfyu5",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4p0z4h",
+    "createdUtc": 1787172244,
+    "group": "Superstonk",
+    "body": "m rap pi thick arb me rush da ki stairw row hut cupboa stra arr tunn ki",
+    "score": null,
+    "threadId": "t3_1vsxzrz",
+    "parentId": "t1_p4oz9g4",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4p08m5",
+    "createdUtc": 1787172050,
+    "group": "Superstonk",
+    "body": "wickereeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vsxiet",
+    "parentId": "t1_p4ozano",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ozic6",
+    "createdUtc": 1787171858,
+    "group": "Superstonk",
+    "body": "gullyeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vsxzrz",
+    "parentId": "t1_p4ozbf1",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4oytkg",
+    "createdUtc": 1787171678,
+    "group": "Superstonk",
+    "body": "hedgeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vsxiet",
+    "parentId": "t1_p4oyhwg",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4oygix",
+    "createdUtc": 1787171585,
+    "group": "Superstonk",
+    "body": "......................................................................................................................",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t3_1vsfyu5",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4oxbci",
+    "createdUtc": 1787171289,
+    "group": "Superstonk",
+    "body": "branc filamen tunne fenne rop finc atti bambo lumber",
+    "score": null,
+    "threadId": "t3_1vsxzrz",
+    "parentId": "t3_1vsxzrz",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4owiek",
+    "createdUtc": 1787171084,
+    "group": "Superstonk",
+    "body": "lock larc grov",
+    "score": null,
+    "threadId": "t3_1vsxiet",
+    "parentId": "t1_p4otz9s",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ovx0y",
+    "createdUtc": 1787170931,
+    "group": "Superstonk",
+    "body": "axl towe tower ravine garden",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4ouoi7",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ou05x",
+    "createdUtc": 1787170442,
+    "group": "Superstonk",
+    "body": "saplingeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vsxiet",
+    "parentId": "t3_1vsxiet",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4orbmv",
+    "createdUtc": 1787169748,
+    "group": "Superstonk",
+    "body": "stairwayeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4oqoct",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4oqwtx",
+    "createdUtc": 1787169642,
+    "group": "Superstonk",
+    "body": "currenteeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4oqjfd",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4oqqhr",
+    "createdUtc": 1787169599,
+    "group": "Superstonk",
+    "body": "flann sto plate arb cactu haze",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4oq8g7",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4on5st",
+    "createdUtc": 1787168676,
+    "group": "Superstonk",
+    "body": "bouldereeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vswmov",
+    "parentId": "t1_p4omh9h",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4omlhm",
+    "createdUtc": 1787168530,
+    "group": "Superstonk",
+    "body": "..",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4og1fs",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4omgla",
+    "createdUtc": 1787168495,
+    "group": "Superstonk",
+    "body": "foyere irise flinte ruddere",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4ol84j",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4om5op",
+    "createdUtc": 1787168416,
+    "group": "Superstonk",
+    "body": "gullyeeee bristleeeee deltaeeee mesaeeee cactuseee licheneee?",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4okulw",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ol84j",
+    "createdUtc": 1787168174,
+    "group": "Superstonk",
+    "body": "chimneyeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4okjve",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4okstb",
+    "createdUtc": 1787168063,
+    "group": "Superstonk",
+    "body": "gingereeeeeeeeeeeeeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vswmov",
+    "parentId": "t3_1vswmov",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4okerp",
+    "createdUtc": 1787167960,
+    "group": "Superstonk",
+    "body": "inleteeeeeeeeeee thistleeeeeeeeeeee arboreeeeeeeeeee gingereeeeeeeeeee",
+    "score": null,
+    "threadId": "t3_1vswkvb",
+    "parentId": "t3_1vswkvb",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4ojqu6",
+    "createdUtc": 1787167790,
+    "group": "Superstonk",
+    "body": "woodlandeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 5,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4ojln0",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ojeru",
+    "createdUtc": 1787167705,
+    "group": "Superstonk",
+    "body": "hoopeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 6,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4oge62",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4og59n",
+    "createdUtc": 1787166873,
+    "group": "Superstonk",
+    "body": "at orcha for she map ironwo nett cact fie",
+    "score": 6,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4ofxdc",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ofuna",
+    "createdUtc": 1787166798,
+    "group": "Superstonk",
+    "body": "......................................................................................................................",
+    "score": 4,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4oecqy",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4oego5",
+    "createdUtc": 1787166447,
+    "group": "Superstonk",
+    "body": ".....................................................................................................................",
+    "score": 3,
+    "threadId": "t3_1vsvisd",
+    "parentId": "t3_1vsvisd",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4odu05",
+    "createdUtc": 1787166284,
+    "group": "Superstonk",
+    "body": "prairi moo axl windo larc pebbl towe stucc flanne horizo channe spindl chape furrow wagon lighthouse paddle mantle sapling eagle tundra axle jasmine",
+    "score": 6,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4odjsv",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4odf5k",
+    "createdUtc": 1787166179,
+    "group": "Superstonk",
+    "body": "trougheeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 5,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4ockpv",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4odcb3",
+    "createdUtc": 1787166159,
+    "group": "Superstonk",
+    "body": "shal dom estuar tundr candl woodlan awnin morta mis cupboar wicke doc cister dia lavende headlan willow spruce granite marble gravel coast canyon copper chalk plateau",
+    "score": 4,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t3_1vsfyu5",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4oamd6",
+    "createdUtc": 1787165476,
+    "group": "Superstonk",
+    "body": "canvaseeeeeee lilaceeeeee cindereeeeee",
+    "score": 5,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4oahbv",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4oa2pd",
+    "createdUtc": 1787165339,
+    "group": "Superstonk",
+    "body": "flee?",
+    "score": 5,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4o89to",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4o8tzv",
+    "createdUtc": 1787165027,
+    "group": "Superstonk",
+    "body": "crateeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 0,
+    "threadId": "t3_1vsmo91",
+    "parentId": "t1_p4o702f",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4o5npx",
+    "createdUtc": 1787164230,
+    "group": "Superstonk",
+    "body": "pillareeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 5,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4o2sgm",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4o5jke",
+    "createdUtc": 1787164201,
+    "group": "Superstonk",
+    "body": "bambooeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 2,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4nyvog",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4o5760",
+    "createdUtc": 1787164116,
+    "group": "Superstonk",
+    "body": "dockeeeeee bridgeeeeeee clayeeeeee slopeeeeeee",
+    "score": 4,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4o3zip",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4o4wm6",
+    "createdUtc": 1787164044,
+    "group": "Superstonk",
+    "body": "crowneeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 0,
+    "threadId": "t3_1vsmo91",
+    "parentId": "t1_p4o3zy2",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4o3d99",
+    "createdUtc": 1787163659,
+    "group": "Superstonk",
+    "body": "shel cistern ironwood fathom sumac",
+    "score": 4,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4o34q1",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4o1ngv",
+    "createdUtc": 1787163234,
+    "group": "Superstonk",
+    "body": "stoneeeeeeeeeeeeeeeeeeeeeee",
+    "score": 9,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4nxv3h",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4o1jqc",
+    "createdUtc": 1787163207,
+    "group": "Superstonk",
+    "body": "sumaceeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 4,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4nz5mm",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4o10ji",
+    "createdUtc": 1787163074,
+    "group": "Superstonk",
+    "body": "bristleeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": -1,
+    "threadId": "t3_1vsmo91",
+    "parentId": "t1_p4o0lmw",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4o0f05",
+    "createdUtc": 1787162924,
+    "group": "Superstonk",
+    "body": "bircheeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 6,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4ny6z0",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4nzbib",
+    "createdUtc": 1787162639,
+    "group": "Superstonk",
+    "body": "gableeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 7,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4nvq1w",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4nz9fk",
+    "createdUtc": 1787162624,
+    "group": "Superstonk",
+    "body": "quarryeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 9,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4nykn6",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4nz2fk",
+    "createdUtc": 1787162573,
+    "group": "Superstonk",
+    "body": "tealeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 5,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4ny5uj",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4nyna6",
+    "createdUtc": 1787162467,
+    "group": "Superstonk",
+    "body": "rusheseeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 4,
+    "threadId": "t3_1vspwon",
+    "parentId": "t1_p4nggvq",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4nxu6a",
+    "createdUtc": 1787162270,
+    "group": "Superstonk",
+    "body": "tunneleeeeeeeeeeeeeeeeeeeee",
+    "score": 9,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4nvt3y",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4nwy2o",
+    "createdUtc": 1787162053,
+    "group": "Superstonk",
+    "body": "stoveeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 6,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4nwjro",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4nvyku",
+    "createdUtc": 1787161811,
+    "group": "Superstonk",
+    "body": "in m filam lo shut keyst pil sto cre cott",
+    "score": 7,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t3_1vsfyu5",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4nvogk",
+    "createdUtc": 1787161738,
+    "group": "Superstonk",
+    "body": "pineeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 6,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4nulk7",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4nv2dc",
+    "createdUtc": 1787161583,
+    "group": "Superstonk",
+    "body": "ridgeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 5,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4nriwo",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4nu1ep",
+    "createdUtc": 1787161325,
+    "group": "Superstonk",
+    "body": "mortareeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 6,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4ntulk",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ntv25",
+    "createdUtc": 1787161281,
+    "group": "Superstonk",
+    "body": "deskeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 9,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t3_1vsfyu5",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4ntpqz",
+    "createdUtc": 1787161244,
+    "group": "Superstonk",
+    "body": "twineeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 6,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4nt55a",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ns1mk",
+    "createdUtc": 1787160829,
+    "group": "Superstonk",
+    "body": "plazaeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 3,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4n67s8",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4nrnk5",
+    "createdUtc": 1787160730,
+    "group": "Superstonk",
+    "body": "sleeteeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 2,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4na3bu",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4nrke8",
+    "createdUtc": 1787160709,
+    "group": "Superstonk",
+    "body": "cellareeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 3,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4n4zxz",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4nqphw",
+    "createdUtc": 1787160495,
+    "group": "Superstonk",
+    "body": "charteeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 6,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4nq3h3",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4nqgeb",
+    "createdUtc": 1787160432,
+    "group": "Superstonk",
+    "body": "thorneeeeeeeeeeeeeeeeeeeeee",
+    "score": 6,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4nobjr",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4npqg7",
+    "createdUtc": 1787160254,
+    "group": "Superstonk",
+    "body": "walnuteeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 1,
+    "threadId": "t3_1vsqmbf",
+    "parentId": "t1_p4ng3i1",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4npjpy",
+    "createdUtc": 1787160207,
+    "group": "Superstonk",
+    "body": "linteleeeeeeeeeeeeeeeeeeeee",
+    "score": 0,
+    "threadId": "t3_1vsqmbf",
+    "parentId": "t1_p4ng4sr",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4noa84",
+    "createdUtc": 1787159893,
+    "group": "Superstonk",
+    "body": "outcropeeeeeeeee quartzeeeeeeeee slateeeeeeeeee flagstoneeeeeeeeee?",
+    "score": 11,
+    "threadId": "t3_1vssrqg",
+    "parentId": "t3_1vssrqg",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4mx7ze",
+    "createdUtc": 1787153036,
+    "group": "Superstonk",
+    "body": "archeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 2,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4mx0sh",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4mwkvi",
+    "createdUtc": 1787152867,
+    "group": "Superstonk",
+    "body": "aldereeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 2,
+    "threadId": "t3_1vsp4k9",
+    "parentId": "t3_1vsp4k9",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4mw2fx",
+    "createdUtc": 1787152730,
+    "group": "Superstonk",
+    "body": "eagleeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 1,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4msowo",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4mvtqx",
+    "createdUtc": 1787152667,
+    "group": "Superstonk",
+    "body": "sageeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 3,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4mv84c",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4mvr2f",
+    "createdUtc": 1787152648,
+    "group": "Superstonk",
+    "body": "fincheeeeeeeeeeeeeeeeeeeeee",
+    "score": 9,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4mvcuu",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4mv3qx",
+    "createdUtc": 1787152475,
+    "group": "Superstonk",
+    "body": "stairwayeeeeeeeeeeeeeeeeeee",
+    "score": 4,
+    "threadId": "t3_1vsox0f",
+    "parentId": "t3_1vsox0f",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4mr74d",
+    "createdUtc": 1787151439,
+    "group": "Superstonk",
+    "body": "gu wind fabr gra inl veran copp bould lighthou rudd inl tidepo",
+    "score": 2,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4mq662",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4mr2jl",
+    "createdUtc": 1787151405,
+    "group": "Superstonk",
+    "body": "cushioneeeeeee belleeeeeee willoweeeeee quarryeeeeee",
+    "score": 2,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4mq41s",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4mqrq8",
+    "createdUtc": 1787151326,
+    "group": "Superstonk",
+    "body": "lobbyeeee pastureeeee willoweeee pillareee mesaeee",
+    "score": 3,
+    "threadId": "t3_1vsmo91",
+    "parentId": "t1_p4mkg4d",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4mpwtf",
+    "createdUtc": 1787151099,
+    "group": "Superstonk",
+    "body": "................................................",
+    "score": 0,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4mp8du",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4mndzy",
+    "createdUtc": 1787150428,
+    "group": "Superstonk",
+    "body": "jasmineeeeeeeeeeeeeeeeeeeee",
+    "score": -1,
+    "threadId": "t3_1vsmo91",
+    "parentId": "t1_p4mhxwn",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4mlmrx",
+    "createdUtc": 1787149958,
+    "group": "Superstonk",
+    "body": "fountaineeeeeeeeeeeeeeeeeee",
+    "score": 3,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4meqqo",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4mlfew",
+    "createdUtc": 1787149905,
+    "group": "Superstonk",
+    "body": "cottone canyone hatche oake grate glass dawn reef tarn carpet rafter tower",
+    "score": 2,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4mhkug",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4mlacg",
+    "createdUtc": 1787149868,
+    "group": "Superstonk",
+    "body": "turretee beaconee lichenee boulderee shelfee lilacee bolte streame moore beame",
+    "score": 4,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4mj7sp",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4mjdl2",
+    "createdUtc": 1787149365,
+    "group": "Superstonk",
+    "body": "chapeleeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 8,
+    "threadId": "t3_1vsmo91",
+    "parentId": "t1_p4mhuuk",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4mj2sj",
+    "createdUtc": 1787149284,
+    "group": "Superstonk",
+    "body": "cindereeeeeeeeeeeeeeeeeeeee",
+    "score": 0,
+    "threadId": "t3_1vsns1e",
+    "parentId": "t3_1vsns1e",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4mhqm0",
+    "createdUtc": 1787148929,
+    "group": "Superstonk",
+    "body": "dahliaeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 5,
+    "threadId": "t3_1vsmfch",
+    "parentId": "t1_p4ma24a",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4mheob",
+    "createdUtc": 1787148841,
+    "group": "Superstonk",
+    "body": "mantleeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 25,
+    "threadId": "t3_1vsmo91",
+    "parentId": "t1_p4mdl35",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4mh6yw",
+    "createdUtc": 1787148784,
+    "group": "Superstonk",
+    "body": "fiddl canyo pebble finch furrow awning marble bamboo jetty attic swale canyon pantry paddle cobble tarn dock pane",
+    "score": 4,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4mejsn",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4mh0ny",
+    "createdUtc": 1787148738,
+    "group": "Superstonk",
+    "body": "mosaice stone fiddle stone bundle tinder linen slope linen veranda thimble cable teal",
+    "score": 4,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t3_1vsfyu5",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4mfy4r",
+    "createdUtc": 1787148451,
+    "group": "Superstonk",
+    "body": "belleeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 3,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4mej8f",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4mdk7f",
+    "createdUtc": 1787147799,
+    "group": "Superstonk",
+    "body": "fenneleeeeeeeeeeeeeeeeeeeee",
+    "score": 12,
+    "threadId": "t3_1vsmo91",
+    "parentId": "t1_p4mderf",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4mcyxh",
+    "createdUtc": 1787147637,
+    "group": "Superstonk",
+    "body": "stuccoeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 14,
+    "threadId": "t3_1vsmo91",
+    "parentId": "t1_p4mb0l4",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4mcnds",
+    "createdUtc": 1787147550,
+    "group": "Superstonk",
+    "body": "timberee vineee broomee flaskee deskee marshee torrentee duneee plazae",
+    "score": -5,
+    "threadId": "t3_1vsmo91",
+    "parentId": "t3_1vsmo91",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4m94le",
+    "createdUtc": 1787146569,
+    "group": "Superstonk",
+    "body": "fathomeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 4,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4m8ak5",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4m8asd",
+    "createdUtc": 1787146335,
+    "group": "Superstonk",
+    "body": "mapleeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 3,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4m84o6",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4m84uz",
+    "createdUtc": 1787146288,
+    "group": "Superstonk",
+    "body": "arboreeeeeeeeeeeeeeeeeeeeee",
+    "score": 15,
+    "threadId": "t3_1vsmhzz",
+    "parentId": "t3_1vsmhzz",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4m806o",
+    "createdUtc": 1787146250,
+    "group": "Superstonk",
+    "body": "gableee marbleee ropeee oatee mortare",
+    "score": 3,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t3_1vsfyu5",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4m6t4z",
+    "createdUtc": 1787145908,
+    "group": "Superstonk",
+    "body": "shaleeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 5,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t3_1vsfyu5",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4m6mr7",
+    "createdUtc": 1787145857,
+    "group": "Superstonk",
+    "body": "quilleeeeeeeeeeeeeeeeeeeeee",
+    "score": 3,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4m27xb",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4m6710",
+    "createdUtc": 1787145732,
+    "group": "Superstonk",
+    "body": "axleeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 6,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t1_p4m3n6a",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4lvhf0",
+    "createdUtc": 1787142459,
+    "group": "Superstonk",
+    "body": "duneeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": -2,
+    "threadId": "t3_1vshfzj",
+    "parentId": "t1_p4l5p4e",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4lv2dj",
+    "createdUtc": 1787142325,
+    "group": "Superstonk",
+    "body": "heathereeeeeeeeeeeeeeeeeeee",
+    "score": -1,
+    "threadId": "t3_1vsi5xu",
+    "parentId": "t1_p4lmhtw",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4luxmo",
+    "createdUtc": 1787142282,
+    "group": "Superstonk",
+    "body": "lanterneeeeeeeeee silteeeeeeeeee belleeeeeeeeee",
+    "score": 5,
+    "threadId": "t3_1vsj1yh",
+    "parentId": "t3_1vsj1yh",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4luqtu",
+    "createdUtc": 1787142221,
+    "group": "Superstonk",
+    "body": "gullyeeeeeee hoopeeeeeee clovereeeeee summiteeeeee",
+    "score": 11,
+    "threadId": "t3_1vsfyu5",
+    "parentId": "t3_1vsfyu5",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4joxcf",
+    "createdUtc": 1787108022,
+    "group": "Superstonk",
+    "body": "ropeee brookee pebbleee rushesee cactuse tindere gravele doorwaye",
+    "score": 52,
+    "threadId": "t3_1vsa5tr",
+    "parentId": "t3_1vsa5tr",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4jni86",
+    "createdUtc": 1787107523,
+    "group": "Superstonk",
+    "body": "mi nick chape slat locke",
+    "score": 1,
+    "threadId": "t3_1vs8p5v",
+    "parentId": "t1_p4jmelb",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4jk0to",
+    "createdUtc": 1787106327,
+    "group": "Superstonk",
+    "body": "bundlee estuary weathervane brass anchor sedge trellis crest knoll fern paddle blanket",
+    "score": -2,
+    "threadId": "t3_1vs9g4w",
+    "parentId": "t1_p4jj8v5",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4jj46o",
+    "createdUtc": 1787106014,
+    "group": "Superstonk",
+    "body": "crateee boulderee locketee jettyee cablee stairwaye lavendere ropee junipere beame porche?",
+    "score": 10,
+    "threadId": "t3_1vs9g4w",
+    "parentId": "t3_1vs9g4w",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4jdyxx",
+    "createdUtc": 1787104268,
+    "group": "Superstonk",
+    "body": "m woodl je bas cl?",
+    "score": 1,
+    "threadId": "t3_1vs8qmn",
+    "parentId": "t3_1vs8qmn",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4jd41z",
+    "createdUtc": 1787103986,
+    "group": "Superstonk",
+    "body": "cabineeeeeeeeeeeeeeeeeee sumaceeeeeeeeeeeeeeeeeee",
+    "score": -3,
+    "threadId": "t3_1vs8p5v",
+    "parentId": "t3_1vs8p5v",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4iyvvl",
+    "createdUtc": 1787099307,
+    "group": "Superstonk",
+    "body": "hutcheeeeee flaskeeeee quartzeeeee plazaeeeee",
+    "score": 8,
+    "threadId": "t3_1vs6yqi",
+    "parentId": "t3_1vs6yqi",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4iym7e",
+    "createdUtc": 1787099221,
+    "group": "Superstonk",
+    "body": "sageeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 4,
+    "threadId": "t3_1vris9i",
+    "parentId": "t1_p4iweg4",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4iyemj",
+    "createdUtc": 1787099153,
+    "group": "Superstonk",
+    "body": "carp trell cand can ciste sha sandb will?",
+    "score": -4,
+    "threadId": "t3_1vs6a1j",
+    "parentId": "t1_p4iy44n",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4iw4i4",
+    "createdUtc": 1787098425,
+    "group": "Superstonk",
+    "body": "tidepool willow sleet",
+    "score": 5,
+    "threadId": "t3_1vris9i",
+    "parentId": "t1_p4iveci",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4iuaq2",
+    "createdUtc": 1787097833,
+    "group": "Superstonk",
+    "body": "mossee ditche charte nettlee horizone spiree fabrice cliffe cisterne guttere poplare larche",
+    "score": 4,
+    "threadId": "t3_1vris9i",
+    "parentId": "t3_1vris9i",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4itqjk",
+    "createdUtc": 1787097652,
+    "group": "Superstonk",
+    "body": "valleyeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 3,
+    "threadId": "t3_1vris9i",
+    "parentId": "t1_p4irzmc",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4itls4",
+    "createdUtc": 1787097610,
+    "group": "Superstonk",
+    "body": "paneeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": -1,
+    "threadId": "t3_1vs6a1j",
+    "parentId": "t3_1vs6a1j",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4it0l3",
+    "createdUtc": 1787097420,
+    "group": "Superstonk",
+    "body": "keystoneeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 8,
+    "threadId": "t3_1vs5dyd",
+    "parentId": "t1_p4isty9",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4isvbs",
+    "createdUtc": 1787097372,
+    "group": "Superstonk",
+    "body": "stoveeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 1,
+    "threadId": "t3_1vs5tp9",
+    "parentId": "t1_p4isnnt",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4is9t4",
+    "createdUtc": 1787097180,
+    "group": "Superstonk",
+    "body": "bircheeeeeeeeeeeeeeeeeeeeee",
+    "score": 18,
+    "threadId": "t3_1vs5dyd",
+    "parentId": "t1_p4irve5",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4is4lj",
+    "createdUtc": 1787097133,
+    "group": "Superstonk",
+    "body": "candleeeeeeeeeeeeeeeeeeeeee",
+    "score": 4,
+    "threadId": "t3_1vs5tp9",
+    "parentId": "t1_p4is09s",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4is1dg",
+    "createdUtc": 1787097104,
+    "group": "Superstonk",
+    "body": "sleeteeeee milleteeee junipereeee parceleeee ferryeeee",
+    "score": 15,
+    "threadId": "t3_1vs6362",
+    "parentId": "t3_1vs6362",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4irriz",
+    "createdUtc": 1787097016,
+    "group": "Superstonk",
+    "body": "lighthouseeeeeeeeeeeeeeeeeeeeeee",
+    "score": 3,
+    "threadId": "t3_1vs5tp9",
+    "parentId": "t1_p4iq25t",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4irglo",
+    "createdUtc": 1787096920,
+    "group": "Superstonk",
+    "body": "graniteeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 7,
+    "threadId": "t3_1vs5z1p",
+    "parentId": "t3_1vs5z1p",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4iqs10",
+    "createdUtc": 1787096701,
+    "group": "Superstonk",
+    "body": "fabriceeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 13,
+    "threadId": "t3_1vs5dyd",
+    "parentId": "t1_p4ipni2",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4iqh39",
+    "createdUtc": 1787096602,
+    "group": "Superstonk",
+    "body": "iriseeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 3,
+    "threadId": "t3_1vris9i",
+    "parentId": "t1_p4ipgo5",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4iobhw",
+    "createdUtc": 1787095910,
+    "group": "Superstonk",
+    "body": "jasmineeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": -6,
+    "threadId": "t3_1vs5j95",
+    "parentId": "t3_1vs5j95",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4inj2c",
+    "createdUtc": 1787095658,
+    "group": "Superstonk",
+    "body": "polleneeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": -11,
+    "threadId": "t3_1vs0mxg",
+    "parentId": "t1_p4inbme",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4imqcn",
+    "createdUtc": 1787095404,
+    "group": "Superstonk",
+    "body": "cedareeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 3,
+    "threadId": "t3_1vris9i",
+    "parentId": "t3_1vris9i",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4im02q",
+    "createdUtc": 1787095175,
+    "group": "Superstonk",
+    "body": "barreleeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 0,
+    "threadId": "t3_1vs485b",
+    "parentId": "t1_p4ilgtu",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4il5nd",
+    "createdUtc": 1787094908,
+    "group": "Superstonk",
+    "body": "chapeleeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 1,
+    "threadId": "t3_1vs485b",
+    "parentId": "t1_p4il236",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ikk2r",
+    "createdUtc": 1787094721,
+    "group": "Superstonk",
+    "body": "currenteee quarryee outcropee blanketee mapleee",
+    "score": 1,
+    "threadId": "t3_1vs485b",
+    "parentId": "t1_p4ijq3f",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4iip8w",
+    "createdUtc": 1787094139,
+    "group": "Superstonk",
+    "body": "belleeeeeeeeeeeeeeeeeeeeeee",
+    "score": 1,
+    "threadId": "t3_1vs485b",
+    "parentId": "t1_p4ign8w",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4iid18",
+    "createdUtc": 1787094033,
+    "group": "Superstonk",
+    "body": "d cave mosa pi stre copp thre headla cryst marb hat hat marb lante cupboa brist she junip mosa sa fin",
+    "score": 5,
+    "threadId": "t3_1vs485b",
+    "parentId": "t1_p4igrr4",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ihgx8",
+    "createdUtc": 1787093757,
+    "group": "Superstonk",
+    "body": "nettleeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 5,
+    "threadId": "t3_1vs485b",
+    "parentId": "t1_p4ih9u3",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4igvsi",
+    "createdUtc": 1787093575,
+    "group": "Superstonk",
+    "body": "grani bamb fer sed fe bund weathervan dun kil turre terrac porc nicke mantl handl sedg fiddl oa lighthous tidepoo slop mapl flagston terrac arro mapl sag",
+    "score": 2,
+    "threadId": "t3_1vs485b",
+    "parentId": "t1_p4ig9k7",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ifxnn",
+    "createdUtc": 1787093281,
+    "group": "Superstonk",
+    "body": "timbereeeeeeeeeeeeeeeeeeeee",
+    "score": 0,
+    "threadId": "t3_1vs40t1",
+    "parentId": "t3_1vs40t1",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4ifejr",
+    "createdUtc": 1787093117,
+    "group": "Superstonk",
+    "body": "flagstoneeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 3,
+    "threadId": "t3_1vs485b",
+    "parentId": "t1_p4iedum",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4iezqq",
+    "createdUtc": 1787092990,
+    "group": "Superstonk",
+    "body": "spindleeeeeeeeeeeeeeeeeeeee",
+    "score": 4,
+    "threadId": "t3_1vs485b",
+    "parentId": "t1_p4ieslc",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ie6m9",
+    "createdUtc": 1787092737,
+    "group": "Superstonk",
+    "body": "hazeleeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 16,
+    "threadId": "t3_1vs485b",
+    "parentId": "t1_p4idkhq",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4idl0i",
+    "createdUtc": 1787092549,
+    "group": "Superstonk",
+    "body": "cisterneeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 3,
+    "threadId": "t3_1vs485b",
+    "parentId": "t1_p4idd0t",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4idcjf",
+    "createdUtc": 1787092476,
+    "group": "Superstonk",
+    "body": "trougheeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 8,
+    "threadId": "t3_1vs3i3k",
+    "parentId": "t1_p4i8au5",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4id5sw",
+    "createdUtc": 1787092419,
+    "group": "Superstonk",
+    "body": "currenteeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": -2,
+    "threadId": "t3_1vs485b",
+    "parentId": "t3_1vs485b",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4id0tr",
+    "createdUtc": 1787092375,
+    "group": "Superstonk",
+    "body": "dockeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 1,
+    "threadId": "t3_1vs0mxg",
+    "parentId": "t1_p4i6q9o",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ichim",
+    "createdUtc": 1787092212,
+    "group": "Superstonk",
+    "body": "beaconeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": -4,
+    "threadId": "t3_1vs0mxg",
+    "parentId": "t1_p4ib3sc",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4ic036",
+    "createdUtc": 1787092063,
+    "group": "Superstonk",
+    "body": "mortareeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 3,
+    "threadId": "t3_1vs2rvi",
+    "parentId": "t1_p4ibuql",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4i8hgz",
+    "createdUtc": 1787091012,
+    "group": "Superstonk",
+    "body": "ruddereeeeeeeeeeee threadeeeeeeeeeee jettyeeeeeeeeeee mineraleeeeeeeeeee knolleeeeeeeeeee heathereeeeeeeeeee stoneeeeeeeeeeee kettleeeeeeeeeeee prairieeeeeeeeeeee",
+    "score": 32,
+    "threadId": "t3_1vs3i3k",
+    "parentId": "t3_1vs3i3k",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4i7ykj",
+    "createdUtc": 1787090856,
+    "group": "Superstonk",
+    "body": "poplareeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 4,
+    "threadId": "t3_1vris9i",
+    "parentId": "t1_p4i7ifo",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4i7nah",
+    "createdUtc": 1787090762,
+    "group": "Superstonk",
+    "body": "bamb trou saddl",
+    "score": 6,
+    "threadId": "t3_1vris9i",
+    "parentId": "t1_p4i75er",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4i7jrv",
+    "createdUtc": 1787090734,
+    "group": "Superstonk",
+    "body": "doorwayeeeeeeeeeeeeeeeeeee",
+    "score": 3,
+    "threadId": "t3_1vris9i",
+    "parentId": "t3_1vris9i",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4i6n5v",
+    "createdUtc": 1787090467,
+    "group": "Superstonk",
+    "body": "vaulteeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 2,
+    "threadId": "t3_1vris9i",
+    "parentId": "t3_1vris9i",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4i6l48",
+    "createdUtc": 1787090451,
+    "group": "Superstonk",
+    "body": "sla as fenne troug glas lattic suma foliag shel?",
+    "score": 3,
+    "threadId": "t3_1vris9i",
+    "parentId": "t1_p4i6d4c",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4i5prc",
+    "createdUtc": 1787090198,
+    "group": "Superstonk",
+    "body": "wickereeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 6,
+    "threadId": "t3_1vris9i",
+    "parentId": "t1_p4i5lkb",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4i5dcf",
+    "createdUtc": 1787090100,
+    "group": "Superstonk",
+    "body": "tidepooleeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 3,
+    "threadId": "t3_1vris9i",
+    "parentId": "t1_p4i5388",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4i51hh",
+    "createdUtc": 1787090006,
+    "group": "Superstonk",
+    "body": "cr spr cl brist fla sa vi for cell fenn wick",
+    "score": 3,
+    "threadId": "t3_1vris9i",
+    "parentId": "t1_p4hyvzo",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4i4had",
+    "createdUtc": 1787089847,
+    "group": "Superstonk",
+    "body": "rid heart",
+    "score": 3,
+    "threadId": "t3_1vs2rvi",
+    "parentId": "t1_p4i409o",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4i45tn",
+    "createdUtc": 1787089756,
+    "group": "Superstonk",
+    "body": "ce this co tidep ba hol gul brist kett",
+    "score": 3,
+    "threadId": "t3_1vris9i",
+    "parentId": "t1_p4i40xe",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4i3wxo",
+    "createdUtc": 1787089686,
+    "group": "Superstonk",
+    "body": "woodlandeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": -4,
+    "threadId": "t3_1vs2zi5",
+    "parentId": "t3_1vs2zi5",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4i3fgz",
+    "createdUtc": 1787089547,
+    "group": "Superstonk",
+    "body": "cliffeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 2,
+    "threadId": "t3_1vris9i",
+    "parentId": "t1_p4i24ax",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4i3710",
+    "createdUtc": 1787089481,
+    "group": "Superstonk",
+    "body": "fleeceeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 5,
+    "threadId": "t3_1vris9i",
+    "parentId": "t1_p4i2oql",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4i2hqu",
+    "createdUtc": 1787089282,
+    "group": "Superstonk",
+    "body": "wickereeeeeeeeeeeeeeeeeeeee",
+    "score": 11,
+    "threadId": "t3_1vs2rvi",
+    "parentId": "t3_1vs2rvi",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4i2d8j",
+    "createdUtc": 1787089247,
+    "group": "Superstonk",
+    "body": "coppereeeeeeeeeeeeeeeeeeeee",
+    "score": -4,
+    "threadId": "t3_1vs2vyh",
+    "parentId": "t3_1vs2vyh",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4i29f2",
+    "createdUtc": 1787089217,
+    "group": "Superstonk",
+    "body": "verandaeee harboreee quilleee sumaceee saddleeee gableee pantryee bridgeee badgeee crownee",
+    "score": 5,
+    "threadId": "t3_1vris9i",
+    "parentId": "t3_1vris9i",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4i1y9e",
+    "createdUtc": 1787089128,
+    "group": "Superstonk",
+    "body": "twineeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 1,
+    "threadId": "t3_1vris9i",
+    "parentId": "t1_p4hv7wp",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4i1rxj",
+    "createdUtc": 1787089078,
+    "group": "Superstonk",
+    "body": "swa barr fro tow vau outcr horizo drif gazeb grave horizo garde mapl scaffol gaug fros pin flas mapl",
+    "score": 7,
+    "threadId": "t3_1vris9i",
+    "parentId": "t1_p4i08fq",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4i05b6",
+    "createdUtc": 1787088620,
+    "group": "Superstonk",
+    "body": "quartze wagone irise ironwoode gravele canale aspene estuarye shingle beam",
+    "score": 2,
+    "threadId": "t3_1vris9i",
+    "parentId": "t1_p4hzicq",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4hzjpt",
+    "createdUtc": 1787088454,
+    "group": "Superstonk",
+    "body": "trestleeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 2,
+    "threadId": "t3_1vs1y48",
+    "parentId": "t3_1vs1y48",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4hyri6",
+    "createdUtc": 1787088237,
+    "group": "Superstonk",
+    "body": "mineraleeeeeeeeeeeeeeeeeeee",
+    "score": 3,
+    "threadId": "t3_1vs1mjp",
+    "parentId": "t1_p4hwlis",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4hy874",
+    "createdUtc": 1787088088,
+    "group": "Superstonk",
+    "body": "raft outcr gro dri fe tidepo te mos hoo gazeb bucke bronz",
+    "score": 6,
+    "threadId": "t3_1vris9i",
+    "parentId": "t1_p4hxlob",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4hy1m2",
+    "createdUtc": 1787088037,
+    "group": "Superstonk",
+    "body": "gullyeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 1,
+    "threadId": "t3_1vs29y4",
+    "parentId": "t3_1vs29y4",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4hxnnf",
+    "createdUtc": 1787087930,
+    "group": "Superstonk",
+    "body": "...................................",
+    "score": -6,
+    "threadId": "t3_1vs1wor",
+    "parentId": "t1_p4huu6r",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4hstdm",
+    "createdUtc": 1787086601,
+    "group": "Superstonk",
+    "body": "bridgeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 2,
+    "threadId": "t3_1vs0mxg",
+    "parentId": "t1_p4hrcct",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4hsdm4",
+    "createdUtc": 1787086483,
+    "group": "Superstonk",
+    "body": "troug stov sil jett headlan harbo parce summi shal spindl dahli nicke fabri mapl foliag maple fern",
+    "score": 27,
+    "threadId": "t3_1vs1mjp",
+    "parentId": "t3_1vs1mjp",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4hrxcl",
+    "createdUtc": 1787086364,
+    "group": "Superstonk",
+    "body": "curtaineeeeeeeeeeeeeeeeeeeeeeeee",
+    "score": 1,
+    "threadId": "t3_1vs1hj9",
+    "parentId": "t3_1vs1hj9",
+    "isTopLevel": true
+   },
+   {
+    "id": "p4hrbzg",
+    "createdUtc": 1787086203,
+    "group": "Superstonk",
+    "body": "atticeeeeeeeeeeeeeeeeeeeeee",
+    "score": -6,
+    "threadId": "t3_1vs0mxg",
+    "parentId": "t1_p4hr84i",
+    "isTopLevel": false
+   },
+   {
+    "id": "p4hqo4x",
+    "createdUtc": 1787086026,
+    "group": "Superstonk",
+    "body": "fincheeeeeeeeeee trougheeeeeeeeee shaleeeeeeeeeee",
+    "score": 3,
+    "threadId": "t3_1vris9i",
+    "parentId": "t1_p4hka5c",
+    "isTopLevel": false
+   }
+  ],
+  "posts": [
+   {
+    "id": "1uqeheg",
+    "createdUtc": 1783473923,
+    "group": "Superstonk",
+    "title": "Friendly Reminder",
+    "score": 1172,
+    "replyCount": 346
+   },
+   {
+    "id": "1u2hh2o",
+    "createdUtc": 1781131590,
+    "group": "Superstonk",
+    "title": "Up a little bit? Down a little bit? Who gives a shit.",
+    "score": 730,
+    "replyCount": 36
+   },
+   {
+    "id": "1tvsyrx",
+    "createdUtc": 1780500860,
+    "group": "Superstonk",
+    "title": "GME is inevitable",
+    "score": 197,
+    "replyCount": 11
+   },
+   {
+    "id": "1tmuaz9",
+    "createdUtc": 1779672126,
+    "group": "Superstonk",
+    "title": "Probably nothing",
+    "score": 592,
+    "replyCount": 59
+   },
+   {
+    "id": "1dldnb6",
+    "createdUtc": 1719001308,
+    "group": "Superstonk",
+    "title": "Welcome to all the baby apes!",
+    "score": 395,
+    "replyCount": 12
+   },
+   {
+    "id": "1df1lf9",
+    "createdUtc": 1718292132,
+    "group": "Superstonk",
+    "title": "HTTP ERROR 503",
+    "score": 125,
+    "replyCount": 4
+   },
+   {
+    "id": "1daesa3",
+    "createdUtc": 1717777137,
+    "group": "Superstonk",
+    "title": "Same vibes as “Gamestop stock has no value of any kind”.",
+    "score": 47,
+    "replyCount": 5
+   },
+   {
+    "id": "1d9s6mk",
+    "createdUtc": 1717705667,
+    "group": "Superstonk",
+    "title": "WE ARE STILL HERE!",
+    "score": 24,
+    "replyCount": 2
+   },
+   {
+    "id": "1d9k3zb",
+    "createdUtc": 1717685622,
+    "group": "Superstonk",
+    "title": "I love watching all the zen apes (and new apes) come roaring back to Superstonk with so much hype. Let’s fucking go!",
+    "score": 202,
+    "replyCount": 16
+   },
+   {
+    "id": "1d76xun",
+    "createdUtc": 1717427834,
+    "group": "Superstonk",
+    "title": "I don’t want to look back and say “I should have bought more at $30”. Can’t wait to DRS these babies. ",
+    "score": 161,
+    "replyCount": 10
+   },
+   {
+    "id": "1cyf47h",
+    "createdUtc": 1716422067,
+    "group": "Superstonk",
+    "title": "Well that’s a new one. ",
+    "score": 4157,
+    "replyCount": 277
+   },
+   {
+    "id": "1cubvyd",
+    "createdUtc": 1715968841,
+    "group": "Superstonk",
+    "title": "DFV @ 2:00pm EST",
+    "score": 806,
+    "replyCount": 41
+   },
+   {
+    "id": "1cubmh2",
+    "createdUtc": 1715968185,
+    "group": "Superstonk",
+    "title": "DFV 1:45pm EST ",
+    "score": 0,
+    "replyCount": 3
+   },
+   {
+    "id": "1cthudn",
+    "createdUtc": 1715878979,
+    "group": "Superstonk",
+    "title": "DFV TWEET 1PM EST",
+    "score": 1536,
+    "replyCount": 60
+   },
+   {
+    "id": "1cte63y",
+    "createdUtc": 1715869488,
+    "group": "Superstonk",
+    "title": "Roaring Kitty @ 10:15am EST",
+    "score": 16,
+    "replyCount": 4
+   },
+   {
+    "id": "1cte3ny",
+    "createdUtc": 1715869301,
+    "group": "Superstonk",
+    "title": "DFV Tweet 10:15am EST",
+    "score": 2,
+    "replyCount": 2
+   },
+   {
+    "id": "1cstwz4",
+    "createdUtc": 1715802432,
+    "group": "Superstonk",
+    "title": "Reposting the COINTEL thread to help apes identify bad actors",
+    "score": 51,
+    "replyCount": 3
+   },
+   {
+    "id": "14x1a4h",
+    "createdUtc": 1689104575,
+    "group": "DPH",
+    "title": "Found this on Twitter:",
+    "score": 87,
+    "replyCount": 1
+   },
+   {
+    "id": "zea7ho",
+    "createdUtc": 1670342128,
+    "group": "Superstonk",
+    "title": "Ramp - a company which facilitates fiat to crypto purchases within the GameStop & Loopring Wallets - launches its OFF-RAMP, facilitating sales of crypto back to fiat. This is how you become your own bank.",
+    "score": 4031,
+    "replyCount": 135
+   },
+   {
+    "id": "yzexdt",
+    "createdUtc": 1668873059,
+    "group": "MemeEconomy",
+    "title": "Invest in Baby Falcon",
+    "score": 2,
+    "replyCount": 0
+   },
+   {
+    "id": "ye7yxp",
+    "createdUtc": 1666815893,
+    "group": "SelfAwarewolves",
+    "title": "“Often times they will completely make up social problems out of thin air.”",
+    "score": 547,
+    "replyCount": 52
+   },
+   {
+    "id": "wrtsyi",
+    "createdUtc": 1660854296,
+    "group": "Superstonk",
+    "title": "Public (Apex Clearing Corp.) did not issue the stock dividend correctly, and told me that the DTC provided instructions to treat it as a stock split event",
+    "score": 1923,
+    "replyCount": 50
+   },
+   {
+    "id": "wlviod",
+    "createdUtc": 1660234970,
+    "group": "Superstonk",
+    "title": "💯 I feel the power rising 💯",
+    "score": 141,
+    "replyCount": 3
+   },
+   {
+    "id": "wk1qpz",
+    "createdUtc": 1660047182,
+    "group": "Superstonk",
+    "title": "Dr Trimbath on Twitter 🟣",
+    "score": 290,
+    "replyCount": 7
+   },
+   {
+    "id": "wg3ij3",
+    "createdUtc": 1659625418,
+    "group": "Superstonk",
+    "title": "I’m gonna need 49 million CCs of purple circles, stat",
+    "score": 81,
+    "replyCount": 2
+   },
+   {
+    "id": "wev9f7",
+    "createdUtc": 1659496073,
+    "group": "Superstonk",
+    "title": "WHERE ARE THEY",
+    "score": 52,
+    "replyCount": 3
+   },
+   {
+    "id": "weorsq",
+    "createdUtc": 1659478350,
+    "group": "Superstonk",
+    "title": "Computershare on Twitter",
+    "score": 14480,
+    "replyCount": 911
+   },
+   {
+    "id": "wen6dc",
+    "createdUtc": 1659474489,
+    "group": "Superstonk",
+    "title": "What the fuck does this mean? - GameStopNFT on Twitter",
+    "score": 67,
+    "replyCount": 34
+   },
+   {
+    "id": "vt10tx",
+    "createdUtc": 1657142718,
+    "group": "Superstonk",
+    "title": "I hereby summon DFV, RISE! RISE FROM YOUR CAT NAP!",
+    "score": 185,
+    "replyCount": 9
+   },
+   {
+    "id": "vesj8o",
+    "createdUtc": 1655506960,
+    "group": "Superstonk",
+    "title": "“Need capital? Not Furlong.” I posted this 1 year ago today. I repost it now because it is 61 weeks since Gensler was appointed. Gamestop STILL has most of that $1.7 billion. Happy anniversary Matt Furlong!",
+    "score": 352,
+    "replyCount": 13
+   },
+   {
+    "id": "v7xn5s",
+    "createdUtc": 1654716102,
+    "group": "Superstonk",
+    "title": "GameStop NFT on Twitter 🏴‍☠️",
+    "score": 613,
+    "replyCount": 24
+   },
+   {
+    "id": "v5i2q1",
+    "createdUtc": 1654449867,
+    "group": "BrandNewSentence",
+    "title": "The spice must flow.",
+    "score": 26,
+    "replyCount": 1
+   },
+   {
+    "id": "v4rvh9",
+    "createdUtc": 1654358495,
+    "group": "Superstonk",
+    "title": "Spotted in r/all - the top comment thread in a post with 80k upvotes - discussing financial terrorism and SuperStonk. You can’t contain this. We are everywhere. HOLD",
+    "score": 5977,
+    "replyCount": 102
+   },
+   {
+    "id": "uxjq7n",
+    "createdUtc": 1653492073,
+    "group": "Superstonk",
+    "title": "Reuters: Record U.S. reverse repos highlight problem of investing excess cash",
+    "score": 111,
+    "replyCount": 3
+   },
+   {
+    "id": "ux01rv",
+    "createdUtc": 1653423646,
+    "group": "Superstonk",
+    "title": "Larry Cheng on Twitter",
+    "score": 318,
+    "replyCount": 14
+   },
+   {
+    "id": "uwz5sz",
+    "createdUtc": 1653421281,
+    "group": "Superstonk",
+    "title": "I wonder how this will affect global markets 🧐",
+    "score": 236,
+    "replyCount": 23
+   },
+   {
+    "id": "u7jgc6",
+    "createdUtc": 1650413553,
+    "group": "loopringorg",
+    "title": "👀👀",
+    "score": 2844,
+    "replyCount": 109
+   },
+   {
+    "id": "u55t6l",
+    "createdUtc": 1650139012,
+    "group": "Superstonk",
+    "title": "GME Floor website hits $100,000,000 on DFV day? Probably nothing.",
+    "score": 1395,
+    "replyCount": 34
+   },
+   {
+    "id": "u4dmsk",
+    "createdUtc": 1650044991,
+    "group": "Superstonk",
+    "title": "Twitter adopts “poison pill” defense in Musk takeover bid",
+    "score": 168,
+    "replyCount": 52
+   },
+   {
+    "id": "u4a3go",
+    "createdUtc": 1650035153,
+    "group": "Superstonk",
+    "title": "If you put your mind to it, you can accomplish anything.",
+    "score": 360,
+    "replyCount": 9
+   },
+   {
+    "id": "u3uhuq",
+    "createdUtc": 1649979321,
+    "group": "Superstonk",
+    "title": "Did Twitter delete Lisa Braganca’s tweet? It’s gone now.",
+    "score": 441,
+    "replyCount": 22
+   },
+   {
+    "id": "u34kno",
+    "createdUtc": 1649895848,
+    "group": "Superstonk",
+    "title": "He’s beginning to believe.",
+    "score": 784,
+    "replyCount": 54
+   },
+   {
+    "id": "u2otxs",
+    "createdUtc": 1649851684,
+    "group": "Superstonk",
+    "title": "inject the hype into my bloodstream",
+    "score": 1262,
+    "replyCount": 69
+   },
+   {
+    "id": "u2obb0",
+    "createdUtc": 1649849930,
+    "group": "Superstonk",
+    "title": "Larry gives off hardcore Gandalf vibes lmayo",
+    "score": 2537,
+    "replyCount": 55
+   },
+   {
+    "id": "u05q8x",
+    "createdUtc": 1649549185,
+    "group": "Superstonk",
+    "title": "The dude has admirable meme skills. I like where this is going.",
+    "score": 93,
+    "replyCount": 13
+   },
+   {
+    "id": "tz2g5d",
+    "createdUtc": 1649421004,
+    "group": "Superstonk",
+    "title": "future-me, from the MOASS tesseract, telling past-me to buy and DRS more $GME before the ex-dividend date",
+    "score": 36,
+    "replyCount": 4
+   },
+   {
+    "id": "tylvxi",
+    "createdUtc": 1649362944,
+    "group": "Superstonk",
+    "title": "1 share here is 7 shares on Earth",
+    "score": 46,
+    "replyCount": 3
+   },
+   {
+    "id": "t7o8ny",
+    "createdUtc": 1646531351,
+    "group": "BrandNewSentence",
+    "title": "thick dragon mamas and little goat boys",
+    "score": 31,
+    "replyCount": 9
+   },
+   {
+    "id": "t6uv3u",
+    "createdUtc": 1646433360,
+    "group": "Superstonk",
+    "title": "I’m gonna call my mom.",
+    "score": 32,
+    "replyCount": 8
+   },
+   {
+    "id": "sb1ju1",
+    "createdUtc": 1642965893,
+    "group": "Superstonk",
+    "title": "wat doing ally?",
+    "score": 54,
+    "replyCount": 2
+   },
+   {
+    "id": "s9r1xe",
+    "createdUtc": 1642816143,
+    "group": "Superstonk",
+    "title": "I called Computershare today to ask some clarifying questions. See my summary and the transcript of the chat in the comments.",
+    "score": 320,
+    "replyCount": 65
+   },
+   {
+    "id": "rx55du",
+    "createdUtc": 1641442203,
+    "group": "Superstonk",
+    "title": "I just sorted by top posts of the day and it's showing up as 30k upvotes. Did it really change and change back? WTF is going on?",
+    "score": 355,
+    "replyCount": 24
+   },
+   {
+    "id": "rutliq",
+    "createdUtc": 1641186260,
+    "group": "Superstonk",
+    "title": "Evergrande, defaulting for the 741st time:",
+    "score": 338,
+    "replyCount": 2
+   },
+   {
+    "id": "rlrzah",
+    "createdUtc": 1640131774,
+    "group": "Superstonk",
+    "title": "Kelly Durkin on Twitter - GMErry Christmas!",
+    "score": 407,
+    "replyCount": 16
+   },
+   {
+    "id": "rewl4e",
+    "createdUtc": 1639338235,
+    "group": "Superstonk",
+    "title": "100% DRS 🟪 - ✅. Space Helmet securely fastened. Ready to buy the dip. Ready for liftoff. Ready for anything. 🦍💪🏼🦍",
+    "score": 2109,
+    "replyCount": 11
+   },
+   {
+    "id": "qpn9gx",
+    "createdUtc": 1636405720,
+    "group": "fidelityinvestments",
+    "title": "Why is Fidelity instructing it's customer service representatives to lie to customers by telling them that any shares transferred to be direct registered must be transferred back to a broker to be able to sell?",
+    "score": 96,
+    "replyCount": 51
+   },
+   {
+    "id": "ocm320",
+    "createdUtc": 1625267993,
+    "group": "Superstonk",
+    "title": "BUY | HODL | SHOP: my haul this week shopping online, all delivered within 3 days. I also bought the tasty, tasty dip (again). I love GameStop, and I like the stock.",
+    "score": 57,
+    "replyCount": 9
+   },
+   {
+    "id": "o5pq8m",
+    "createdUtc": 1624375593,
+    "group": "Superstonk",
+    "title": "Need capital? Not furlong.",
+    "score": 6476,
+    "replyCount": 166
+   },
+   {
+    "id": "o2vbvj",
+    "createdUtc": 1624037486,
+    "group": "Superstonk",
+    "title": "$747B RRRP 🚀🚀🚀🚀🚀",
+    "score": 0,
+    "replyCount": 4
+   },
+   {
+    "id": "o1fgd9",
+    "createdUtc": 1623877409,
+    "group": "Superstonk",
+    "title": "What a punch to the gut...",
+    "score": 38,
+    "replyCount": 1
+   },
+   {
+    "id": "nw7zpp",
+    "createdUtc": 1623277221,
+    "group": "Superstonk",
+    "title": "We're already climbing back up to $280",
+    "score": 40,
+    "replyCount": 34
+   },
+   {
+    "id": "ntzse2",
+    "createdUtc": 1623026017,
+    "group": "crappymusic",
+    "title": "Chessboard Dance Song",
+    "score": 6,
+    "replyCount": 3
+   },
+   {
+    "id": "nt09xh",
+    "createdUtc": 1622912627,
+    "group": "Superstonk",
+    "title": "Ah yes, \"boomtown\", one of the most well-studied and nuanced towns in Economics",
+    "score": 30,
+    "replyCount": 21
+   },
+   {
+    "id": "nsnthz",
+    "createdUtc": 1622868118,
+    "group": "Superstonk",
+    "title": "Apes strong together.",
+    "score": 163,
+    "replyCount": 19
+   },
+   {
+    "id": "nsl4w2",
+    "createdUtc": 1622858501,
+    "group": "Superstonk",
+    "title": "\"Naked shorts, yeah.\"",
+    "score": 69,
+    "replyCount": 1
+   },
+   {
+    "id": "ns8pf5",
+    "createdUtc": 1622822849,
+    "group": "Superstonk",
+    "title": "MFW I buy the dip",
+    "score": 5,
+    "replyCount": 0
+   },
+   {
+    "id": "nlz54a",
+    "createdUtc": 1622088292,
+    "group": "Superstonk",
+    "title": "TLDR: A House of Cards - Part 2 and Part 3",
+    "score": 46,
+    "replyCount": 1
+   },
+   {
+    "id": "mvljw4",
+    "createdUtc": 1619028324,
+    "group": "Superstonk",
+    "title": "TLDR: A House of Cards - Part 1",
+    "score": 2828,
+    "replyCount": 35
+   },
+   {
+    "id": "mm6sfp",
+    "createdUtc": 1617815209,
+    "group": "Superstonk",
+    "title": "Rare Footage: Ape captures the exact moment the $GME Infinite Short Squeeze begins (colorized, 2021)",
+    "score": 12,
+    "replyCount": 7
+   },
+   {
+    "id": "mkr44n",
+    "createdUtc": 1617646605,
+    "group": "Superstonk",
+    "title": "I present to you: A scientifically accurate study regarding the great ape migrations of 2021. This is the way. ✋🏼💎🤚🏼",
+    "score": 139,
+    "replyCount": 8
+   },
+   {
+    "id": "mkpibc",
+    "createdUtc": 1617642336,
+    "group": "Superstonk",
+    "title": "100,000 APES TOGETHER STRONG ALREADY",
+    "score": 25,
+    "replyCount": 1
+   },
+   {
+    "id": "mitw0g",
+    "createdUtc": 1617398249,
+    "group": "GME",
+    "title": "Regarding Price Anchoring",
+    "score": 29,
+    "replyCount": 6
+   },
+   {
+    "id": "mcg3fx",
+    "createdUtc": 1616618527,
+    "group": "GME",
+    "title": "Me, today, waiting for the price to bottom out before dumping in the rest of my liquidity:",
+    "score": 26,
+    "replyCount": 0
+   }
+  ],
+  "coverage": {
+   "commentsFetched": 300,
+   "commentsTotal": 4848,
+   "postsFetched": 73,
+   "postsTotal": 69,
+   "truncated": true,
+   "oldestFetchedUtc": 1616618527,
+   "sources": [
+    "arctic-shift"
+   ],
+   "errors": []
+  }
+ }
+}

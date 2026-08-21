@@ -1,6 +1,7 @@
 {
  "username": "sub_doesnt_exist_bot",
  "class": "bot",
+ "cohort": "declared-bot",
  "capturedAt": 1787154846,
  "bodies": "real",
  "declaredBy": "self-declaration",

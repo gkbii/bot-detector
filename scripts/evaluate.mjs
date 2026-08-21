@@ -6,7 +6,7 @@
  *   npm run evaluate -- --detail    # one line per account as well
  *   npm run evaluate -- --update    # rewrite expected.json from today's scores
  *
- * NO NETWORK. Not a soft preference — `test/corpus/` is 25 serialised
+ * NO NETWORK. Not a soft preference — `test/corpus/` is 27 serialised
  * `buildProfile` outputs and `scoreAccount` is pure, so this whole script is
  * JSON in and arithmetic out. It runs with no `node_modules` present, like the
  * rest of the suite.
@@ -43,7 +43,9 @@ const UPDATE = argv.includes('--update');
 
 const BAND_ORDER = ['low', 'moderate', 'high', 'insufficient-data'];
 
-const { accounts, bots, humans } = loadCorpus();
+const {
+  accounts, bots, threadHumans, prolificHumans,
+} = loadCorpus();
 if (!accounts.length) {
   console.error('test/corpus/ is empty — run: node scripts/capture-corpus.mjs');
   process.exit(1);
@@ -65,12 +67,18 @@ const manifest = loadManifest();
 const capturedAt = accounts.map((a) => a.capturedAt).filter(Number.isFinite);
 
 console.log('Frozen evaluation corpus — EVALUATION.md\'s headline table, recomputed from disk');
-console.log(`test/corpus/ · ${humans.length} thread humans + ${bots.length} declared bots · captured ${
+console.log(`test/corpus/ · ${threadHumans.length} thread humans + ${prolificHumans.length} prolific humans + ${bots.length} declared bots · captured ${
   capturedAt.length ? new Date(Math.min(...capturedAt) * 1000).toISOString().slice(0, 10) : 'unknown'
 } · no network\n`);
 
+// THREE ROWS, NOT TWO. The prolific humans were sampled by a different rule
+// (a content-blind volume sweep, not one thread) and they are two accounts
+// against seventeen, so folding them into the thread row would move that row's
+// range while still calling it "thread humans" — and would bury the only
+// reason they are in the corpus at all (JIO-344, EVALUATION.md Finding 4a).
 const rows = [
-  [`${humans.length} thread humans`, humans],
+  [`${threadHumans.length} thread humans`, threadHumans],
+  [`${prolificHumans.length} prolific humans`, prolificHumans],
   [`${bots.length} declared bots`, bots],
 ];
 const labelWidth = Math.max(...rows.map(([label]) => label.length));
@@ -96,8 +104,23 @@ for (const a of botsAtLow) console.log(`  ! bot   ${a.username} scores low ${a.v
 
 // --- every bound that fired, out loud ---------------------------------------
 const notes = [];
-if (humans.length !== 17) notes.push(`${humans.length} humans, not the 17 EVALUATION.md scored`);
+if (threadHumans.length !== 17) notes.push(`${threadHumans.length} thread humans, not the 17 EVALUATION.md scored`);
 if (bots.length !== 8) notes.push(`${bots.length} bots, not the 8 EVALUATION.md scored`);
+// The prolific cohort is only worth anything while the rate signal actually
+// measures it. If it stops firing, this corpus is back to being unable to ask
+// the question it was extended to ask, and that has to be said out loud rather
+// than inferred from a row that still prints.
+if (!prolificHumans.length) {
+  notes.push('NO prolific human in the corpus — README\'s claim that this signal\'s shape, not its gate, is what protects a >3/h person is unfalsifiable again (JIO-344)');
+}
+for (const account of prolificHumans) {
+  const rate = verdictOf.get(account.username).automation.signals.find((sig) => sig.key === 'sustained-posting-rate');
+  if (!rate || rate.band === 'insufficient-data') {
+    notes.push(`prolific human ${account.username} no longer fires sustained-posting-rate, so it pins nothing`);
+  } else {
+    notes.push(`prolific human ${account.username} sustains ${rate.value.itemsPerHour.toFixed(2)}/h and still scores automation ${verdictOf.get(account.username).automation.band} ${verdictOf.get(account.username).automation.score}`);
+  }
+}
 const synthetic = accounts.filter((a) => a.bodies !== 'real');
 if (synthetic.length) {
   notes.push(`${synthetic.length} of ${accounts.length} accounts carry length-matched synthetic bodies, so their \`near-duplicate-bodies\` and \`stock-phrasing\` signals are NOT the ones the live account produced`);
@@ -127,6 +150,7 @@ if (synthetic.length) {
   }
 }
 for (const skipped of manifest?.humansSkipped ?? []) notes.push(`human candidate ${skipped.username} skipped: ${skipped.reason}`);
+for (const skipped of manifest?.prolificSkipped ?? []) notes.push(`prolific human candidate ${skipped.username} skipped: ${skipped.reason}`);
 for (const rejected of manifest?.botsRejected ?? []) notes.push(`bot candidate ${rejected.username} rejected: ${rejected.reason}`);
 if (notes.length) {
   console.log('\nBounds that fired:');
@@ -136,9 +160,10 @@ if (notes.length) {
 if (DETAIL) {
   console.log('\nPer account:');
   const width = Math.max(...scored.map((a) => a.username.length));
-  for (const klass of ['human', 'bot']) {
-    for (const a of scored.filter((x) => x.class === klass)) {
-      console.log(`  ${klass === 'bot' ? 'bot  ' : 'human'} ${a.username.padEnd(width)}  ${
+  const LABELS = { 'politics-thread': 'human', 'prolific-probe': 'FAST ', 'declared-bot': 'bot  ' };
+  for (const cohort of ['politics-thread', 'prolific-probe', 'declared-bot']) {
+    for (const a of scored.filter((x) => x.cohort === cohort)) {
+      console.log(`  ${LABELS[cohort]} ${a.username.padEnd(width)}  ${
         AXES.map((axis) => `${axis.slice(0, 4)} ${String(a.verdict[axis].band).padEnd(16)} ${String(a.verdict[axis].score ?? '—').padStart(3)}`).join(' · ')
       }`);
     }

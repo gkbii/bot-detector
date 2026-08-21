@@ -1,6 +1,7 @@
 {
  "username": "AmputatorBot",
  "class": "bot",
+ "cohort": "declared-bot",
  "capturedAt": 1787030510,
  "bodies": "real",
  "declaredBy": "self-declaration",

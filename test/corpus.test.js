@@ -1,12 +1,13 @@
 /**
  * The frozen evaluation corpus, as a test (JIO-343).
  *
- * `test/corpus/` holds 25 serialised `buildProfile` outputs — the 17 thread
- * humans and 8 declared bots behind EVALUATION.md's headline band table. This
- * file asserts that today's scorers still produce that table, which is the
- * thing the 2026-08-05 live run could never leave behind: no profile was kept
- * from it, so "the separation is not regressed" was a claim with no command
- * under it and every reweighting proposed afterwards was unfalsifiable.
+ * `test/corpus/` holds 27 serialised `buildProfile` outputs — the 17 thread
+ * humans and 8 declared bots behind EVALUATION.md's headline band table, plus
+ * the 2 prolific humans of Finding 4a. This file asserts that today's scorers
+ * still produce that table, which is the thing the 2026-08-05 live run could
+ * never leave behind: no profile was kept from it, so "the separation is not
+ * regressed" was a claim with no command under it and every reweighting
+ * proposed afterwards was unfalsifiable.
  *
  * Three separate things are checked, and they fail for different reasons:
  *
@@ -17,8 +18,9 @@
  *      bot at `low`. Catches a change that kept the scores plausible and
  *      destroyed the only result EVALUATION.md actually claimed.
  *   3. THE CORPUS ITSELF — that each bot still declares itself a bot in its
- *      own committed text, and that the synthetic-body machinery still
- *      preserves what it says it preserves.
+ *      own committed text, that each prolific human still sustains the rate it
+ *      was admitted for, and that the synthetic-body machinery still preserves
+ *      what it says it preserves.
  *
  * NO NETWORK, and the suite still runs with no `node_modules`: everything here
  * is `node:test`, `node:fs` and JSON.
@@ -39,14 +41,16 @@ import { fileURLToPath } from 'node:url';
 
 import { scoreAccount } from '../extension/lib/scoring/index.js';
 import { normalizeWords, stripUrls } from '../extension/lib/scoring/stats.js';
-import { AXES, loadCorpus, loadExpected } from './corpus/load.js';
+import { AXES, COHORTS, loadCorpus, loadExpected } from './corpus/load.js';
 import { EVALUATION_MD_BOTS, declarationBasis } from '../scripts/lib/bot-declaration.mjs';
 import {
   HELP_SEEKING_CANONICAL, SELF_CORRECTION_CANONICAL, bodyMeasurements, synthesizeBody,
 } from '../scripts/lib/synthetic-bodies.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const { accounts, bots, humans } = loadCorpus();
+const {
+  accounts, bots, humans, threadHumans, prolificHumans,
+} = loadCorpus();
 const expected = loadExpected();
 
 // One scoring pass for the whole file. `scoreAccount` is pure, so caching it
@@ -57,9 +61,76 @@ const verdicts = new Map(accounts.map((a) => [a.username, scoreAccount(a.profile
 const verdictOf = (account) => verdicts.get(account.username);
 
 test('the corpus is the population EVALUATION.md scored: 17 thread humans, 8 declared bots', () => {
-  assert.equal(humans.length, 17);
+  assert.equal(threadHumans.length, 17);
   assert.equal(bots.length, 8);
-  assert.equal(accounts.length, 25);
+});
+
+/**
+ * The cohorts are counted SEPARATELY and the total is asserted against their
+ * sum, so an account can never join one population by being quietly missing
+ * from another. `loadCorpus` already refuses an unknown cohort; this is the
+ * other half — a file that lost its cohort field cannot vanish from the table
+ * while `accounts.length` still looks right.
+ */
+test('every account belongs to exactly one of the three cohorts, and they add up', () => {
+  const counts = { [COHORTS.THREAD]: 0, [COHORTS.PROLIFIC]: 0, [COHORTS.BOT]: 0 };
+  for (const account of accounts) counts[account.cohort] += 1;
+  assert.deepEqual(counts, { [COHORTS.THREAD]: 17, [COHORTS.PROLIFIC]: 2, [COHORTS.BOT]: 8 });
+  assert.equal(accounts.length, 27);
+  assert.equal(humans.length, threadHumans.length + prolificHumans.length,
+    'both human cohorts must be inside `humans`, or the separation invariant stops covering one of them');
+  for (const account of prolificHumans) assert.equal(account.class, 'human');
+  for (const account of bots) assert.equal(account.cohort, COHORTS.BOT);
+});
+
+/**
+ * WHY THIS COHORT EXISTS, as a test rather than as a comment (JIO-344).
+ *
+ * README used to say the gate at `ORDINARY_ITEMS_PER_HOUR = 3` "sits in the
+ * gap" between people and bots. It does not: a content-blind sweep found six
+ * people above it, one of them faster than u/RemindMeBot (EVALUATION.md
+ * Finding 4a). What actually keeps those people `low` is the SHAPE of the
+ * signal — one-directional, floored at 0.5, log-scaled, weight 2 of 15.5 — and
+ * a claim about shape is exactly the kind that stays true-sounding after it
+ * stops being true. So it is pinned to two real profiles.
+ *
+ * If this fails, something made the axis harsher on a person the tool is
+ * likelier to be pointed at than any bot. HAND-READ THE ACCOUNT before
+ * touching either the threshold or this test.
+ */
+test('a prolific human fires the rate signal and STILL scores automation low', () => {
+  assert.ok(prolificHumans.length, 'the corpus no longer holds a >3/h human — Finding 4a is unfalsifiable again');
+
+  for (const account of prolificHumans) {
+    const verdict = verdictOf(account);
+    const rate = verdict.automation.signals.find((sig) => sig.key === 'sustained-posting-rate');
+
+    // Admitted for a rate, so the rate has to still be there. An account that
+    // drifted under the gate would sit in the corpus pinning nothing while
+    // every count above it still added up.
+    assert.ok(rate, `${account.username} has no sustained-posting-rate signal at all`);
+    assert.notEqual(rate.band, 'insufficient-data',
+      `${account.username} no longer fires the signal it was admitted for (${rate.value?.itemsPerHour?.toFixed(2) ?? '—'}/h)`);
+    assert.ok(rate.value.itemsPerHour > 3,
+      `${account.username} sustains ${rate.value.itemsPerHour.toFixed(2)}/h, which is not above the gate`);
+
+    // The finding itself.
+    assert.equal(verdict.automation.band, 'low',
+      `${account.username} sustains ${rate.value.itemsPerHour.toFixed(2)}/h and now scores automation ${verdict.automation.band} ${verdict.automation.score} — a person crossed a band`);
+  }
+
+  // u/humdingler at 5.90/h is the specific account that refutes the "gap":
+  // faster than u/RemindMeBot at 5.5/h, so the two populations overlap and no
+  // value of ORDINARY_ITEMS_PER_HOUR separates them.
+  const fastest = prolificHumans
+    .map((a) => verdictOf(a).automation.signals.find((sig) => sig.key === 'sustained-posting-rate'))
+    .reduce((a, b) => (b.value.itemsPerHour > a.value.itemsPerHour ? b : a));
+  const slowestBot = bots
+    .map((a) => verdictOf(a).automation.signals.find((sig) => sig.key === 'sustained-posting-rate'))
+    .filter((sig) => sig && sig.band !== 'insufficient-data')
+    .reduce((a, b) => (b.value.itemsPerHour < a.value.itemsPerHour ? b : a));
+  assert.ok(fastest.value.itemsPerHour > slowestBot.value.itemsPerHour,
+    `the fastest frozen human (${fastest.value.itemsPerHour.toFixed(2)}/h) no longer overlaps the slowest frozen bot (${slowestBot.value.itemsPerHour.toFixed(2)}/h) — if this is real and not a re-capture artifact, README's rewritten threshold section needs re-reading`);
 });
 
 test('every frozen account still scores exactly what expected.json records', () => {

@@ -25,6 +25,34 @@ export const MANIFEST_PATH = path.join(CORPUS_DIR, 'manifest.json');
 export const AXES = ['automation', 'agenda', 'authenticity'];
 
 /**
+ * The three populations in here, which were sampled by three different rules
+ * and are NOT interchangeable (JIO-344).
+ *
+ *   politics-thread  17 authors of one r/politics thread, by comment count in
+ *                    it. Ordinary-volume commenters by construction — which is
+ *                    exactly why they could never answer whether a PROLIFIC
+ *                    person trips `sustained-posting-rate`.
+ *   prolific-probe   humans found by a content-blind volume sweep of 22
+ *                    subreddits and hand-read (EVALUATION.md Finding 4a). They
+ *                    are here to hold that one question open, and they are a
+ *                    demonstration that the population exists — NOT a measured
+ *                    false-positive rate, because the sweep deliberately aimed
+ *                    at the busiest authors on the platform.
+ *   declared-bot     accounts admitted by `scripts/lib/bot-declaration.mjs`.
+ *
+ * Every separation invariant applies to BOTH human cohorts — a prolific person
+ * that scored above `low` would be a false accusation just the same. Only the
+ * counts and the table labels distinguish them, so that a row reading
+ * "17 thread humans" keeps meaning 17 thread humans.
+ */
+export const COHORTS = {
+  THREAD: 'politics-thread',
+  PROLIFIC: 'prolific-probe',
+  BOT: 'declared-bot',
+};
+const KNOWN_COHORTS = new Set(Object.values(COHORTS));
+
+/**
  * Every account file, sorted by username so the table is byte-stable.
  * Anything that is not an account file (the manifest, the expectation, this
  * module) is excluded by name rather than by guessing at shape.
@@ -38,13 +66,24 @@ export function loadCorpus() {
   const accounts = files.map((file) => {
     const entry = JSON.parse(fs.readFileSync(path.join(CORPUS_DIR, file), 'utf8'));
     if (!entry.profile || !entry.class) throw new Error(`${file}: not a corpus account file`);
+    // REQUIRED, not defaulted. A cohort this module quietly guessed at is how
+    // a probe human would end up counted as the eighteenth thread human and
+    // the table would go on reading exactly as plausibly as before.
+    if (!KNOWN_COHORTS.has(entry.cohort)) {
+      throw new Error(`${file}: cohort ${JSON.stringify(entry.cohort)} is not one of ${[...KNOWN_COHORTS].join(', ')}`);
+    }
     return entry;
   });
 
+  const inCohort = (cohort) => accounts.filter((a) => a.cohort === cohort);
   return {
     accounts,
     bots: accounts.filter((a) => a.class === 'bot'),
+    // Every human, both cohorts — this is what the separation invariants run
+    // over, and adding a cohort must never shrink it.
     humans: accounts.filter((a) => a.class === 'human'),
+    threadHumans: inCohort(COHORTS.THREAD),
+    prolificHumans: inCohort(COHORTS.PROLIFIC),
   };
 }
 

@@ -1,6 +1,7 @@
 {
  "username": "AutoModerator",
  "class": "bot",
+ "cohort": "declared-bot",
  "capturedAt": 1787030317,
  "bodies": "real",
  "declaredBy": "self-declaration",

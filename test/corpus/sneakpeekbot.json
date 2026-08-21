@@ -1,6 +1,7 @@
 {
  "username": "sneakpeekbot",
  "class": "bot",
+ "cohort": "declared-bot",
  "capturedAt": 1787030406,
  "bodies": "real",
  "declaredBy": "evaluation-md",

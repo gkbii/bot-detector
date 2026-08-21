@@ -1,6 +1,7 @@
 {
  "username": "same_subreddit_bot",
  "class": "bot",
+ "cohort": "declared-bot",
  "capturedAt": 1787154726,
  "bodies": "real",
  "declaredBy": "self-declaration",

@@ -85,11 +85,26 @@ const MIN_SPAN_SECONDS_FOR_RATE = 60;
  * bot in exchange for a signal that can only ever fire on the loud ones.
  *
  * 3 items/hour is 72 a day sustained across the entire retrieved window,
- * nights included. The 17 humans frozen in `test/corpus/` top out at 0.92/h;
- * the five bots this was added for run 5.5 to 13,039/h. The gate sits in that
- * gap rather than halfway between, because the cost of the two errors is not
- * symmetric — a missed bot is a moderate band instead of a high one, and a
- * caught human is a false accusation.
+ * nights included.
+ *
+ * IT IS NOT A CEILING ON PEOPLE, and the comment that stood here saying "the
+ * gate sits in the gap" between the humans and the bots was wrong. A
+ * content-blind sweep of 22 subreddits found seven accounts above it and SIX
+ * OF THE SEVEN hand-read as people, topping out at 5.90/h — above
+ * u/RemindMeBot's 5.5/h, the slowest bot this was added for (EVALUATION.md
+ * Finding 4a). The two populations overlap, so no value of this constant
+ * separates them: raising it to 6 silences RemindMeBot and still measures the
+ * human. There is no gap and there is nothing to sit in.
+ *
+ * What keeps a prolific person `low` is the SHAPE of this signal rather than
+ * the position of this number — one-directional, floored at
+ * `RATE_FLOOR_STRENGTH`, log-scaled to `SATURATED_ITEMS_PER_HOUR`, and weight
+ * 2 of 15.5. The 5.90/h human earns strength 0.573, i.e. 0.073 above neutral,
+ * and scores automation `low 14`. So this is the threshold at which throughput
+ * becomes worth WEIGHING, not the throughput at which an account becomes a
+ * machine, and moving it is not the lever it looks like. u/humdingler (5.90/h)
+ * and u/chilidirigible (3.42/h) are frozen in `test/corpus/` so that stops
+ * being an assurance and starts being a test.
  */
 const ORDINARY_ITEMS_PER_HOUR = 3;
 
@@ -254,7 +269,7 @@ function sustainedRateSignal(profile) {
       label,
       weight,
       value,
-      evidence: `${measured}, inside the range a person sustains. This signal only reports throughput a person cannot reach, so it says nothing about this account either way — it is not a clean result on the automation axis.`,
+      evidence: `${measured}, below the ${ORDINARY_ITEMS_PER_HOUR} an hour at which this signal begins to weigh throughput at all. Accounts of every kind sit here, so it says nothing about this account either way — it is not a clean result on the automation axis.`,
     });
   }
 
@@ -270,7 +285,13 @@ function sustainedRateSignal(profile) {
     weight,
     strength,
     value,
-    evidence: `${measured}, sustained across the whole retrieved window — above the ${ORDINARY_ITEMS_PER_HOUR} an hour a person keeps up. This is a claim about throughput and not about schedule: it counts how much the account produced, not when.`,
+    // NOT "more than a person keeps up", which is what this said until
+    // EVALUATION.md Finding 4a found six live accounts over this gate that
+    // hand-read as people. The string is printed ON THE ACCOUNT BEING JUDGED,
+    // so it may describe the account and the weighing, and may not make a
+    // claim about what human beings are capable of — see the guard in
+    // test/scoring.test.js.
+    evidence: `${measured}, sustained across the whole retrieved window — above the ${ORDINARY_ITEMS_PER_HOUR} an hour at which this signal begins to weigh throughput at all. Throughput at this level is uncommon and is weighed as such, not taken on its own as proof of automation. This is a claim about throughput and not about schedule: it counts how much the account produced, not when.`,
   });
 }
 

@@ -1,6 +1,7 @@
 {
  "username": "Anti-ThisBot-IB",
  "class": "bot",
+ "cohort": "declared-bot",
  "capturedAt": 1787030733,
  "bodies": "real",
  "declaredBy": "self-declaration",

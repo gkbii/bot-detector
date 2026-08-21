@@ -1,6 +1,7 @@
 {
  "username": "RepostSleuthBot",
  "class": "bot",
+ "cohort": "declared-bot",
  "capturedAt": 1787030352,
  "bodies": "real",
  "declaredBy": "evaluation-md",

@@ -294,6 +294,34 @@
     "score": 81
    }
   },
+  "chilidirigible": {
+   "automation": {
+    "band": "low",
+    "score": 25
+   },
+   "agenda": {
+    "band": "moderate",
+    "score": 57
+   },
+   "authenticity": {
+    "band": "low",
+    "score": 16
+   }
+  },
+  "humdingler": {
+   "automation": {
+    "band": "low",
+    "score": 14
+   },
+   "agenda": {
+    "band": "moderate",
+    "score": 55
+   },
+   "authenticity": {
+    "band": "moderate",
+    "score": 52
+   }
+  },
   "runnertrailsBay": {
    "automation": {
     "band": "low",

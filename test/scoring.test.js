@@ -690,6 +690,40 @@ test('automation: an 82-second window still measures throughput — the binding 
   assert.match(rate.evidence, /82 seconds/);
 });
 
+/**
+ * THE EVIDENCE STRING IS PRINTED ON THE ACCOUNT BEING JUDGED, so it is held to
+ * what was actually measured (JIO-344, EVALUATION.md Finding 4a).
+ *
+ * It used to read "above the 3 an hour a person keeps up". That is a claim
+ * about people rather than about this account, it was never measured, and it
+ * is false: a content-blind sweep of 22 subreddits found seven accounts over
+ * the gate and six of them hand-read as people, topping out at 5.90/h — above
+ * u/RemindMeBot's 5.5/h. u/humdingler and u/chilidirigible are frozen in
+ * `test/corpus/` as the counter-example.
+ *
+ * The rule this enforces is narrow and easy to keep: describe the ACCOUNT and
+ * how the number is weighed, not the population. If a future signal genuinely
+ * has a measured claim about people behind it, that measurement goes in
+ * EVALUATION.md first and this guard is loosened deliberately — it is not a
+ * word filter to route around.
+ */
+test('automation: the rate evidence claims what was measured, never what a person can do', () => {
+  const fired = findSignal(scoreAccount(fastProfile(5)).automation, 'sustained-posting-rate');
+  const silent = findSignal(scoreAccount(genuineProfile()).automation, 'sustained-posting-rate');
+
+  assert.equal(fired.band, BAND.HIGH);
+  assert.equal(silent.band, BAND.INSUFFICIENT);
+
+  for (const [which, sig] of [['fired', fired], ['unmeasured', silent]]) {
+    assert.doesNotMatch(sig.evidence, /\b(?:person|people|human|humans)\b/i,
+      `the ${which} rate evidence makes a claim about people: ${JSON.stringify(sig.evidence)}`);
+  }
+
+  // ...and it still says the thing it is entitled to say.
+  assert.match(fired.evidence, /uncommon/, 'the fired evidence must still explain why the number is being weighed');
+  assert.match(silent.evidence, /not a clean result/);
+});
+
 test('automation: an ordinary rate is unmeasured, never a vote for a person', () => {
   const axis = scoreAccount(genuineProfile()).automation;
   const rate = findSignal(axis, 'sustained-posting-rate');

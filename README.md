@@ -63,12 +63,12 @@ bot-detector/
     username.js              normalisation as a security boundary (this value enters a URL)
   scripts/                   NOT shipped, NOT imported by anything, NOT run by npm test
     capture-corpus.mjs       fetches; rebuilds test/corpus/
-    probe-prolific-humans.mjs fetches; looks for the >3/h person the corpus cannot hold
+    probe-prolific-humans.mjs fetches; found the >3/h people now in test/corpus/
     evaluate.mjs             reprints EVALUATION.md's band table from test/corpus/, offline
     lib/bot-declaration.mjs  what counts as "this account declares itself a bot", and why twice
-    lib/synthetic-bodies.mjs length-matched stand-ins for the 17 humans' comment text
+    lib/synthetic-bodies.mjs length-matched stand-ins for the 19 humans' comment text
   test/                      the shared core's suite
-  test/corpus/               25 frozen buildProfile outputs — the evaluation as a diff
+  test/corpus/               27 frozen buildProfile outputs — the evaluation as a diff
   server/test/               the backend's suite
   docs/                      the diagram and feature list this project's public page is generated from
     architecture.md          one mermaid flowchart, stable node ids, and the reasoning
@@ -396,13 +396,36 @@ therefore starts at 0.5 rather than 0, because a strength under 0.25 reads as
 `direction: 'lowers'` in `axis.js` and would drag the average down — which is
 precisely the vote this signal is not allowed to cast.
 
-**The gate sits in the gap, not halfway across it.** 3 items/hour is 72 a day
-sustained across the entire retrieved window, nights included. The 17 frozen
-humans top out at **0.92/h**; the five bots this was added for run **5.5, 11.9,
-18.7, 28.8 and 13,039/h**. The threshold is put near the human end of that gap
-on purpose, because the two errors do not cost the same: a missed bot is a
-`moderate` band instead of a `high` one, and a caught human is a false
-accusation.
+**The gate is where throughput becomes worth weighing — it is NOT a ceiling on
+people, and there is no gap for it to sit in.** 3 items/hour is 72 a day
+sustained across the entire retrieved window, nights included. This section
+used to argue the number from a gap: the frozen humans top out at 0.92/h and
+the five bots run 5.5–13,039/h, so put the gate between them. That gap was an
+artifact of a corpus with no prolific human in it, and going and looking
+destroyed it (EVALUATION.md Finding 4a). A content-blind sweep of 22
+subreddits found seven accounts above the gate and **six of the seven hand-read
+as people**, the fastest of them at **5.90/h — above u/RemindMeBot's 5.5/h**.
+The populations overlap. No value of `ORDINARY_ITEMS_PER_HOUR` separates them:
+raising it to 6 silences RemindMeBot and still measures the human.
+
+**So what protects a prolific person is the shape of this signal, not the
+position of its gate**, and that is the sentence to keep. One-directional, so
+an ordinary rate is `unmeasured` and never a vote either way. Floored at
+`RATE_FLOOR_STRENGTH = 0.5`, so the measured range starts at neutral. Log-scaled
+to `SATURATED_ITEMS_PER_HOUR`, so the distance from 3/h to 300/h is what the
+strength is spent on rather than the distance from 3/h to 6/h. And weight 2 of
+15.5. Put together, the 5.90/h human earns strength **0.573** — 0.073 above
+neutral — and scores automation `low 14`. u/humdingler (5.90/h, `low 14`) and
+u/chilidirigible (3.42/h, `low 25`) are frozen in `test/corpus/` and
+`test/corpus.test.js` asserts both halves of that: that they still clear the
+gate, and that they are still `low`. A claim about shape is exactly the kind
+that keeps sounding true after it stops being true, so it is pinned to two real
+people rather than left in this paragraph.
+
+Moving the threshold is therefore not the lever it looks like. It cannot buy
+separation that does not exist, and the two errors it trades between still do
+not cost the same: a missed bot is a `moderate` band instead of a `high` one,
+and a caught human is a false accusation.
 
 **The 82-second window is what fixes the minimum-span guard at 60 seconds, and
 the arithmetic is not close.** Before this signal the five bots measured 10.5
@@ -432,28 +455,58 @@ This asks the question CV deliberately refuses: not how evenly, but how much.
 changed and **every one of them is a bot**: AutoModerator `moderate 63 -> high
 69`, RemindMeBot 62 → 64, sneakpeekbot 47 → 50, Anti-ThisBot-IB 35 → 39, and —
 because a weighted average works in both directions — RepostSleuthBot 76 → 75
-and sub_doesnt_exist_bot 53 → 52. Not one of the 17 humans moved by a single
-point, because for all 17 the signal is unmeasured. The bot floor rose from 35
-to 39 and the human ceiling stayed at 17, so the separation the whole evaluation
-rests on widened rather than narrowed.
+and sub_doesnt_exist_bot 53 → 52. Not one of the 17 thread humans moved by a
+single point, because for all 17 the signal is unmeasured. The bot floor rose
+from 35 to 39 and their ceiling stayed at 17.
 
-**What it cannot see**, stated because a bound that only fires quietly is worse
-than one that fires: a person who genuinely sustains more than 3 items an hour
-across a truncated window — 300 comments inside a four-day argument — would be
-measured here, and the corpus contains no such human to check that against. The
-`sustained` framing is the mitigation, not a proof: one furious evening is
-diluted by the rest of the window, and 30 items is the floor below which the
-signal refuses to call anything a rate. If such an account turns up, it belongs
-in `test/corpus/` before the threshold is touched.
+That was measured before the corpus had a prolific human in it, and admitting
+two narrowed the margin it describes: **the human ceiling on automation is now
+25, not 17** (u/chilidirigible, 3.42/h), against a bot floor of 39. The bands
+still do not overlap and the separation invariant still holds, but 14 points of
+gap is the honest number and 22 was the number a thread sample happened to
+produce. Both cohorts are printed as their own row by `npm run evaluate` so
+that one can never quietly widen the other.
 
-**THIS BOUND FIRED — see EVALUATION.md, Finding 4a.** A content-blind live
-sweep on 2026-08-20 (`node scripts/probe-prolific-humans.mjs`) found seven
-accounts over the gate and **six of them hand-read as people**, topping out at
-5.90/h — above u/RemindMeBot's 5.5/h, so the two populations overlap and the
-"gap" two paragraphs up does not exist. All six still score `low`, because what
-protects them is this signal's shape rather than its gate's position; the
-paragraphs above have not yet been rewritten to say so, and no prolific human
-is in `test/corpus/` yet.
+**What it measures that you might not expect it to**, stated because this
+started life as a bound nobody had checked. A person who genuinely sustains
+more than 3 items an hour across a truncated window — 300 comments inside a
+four-day argument — *is* measured here. The old text said so and added that the
+corpus held no such human to check it against, which made it an honest bound
+and an unfalsifiable one: `test/corpus/`'s 17 humans are the authors of one
+r/politics thread and are ordinary-volume commenters by construction, so no
+re-run of it could ever produce the counter-example.
+
+**THAT BOUND FIRED — see EVALUATION.md, Finding 4a.** `node
+scripts/probe-prolific-humans.mjs` went and looked: 22 subreddits, ~23,000
+comments, 16,264 distinct authors ranked before anything was fetched. Seven of
+the top 48 cleared the gate and six hand-read as people. They are not rare
+freaks — they are a GIF poster in r/Superstonk, a fifteen-year r/anime regular,
+a baseball fan in September. Two of them are now in `test/corpus/` as the
+`prolific-probe` cohort, and `npm run evaluate` prints their rate and their
+band on every run.
+
+The `sustained` framing is the mitigation and it is not a proof: one furious
+evening is diluted by the rest of the window, and 30 items is the floor below
+which the signal refuses to call anything a rate.
+
+**The residue that is still real, and it has a name and a number.** At 3.42/h
+u/chilidirigible scores automation `low 25` — well above the 17 the thread
+humans top out at, mostly on `posting-hour-dead-zone`, which for once *does*
+measure them (a 3.7-day window, and a long-running r/anime regular with no
+6-hour quiet stretch in it). Recomputed from that frozen profile under
+JIO-329's premise — `conversation-depth` and `interval-regularity` both going
+unmeasured — they come out **`moderate 32`, and without this signal `low 28`**.
+So this signal supplies the 4 points that cross the band, and JIO-329 supplies
+the rest by removing two measured near-zeros from a weighted average. One real
+person crosses a band, and it is a cost of the two changes together rather than
+of either alone. It is written down before JIO-329 lands rather than found
+afterwards, and u/chilidirigible is in the corpus precisely so that `npm run
+evaluate` fails on the day it happens instead of printing `OK`. (Those two
+projections are not reproducible from the public verdict — `axis.js` publishes
+`band` and not `strength` by design — so they were computed on an instrumented
+copy of `stripInternal`. EVALUATION.md Finding 4a measured 33/29 for the same
+account against its live 2026-08-20 window; 32/28 is the frozen 2026-08-21
+one.)
 
 ## The blind spot: an account the index has never heard of
 
@@ -553,7 +606,10 @@ re-measure that followed could not rule out having moved the one result the
 evaluation actually claimed.
 
 `test/corpus/` fixes that. It holds those 25 accounts as serialised
-`buildProfile` output — the real fetch, frozen — and:
+`buildProfile` output — the real fetch, frozen — plus the 2 prolific humans
+JIO-344 admitted, for 27 in three separately-ruled cohorts (`politics-thread`,
+`prolific-probe`, `declared-bot`; `test/corpus/load.js` refuses a file that
+does not name one). And:
 
 ```
 npm run evaluate                # the table, the invariants, and a diff. exit 1 if anything moved
@@ -579,8 +635,9 @@ room to spare. It has since moved once, on purpose and in one direction:
 `sustained-posting-rate` took the bots to `moderate ×6, high ×2` and their
 floor from 35 to 39 without touching a single human score, which is the section
 above and is a diff in `expected.json` rather than a paragraph, because that is
-now the point. The humans still top out at 17, the lowest bot is 39, and
-nothing sits in between. The other two columns have moved for less deliberate
+now the point. The thread humans still top out at 17 and the lowest bot is 39.
+The two prolific humans admitted afterwards sit at 14 and 25, so the human
+ceiling across both cohorts is 25 and nothing still sits between 25 and 39. The other two columns have moved for less deliberate
 reasons. The bots' agenda column was `low ×6, moderate ×2` and is now `moderate
 ×8` — including all four of the accounts EVALUATION.md hand-read itself — and
 their authenticity column went from `low ×3, moderate ×5` to `low ×5, moderate
@@ -603,12 +660,48 @@ authors against the 496 and 236 recorded on the day, and the three humans
 EVALUATION.md does name fall out at ranks 1, 3 and 6 unprompted. That is the
 only corroboration available and it is not the same thing as the original 17.
 
+**There is a second human cohort, and it is a separate row on purpose.** The 17
+above are ordinary-volume commenters *by construction* — they were picked by
+comment count inside one thread — which quietly made one question unaskable of
+this corpus: whether a person fast enough to trip `sustained-posting-rate` still
+comes back `low`. JIO-344 went and found two (`prolific-probe`:
+u/humdingler at 5.90/h and u/chilidirigible at 3.42/h, from the content-blind
+sweep in EVALUATION.md Finding 4a) and froze them here. Three things about how
+they are held:
+
+* **They are `class: "human"`, so both separation invariants cover them.** A
+  prolific person scored above `low` would be a false accusation exactly like
+  any other, and `npm run evaluate` fails on it.
+* **They are their own table row, never folded into the seventeen.** Two
+  accounts from a volume sweep averaged into seventeen from one thread would
+  move that row's range while it still said "thread humans", and would bury the
+  only reason these two exist. `test/corpus/load.js` throws on a file whose
+  `cohort` it does not recognise rather than guessing.
+* **Admission is re-checkable, like the bots'.** A bot must declare itself in
+  its own committed text; a prolific human must actually *fire* the rate signal
+  from its own committed timestamps. An account that had slowed below the gate
+  since the probe read it would otherwise sit in here pinning nothing while
+  every count still added up, so `capture-corpus.mjs` refuses it and
+  `test/corpus.test.js` re-derives the gate from the frozen profile.
+
+**What they cost, said plainly.** Two accounts hand-read by one person are a
+demonstration that the population exists, **not** a measured false-positive
+rate — the sweep deliberately aimed at the busiest authors on Reddit, so
+nothing here says how *common* a >3/h person is. And they moved a number that
+mattered: the human ceiling on automation goes from 17 to 25. They also carry a
+finding this ticket did not go looking for and is not fixing — **both score
+agenda `moderate` (55 and 57) where all 17 thread humans are `low` (0–19)**,
+on `topic-concentration` and `drive-by-ratio`, which is what a high-volume
+single-subreddit hobbyist looks like to that axis. It is filed rather than
+absorbed.
+
 **Bot bodies are real; human bodies are not.** Nobody's privacy is at stake in
 `u/RemindMeBot`'s boilerplate, and the bot half is precisely where the wording
 *is* the evidence — Finding 2 is a claim about the characters in a URL. The
-other seventeen are real people who argued about one r/politics thread and never
-agreed to have it committed to a public repository, so their comment bodies are
-replaced with length-matched filler. Not lorem ipsum: five things in the scoring
+other nineteen are real people — seventeen who argued about one r/politics
+thread, two who turned up in a volume sweep — and none of them agreed to have
+it committed to a public repository, so their comment bodies are replaced with
+length-matched filler. Not lorem ipsum: five things in the scoring
 core read a body, and `scripts/lib/synthetic-bodies.mjs` reproduces four of them
 exactly — the trimmed character length (`length-uniformity`), the normalised
 word count, whether `stripUrls(body)` holds a `?`, and which `self-correction`
@@ -619,8 +712,8 @@ into `manifest.json`, so the price of that substitution is a number in the
 repository rather than an assurance in a comment.
 
 One thing is deliberately *not* substituted, and it belongs here rather than in
-a code comment: the humans' **post titles are committed verbatim** — 717 of
-them across 15 of the 17 accounts. No scoring signal reads a title (`.title`
+a code comment: the humans' **post titles are committed verbatim** — 890 of
+them across 17 of the 19 accounts. No scoring signal reads a title (`.title`
 appears nowhere under `extension/lib/` outside the source adapter), and
 blanking them would remove the only human-readable handle on what a frozen post
 actually was. They are kept for that reason and it is a defensible trade, but
@@ -1003,8 +1096,8 @@ npm run evaluate                          # EVALUATION.md's band table, off froz
 
 `test/` covers the shared core, `server/test/` the backend — and both globs are
 in the `test` script on purpose, because a single `test/*.test.js` silently skips
-the server. `test/corpus.test.js` is the odd one out: it scores the 25 frozen
-accounts in `test/corpus/` and fails if any of their 75 scores moved, which is
+the server. `test/corpus.test.js` is the odd one out: it scores the 27 frozen
+accounts in `test/corpus/` and fails if any of their 81 scores moved, which is
 the same check `npm run evaluate` prints as a table. See ["that table,
 frozen"](#that-table-frozen-npm-run-evaluate) for what it can and cannot see. `scoreAccount` is a pure function (no network, no `Date.now()`, no
 storage — the only clock is `profile.fetchedAt`, captured by the source
