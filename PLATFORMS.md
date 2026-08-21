@@ -161,6 +161,15 @@ Not a thought experiment: the 20 real `@NASA` tweets were mapped into
       UNMEASURED w=3    off-script-dissent
 ```
 
+> Probed against the scorer as it stood on 2026-08-18. JIO-344 has since added
+> `sustained-posting-rate` (w 2), so the automation denominator is 15.5 rather
+> than 13.5; the numbers in this file are left as they were measured. The new
+> signal is safe on this endpoint by construction rather than by luck — a
+> sampled, non-contiguous window can only ever spread N items over a *longer*
+> span than they really occupied, so it can only understate a rate, and the
+> signal is one-directional upward. Where it understates, it returns
+> `unmeasured()`.
+
 All twelve accounts were then put through the same path:
 
 ```
@@ -496,6 +505,9 @@ what that looks like. If it is built anyway, these are the conditions:
    simpler and more honest, must never populate `posting-hour-dead-zone`,
    `interval-regularity` or `dormancy-revival` from a payload it cannot prove
    is contiguous. Which, on this endpoint, is all of them.
+   `sustained-posting-rate` is the one exception and does not need the guard,
+   for the reason noted above the twelve-account table: a gap the endpoint
+   invented makes the measured rate lower, never higher.
 2. **Staleness must be measured and carried.** `fetchedAt` minus the newest
    item was 279–554 days for four of twelve accounts. That belongs in
    `coverage` and on the badge; nothing currently expresses "this data is a

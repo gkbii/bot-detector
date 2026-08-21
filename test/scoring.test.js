@@ -640,6 +640,97 @@ test('automation: a fetch window under three days cannot claim a sleep cycle', (
   assert.match(sig.evidence, /far too short a window/);
 });
 
+// ---------------------------------------------------------------------------
+// Finding 4 — the window where the hour profile cannot run
+// ---------------------------------------------------------------------------
+
+/** 299 items across `hours`, spread evenly. The prolific-account shape. */
+function fastProfile(hours, count = 299) {
+  const rand = rng(53);
+  const spacing = (hours * 3600) / count;
+  const comments = Array.from({ length: count }, (_, i) => comment({
+    id: `fast${i}`,
+    at: Math.round(NOW - hours * 3600 + i * spacing),
+    group: `g${i % 40}`,
+    body: randomText(rand),
+    thread: `t3_fast${i}`,
+  }));
+  return profileOf({ comments, truncated: true, firstSeenUtc: NOW - 2000 * DAY });
+}
+
+test('automation: 299 items in 5 hours reads high on throughput, in the very window the hour profile refuses', () => {
+  const axis = scoreAccount(fastProfile(5)).automation;
+
+  // The pairing is the point: the heaviest signal in the axis drops out for
+  // prolific accounts precisely because they are prolific (EVALUATION.md
+  // Finding 4), and this is what covers that window.
+  assert.equal(findSignal(axis, 'posting-hour-dead-zone').band, BAND.INSUFFICIENT,
+    'the span guard must still refuse — this test is worthless if it was weakened');
+
+  const rate = findSignal(axis, 'sustained-posting-rate');
+  assert.equal(rate.band, BAND.HIGH, `299 comments in 5 hours must read high, got ${rate.band}`);
+  assert.equal(rate.direction, 'raises');
+  assert.ok(rate.value.itemsPerHour > 55, `expected ~60/h, got ${rate.value.itemsPerHour}`);
+
+  // The evidence must claim THROUGHPUT, not schedule. Claiming a schedule from
+  // a five-hour window is the forged sleep cycle all over again.
+  assert.match(rate.evidence, /throughput/);
+  assert.doesNotMatch(rate.evidence, /sleep|quiet|hour of the day|dead zone/);
+});
+
+test('automation: an 82-second window still measures throughput — the binding real case', () => {
+  // u/AutoModerator's reliable window in test/corpus/ is 297 items spanning 82
+  // seconds. Any minimum-span guard it fails leaves the axis at 7.0 of 15.5
+  // measured, below MIN_MEASURED_WEIGHT_FRACTION, which is strictly worse than
+  // never adding this signal at all.
+  const rate = findSignal(scoreAccount(fastProfile(82 / 3600, 297)).automation, 'sustained-posting-rate');
+
+  assert.notEqual(rate.band, BAND.INSUFFICIENT, '82 seconds of 297 items is a throughput fact');
+  assert.equal(rate.band, BAND.HIGH);
+  assert.match(rate.evidence, /82 seconds/);
+});
+
+test('automation: an ordinary rate is unmeasured, never a vote for a person', () => {
+  const axis = scoreAccount(genuineProfile()).automation;
+  const rate = findSignal(axis, 'sustained-posting-rate');
+
+  assert.equal(rate.band, BAND.INSUFFICIENT);
+  assert.equal(rate.direction, 'neutral',
+    'an ordinary rate must not lower the axis — it is the absence of evidence, not evidence');
+  assert.match(rate.evidence, /not a clean result/);
+
+  // ...and the axis it sits in still reports, rather than being tipped into
+  // insufficient-data by the weight this signal withholds.
+  assert.equal(axis.band, BAND.LOW);
+  assert.ok(Number.isFinite(axis.score));
+});
+
+test('automation: the rate signal never outranks the dead zone it stands in for', () => {
+  const axis = scoreAccount(fastProfile(5)).automation;
+  const rate = findSignal(axis, 'sustained-posting-rate');
+
+  assert.equal(rate.weight, 2);
+  assert.ok(rate.weight < findSignal(axis, 'posting-hour-dead-zone').weight,
+    'throughput is the weaker claim of the two and must stay weighted below the schedule');
+});
+
+test('automation: the rate is measured over the RELIABLE window, so an ancient post cannot dilute it', () => {
+  // Same defect shape as the forged 12-year dormancy: one old submission
+  // merged against a shallow comment window. Here it would drag 299 items in
+  // 5 hours down to 299 items in 12 years and silence the signal entirely.
+  const fast = fastProfile(5);
+  const withAncient = profileOf({
+    comments: [...fast.comments],
+    posts: [post({ id: 'old', at: NOW - 4300 * DAY })],
+    truncated: true,
+    firstSeenUtc: NOW - 4300 * DAY,
+  });
+
+  const rate = findSignal(scoreAccount(withAncient).automation, 'sustained-posting-rate');
+  assert.equal(rate.band, BAND.HIGH, 'the 2014 submission is below the reliable start and must be dropped');
+  assert.ok(rate.value.spanSeconds < 6 * 3600, `expected a 5-hour span, got ${rate.value.spanSeconds}s`);
+});
+
 test('agenda: drive-by counts unanswered replies on own posts and names the proxy half', () => {
   const sig = findSignal(scoreAccount(propagandistProfile()).agenda, 'drive-by-ratio');
   assert.equal(sig.value.postsWithReplies, 2);

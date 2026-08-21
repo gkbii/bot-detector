@@ -31,7 +31,7 @@
   "Anti-ThisBot-IB": {
    "automation": {
     "band": "moderate",
-    "score": 35
+    "score": 39
    },
    "agenda": {
     "band": "moderate",
@@ -58,8 +58,8 @@
   },
   "AutoModerator": {
    "automation": {
-    "band": "moderate",
-    "score": 63
+    "band": "high",
+    "score": 69
    },
    "agenda": {
     "band": "moderate",
@@ -185,7 +185,7 @@
   "RemindMeBot": {
    "automation": {
     "band": "moderate",
-    "score": 62
+    "score": 64
    },
    "agenda": {
     "band": "moderate",
@@ -199,7 +199,7 @@
   "RepostSleuthBot": {
    "automation": {
     "band": "high",
-    "score": 76
+    "score": 75
    },
    "agenda": {
     "band": "moderate",
@@ -325,7 +325,7 @@
   "sneakpeekbot": {
    "automation": {
     "band": "moderate",
-    "score": 47
+    "score": 50
    },
    "agenda": {
     "band": "moderate",
@@ -339,7 +339,7 @@
   "sub_doesnt_exist_bot": {
    "automation": {
     "band": "moderate",
-    "score": 53
+    "score": 52
    },
    "agenda": {
     "band": "moderate",

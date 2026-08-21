@@ -291,6 +291,25 @@ separate cleanly, and `moderate` on automation is not an all-clear. But a reader
 who treats `moderate` as "probably fine" gets the easiest case in the world
 wrong.
 
+**FIRST BULLET FIXED 2026-08-20 (JIO-344).** `sustained-posting-rate` (weight 2)
+measures items per hour across the reliable window and covers exactly the window
+`posting-hour-dead-zone` refuses. It can, because throughput survives truncation
+while a schedule does not: an hour histogram built from AutoModerator's
+82-second window is measuring our pagination, but 297 items in 82 seconds is a
+fact about the account whatever we failed to fetch.
+`MIN_SPAN_DAYS_FOR_HOUR_PROFILE` is untouched — it is Finding 1's fix and stays.
+
+The signal is one-directional: below 3 items/hour it returns `unmeasured()`,
+never a low score, because an ordinary rate is the absence of evidence of a
+machine rather than evidence of a person. Against the frozen corpus the six
+scores that moved are all bots — AutoModerator `moderate 63 -> high 69`,
+RemindMeBot 62 -> 64, sneakpeekbot 47 -> 50, Anti-ThisBot-IB 35 -> 39,
+RepostSleuthBot 76 -> 75, sub_doesnt_exist_bot 53 -> 52 — no human moved at all,
+and the bots' cell in the table above becomes `moderate x6, high x2` with the
+floor at 39. The ceiling is raised, not removed: the other two bullets
+(`interval-regularity` measuring demand, `conversation-depth` inverting for
+reply-bots) are JIO-329 and are still open.
+
 ## What this evaluation does not establish
 
 The agenda axis has **no real-world validation** and cannot easily get one. The

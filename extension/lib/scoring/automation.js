@@ -51,6 +51,59 @@ const QUIET_HOUR_FRACTION = 0.2;
 /** A human sleep cycle. At or above this, the dead-zone signal reads clean. */
 const HUMAN_DEAD_ZONE_HOURS = 6;
 
+/**
+ * The other half of that trade, and the reason this file has two signals
+ * reading the same window.
+ *
+ * `MIN_SPAN_DAYS_FOR_HOUR_PROFILE` is right and must not be weakened, but it
+ * hands the loudest bots an exemption from the heaviest check in the axis:
+ * the more prolific the account, the shorter the window its per-lookup limit
+ * covers, and the more certainly `posting-hour-dead-zone` returns unmeasured
+ * (EVALUATION.md Finding 4 — "volume itself buys immunity from the strongest
+ * check"). `sustained-posting-rate` is what fills that window, and it can,
+ * because THROUGHPUT SURVIVES TRUNCATION WHILE A SCHEDULE DOES NOT. An hour
+ * histogram built from 82 seconds of data is measuring our pagination; a rate
+ * built from the same 82 seconds is a ratio of two things we genuinely
+ * observed, and 297 items in 82 seconds is a fact about the account no matter
+ * how much older history we failed to fetch.
+ *
+ * So the guards here are about having enough items to call it *sustained*
+ * rather than about covering enough calendar. 60 seconds is the floor purely
+ * so a degenerate window cannot divide by ~zero; AutoModerator's real window
+ * is 82 seconds and has to clear it, or this signal is unmeasured for exactly
+ * the account it was added for.
+ */
+const MIN_ITEMS_FOR_RATE = 30;
+const MIN_SPAN_SECONDS_FOR_RATE = 60;
+
+/**
+ * Below this the account is inside the range a person can sustain, and the
+ * signal reports NOTHING — not a low strength. It is deliberately
+ * one-directional: an ordinary posting rate is not evidence of a human, it is
+ * the absence of evidence of a machine, and every account on the platform has
+ * it. Scoring it as a measured zero would hand a clean vote to every patient
+ * bot in exchange for a signal that can only ever fire on the loud ones.
+ *
+ * 3 items/hour is 72 a day sustained across the entire retrieved window,
+ * nights included. The 17 humans frozen in `test/corpus/` top out at 0.92/h;
+ * the five bots this was added for run 5.5 to 13,039/h. The gate sits in that
+ * gap rather than halfway between, because the cost of the two errors is not
+ * symmetric — a missed bot is a moderate band instead of a high one, and a
+ * caught human is a false accusation.
+ */
+const ORDINARY_ITEMS_PER_HOUR = 3;
+
+/** One item every 12 seconds, sustained. Nothing above this scores differently. */
+const SATURATED_ITEMS_PER_HOUR = 300;
+
+/**
+ * What `ORDINARY_ITEMS_PER_HOUR` itself scores. Not 0: a measured strength
+ * below 0.25 reads as `direction: 'lowers'` in axis.js and drags the weighted
+ * average down, which is the vote for a person this signal is not allowed to
+ * cast. The measured range therefore starts at neutral and only ever climbs.
+ */
+const RATE_FLOOR_STRENGTH = 0.5;
+
 const MIN_INTERVALS = 10;
 const MIN_COMMENTS_FOR_LENGTH = 10;
 
@@ -67,6 +120,7 @@ const DUPLICATE_MAX_COMPARED = 200;
 export function scoreAutomation(profile) {
   return buildAxis([
     postingHourSignal(profile),
+    sustainedRateSignal(profile),
     intervalRegularitySignal(profile),
     burstSignal(profile),
     lengthUniformitySignal(profile),
@@ -143,6 +197,80 @@ function postingHourSignal(profile) {
     strength,
     value: { deadZoneHours: deadZone.length, deadZoneStartHour: deadZone.start, hourEntropy: entropy, hours },
     evidence,
+  });
+}
+
+/**
+ * Sustained posting rate — items per hour across the reliable window.
+ *
+ * Complementary to `cross-thread-bursts` rather than a duplicate of it: a
+ * burst is a run of items inside 120 seconds and says nothing about the other
+ * 23 hours, while this is the average over the whole window and is diluted by
+ * every quiet stretch in it. An account that drains a queue once a day scores
+ * on bursts and not here; an account that never stops scores here.
+ *
+ * It is also NOT `interval-regularity`. CV is unitless on purpose and reports
+ * only whether a rhythm is mechanical, so a summon-driven bot posting as
+ * irregularly as the humans summoning it reads clean there. This asks the
+ * question CV deliberately refuses: not how evenly, but how much.
+ *
+ * Weighted below `posting-hour-dead-zone` (3) because it is the weaker claim
+ * of the two — a schedule with no sleep in it is hard to produce by accident,
+ * whereas throughput is only ever an argument from volume.
+ */
+function sustainedRateSignal(profile) {
+  const key = 'sustained-posting-rate';
+  const label = 'Sustained posting throughput';
+  const weight = 2;
+
+  const timeline = reliableActivityOldestFirst(profile);
+  if (timeline.length < MIN_ITEMS_FOR_RATE) {
+    return unmeasured({
+      key,
+      label,
+      weight,
+      evidence: `Only ${timeline.length} timestamped ${plural(timeline.length, 'item')} in the reliable window — needs at least ${MIN_ITEMS_FOR_RATE} before a rate is more than a coincidence.`,
+    });
+  }
+
+  const spanSeconds = timeline[timeline.length - 1].createdUtc - timeline[0].createdUtc;
+  if (spanSeconds < MIN_SPAN_SECONDS_FOR_RATE) {
+    return unmeasured({
+      key,
+      label,
+      weight,
+      value: { items: timeline.length, spanSeconds },
+      evidence: `The ${timeline.length} retrieved items span under ${MIN_SPAN_SECONDS_FOR_RATE} seconds, which is too short to divide by.`,
+    });
+  }
+
+  const perHour = timeline.length / (spanSeconds / 3600);
+  const value = { itemsPerHour: perHour, items: timeline.length, spanSeconds };
+  const measured = `${timeline.length} items in ${formatSpan(spanSeconds)} is ${formatRate(perHour)} an hour`;
+
+  if (perHour < ORDINARY_ITEMS_PER_HOUR) {
+    return unmeasured({
+      key,
+      label,
+      weight,
+      value,
+      evidence: `${measured}, inside the range a person sustains. This signal only reports throughput a person cannot reach, so it says nothing about this account either way — it is not a clean result on the automation axis.`,
+    });
+  }
+
+  const strength = clamp01(RATE_FLOOR_STRENGTH + (1 - RATE_FLOOR_STRENGTH) * rescale(
+    Math.log10(perHour),
+    Math.log10(ORDINARY_ITEMS_PER_HOUR),
+    Math.log10(SATURATED_ITEMS_PER_HOUR),
+  ));
+
+  return signal({
+    key,
+    label,
+    weight,
+    strength,
+    value,
+    evidence: `${measured}, sustained across the whole retrieved window — above the ${ORDINARY_ITEMS_PER_HOUR} an hour a person keeps up. This is a claim about throughput and not about schedule: it counts how much the account produced, not when.`,
   });
 }
 
@@ -418,6 +546,25 @@ function conversationDepthSignal(profile) {
       ? `All ${known.length} comments are top-level responses to a submission; the account has never replied to another commenter.`
       : `${replies} of ${known.length} comments (${pct(replyShare)}) are replies to other commenters rather than top-level drops.`,
   });
+}
+
+/** A span in the largest unit that still reads as a measurement. */
+function formatSpan(seconds) {
+  if (seconds < 120) return `${Math.round(seconds)} seconds`;
+  if (seconds < 7200) return `${Math.round(seconds / 60)} minutes`;
+  if (seconds < 172800) return `${(seconds / 3600).toFixed(1)} hours`;
+  return `${(seconds / 86400).toFixed(1)} days`;
+}
+
+/**
+ * A rate, at the precision that still carries information. The extra decimal
+ * below 1/hour is not cosmetic: `toFixed(1)` renders a 310-item account as
+ * "0.0 an hour", and an evidence string that contradicts its own sample is
+ * exactly the bare-number failure mode axis.js exists to prevent.
+ */
+function formatRate(perHour) {
+  if (perHour >= 100) return Math.round(perHour).toLocaleString('en-US');
+  return perHour >= 1 ? perHour.toFixed(1) : perHour.toFixed(2);
 }
 
 function snippet(words) {

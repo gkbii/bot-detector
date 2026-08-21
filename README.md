@@ -16,7 +16,7 @@ things the browser cannot do: a Claude read of what an account actually argues,
 and a lookup cache shared between your machines. Nothing requires it.
 
 ```
-npm test        # 134 tests, and they pass with NO node_modules installed
+npm test        # 139 tests, and they pass with NO node_modules installed
 npm install     # only needed for the optional server's one dependency
 npm start       # the optional server
 ```
@@ -185,7 +185,8 @@ The signals, with their weights:
 | Repeated near-identical text (2.5) | Single-subject focus (2.5) | Admits being wrong (2.5) |
 | Mechanical posting rhythm (2) | Recurring stock phrases (2.5) | Stays in conversations (2) |
 | Bursts across unrelated threads (2) | Posts and leaves (2) | Range of interests (2) |
-| Uniform comment length (1.5) | | Asks questions (1.5) |
+| Sustained posting throughput (2) | | Asks questions (1.5) |
+| Uniform comment length (1.5) | | |
 | Never replies to replies (1.5) | | |
 | Karma accumulation rate (1) | | |
 
@@ -348,6 +349,102 @@ axis gets pointed at — and a young account looking clean on the heaviest agend
 signal is the failure mode worth caring about. There is a test for the complete
 case specifically, so nobody narrows it back.
 
+## Volume bought immunity from the strongest check
+
+The section above is four false positives. This is the opposite failure and it
+had been sitting in `EVALUATION.md` as Finding 4 since the live run: **seven of
+eight unmistakable bots topped out at `moderate` on automation.** Not a wrong
+answer — the bands still separated — but a reader who takes `moderate` as
+"probably fine" gets the easiest case on the platform wrong.
+
+The first of its three causes is the one this section is about, and it is
+structural rather than a bug: **`posting-hour-dead-zone` is unavailable exactly
+where automation is highest.** It is the heaviest signal in the axis (weight 3)
+and it needs a 3-day span, for the very good reason two sections up — a sleep
+cycle is a claim about days, and 299 comments spanning an hour manufacture a
+17-hour "sleep gap" out of nothing but our own fetch window. But the more
+prolific the account, the shorter the window its per-lookup limit covers, so
+the guard fires hardest on the loudest bots. In `test/corpus/`, five of the
+eight reach it: u/AutoModerator's reliable window is 297 items spanning **82
+seconds**, u/RemindMeBot's is 10.4 hours. Being fast enough is a way to buy
+your way out of the strongest check there is.
+
+Weakening `MIN_SPAN_DAYS_FOR_HOUR_PROFILE` is not the fix. It is a fix, for a
+false positive that was live. So `sustained-posting-rate` (weight 2) fills that
+window instead, and the reason it *can* is the whole of why this section
+exists:
+
+**Throughput survives truncation; a schedule does not.** An hour histogram
+built from 82 seconds is measuring our pagination — the account did not choose
+to be silent in the other 23 hours, we simply never asked. A *rate* built from
+the same 82 seconds is a ratio of two things we genuinely observed. 297 items
+in 82 seconds is a fact about the account no matter how much older history we
+failed to fetch, and no amount of missing history can make it smaller. That
+asymmetry is why one signal has to gate on days and the other does not, and it
+is the sentence to reread before anyone "harmonises" the two guards.
+
+Three things about it are load-bearing.
+
+**It is one-directional: an ordinary rate is `unmeasured`, never a low score.**
+Below `ORDINARY_ITEMS_PER_HOUR` the signal reports nothing at all, and its
+evidence string says in as many words that this is not a clean result. Everyone
+on the platform posts at an ordinary rate; scoring that as a measured zero
+would hand a free vote-for-a-person to every patient bot in the world in
+exchange for a signal that only ever fires on the loud ones. The measured range
+therefore starts at 0.5 rather than 0, because a strength under 0.25 reads as
+`direction: 'lowers'` in `axis.js` and would drag the average down — which is
+precisely the vote this signal is not allowed to cast.
+
+**The gate sits in the gap, not halfway across it.** 3 items/hour is 72 a day
+sustained across the entire retrieved window, nights included. The 17 frozen
+humans top out at **0.92/h**; the five bots this was added for run **5.5, 11.9,
+18.7, 28.8 and 13,039/h**. The threshold is put near the human end of that gap
+on purpose, because the two errors do not cost the same: a missed bot is a
+`moderate` band instead of a `high` one, and a caught human is a false
+accusation.
+
+**The 82-second window is what fixes the minimum-span guard at 60 seconds, and
+the arithmetic is not close.** Before this signal the five bots measured 10.5
+of the axis's 13.5 weight, with only the hour profile missing. JIO-329 will
+take `conversation-depth` and `interval-regularity` to unmeasured for them too
+— both invert on reply-bots — which is 7.0/13.5 = 0.519, one signal above
+`MIN_MEASURED_WEIGHT_FRACTION`. Add
+this signal and have it *fire*: 9.0/15.5 = 0.581, and the axis still reports.
+Add it and have it stay silent — which any minimum span of an hour or more
+would do to AutoModerator — and it is 7.0/15.5 = **0.452**, below the gate.
+That is strictly worse than never adding the signal at all: the loudest bot on
+Reddit would come back `insufficient-data`. A guard that looks merely cautious
+can invert the thing it is guarding, so 60 seconds is there only to stop a
+degenerate window dividing by zero, and the real guard is on item count
+(`MIN_ITEMS_FOR_RATE = 30`) where "sustained" actually lives.
+
+It is deliberately not a duplicate of the two signals it sits next to.
+`cross-thread-bursts` wants a run inside 120 seconds and says nothing about the
+other 23 hours; this is the average over the whole window and is diluted by
+every quiet stretch in it — an account that drains a queue once a day scores
+there and not here. `interval-regularity` is a coefficient of variation, which
+is unitless on purpose and reports only whether a rhythm is *mechanical*, so a
+summon-driven bot posting as irregularly as the humans summoning it reads clean.
+This asks the question CV deliberately refuses: not how evenly, but how much.
+
+**What it moved, and what it did not.** Against the frozen corpus, six scores
+changed and **every one of them is a bot**: AutoModerator `moderate 63 -> high
+69`, RemindMeBot 62 → 64, sneakpeekbot 47 → 50, Anti-ThisBot-IB 35 → 39, and —
+because a weighted average works in both directions — RepostSleuthBot 76 → 75
+and sub_doesnt_exist_bot 53 → 52. Not one of the 17 humans moved by a single
+point, because for all 17 the signal is unmeasured. The bot floor rose from 35
+to 39 and the human ceiling stayed at 17, so the separation the whole evaluation
+rests on widened rather than narrowed.
+
+**What it cannot see**, stated because a bound that only fires quietly is worse
+than one that fires: a person who genuinely sustains more than 3 items an hour
+across a truncated window — 300 comments inside a four-day argument — would be
+measured here, and the corpus contains no such human to check that against. The
+`sustained` framing is the mitigation, not a proof: one furious evening is
+diluted by the rest of the window, and 30 items is the floor below which the
+signal refuses to call anything a rate. If such an account turns up, it belongs
+in `test/corpus/` before the threshold is touched.
+
 ## The blind spot: an account the index has never heard of
 
 The defects above are false positives. This one is the opposite and it is
@@ -461,19 +558,24 @@ the import graph, because "just refresh it if it's stale" is exactly the change
 that would look helpful.
 
 **What it reproduces, and what it does not.** Re-captured across 2026-08-18/19
-and scored by today's code, the automation column comes back *exactly* as
-EVALUATION.md printed it — `low ×17` for the humans, `moderate ×7, high ×1` for
-the bots — and the separation the whole evaluation rested on holds with room to
-spare: the humans top out at 17, the lowest bot is 35, and nothing sits in
-between. The other two columns have moved. The bots' agenda column was `low ×6,
-moderate ×2` and is now `moderate ×8` — including all four of the accounts
-EVALUATION.md hand-read itself — and their authenticity column went from `low
-×3, moderate ×5` to `low ×5, moderate ×3`. That is not a regression this corpus
-caught, because there was no baseline to catch it against; it is sixteen months
-of fresh history, JIO-290's two signal changes and JIO-291's truncation fix all
-surfacing at once. It is written down here rather than quietly re-baselined,
-because a table that lives only in prose is exactly how a move this size stays
-invisible. `expected.json` freezes *today's* numbers, so the next one is a diff.
+and scored by the code of that day, the automation column came back *exactly*
+as EVALUATION.md printed it — `low ×17` for the humans, `moderate ×7, high ×1`
+for the bots — and the separation the whole evaluation rested on holds with
+room to spare. It has since moved once, on purpose and in one direction:
+`sustained-posting-rate` took the bots to `moderate ×6, high ×2` and their
+floor from 35 to 39 without touching a single human score, which is the section
+above and is a diff in `expected.json` rather than a paragraph, because that is
+now the point. The humans still top out at 17, the lowest bot is 39, and
+nothing sits in between. The other two columns have moved for less deliberate
+reasons. The bots' agenda column was `low ×6, moderate ×2` and is now `moderate
+×8` — including all four of the accounts EVALUATION.md hand-read itself — and
+their authenticity column went from `low ×3, moderate ×5` to `low ×5, moderate
+×3`. That is not a regression this corpus caught, because there was no baseline
+to catch it against; it is sixteen months of fresh history, JIO-290's two
+signal changes and JIO-291's truncation fix all surfacing at once. It is
+written down here rather than quietly re-baselined, because a table that lives
+only in prose is exactly how a move this size stays invisible. `expected.json`
+freezes *today's* numbers, so the next one is a diff.
 
 **It is re-derived, not recovered, and that is the first thing to know.** Of the
 25 accounts, EVALUATION.md names seven: three humans and four bots. The scratch
@@ -880,7 +982,7 @@ source's own unit.
 ## Tests
 
 ```
-npm test                                  # both suites, 134 tests
+npm test                                  # both suites, 139 tests
 node --test test/scoring.test.js           # one file
 npm run evaluate                          # EVALUATION.md's band table, off frozen profiles
 ```
