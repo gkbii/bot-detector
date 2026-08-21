@@ -173,12 +173,18 @@ function nightShiftProfile() {
  * writing varied prose, pushing one line. Every automation signal reads clean
  * because no machine is involved.
  */
-function propagandistProfile() {
+function propagandistProfile({ revived = true } = {}) {
   const rand = rng(11);
   const talkingPoint = 'the mainstream media refuses to report the real numbers';
 
-  // An old era, a long silence, then a busy present.
-  const oldEra = humanTimestamps({ rand, days: 980, activeHours: WAKING_HOURS, activeDayChance: 0.25, perDay: 2, endDaysAgo: 950 });
+  // An old era, a long silence, then a busy present. `revived: false` drops the
+  // old era and keeps everything else, which leaves `dormancy-revival` measured
+  // (300 days is well over its 120-day span gate) and reading a flat zero. That
+  // is the one shape the corpus never produces: a strong corroborator beside a
+  // measured-zero one. See the strongest-not-weakest test.
+  const oldEra = revived
+    ? humanTimestamps({ rand, days: 980, activeHours: WAKING_HOURS, activeDayChance: 0.25, perDay: 2, endDaysAgo: 950 })
+    : [];
   const nowEra = humanTimestamps({ rand, days: 300, activeHours: WAKING_HOURS, activeDayChance: 0.5, perDay: 3, endDaysAgo: 2 });
 
   const comments = [...oldEra, ...nowEra].map((at, i) => {
@@ -238,11 +244,14 @@ const FILLERS = ['is that right?', 'right?', 'or no?', 'surely?', 'yes?'];
  *
  * Deliberately spans 300 days, so `dormancy-revival` is MEASURED at zero
  * rather than merely unmeasurable — a measured zero must not corroborate
- * either.
+ * either. `days` shortens that span below the signal's 120-day gate, which is
+ * the OTHER case, and the one both live accounts were actually in: their 2-
+ * and 4-day windows left dormancy unmeasurable, and an unmeasured corroborator
+ * has to be named as unmeasured on screen rather than silently read as a zero.
  */
-function hobbyistProfile() {
+function hobbyistProfile({ days = 300 } = {}) {
   const rand = rng(41);
-  const stamps = humanTimestamps({ rand, days: 300, activeHours: WAKING_HOURS, perDay: 6 });
+  const stamps = humanTimestamps({ rand, days, activeHours: WAKING_HOURS, perDay: 6 });
   const comments = stamps.map((at, i) => comment({
     id: `hb${i}`,
     at,
@@ -985,6 +994,28 @@ test('agenda: a held signal says so on the account being judged', () => {
   assert.match(topic.evidence, /fits a dedicated hobbyist/);
   assert.match(topic.evidence, /nothing beside it reads above low/);
   assert.match(topic.evidence, /held to the edge of `moderate` rather than counted in full/);
+  assert.doesNotMatch(topic.evidence, /could not be measured at all/,
+    'both corroborators ARE measured on this fixture — do not claim otherwise');
+});
+
+/**
+ * And the case both live accounts were in. u/humdingler and u/chilidirigible
+ * were captured over 2- and 4-day windows, so `dormancy-revival` could not be
+ * measured at all — and "we did not look" must not read on screen as "we
+ * looked and found nothing", which is `axis.js` rule 3 in the one place a user
+ * actually reads. Nothing pinned this sentence: dropping the `strength != null`
+ * filter that produces it passes the rest of the suite and `evaluate`, because
+ * `Math.max` swallows the null and no score moves.
+ */
+test('agenda: a corroborator that could not be measured is named as unmeasured', () => {
+  const verdict = scoreAccount(hobbyistProfile({ days: 60 })).agenda;
+  assert.equal(findSignal(verdict, 'dormancy-revival').band, BAND.INSUFFICIENT,
+    'the fixture only bites if the window is too short to look for a gap');
+
+  const topic = findSignal(verdict, 'topic-concentration');
+  assert.equal(topic.value.heldToCorroboration, true);
+  assert.match(topic.evidence, /nothing beside it reads above low, and one of the two could not be measured at all/);
+  assert.equal(verdict.band, BAND.LOW);
 });
 
 /**
@@ -1011,9 +1042,9 @@ test('agenda: a talking point buys the shape signals back their strength', () =>
  * THE CLIFF THIS RULE DOES NOT HAVE, pinned because the graded shape is the
  * whole reason it is written the way it is. An on/off gate at the band edge
  * would have moved u/chilidirigible from agenda 30 to 68 on a `stock-phrasing`
- * strength crossing 0.30, and three of the 17 thread humans sit within 0.11 of
- * that line on their real bodies. So: a hair more corroboration must buy a
- * hair more agenda, never a band.
+ * strength crossing 0.30, and two of the 17 thread humans sit within 0.11 of
+ * that line on their real bodies (0.37 and 0.40). So: a hair more
+ * corroboration must buy a hair more agenda, never a band.
  */
 test('agenda: corroboration is graded, so no small change in phrasing moves a band', () => {
   const base = hobbyistProfile();
@@ -1031,6 +1062,40 @@ test('agenda: corroboration is graded, so no small change in phrasing moves a ba
     }
     previous = score;
   }
+});
+
+/**
+ * STRONGEST, NOT WEAKEST (JIO-424). The ceiling is a `max` over the measured
+ * corroborators, and nothing pinned that until this test: mutating it to a
+ * `min` passed the entire suite and `npm run evaluate`, because no account in
+ * `test/corpus/` and no other fixture has both corroborators measured with one
+ * of them strong. This one does — a talking point recurring across threads,
+ * beside a 300-day span whose longest silence is days, so `dormancy-revival`
+ * is a MEASURED ZERO rather than an absent one.
+ *
+ * A `min` would hold both shape signals to the band edge here and let a real
+ * propagandist out of `high` on the strength of evidence it does NOT have,
+ * which is the inversion of the rule this whole hold was written to state.
+ */
+test('agenda: shape is held to the strongest corroborator, not the weakest', () => {
+  const verdict = scoreAccount(propagandistProfile({ revived: false })).agenda;
+
+  const dormancy = findSignal(verdict, 'dormancy-revival');
+  assert.equal(dormancy.band, BAND.LOW, 'the fixture only bites if dormancy is MEASURED');
+  assert.ok(dormancy.value.largestGapDays < 120, 'and measured at zero');
+  assert.equal(findSignal(verdict, 'stock-phrasing').band, BAND.HIGH,
+    'the strong corroborator the shape must be read against');
+
+  for (const key of ['topic-concentration', 'drive-by-ratio']) {
+    const sig = findSignal(verdict, key);
+    // Held — both shape strengths clamp to 1 here, above any corroborator — but
+    // held to the phrasing at `high`, not down to the band edge by the zero.
+    assert.equal(sig.value.heldToCorroboration, true);
+    assert.equal(sig.band, BAND.HIGH,
+      `${key} was held to the measured-zero dormancy rather than the phrasing beside it`);
+    assert.match(sig.evidence, /"Recurring stock phrases", reads high/);
+  }
+  assert.ok(verdict.score >= 60, `a corroborated propagandist fell to ${verdict.score}`);
 });
 
 test('agenda: drive-by counts unanswered replies on own posts and names the proxy half', () => {

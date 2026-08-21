@@ -24,7 +24,7 @@
 
 import { scoreAgenda } from '../extension/lib/scoring/agenda.js';
 import { BAND_THRESHOLDS } from '../extension/lib/scoring/axis.js';
-import { rescale } from '../extension/lib/scoring/stats.js';
+import { clamp01, rescale } from '../extension/lib/scoring/stats.js';
 import { COHORTS, loadCorpus, loadManifest } from '../test/corpus/load.js';
 
 const COHORT_LABELS = {
@@ -117,6 +117,7 @@ if (!heldRows.length) console.log('  · none — nothing in the corpus is concen
 // falls out of the weighted average. Those recorded scores predate the hold,
 // so the arithmetic below is the uncapped one they were computed under.
 const SHAPE_FLOOR = BAND_THRESHOLDS.moderate / 100;
+const SHAPE_KEYS = new Set(['topic-concentration', 'drive-by-ratio']);
 const manifest = loadManifest();
 const realAgenda = new Map((manifest?.captured ?? [])
   .filter((e) => e.real && e.frozen)
@@ -141,7 +142,13 @@ console.log(`
   \`moderate\` there too. The bound worth knowing is the other end of the
   column — this rule protects an account whose phrasing AND dormancy both read
   low, and nothing else. A hobbyist with a catchphrase gets nothing from it,
-  and three of these seventeen ordinary people already have one.`);
+  and two of these seventeen ordinary people already have one.
+
+  And this column is OF THE CAPTURE WINDOW rather than of the account. It
+  solves against the score \`manifest.json\` recorded at capture, so it moves
+  whenever the account does: u/Hartacus solves to 0.37 here and read 0.08 on a
+  live re-fetch on 2026-08-21. Read the shape of the column, not a row of it as
+  a current measurement.`);
 
 console.log(`\nWhat this does NOT measure: whether either signal fires on an actual agenda
 account. All 8 bots here are UTILITY bots, and EVALUATION.md records that no
@@ -172,35 +179,75 @@ function held(r) {
 }
 
 /**
+ * Every measured signal on the axis EXCEPT `stock-phrasing`, re-derived from
+ * the published `value` the same way the table above reads it — weight paired
+ * with strength, and an unmeasured signal simply absent, because axis.js rule
+ * 3 leaves it out of the weighted mean on both sides of the solve.
+ *
+ * `dormancy-revival` has to be in here and was not (JIO-424, found by the
+ * Auditor). It is the heaviest signal on the axis at weight 3, so reading it
+ * as an implicit zero attributes whatever it measured to phrasing instead:
+ * u/KevinGreeneSolar published as 0.31, "corroborates? yes", against a true
+ * 0.009 — a gap of exactly 3 × 0.2514 / 2.5 — while the live account reads
+ * phrasing 0.00. It is the one account in the corpus with a dormancy gap over
+ * the 120-day threshold, and 0.2514 bands `low`, so the band-based guard that
+ * used to stand here could not see it.
+ */
+function otherStrengths(r) {
+  return [
+    { key: 'topic-concentration', weight: 2.5, strength: rescaleOf(r.topic, 'topShare', 0.35, 0.85) },
+    { key: 'drive-by-ratio', weight: 2, strength: rescaleOf(r.driveBy, 'share', 0.35, 0.9) },
+    { key: 'dormancy-revival', weight: 3, strength: dormancyStrength(r.dormancy) },
+  ].filter((s) => s.strength != null);
+}
+
+function rescaleOf(sig, field, floor, ceiling) {
+  return sig.band === 'insufficient-data' ? null : rescale(sig.value[field], floor, ceiling);
+}
+
+/**
+ * The sub-threshold branch of `dormancy-revival` publishes a flat zero and no
+ * `gapStart`; the scoring branch publishes both halves it multiplies, so the
+ * strength falls straight back out of them.
+ */
+function dormancyStrength(sig) {
+  if (sig.band === 'insufficient-data') return null;
+  if (!Number.isFinite(sig.value?.gapStart)) return 0;
+  return clamp01(
+    rescale(sig.value.largestGapDays, 120, 730)
+    * (1 - rescale(sig.value.daysSinceRevival, 365, 1095)),
+  );
+}
+
+/** 2.5 for `stock-phrasing`, which is always measured here, plus the rest. */
+function measuredWeight(others) {
+  return 2.5 + others.reduce((acc, s) => acc + s.weight, 0);
+}
+
+/**
  * The `stock-phrasing` strength the real bodies must have had, from the agenda
  * score they produced. Null for the bots, which keep their real text anyway.
  */
 function impliedPhrasing(r) {
   const real = realAgenda.get(r.username);
   if (!Number.isFinite(real)) return null;
-  const strength = (sig, floor, ceiling, field) => (
-    sig.band === 'insufficient-data' ? null : rescale(sig.value[field], floor, ceiling)
-  );
-  const topic = strength(r.topic, 0.35, 0.85, 'topShare');
-  const driveBy = strength(r.driveBy, 0.35, 0.9, 'share');
-  const dormancyMeasured = r.dormancy.band !== 'insufficient-data';
-  // Every frozen human reads a flat zero on dormancy where it is measured at
-  // all; if that stops being true this solver is measuring the wrong thing.
-  if (dormancyMeasured && r.dormancy.band !== 'low') return null;
-  const measuredWeight = 2.5 + 2.5 + 2 + (dormancyMeasured ? 3 : 0);
-  return ((real / 100) * measuredWeight - 2.5 * topic - 2 * driveBy) / 2.5;
+  const others = otherStrengths(r);
+  const known = others.reduce((acc, s) => acc + s.weight * s.strength, 0);
+  return ((real / 100) * measuredWeight(others) - known) / 2.5;
 }
 
 /** What that account would score today, on the real bodies, under the hold. */
 function realUnderHold(r, implied) {
-  const ceiling = Math.max(SHAPE_FLOOR, implied);
-  const cap = (v) => Math.min(v, ceiling);
-  const dormancyMeasured = r.dormancy.band !== 'insufficient-data';
-  const measuredWeight = 2.5 + 2.5 + 2 + (dormancyMeasured ? 3 : 0);
-  const weighted = 2.5 * cap(rescale(r.topic.value.topShare, 0.35, 0.85))
-    + 2.5 * Math.max(0, implied)
-    + 2 * cap(rescale(r.driveBy.value.share, 0.35, 0.9));
-  return Math.round((weighted / measuredWeight) * 100);
+  const others = otherStrengths(r);
+  const dormancy = others.find((s) => s.key === 'dormancy-revival');
+  // holdShapeToCorroboration() holds shape to the STRONGEST corroborator, so
+  // dormancy belongs in this max alongside phrasing — an account revived from
+  // a long sleep has evidence beside its shape even when its text has none.
+  const ceiling = Math.max(SHAPE_FLOOR, implied, ...(dormancy ? [dormancy.strength] : []));
+  const weighted = others.reduce((acc, s) => (
+    acc + s.weight * (SHAPE_KEYS.has(s.key) ? Math.min(s.strength, ceiling) : s.strength)
+  ), 2.5 * Math.max(0, implied));
+  return Math.round((weighted / measuredWeight(others)) * 100);
 }
 
 function byImplied(a, b) {

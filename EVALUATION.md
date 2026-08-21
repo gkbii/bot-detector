@@ -697,9 +697,10 @@ harder to see.
 
 **It is graded, not a gate, and that is the load-bearing half.** An on/off rule
 at the band edge would have taken u/chilidirigible from agenda 30 to **68** on
-a `stock-phrasing` strength moving 0.29 to 0.31 — and three of the 17 thread
-humans sit within 0.11 of that line on their real bodies. A cliff that steep
-next to real accounts is a false positive waiting for the next re-capture.
+a `stock-phrasing` strength moving 0.29 to 0.31 — and two of the 17 thread
+humans sit within 0.11 of that line on their real bodies, at 0.37 and 0.40. A
+cliff that steep next to real accounts is a false positive waiting for the next
+re-capture.
 `test/scoring.test.js` walks a hobbyist's phrasing coverage from 0% to 20% and
 fails if any step moves the score by more than 12 points; today the whole ramp
 is 14 → 51 in steps of nine or fewer.
@@ -724,9 +725,23 @@ is untouched. `npm run evaluate` exits 0.
 **The corroborated branch is not exercised by a real person anywhere in this
 corpus.** All 19 human profiles carry length-matched synthetic bodies, so their
 `stock-phrasing` — the signal the hold reads — is not the one the live account
-produced. Only the synthetic propagandist fixture in `test/scoring.test.js`
-exercises the un-held path. A frozen corpus is evidence a change broke nothing;
-it is never evidence the change did anything.
+produced. Only the synthetic fixtures in `test/scoring.test.js` take the
+un-held path. A frozen corpus is evidence a change broke nothing; it is never
+evidence the change did anything. The live re-fetch at the end of this finding
+is what closes that gap.
+
+**Two halves of the rule went unpinned by the corpus, and both are pinned by
+fixtures now.** Holding shape to the *weakest* measured corroborator instead of
+the strongest passed all 154 tests and `evaluate`: no account here and no
+fixture had both corroborators measured with one of them strong. A second
+propagandist fixture is that shape — a talking point recurring across threads
+beside a `dormancy-revival` measured at ZERO over a 300-day span. Separately,
+dropping the filter that keeps an UNMEASURED corroborator out of the ceiling
+also passed everything: `Math.max` swallows the `null` so no score moves, and
+the only casualty is the evidence string, which stops saying "one of the two
+could not be measured at all" — the sentence both prolific humans get, and the
+one place `axis.js` rule 3 is visible to a user. A short-window hobbyist
+fixture pins it.
 
 **So the real bodies were solved for rather than assumed.** `manifest.json`
 records each human's agenda score on both the real and the synthesised profile,
@@ -747,19 +762,52 @@ Both prolific humans are held on their real bodies too, and leave `moderate`
 there as well. That is derived from scores `manifest.json` already recorded,
 not re-measured against the API.
 
+**That column had a defect, found in review and corrected here.**
+`impliedPhrasing()` solved the weighted average for `stock-phrasing` without
+subtracting `dormancy-revival`, so wherever dormancy was MEASURED and non-zero
+its weight — 3, the heaviest on the axis — was attributed to phrasing instead.
+One account in the corpus is affected: u/KevinGreeneSolar published as **0.31,
+"corroborates: yes"** against a true **0.009**, a gap of exactly
+3 × 0.2514 / 2.5, and the live account reads phrasing 0.00. The band-based
+guard standing in its place could not see it, because 0.2514 bands `low`. No
+score in this finding was wrong — the two errors cancel wherever the hold does
+not bind, and the one affected account is not held — but the count of ordinary
+humans clearing the corroboration floor was published as three and is two.
+
 **And the bound that column exposes is the real limit of this rule.** It
 protects an account whose phrasing *and* dormancy both read low, and nothing
-else. Three of the seventeen ordinary humans clear the corroboration floor on
-their own real text (0.31–0.40) — **a hobbyist with a catchphrase gets nothing
-from this fix.** They all still score `low` today, on a weighted average that
-never had a problem with them; but if a concentrated, drive-by account with a
+else. Two of the seventeen ordinary humans clear the corroboration floor on
+their own real text (0.37–0.40) — **a hobbyist with a catchphrase gets nothing
+from this fix.** Both still score `low` today, on a weighted average that never
+had a problem with them; but if a concentrated, drive-by account with a
 sign-off ever bands `moderate`, this rule will not have been what failed, and
 it will not have helped either.
 
-**None of it is a live re-measure.** Findings 4a and 4b went to the API. This
-one deliberately did not: the question is about two accounts already frozen, and
-re-fetching them would have changed the very window the ticket was filed
-against.
+**The derivation is not a live re-measure — but one has since been run.** The
+column above is deliberately offline: the question is about two accounts
+already frozen, and re-fetching them would have changed the very window the
+ticket was filed against. So the live check was done *after* the change landed,
+on **2026-08-21**, over ten accounts through the real `fetchAccount`, purely to
+put the derivation against the API:
+
+| account | live, pre-hold | live, under the hold | derived |
+|---|---:|---:|---:|
+| u/humdingler | 55 | **low 19** | 55 → 19 |
+| u/chilidirigible | 64 | **low 26** | 63 → 25 |
+| u/bigbjarne | 28 | 28 — not held, live phrasing 0.45 | 27 → 26 |
+| u/AmputatorBot, u/RepostSleuthBot, u/RemindMeBot | — | unmoved | unmoved |
+
+Both prolific humans leave `moderate` on their live bodies, which is the
+finding. u/bigbjarne is the more useful row: at a live `stock-phrasing` of 0.45
+it is the first REAL account to exercise the corroborated branch, which until
+then only a fixture had.
+
+**And it is a hand check, not a command.** It is not reproducible from this
+repo — `measure-agenda-shape.mjs` stays offline on purpose, and a re-fetch
+today returns different numbers again. That is visible in the live phrasing
+itself, which tracks the derived column without being it: u/chilidirigible
+reads 0.18 live against 0.16 derived, and u/Hartacus 0.08 against 0.37. The
+derived column is of the CAPTURE WINDOW; the account has moved since.
 
 ## Finding 4d — a 100% reply rate scored as evidence of a person, and the whole margin is three comments
 

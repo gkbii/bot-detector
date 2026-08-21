@@ -119,9 +119,10 @@ export function scoreAgenda(profile) {
  * silenced and can always take the axis to the edge of an accusation on its
  * own. GRADED, not a gate, and that is load-bearing: an on/off rule at the
  * band edge would have taken u/chilidirigible from 30 to 68 on a
- * `stock-phrasing` strength moving 0.29 to 0.31, and three of the 17 thread
- * humans sit within 0.11 of that line on their real bodies. A cliff that steep
- * next to real accounts is a false positive waiting for a re-capture.
+ * `stock-phrasing` strength moving 0.29 to 0.31, and two of the 17 thread
+ * humans sit within 0.11 of that line on their real bodies (0.37 and 0.40). A
+ * cliff that steep next to real accounts is a false positive waiting for a
+ * re-capture.
  *
  * The floor is `BAND_THRESHOLDS.moderate / 100` rather than a number somebody
  * picked, for the same reason.
