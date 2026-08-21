@@ -208,6 +208,45 @@ test('no frozen reply-bot votes for its own humanity, and the human margin is st
     `${thinnest.account.username} is the thinnest human margin (${thinnest.depth.value.topLevel} top-level of ${thinnest.depth.value.sample}) and is no longer measured`);
 });
 
+/**
+ * JIO-347, and the same shape as the reply-bot test above: a signal that exists
+ * to VOUCH for a person must not fire hardest on the accounts that are least
+ * like one. All eight of these ran sitewide and all eight read `high` on
+ * `topical-breadth` before the depth taper, u/AutoModerator across 307 groups.
+ *
+ * The human half of the assertion is the one that matters: the taper is drawn
+ * across a gap between two populations, and a gap only exists while nobody
+ * stands in it. If the thinnest human here ever loses their full credit, the
+ * constant has drifted onto a real person and the corpus is what says so.
+ */
+test('no frozen bot is vouched for by its own reach, and no frozen human pays for the taper', () => {
+  const breadthOf = (account) => verdictOf(account).authenticity.signals
+    .find((sig) => sig.key === 'topical-breadth');
+
+  for (const account of bots) {
+    const breadth = breadthOf(account);
+    assert.notEqual(breadth.band, 'high',
+      `bot ${account.username} is in ${breadth.value.distinctGroups} groups at ${
+        breadth.value.itemsPerGroup.toFixed(2)} items each and still reads a range of interests`);
+  }
+
+  const shallowest = humans
+    .map((account) => ({ account, breadth: breadthOf(account) }))
+    .filter((r) => r.breadth.value?.itemsPerGroup != null)
+    .reduce((a, b) => (b.breadth.value.itemsPerGroup < a.breadth.value.itemsPerGroup ? b : a));
+  const deepestBot = bots
+    .map((account) => ({ account, breadth: breadthOf(account) }))
+    .reduce((a, b) => (b.breadth.value.itemsPerGroup > a.breadth.value.itemsPerGroup ? b : a));
+
+  assert.equal(shallowest.breadth.value.depth, 1,
+    `${shallowest.account.username} is the thinnest human margin (${
+      shallowest.breadth.value.itemsPerGroup.toFixed(2)} items per group) and is now discounted for it`);
+  assert.ok(shallowest.breadth.value.itemsPerGroup > deepestBot.breadth.value.itemsPerGroup,
+    `${shallowest.account.username} (${shallowest.breadth.value.itemsPerGroup.toFixed(2)}) no longer sits above the `
+    + `deepest bot ${deepestBot.account.username} (${deepestBot.breadth.value.itemsPerGroup.toFixed(2)}), so the `
+    + 'populations overlap and this cut separates nothing — re-read both before touching authenticity.js');
+});
+
 test('every frozen account still scores exactly what expected.json records', () => {
   assert.ok(expected, 'test/corpus/expected.json is missing — run: npm run evaluate -- --update');
   for (const account of accounts) {
@@ -369,8 +408,8 @@ test('every canonical replacement still matches the pattern it stands in for', (
  * mentions — both files name `capture-corpus.mjs` in prose, and telling a
  * reader where to go is not the same as going there.
  *
- * The three `measure-*.mjs` scripts are held to it as well: they are the
- * published way to reproduce EVALUATION.md Findings 4c, 4d and 4e, and a
+ * The four `measure-*.mjs` scripts are held to it as well: they are the
+ * published way to reproduce EVALUATION.md Findings 4c, 4d, 4e and 4f, and a
  * measurement that quietly re-fetched would be measuring a different window
  * from the one the finding was written against.
  *
@@ -388,12 +427,13 @@ test('nothing on the evaluate path can reach the network', () => {
   const paths = [
     'scripts/evaluate.mjs',
     'test/corpus/load.js',
-    // The three hand-run measurement scripts make the same no-network claim in
+    // The four hand-run measurement scripts make the same no-network claim in
     // their headers, and a claim in a header is not a check. They are the
-    // reproduction instructions for EVALUATION.md Findings 4c, 4d and 4e.
+    // reproduction instructions for EVALUATION.md Findings 4c, 4d, 4e and 4f.
     'scripts/measure-agenda-shape.mjs',
     'scripts/measure-reply-share.mjs',
     'scripts/measure-interval-cv.mjs',
+    'scripts/measure-topical-breadth.mjs',
   ];
   for (const rel of paths) {
     const src = fs.readFileSync(path.join(ROOT, rel), 'utf8');

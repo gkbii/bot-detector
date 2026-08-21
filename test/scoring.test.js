@@ -1324,6 +1324,59 @@ test('authenticity: topical breadth separates a broad account from a single-issu
   assert.equal(narrow.band, BAND.LOW);
 });
 
+/**
+ * JIO-347. u/AutoModerator answers in 307 groups with 98% of itself outside the
+ * largest, which both halves of the pre-taper score read as the widest range of
+ * interests it can measure — a flat 1.000 on the axis that exists to say "this
+ * is a person". Running sitewide is what a bot IS. The fixture is that account's
+ * shape and nothing else: one item per group, no other bot marker, so a pass
+ * here is the breadth arithmetic and not some other signal rescuing the verdict.
+ */
+test('authenticity: sitewide reach with one item per group is not a range of interests', () => {
+  const rand = rng(71);
+  const stamps = humanTimestamps({ rand, days: 300, activeHours: WAKING_HOURS });
+  const comments = stamps.map((at, i) => comment({
+    id: `sw${i}`, at, group: `sub${i}`, body: randomText(rand),
+  }));
+
+  const sig = findSignal(scoreAccount(profileOf({ comments })).authenticity, 'topical-breadth');
+
+  assert.ok(sig.value.distinctGroups > 200,
+    `the fixture must be sitewide to be the case under test, got ${sig.value.distinctGroups} groups`);
+  assert.equal(sig.value.itemsPerGroup, 1, 'one item per group is the shape being tested');
+  assert.equal(sig.value.reach, 1, 'the un-tapered reach still reads maximum breadth — that is the defect');
+  assert.equal(sig.band, BAND.LOW,
+    `${sig.value.distinctGroups} groups visited once each must not vouch for anyone, got ${sig.band}`);
+  // Every bound that fires says so out loud: the sentence has to name the
+  // discount, or it describes breadth this signal did not credit.
+  assert.match(sig.evidence, /reach without depth/);
+});
+
+/**
+ * The other end of the same taper, pinned separately because the frozen corpus
+ * cannot pin it: nothing in test/corpus/ sits between 2.06 and 3.08 items per
+ * group, so a change that moved DEPTH_FULL_CREDIT to 6 would leave `npm run
+ * evaluate` green while silently docking half the people on the platform.
+ */
+test('authenticity: an account that returns to its groups keeps the full breadth credit', () => {
+  const rand = rng(72);
+  const stamps = humanTimestamps({ rand, days: 300, activeHours: WAKING_HOURS });
+  // Trimmed to a whole number of groups, so this lands on EXACTLY 3.00 items
+  // per group and pins the boundary as inclusive rather than clearing it by a
+  // margin nobody chose.
+  const comments = stamps.slice(0, stamps.length - (stamps.length % 3)).map((at, i) => comment({
+    id: `dp${i}`, at, group: `sub${Math.floor(i / 3)}`, body: randomText(rand),
+  }));
+
+  const sig = findSignal(scoreAccount(profileOf({ comments })).authenticity, 'topical-breadth');
+
+  assert.equal(sig.value.itemsPerGroup, 3, `the fixture must sit on the taper's ceiling, got ${sig.value.itemsPerGroup}`);
+  assert.equal(sig.value.depth, 1, 'three items per group is a return visit, not a drive-by');
+  assert.equal(sig.band, BAND.HIGH);
+  assert.match(sig.evidence, /returns to what it touches/);
+  assert.doesNotMatch(sig.evidence, /credit is cut/);
+});
+
 // ---------------------------------------------------------------------------
 // The two cases most likely to be wrong
 // ---------------------------------------------------------------------------

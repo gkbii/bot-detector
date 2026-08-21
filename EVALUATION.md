@@ -318,6 +318,7 @@ scored `high` for AutoModerator (333 subreddits) and RemindMeBot (175) — runni
 sitewide is what a bot *is*, not evidence of a person with wide interests — and
 `asks-questions` per Finding 2. AutoModerator lands on authenticity **moderate
 38** with both of its high signals being artifacts of automation.
+*(FIXED 2026-08-21, JIO-347 — Finding 4f below.)*
 
 This is a sensitivity ceiling rather than a wrong answer: the bands still
 separate cleanly, and `moderate` on automation is not an all-clear. But a reader
@@ -1110,7 +1111,7 @@ empty, and a third one, taken live, has now found the account standing in it.
 
 `node scripts/measure-interval-crossing.mjs --all-humans` is this measurement,
 and unlike the
-three `measure-*.mjs` scripts above **it goes to the network** — necessarily, and
+four `measure-*.mjs` scripts above **it goes to the network** — necessarily, and
 that is the point rather than a lapse. The frozen corpus is what hid this for
 three days, so a question about drift cannot be asked of the snapshot the drift
 is measured against. It is the one `measure-*` script deliberately left off
@@ -1148,6 +1149,134 @@ discovery.
 **Eight declared bots, all utility bots.** "The tool now reads six of eight as
 `high`" is a statement about eight accounts that announce themselves. It is not
 a detection rate.
+
+## Finding 4f — `topical-breadth` scored 307 subreddits as a range of interests, and vouched for every bot in the corpus
+
+Measured on **2026-08-21** by `scripts/measure-topical-breadth.mjs`, over the 27
+accounts frozen in `test/corpus/`. **No network**, like Findings 4c, 4d and 4e:
+`scoreAuthenticity` is pure and the corpus is JSON, so this is arithmetic on
+disk and reproduces byte-for-byte. Run it rather than trusting the tables below.
+
+This is Finding 4's last paragraph — the authenticity half of the ceiling,
+where two signals *reward* being a bot — and with `asks-questions` closed by
+Finding 2 it is the last open item in JIO-329's definition of done.
+
+### The measurement
+
+`topical-breadth` scored `0.5 × rescale(outside-the-largest-group, 0.15, 0.75)
++ 0.5 × rescale(distinct groups, 2, 15)`, and **both halves saturate on
+sitewide automation**. u/AutoModerator posts into 307 groups with 98% of itself
+outside the largest, so it took a flat **1.000** — the largest vouch this signal
+can award anybody — on the axis whose entire job is to say *this is a person*.
+
+| | distinct groups | items per group | this signal |
+|---|---|---|---|
+| 8 declared bots | 148 – 307 | **1.24 – 2.06** | **`high` ×8** |
+| 17 thread humans | 25 – 92 | 3.08 – 12.36 | `high` ×17 |
+| 2 prolific humans | 6 – 9 | 41.4 – 66.7 | `low` ×2 |
+
+**The ticket named two accounts; the corpus says all eight.** JIO-347 was filed
+off Finding 4's live numbers — AutoModerator at 333 subreddits and authenticity
+`moderate 38`, RemindMeBot at 175 — and the frozen 2026-08-18 window reads 307
+and `low 29` for the same account. That gap is two fetch windows and the
+signals JIO-345 and JIO-346 landed in between, not a regression: the *band on
+this signal* is `high` in both, and it is `high` for the six bots the ticket did
+not name either.
+
+The second half is not merely saturated but **inverted**: share outside the
+largest group runs **0.84 – 0.98 for the bots** against **0.03 – 0.87 for the
+people**. Being everywhere is the job. u/AutoModerator's frozen window is 296
+comments spanning **82 seconds** across 300-odd subreddits — one automod reply
+per subreddit, which is reach with no depth anywhere in it.
+
+### Why the taper is items per group, and why neither end is fitted to this table
+
+Items per group separates the two populations with **no overlap and a factor of
+1.49 between them** — every bot at 1.24–2.06, every human at 3.08–66.7. The
+signal is now `reach × depth`, where `depth = rescale(items per group, 1, 3)`.
+
+Neither end is a number drawn next to 27 accounts. **1.0 is the arithmetic
+minimum of the measure** — one item in every group, a visit and never a return —
+and **3 is a return visit rather than a drive-by**, which happens to sit just
+under the thinnest human rather than having been placed there. Finding 4e could
+point at the ceiling of a `rescale` and Finding 4d had to make its cut
+categorical inside a three-comment margin; here the measure has a floor of its
+own, and the human population is a factor clear of it rather than a decimal.
+
+**The obvious rival was rejected on its own number.** The share of an account's
+groups holding exactly one item does separate these populations — by **0.0023**:
+u/humdingler at 0.6667 against u/RepostSleuthBot at 0.6689. A cut there is
+fitted to the third decimal place of one person, and one more comment in a
+group they had already visited would move it.
+
+### Why this is a taper and NOT `unmeasured()`, unlike 4d and 4e
+
+Both of those closed an inverting signal by declining to score its bad pole, per
+axis.js rule 3. **That fix would make this defect worse.** `buildAxis` averages
+over MEASURED weight only, so removing a signal redistributes its weight to the
+others — a penalty on a suspicion axis, and a **gift** on the axis that exists
+to vouch. Taking `topical-breadth` to `unmeasured()` would have *raised* all
+eight bots' authenticity scores. A signal that has read "reach without depth"
+has measured something real and must score it low rather than look away, and
+the evidence string names the discount it applied:
+
+```
+Active in 307 groups across 396 items; the largest accounts for 2%, leaving 98%
+elsewhere (spread 0.98 of 1.00). That is 1.29 items per group — reach without
+depth, which is what running sitewide looks like rather than what being curious
+looks like, so the breadth credit is cut to 14% of what the reach alone would
+score.
+```
+
+### What moved
+
+8 of the 81 frozen scores, and **every one of them is a bot going down**:
+
+| | authenticity |
+|---|---|
+| u/AmputatorBot | `low 25` → **`low 3`** |
+| u/RemindMeBot | `low 25` → **`low 5`** |
+| u/same\_subreddit\_bot | `low 25` → **`low 6`** |
+| u/AutoModerator | `low 29` → **`low 8`** |
+| u/RepostSleuthBot | `low 25` → **`low 13`** |
+| u/Anti-ThisBot-IB | `moderate 32` → **`low 15`** |
+| u/sneakpeekbot | `moderate 38` → **`low 16`** |
+| u/sub\_doesnt\_exist\_bot | `moderate 38` → **`low 17`** |
+| 19 humans | **not one point, in either direction** |
+
+Three bots cross a band and the bots' authenticity cell in the headline table
+becomes **`low ×8` (3–17)**, against thread humans at `moderate ×10, high ×7`
+(38–81). Every human is untouched because every human's depth taper is exactly
+1.00 — the gap is wide enough that nobody is standing in it.
+
+### What this does not establish
+
+**A bot that returns to what it touches keeps the full credit.** Three items per
+group buys back everything the taper takes, and no corpus available to this repo
+holds an account that does it deliberately. This raises the price of the vouch,
+it does not close the door — that bot has to be caught on the automation axis.
+
+**The taper is priced by the fetch window as much as by the account.** 300
+comments spread over 300 groups cannot demonstrate depth even if the account has
+it; u/AutoModerator's 82-second window is the extreme case. It cuts the right
+way here only because the volume that truncates the window is itself the bot
+signal, and the two prolific humans in the corpus concentrate rather than spread
+(41 and 67 items per group). A prolific human who genuinely ranged over hundreds
+of subreddits would be docked by this, and none is available to check against.
+
+**It has a real cost for small accounts, and it is accepted deliberately.** An
+ordinary person with 30 comments in 20 different groups now scores near zero
+here. One comment in each of twenty groups is the same *shape* as the adversary,
+and this axis reads `low` as "we found no positive evidence" rather than as an
+accusation — the other four authenticity signals are untouched and still speak
+for that account. `test/scoring.test.js` pins both ends of the taper, because
+nothing in the frozen corpus sits between 2.06 and 3.08 items per group: a
+change that moved the full-credit constant to 6 would leave `npm run evaluate`
+green while quietly docking half the people on the platform.
+
+**Eight declared bots, all utility bots.** "No bot is vouched for by its reach"
+is a statement about eight accounts that announce themselves. It is not a
+detection rate.
 
 ## What this evaluation does not establish
 

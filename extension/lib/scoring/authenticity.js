@@ -26,6 +26,13 @@ const MIN_THREADS = 5;
 const MIN_GROUP_ITEMS = 10;
 
 /**
+ * Items per group at which topical breadth is credited in full. Below it the
+ * account's reach is tapered towards zero at 1.0 item per group — see the long
+ * note on `topicalBreadthSignal`.
+ */
+const DEPTH_FULL_CREDIT = 3;
+
+/**
  * Admitting error. Cheap to type, but a propaganda account has no reason to —
  * conceding a point is the opposite of the job.
  */
@@ -174,6 +181,40 @@ function sustainedThreadSignal(profile) {
  * groups there are, because either alone is gameable: an account in two groups
  * 50/50 has a low top share, and an account touching 30 groups once each while
  * spending 90% of itself in one has a high distinct count.
+ *
+ * AND THEN TAPERED BY DEPTH, which is the part that stops it vouching for
+ * infrastructure (JIO-347, EVALUATION.md Finding 4f). Both halves above
+ * saturate on sitewide automation: u/AutoModerator answers in 307 groups with
+ * 98% of itself outside the largest, so it scored a flat 1.000 — the maximum
+ * this signal can award a human — and both of its `high` authenticity signals
+ * were artifacts of being a machine. Running everywhere is what a bot IS. All
+ * eight declared bots in the frozen corpus read `high` here, not the two the
+ * ticket named.
+ *
+ * The discriminator is items per group, and in the corpus it does not overlap:
+ * every bot sits at 1.24-2.06 (they visit, they do not return), every human at
+ * 3.08-66.7. So full credit needs `DEPTH_FULL_CREDIT` items per group and
+ * credit starts at 1.0, which is not a threshold fitted between two adjacent
+ * accounts: 1.0 is the arithmetic minimum of the measure — one item in every
+ * group, reach with no depth anywhere — and 3 is a return visit rather than a
+ * drive-by, sitting at the bottom of the human range. Reproduce both ends with
+ * `node scripts/measure-topical-breadth.mjs`.
+ *
+ * WHY THE SINGLETON SHARE IS NOT THE MEASURE, though it is the obvious one:
+ * the share of an account's groups holding exactly one item does separate the
+ * two populations, by 0.0023 — u/humdingler at 0.6667 against u/RepostSleuthBot
+ * at 0.6689. A cut there is fitted to the third decimal place of one person,
+ * and one more comment in a group they have already visited moves it. On items
+ * per group those same two populations are 1.02 apart, a factor of 1.49.
+ *
+ * WHY A TAPER AND NOT `unmeasured()`, which is how JIO-345 and JIO-346 closed
+ * the same shape of defect on the automation axis: `buildAxis` averages over
+ * MEASURED weight only, so dropping a signal REDISTRIBUTES its weight to the
+ * others. On a suspicion axis that is a penalty and the fix works; on this one
+ * — the axis that exists to vouch — it would RAISE every tapered bot's
+ * authenticity score, which is the opposite of the ask. A signal that reads
+ * "reach without depth" has measured something; it must score it low, not
+ * decline to look.
  */
 function topicalBreadthSignal(profile) {
   const key = 'topical-breadth';
@@ -195,18 +236,31 @@ function topicalBreadthSignal(profile) {
   const outside = 1 - topShare;
   const entropy = normalizedEntropy(counts, Math.max(histogram.size, 2)) ?? 0;
 
-  const strength = clamp01(
+  const reach = clamp01(
     0.5 * rescale(outside, 0.15, 0.75)
     + 0.5 * rescale(histogram.size, 2, 15),
   );
+
+  const itemsPerGroup = total / histogram.size;
+  const depth = rescale(itemsPerGroup, 1, DEPTH_FULL_CREDIT);
+  const strength = reach * depth;
+
+  // Every bound that fires says so out loud: a discounted breadth score has to
+  // name the discount, or the evidence sentence describes a range of interests
+  // this signal did not actually credit.
+  const depthNote = depth < 1
+    ? ` That is ${itemsPerGroup.toFixed(2)} items per group — reach without depth, which is what running sitewide looks like rather than what being curious looks like, so the breadth credit is cut to ${pct(depth)} of what the reach alone would score.`
+    : ` At ${itemsPerGroup.toFixed(2)} items per group the account returns to what it touches, so the reach is credited in full.`;
 
   return signal({
     key,
     label,
     weight,
     strength,
-    value: { distinctGroups: histogram.size, topShare, outsideTopShare: outside, entropy },
-    evidence: `Active in ${histogram.size} ${plural(histogram.size, 'group')} across ${total} items; the largest accounts for ${pct(topShare)}, leaving ${pct(outside)} elsewhere (spread ${entropy.toFixed(2)} of 1.00).`,
+    value: {
+      distinctGroups: histogram.size, topShare, outsideTopShare: outside, entropy, itemsPerGroup, reach, depth,
+    },
+    evidence: `Active in ${histogram.size} ${plural(histogram.size, 'group')} across ${total} items; the largest accounts for ${pct(topShare)}, leaving ${pct(outside)} elsewhere (spread ${entropy.toFixed(2)} of 1.00).${depthNote}`,
   });
 }
 

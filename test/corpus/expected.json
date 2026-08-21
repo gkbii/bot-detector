@@ -25,7 +25,7 @@
    },
    "authenticity": {
     "band": "low",
-    "score": 25
+    "score": 3
    }
   },
   "Anti-ThisBot-IB": {
@@ -38,8 +38,8 @@
     "score": 36
    },
    "authenticity": {
-    "band": "moderate",
-    "score": 32
+    "band": "low",
+    "score": 15
    }
   },
   "Aubenabee": {
@@ -67,7 +67,7 @@
    },
    "authenticity": {
     "band": "low",
-    "score": 29
+    "score": 8
    }
   },
   "Biscopiphany": {
@@ -193,7 +193,7 @@
    },
    "authenticity": {
     "band": "low",
-    "score": 25
+    "score": 5
    }
   },
   "RepostSleuthBot": {
@@ -207,7 +207,7 @@
    },
    "authenticity": {
     "band": "low",
-    "score": 25
+    "score": 13
    }
   },
   "TCBloo": {
@@ -347,7 +347,7 @@
    },
    "authenticity": {
     "band": "low",
-    "score": 25
+    "score": 6
    }
   },
   "sneakpeekbot": {
@@ -360,8 +360,8 @@
     "score": 36
    },
    "authenticity": {
-    "band": "moderate",
-    "score": 38
+    "band": "low",
+    "score": 16
    }
   },
   "sub_doesnt_exist_bot": {
@@ -374,8 +374,8 @@
     "score": 36
    },
    "authenticity": {
-    "band": "moderate",
-    "score": 38
+    "band": "low",
+    "score": 17
    }
   }
  }

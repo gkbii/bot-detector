@@ -58,10 +58,11 @@
     "measure-agenda-shape.mjs (JIO-424) is",
     "run by hand too but never fetches: like `evaluate` it reads test/corpus/",
     "and nothing else, which is why it has no script entry to protect it from",
-    "being run by accident. measure-reply-share.mjs (JIO-345) and",
-    "measure-interval-cv.mjs (JIO-346) are the second and third of those and are",
-    "the same shape: hand-run, no network, no script entry. test/corpus.test.js",
-    "holds all three to the no-network claim at the import graph."
+    "being run by accident. measure-reply-share.mjs (JIO-345),",
+    "measure-interval-cv.mjs (JIO-346) and measure-topical-breadth.mjs (JIO-347)",
+    "are the second, third and fourth of those and are the same shape: hand-run,",
+    "no network, no script entry. test/corpus.test.js holds all four to the",
+    "no-network claim at the import graph."
   ],
   "scripts": {
     "start": "node server/index.js",

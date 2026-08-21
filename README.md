@@ -16,7 +16,7 @@ things the browser cannot do: a Claude read of what an account actually argues,
 and a lookup cache shared between your machines. Nothing requires it.
 
 ```
-npm test        # 160 tests, and they pass with NO node_modules installed
+npm test        # 164 tests, and they pass with NO node_modules installed
 npm install     # only needed for the optional server's one dependency
 npm start       # the optional server
 ```
@@ -68,6 +68,7 @@ bot-detector/
     measure-agenda-shape.mjs offline; ranks the corpus on the two shape signals — EVALUATION.md 4c
     measure-reply-share.mjs  offline; the corpus reply-share spread — EVALUATION.md 4d
     measure-interval-cv.mjs  offline; the corpus interval-CV spread — EVALUATION.md 4e
+    measure-topical-breadth.mjs offline; the corpus items-per-group gap — EVALUATION.md 4f
     measure-interval-crossing.mjs fetches; who JIO-346 pushed over the edge, live — EVALUATION.md 4e
     evaluate.mjs             reprints EVALUATION.md's band table from test/corpus/, offline
     lib/bot-declaration.mjs  what counts as "this account declares itself a bot", and why twice
@@ -204,6 +205,12 @@ Revived dormant account, floored at the `moderate` band edge so neither is ever
 silenced. The section on it is below; the short version is that a hobbyist is
 topic-concentrated and posts and leaves, and those two signals alone were
 enough to band two real people.
+
+One signal in the authenticity column is **tapered rather than trusted**. Range
+of interests is multiplied by the account's items per group, because breadth and
+being everywhere are the same measurement until you ask whether the account ever
+went back. The section is below; the short version is that u/AutoModerator was in
+307 subreddits and took the largest vouch this signal can award anybody.
 
 Two signals in the automation column argue in **one direction only**, and for
 the same reason as each other. Sustained posting throughput is `unmeasured`
@@ -957,6 +964,78 @@ available to this repo holds an adversarial bot to check against.
 `test/scoring.test.js` asserts both sides of the gate, so the escape stays a
 stated bound rather than something found later.
 
+## Running everywhere is not a range of interests
+
+Finding 4's last paragraph, and the one that lands on the axis that exists to
+**vouch** for people rather than to suspect them.
+
+`topical-breadth` scored `0.5 × how much sits outside the largest group + 0.5 ×
+rescale(distinct groups, 2, 15)`, and both halves saturate on sitewide
+automation. u/AutoModerator answers in **307 subreddits** with 98% of itself
+outside the largest, so it took a flat **1.000** — the largest vouch this signal
+can award anybody — and its badge said *range of interests*. The second half is
+not merely saturated but inverted: share outside the largest group runs 0.84–0.98
+for the corpus bots against 0.03–0.87 for its humans. **Being everywhere is the
+job.**
+
+**The ticket named two accounts. The measurement said all eight.** JIO-347 was
+filed off u/AutoModerator (333 subreddits, live) and u/RemindMeBot (175); `node
+scripts/measure-topical-breadth.mjs` (no network — `test/corpus/` and nothing
+else) reads `high` here for **every declared bot in the corpus**, none of which
+had been re-checked because the ticket did not name them.
+
+**The discriminator is items per group, and it does not overlap.** Every bot
+sits at **1.24–2.06** — they visit, they never return — and every human at
+**3.08–66.7**, a factor of 1.49 clear. So the signal is now `reach × depth`,
+with `depth = rescale(items per group, 1, 3)`. Neither end of that is a number
+picked next to a population: **1.0 is the arithmetic minimum of the measure**
+(one item in every group, reach with no depth anywhere), and **3 is a return
+visit rather than a drive-by**, which happens to sit just under the thinnest
+human rather than having been placed there.
+
+The obvious rival was rejected on its own number. The share of an account's
+groups holding exactly one item *does* separate these populations — by
+**0.0023**, u/humdingler at 0.6667 against u/RepostSleuthBot at 0.6689. A cut
+there is fitted to the third decimal place of one person.
+
+**And this one is a taper, not an `unmeasured()`, unlike the two sections above
+it.** Both of those closed an inverting signal by declining to score its bad
+pole. Here that same fix makes the defect *worse*: `buildAxis` averages over
+measured weight only, so dropping a signal redistributes its weight — a penalty
+on a suspicion axis and a **gift** on a vouching one. Going `unmeasured()` would
+have raised all eight bots' authenticity scores. A signal that has read "reach
+without depth" has measured something and must score it low rather than look
+away, and the evidence string names the discount out loud: *"That is 1.29 items
+per group — reach without depth … so the breadth credit is cut to 14% of what
+the reach alone would score."*
+
+**What it moved.** 8 of the 81 frozen scores, every one a bot going down:
+u/AmputatorBot `low 25 → 3`, u/RemindMeBot `25 → 5`, u/same_subreddit_bot
+`25 → 6`, u/AutoModerator `low 29 → 8`, u/RepostSleuthBot `25 → 13`,
+u/Anti-ThisBot-IB `moderate 32 → low 15`, u/sneakpeekbot `moderate 38 → low 16`,
+u/sub_doesnt_exist_bot `moderate 38 → low 17`. Three cross a band, the bots'
+authenticity cell becomes `low ×8` (3–17) against thread humans at 38–81, and
+**not one human moved a point in either direction** — every human's taper is
+exactly 1.00, because the gap is wide enough that nobody is standing in it.
+
+**Two bounds, stated because a passing suite shows neither.**
+
+A genuine small account with 30 comments in 20 different groups now scores near
+zero here. That is a real cost, accepted deliberately: one comment in each of
+twenty groups is the same *shape* as the adversary, and `low` on this axis means
+no positive evidence was found rather than that anything was found. The other
+four authenticity signals are untouched and still speak for that account.
+`test/scoring.test.js` pins **both** ends of the taper, because nothing in the
+corpus sits between 2.06 and 3.08 items per group — a change that moved the
+full-credit constant to 6 would leave `npm run evaluate` green while quietly
+docking half the people on the platform.
+
+And **a bot that returns to what it touches keeps the full credit.** Three items
+per group buys back everything the taper takes; no population available to this
+repo holds an account doing it on purpose. This raises the price of the vouch
+rather than closing the door, and that bot has to be caught on the automation
+axis instead.
+
 ## The blind spot: an account the index has never heard of
 
 The defects above are false positives. This one is the opposite and it is
@@ -1070,6 +1149,7 @@ node scripts/measure-jio329.mjs --corpus # JIO-329's cost, offline; --harvest/--
 node scripts/measure-agenda-shape.mjs    # the agenda hold — EVALUATION.md 4c, offline
 node scripts/measure-reply-share.mjs     # the reply-share spread — EVALUATION.md 4d, offline
 node scripts/measure-interval-cv.mjs     # the interval-CV spread — EVALUATION.md 4e, offline
+node scripts/measure-topical-breadth.mjs # the items-per-group gap — EVALUATION.md 4f, offline
 node scripts/measure-interval-crossing.mjs # who JIO-346 crossed — EVALUATION.md 4e, LIVE
 ```
 
@@ -1078,12 +1158,12 @@ node scripts/measure-interval-crossing.mjs # who JIO-346 crossed — EVALUATION.
 none of them is part of `npm test`. `measure-jio329.mjs` goes either way:
 `--corpus`, `--variants` and `--report` read `test/corpus/` or a state file
 already on disk and fetch nothing, while `--harvest`/`--fetch` go live.
-`measure-agenda-shape.mjs`, `measure-reply-share.mjs` and
-`measure-interval-cv.mjs` never fetch at all — like `evaluate`, they are JSON in
-and arithmetic out.
+`measure-agenda-shape.mjs`, `measure-reply-share.mjs`, `measure-interval-cv.mjs`
+and `measure-topical-breadth.mjs` never fetch at all — like `evaluate`, they are
+JSON in and arithmetic out.
 
 **`measure-interval-crossing.mjs` has to fetch, and that is the finding rather
-than an oversight.** The other three re-measure the frozen corpus, which is what
+than an oversight.** The other four re-measure the frozen corpus, which is what
 makes them reproducible byte-for-byte — and a frozen corpus is exactly what hid
 u/chilidirigible's band crossing for three days. A question about drift cannot
 be answered from the snapshot the drift is measured against, so this one is
@@ -1115,7 +1195,9 @@ reasons. The bots' agenda column was `low ×6, moderate ×2` and is now `moderat
 their authenticity column went from `low ×3, moderate ×5` to `low ×5, moderate
 ×3`. That is not a regression this corpus caught, because there was no baseline
 to catch it against; it is sixteen months of fresh history, JIO-290's two
-signal changes and JIO-291's truncation fix all surfacing at once. It is
+signal changes and JIO-291's truncation fix all surfacing at once. JIO-347's
+depth taper then took that column to **`low ×8`** (3–17) on purpose, and unlike
+the drift above it is a diff in `expected.json` with a section of its own. It is
 written down here rather than quietly re-baselined, because a table that lives
 only in prose is exactly how a move this size stays invisible. `expected.json`
 freezes *today's* numbers, so the next one is a diff.
@@ -1561,7 +1643,7 @@ source's own unit.
 ## Tests
 
 ```
-npm test                                  # both suites, 160 tests
+npm test                                  # both suites, 164 tests
 node --test test/scoring.test.js           # one file
 npm run evaluate                          # EVALUATION.md's band table, off frozen profiles
 ```
