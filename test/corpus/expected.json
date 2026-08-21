@@ -353,7 +353,7 @@
   "sneakpeekbot": {
    "automation": {
     "band": "high",
-    "score": 69
+    "score": 88
    },
    "agenda": {
     "band": "moderate",
@@ -361,7 +361,7 @@
    },
    "authenticity": {
     "band": "low",
-    "score": 16
+    "score": 3
    }
   },
   "sub_doesnt_exist_bot": {

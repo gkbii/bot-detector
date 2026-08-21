@@ -973,6 +973,121 @@ test('authenticity: a human who quotes ratios keeps the question credit', () => 
     `every body ends in a question, got ${sig.value.questions} of ${sig.value.sample}`);
 });
 
+// ---------------------------------------------------------------------------
+// JIO-349 — a quoted post title is not the account's question
+// ---------------------------------------------------------------------------
+
+/**
+ * The last route into `asks-questions` that JIO-290 left open. u/sneakpeekbot
+ * still scored 97 of 299 after the URL strip, on a template that quotes OTHER
+ * PEOPLE'S post titles: not one of those question marks belongs to the account
+ * printing them.
+ *
+ * The rule is per LINE and it reads what surrounds the brackets, not what is
+ * inside them: remove every `[text](target)`, and if no word of the author's
+ * is left then nobody wrote that line. That is what lets it keep JIO-290's
+ * promise — `hey [does anyone know?](url)` leaves `hey` behind and survives —
+ * while a bare `\#1: … | …` listing does not.
+ *
+ * The escaped-bracket case is in here because it is the one that quietly
+ * fails: three real corpus titles are `\[gendered\]`-shaped, and a link-text
+ * pattern of `[^\]]*` stops dead at the first `\]`.
+ */
+const SNEAKPEEK_BODY = [
+  "Here's a sneak peek of /r/pointlesslygendered using the [top posts]"
+  + '(https://np.reddit.com/r/pointlesslygendered/top/?sort=top&t=year) of the year!',
+  '\\#1: [Where the heck do they think we get it from? \\[gendered\\]]'
+  + '(https://i.redd.it/gtj2e6cfbikf1.jpeg) | [692 comments]'
+  + '(https://np.reddit.com/r/pointlesslygendered/comments/1mwy16y/where_the_heck_do_they_think/)  ',
+  '\\#3: [\\[gendered\\]Maybe this is just straight up misogyny?]'
+  + '(https://i.redd.it/h8w2unank6rg1.jpeg) | [321 comments]'
+  + '(https://np.reddit.com/r/pointlesslygendered/comments/1s38mn6/genderedmaybe_this_is_just/)',
+  "----\n^^I'm ^^a ^^bot, ^^beep ^^boop ^^| ^^[Contact]"
+  + '(https://www.reddit.com/message/compose/?to=sneakpeekbot)',
+].join('\n\n');
+
+const QUOTED_TITLE_CASES = [
+  // [ input, must survive in the stripped text, must not survive ]
+  // The template line: an enumerator and a pipe are not words, so the whole
+  // line is a listing of other people's titles.
+  ['\\#2: [Any News On The CRKD Drum Kit?](https://a.b/c) | [8 comments](https://a.b/d)',
+    [], ['?', 'CRKD', 'comments']],
+  // JIO-290's promise, unchanged: the author wrote a sentence around the link.
+  ['hey [does anyone know?](https://a.b/c) I cannot work it out',
+    ['does anyone know?', 'hey', 'cannot work it out'], []],
+  // Reddit's own quotation marker, agreeing with the rule: a screenshot
+  // caption of somebody else's dialogue (u/IndependentMacaroon, live sweep).
+  ['>[wtf are they doing?](https://i.imgur.com/rC63ktR.png)', [], ['?', 'wtf']],
+  // A pasted article headline on its own line (u/Human_Drummer4378, live
+  // sweep). The person's own sentence above it is untouched.
+  ['Montagu did not invent the sandwich.\n[Who Invented the Sandwich? | HISTORY](https://www.history.com/articles/x)',
+    ['Montagu did not invent the sandwich.'], ['?', 'HISTORY']],
+  // A mod macro's canned FAQ label, alone on its line (u/ElectricMayhem123).
+  ['["How does my comment break Rule 1?"](https://sh.reddit.com/r/x/faq)', [], ['?', 'How does']],
+  // Link labels with no sentence around them are not words the author chose
+  // to say either — u/AutoModerator's download-mirror row.
+  ['**[RedditSave](https://redditsave.com/info?url=x)** | **[ReddLoader](https://reddloader.com/y)**',
+    [], ['RedditSave', 'ReddLoader']],
+  // The stated cost, asserted rather than described: one letter is a bullet
+  // far more often than it is a word, so a line whose only text outside the
+  // brackets is a single letter reads as a listing and loses the link text.
+  ['a) [Is this a question?](https://a.b/c)', [], ['?', 'Is this']],
+];
+
+test('stripUrls: a quoted post title is not the account\'s question', () => {
+  for (const [input, survives, removed] of QUOTED_TITLE_CASES) {
+    const stripped = stripUrls(input);
+    for (const fragment of survives) {
+      assert.ok(stripped.includes(fragment),
+        `${JSON.stringify(input)} -> ${JSON.stringify(stripped)} lost ${JSON.stringify(fragment)}`);
+    }
+    for (const fragment of removed) {
+      assert.ok(!stripped.includes(fragment),
+        `${JSON.stringify(input)} -> ${JSON.stringify(stripped)} kept ${JSON.stringify(fragment)}`);
+    }
+  }
+});
+
+test('stripUrls: the escaped brackets in a real quoted title are consumed', () => {
+  // `\[gendered\]` inside the link text. A `[^\]]*` pattern matches nothing
+  // here, leaves the whole line alone, and the fix silently does not apply.
+  const stripped = stripUrls(SNEAKPEEK_BODY);
+  assert.ok(!stripped.includes('?'),
+    `no question mark in this body belongs to the account: ${JSON.stringify(stripped)}`);
+  assert.ok(!stripped.includes('gendered]Maybe'), 'the escaped-bracket title survived the strip');
+  assert.ok(stripped.includes('sneak peek'), "the account's own sentence must survive");
+  assert.ok(stripped.includes('top posts'), 'a link inside that sentence is still the author labelling it');
+});
+
+test('normalizeWords: a quoted title contributes no tokens', () => {
+  // The automation axis reads the same stripped text, and this is the half
+  // that pays for itself there: with the titles gone, u/sneakpeekbot's bodies
+  // stop differing at all. `near-duplicate-bodies` goes 28 of 197 to 196 of
+  // 197 on the frozen corpus, because the quoted titles were the ONLY varying
+  // content diluting its shingles.
+  // Only the enumerator's digit survives; every word on the line was quoted.
+  assert.deepEqual(normalizeWords('\\#2: [Any News On The CRKD Drum Kit?](https://a.b/c) | [8 comments](https://a.b/d)'), ['2']);
+  assert.deepEqual(normalizeWords('hey [does anyone know?](https://a.b/c)'), ['hey', 'does', 'anyone', 'know']);
+});
+
+test('authenticity: quoted post titles are not the account asking anything', () => {
+  // The u/sneakpeekbot half of Finding 2, three template lines and all. Every
+  // question mark in this fixture was typed by a stranger.
+  assert.ok(SNEAKPEEK_BODY.split('?').length - 1 >= 3, 'the fixture must carry the quoted questions');
+
+  const comments = Array.from({ length: 60 }, (_, i) => comment({
+    id: `sp${i}`, at: NOW - 3000 + i * 50, group: `g${i % 30}`, body: SNEAKPEEK_BODY,
+  }));
+  const sig = findSignal(
+    scoreAccount(profileOf({ comments, firstSeenUtc: NOW - 2000 * DAY, truncated: true })).authenticity,
+    'asks-questions',
+  );
+
+  assert.equal(sig.value.questions, 0,
+    `other people's post titles must not read as questions, got ${sig.value.questions} of ${sig.value.sample}`);
+  assert.equal(sig.band, BAND.LOW);
+});
+
 test('automation: a fetch window under three days cannot claim a sleep cycle', () => {
   // Same live account, same root cause on a different signal: 299 comments
   // spanning under an hour necessarily leave 17 hours of the day empty, which

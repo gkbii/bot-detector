@@ -432,14 +432,20 @@ test('every canonical replacement still matches the pattern it stands in for', (
  * measurement that quietly re-fetched would be measuring a different window
  * from the one the finding was written against.
  *
- * `measure-interval-crossing.mjs` is the one `measure-*` script NOT on this
- * list, and its absence is deliberate rather than an oversight -- adding it
- * here would be the mistake. It exists to ask whether JIO-346 pushed a real
- * person over the band edge TODAY, and Finding 4e's answer is yes for
- * u/chilidirigible, which neither the corpus nor a same-day sweep could see: the
- * corpus was captured 2026-08-18 and that account drifted the one point that was
- * the whole margin. A question about drift cannot be answered from the snapshot
- * the drift is measured against, so that script must fetch.
+ * TWO `measure-*` scripts are NOT on this list, and their absence is
+ * deliberate rather than an oversight -- adding either would be the mistake.
+ * Both ask something the frozen corpus is constitutionally unable to answer:
+ *
+ *   * `measure-interval-crossing.mjs` asks whether JIO-346 pushed a real
+ *     person over the band edge TODAY, and Finding 4e's answer is yes for
+ *     u/chilidirigible, which neither the corpus nor a same-day sweep could
+ *     see: the corpus was captured 2026-08-18 and that account drifted the one
+ *     point that was the whole margin. A question about drift cannot be
+ *     answered from the snapshot the drift is measured against.
+ *   * `measure-quoted-titles.mjs` asks what JIO-349's quoted-title strip COSTS
+ *     an ordinary person, and 19 of the 27 corpus profiles carry length-matched
+ *     SYNTHETIC bodies that contain no markdown links at all. Pointed at
+ *     test/corpus/ it would report a cost of zero, truthfully and uselessly.
  */
 test('nothing on the evaluate path can reach the network', () => {
   const forbidden = /from\s+['"][^'"]*(?:sources\/arcticShift|capture-corpus)/;
@@ -462,14 +468,23 @@ test('nothing on the evaluate path can reach the network', () => {
   }
 
   // The allowlist above is a list of things that must NOT fetch, so a script
-  // dropping off it is invisible -- and dropping this one off is the specific
-  // regression worth naming.
-  const LIVE = 'scripts/measure-interval-crossing.mjs';
-  assert.ok(!paths.includes(LIVE),
-    `${LIVE} must stay OFF the no-network list — see the note above`);
-  const live = fs.readFileSync(path.join(ROOT, LIVE), 'utf8');
-  assert.ok(forbidden.test(live.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '')),
-    'measure-interval-crossing.mjs must still reach the live API: pointing it at test/corpus/ '
-    + 'would make it agree with the snapshot by construction, which is the exact failure '
-    + 'EVALUATION.md Finding 4e exists to record');
+  // dropping off it is invisible -- and dropping one of these off is the
+  // specific regression worth naming. Each is here because the corpus CANNOT
+  // answer the question it asks, so a version of it that read test/corpus/
+  // would agree with the snapshot by construction.
+  const LIVE = {
+    // Finding 4e: did JIO-346 push a real person over a band edge TODAY? The
+    // corpus is the 2026-08-18 snapshot the drift is measured against.
+    'scripts/measure-interval-crossing.mjs': 'EVALUATION.md Finding 4e',
+    // Finding 2 (JIO-349): what does the quoted-title strip COST a person? 19
+    // of the 27 corpus profiles carry synthetic bodies with no markdown links.
+    'scripts/measure-quoted-titles.mjs': 'EVALUATION.md Finding 2',
+  };
+  for (const [rel, finding] of Object.entries(LIVE)) {
+    assert.ok(!paths.includes(rel), `${rel} must stay OFF the no-network list — see the note above`);
+    const live = fs.readFileSync(path.join(ROOT, rel), 'utf8');
+    assert.ok(forbidden.test(live.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '')),
+      `${rel} must still reach the live API: pointing it at test/corpus/ would make it agree `
+      + `with the snapshot by construction, which is the exact failure ${finding} exists to record`);
+  }
 });

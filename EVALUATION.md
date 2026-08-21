@@ -228,7 +228,7 @@ u/bigbjarne 118 -> 107 and u/KevinGreeneSolar 15 -> 14. u/sneakpeekbot lands at
 94 of 299, not the 23 estimated here, and the residue is not URLs: its template
 quotes other people's post titles (`#2: [Any News On The CRKD Drum Kit?]`).
 Counting quoted third-party text as the account's own words is a separate
-defect and is still open.
+defect -- closed four days later by JIO-349, at the foot of this finding.
 
 **AMENDED 2026-08-21 (JIO-386).** That fix ran too wide in one direction and
 not wide enough in two others: the bare host rule matched numeric ratios, so
@@ -260,6 +260,61 @@ links; root-relative `/path?a=b` rule **0 firings**, so that rule remains
 asserted by tests and unmeasured in the wild. Finding 2's own numbers hold live:
 u/RemindMeBot **0 of 300**, u/RepostSleuthBot **0 of 300**, u/AutoModerator 38
 of 300. Full tables in README, "And the same rule, running the other way".
+
+**THE RESIDUE CLOSED 2026-08-21 (JIO-349).** The separate defect left open
+above — u/sneakpeekbot at 94 of 299 because its template quotes other people's
+post titles — is fixed. `stripUrls()` now drops link TEXT as well as the link
+target, but only on a line where nothing outside the brackets is a word of the
+author's: `\#1: [someone else's title?](url) | [384 comments](url)` leaves
+`\#1:  | `, while `hey [does anyone know?](url)` leaves `hey` and keeps the
+question JIO-290 promised to keep.
+
+| | before | after |
+| --- | --- | --- |
+| u/sneakpeekbot `asks-questions` | 97 of 299 (32%) | **0 of 299 (0%)** |
+| u/sneakpeekbot authenticity | `low 16` | **`low 3`** |
+| u/sneakpeekbot `near-duplicate-bodies` | 28 of 197 (14%) | **196 of 197 (99%)** |
+| u/sneakpeekbot automation | `high 69` | **`high 88`** |
+| every other frozen account, all 3 axes | — | unmoved |
+
+The automation row is the same second-order effect JIO-386 saw and is worth
+reading twice: the quoted titles were the ONLY varying content in that
+account's bodies, so removing them does not merely stop crediting it with
+questions, it reveals a template that is 99% self-similar. Text that made a bot
+look more human on one axis was making it look less templated on another.
+
+The ticket's own proposed fix — strip blockquotes — is a **measured no-op**:
+0 of those 299 bodies contain a `>` line.
+
+**Cost, measured live the same day** (`node scripts/measure-quoted-titles.mjs`,
+which must fetch: 19 of the 27 corpus profiles carry synthetic bodies with no
+markdown links, so the corpus reports a cost of zero by construction).
+**8,601 real bodies** from a content-blind sweep of 15 subreddits, plus **24
+whole accounts (6,652 comments)** drawn at even ranks from that sweep's author
+ranking and scored on all three axes both ways:
+
+| | |
+| --- | --- |
+| bodies whose stripped text changed at all | 131 of 8,601 (1.52%) |
+| bodies that lost a `?` | **2 of 8,601 (0.02%)** |
+| window question rate | 14.65% → **14.63%** |
+| help-seeking hits | 51 → 51 |
+| `normalizeWords` tokens | 278,079 → 277,536 (0.20% removed) |
+| accounts whose axis score moved | **1 of 24** (u/AutoModerator, authenticity 11 → 10) |
+| band crossings | **0** |
+| largest per-account `asks-questions` move | **0.7 points** (tolerance: 1–2) |
+
+All three question marks lost across both arms were hand-read, and every one is
+somebody else's text: a mod macro's canned `["How does my comment break Rule
+1?"](faq)` (u/ElectricMayhem123), blockquoted anime screenshot captions
+`>[wtf are they doing?](imgur)` (u/IndependentMacaroon), and a pasted article
+headline `[Who Invented the Sandwich? | HISTORY](url)` on a line of its own
+(u/Human_Drummer4378). **Zero authored questions were lost in 15,253 bodies.**
+
+Bounds: one sweep on one day; the profile arm is 24 accounts, not a rate; and
+the rule needs a word of TWO letters to hold a line, so `a) [title](url)` reads
+as a listing — asserted in `test/scoring.test.js` rather than measured, because
+the sweep contains no instance of it.
 
 ## Finding 3 — `dormancy-revival` returns a confident zero from windows too short to hold a gap
 

@@ -115,6 +115,21 @@ export function longestZeroRunCircular(counts) {
 // Text
 // ---------------------------------------------------------------------------
 
+/** `[text](target)`, with `\]` inside the text consumed rather than ending it. */
+const MARKDOWN_LINK = /\[(?:\\[\s\S]|[^[\]\\])*\]\([^\s)]*\)?/g;
+/** A word of the author's: two or more letters in any script. */
+const AUTHOR_WORD = /\p{L}{2,}/u;
+
+/** See "WHOSE WORDS ARE IN THE BRACKETS" below. Per line, never per body. */
+function stripUnauthoredLinkText(text) {
+  if (!text.includes('](')) return text;
+  return text.split('\n').map((line) => {
+    if (!line.includes('](')) return line;
+    const outsideLinks = line.replace(MARKDOWN_LINK, ' ');
+    return AUTHOR_WORD.test(outsideLinks) ? line : outsideLinks;
+  }).join('\n');
+}
+
 /**
  * Remove every link from a body, leaving only what the author actually typed.
  *
@@ -131,8 +146,39 @@ export function longestZeroRunCircular(counts) {
  *   * bare `host.tld/path` and `host.tld?a=b` tokens;
  *   * root-relative `/path?a=b`, which has no host at all.
  *
- * The link TEXT survives on purpose: `[does anyone know?](url)` is a question
- * its author wrote, and dropping it would trade one blind spot for another.
+ * The link TEXT survives WHEN THE AUTHOR WROTE A SENTENCE AROUND IT:
+ * `hey [does anyone know?](url)` is a question its author asked, and dropping
+ * it would trade one blind spot for another. See the next rule for when it
+ * does not survive.
+ *
+ * WHOSE WORDS ARE IN THE BRACKETS (JIO-349). JIO-290's blanket "link text is
+ * the author's" left one route open, and u/sneakpeekbot walked it: 97 of its
+ * 299 comments still read as questions afterwards, on a template that quotes
+ * OTHER PEOPLE'S post titles —
+ * `\#1: [Is it possible to bring this dog back to the states?](url) |
+ * [384 comments](url)`. Not one of those question marks belongs to the account
+ * asking them, which is the same false positive Finding 2 is about, one layer
+ * in. Note the ticket's own guess at the fix — strip blockquotes — is a
+ * measured no-op: 0 of those 299 bodies contain a `>` line.
+ *
+ * The rule is per LINE, and it is about what surrounds the brackets rather
+ * than what is in them: remove every `[text](target)` from the line, and if
+ * what is left holds no word of the author's — two or more letters, any script
+ * — then nobody wrote that line, they only listed things. `\#1: … | …` leaves
+ * `\#1:  | `. `hey [does anyone know?](url)` leaves `hey`, so it stays, which
+ * is how JIO-290's promise above survives intact.
+ *
+ * Deliberately NOT "strip all link text" (32.4% -> 1.0% on this account, and
+ * it reverses that promise), and deliberately NOT a `#N:`-shaped rule, which
+ * would fit one bot's template and no other. Two things it costs, stated
+ * rather than discovered: a comment whose WHOLE body is one bare
+ * `[question?](url)` and nothing else loses its question, and a word has to be
+ * TWO letters to hold a line, so `a) [title](url)` is read as a listing —
+ * a lone letter beside a link is a bullet far more often than it is a word.
+ *
+ * Escaped brackets are real and the pattern eats them — three corpus titles
+ * are `\[gendered\]`-shaped, and a link-text pattern of `[^\]]*` would stop at
+ * the first `\]`, leave `](url)` behind and match nothing.
  *
  * WHAT MAKES A HOST A HOST (JIO-386). The bare rule was `[\w-]+(?:\.[\w-]+)+/`
  * — two dot-joined word chunks and a slash — and a numeric ratio is exactly
@@ -189,7 +235,7 @@ export function longestZeroRunCircular(counts) {
  */
 export function stripUrls(text) {
   if (typeof text !== 'string') return '';
-  return text
+  return stripUnauthoredLinkText(text)
     .replace(/\]\([^\s)]*/g, '](')
     .replace(/\b[a-z][a-z0-9+.-]*:\/\/\S+/gi, ' ')
     .replace(/\bmailto:\S+/gi, ' ')

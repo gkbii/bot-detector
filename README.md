@@ -16,7 +16,7 @@ things the browser cannot do: a Claude read of what an account actually argues,
 and a lookup cache shared between your machines. Nothing requires it.
 
 ```
-npm test        # 164 tests, and they pass with NO node_modules installed
+npm test        # 171 tests, and they pass with NO node_modules installed
 npm install     # only needed for the optional server's one dependency
 npm start       # the optional server
 ```
@@ -70,6 +70,7 @@ bot-detector/
     measure-interval-cv.mjs  offline; the corpus interval-CV spread — EVALUATION.md 4e
     measure-topical-breadth.mjs offline; the corpus items-per-group gap — EVALUATION.md 4f
     measure-interval-crossing.mjs fetches; who JIO-346 pushed over the edge, live — EVALUATION.md 4e
+    measure-quoted-titles.mjs fetches; what JIO-349's quoted-title strip costs a person — EVALUATION.md 2
     evaluate.mjs             reprints EVALUATION.md's band table from test/corpus/, offline
     lib/bot-declaration.mjs  what counts as "this account declares itself a bot", and why twice
     lib/synthetic-bodies.mjs length-matched stand-ins for the 19 humans' comment text
@@ -360,11 +361,12 @@ data afterwards, and two humans moved 118→107 and 15→14. That ratio is the
 whole point: the defect was invisible on humans and total on the adversary,
 which is exactly the shape a suite of hand-built fixtures cannot see.
 
-Two details are load-bearing. The link **text** survives, because
-`[does anyone know?](url)` is a question its author wrote. And the help-seeking
-patterns run over the *same stripped body*, so both halves of the signal read
-what the author actually typed rather than one reading the raw text and the
-other not.
+Two details are load-bearing. The link **text** survives when the author wrote
+a sentence around it, because `hey [does anyone know?](url)` is a question its
+author asked — see "Whose words are in the brackets" below for the line where
+that stops being true. And the help-seeking patterns run over the *same
+stripped body*, so both halves of the signal read what the author actually
+typed rather than one reading the raw text and the other not.
 
 **And the same rule, running the other way (JIO-386).** The bare host rule was
 `[\w-]+(?:\.[\w-]+)+/` — two dot-joined word chunks and a slash. A numeric
@@ -457,6 +459,91 @@ above are fixtures in `test/scoring.test.js` as `LIVE_STRIP_URL_CASES`, kept
 apart from the hand-built list because they are evidence rather than design —
 four of them (`1.5A/port`, `15.8/16GB`, `$44.56/hour`, `2.5/3.5`) are shapes
 nobody here would have thought to invent.
+
+**Whose words are in the brackets (JIO-349).** JIO-290's "the link text is the
+author's" was right about people and wrong about one kind of bot, and
+u/sneakpeekbot spent four days in the gap: **97 of its 299 comments still read
+as questions** after the URL strip, on a template that quotes *other people's
+post titles*.
+
+```
+Here's a sneak peek of /r/Thailand using the [top posts](url) of the year!
+
+\#1: [Is it possible to bring this dog we fell in love with back to the states?](url) | [384 comments](url)
+\#2: [I opened another branch of my restaurant. AMA](url) | [336 comments](url)
+```
+
+Not one of those question marks belongs to the account printing them. It is
+Finding 2's false positive exactly — a template bot taking a third of the
+maximum on the one signal that exists to *vouch* for a person — one layer in
+from where JIO-290 stopped.
+
+The rule now reads **what surrounds the brackets, not what is inside them**,
+one line at a time: remove every `[text](target)` from the line, and if what is
+left holds no word of the author's — two or more letters, any script — then
+nobody wrote that line, they only listed things. `\#1: … | …` leaves `\#1:  | `
+and goes. `hey [does anyone know?](url)` leaves `hey` and stays, which is how
+JIO-290's promise survives intact.
+
+Two shapes it is deliberately *not*. Stripping **all** link text fixes the
+account outright (32.4% → 1.0%) and reverses that promise, so it is off the
+table. A `#N:`-shaped rule would fit one bot's template and nothing else, and
+would be the kind of fix that has to be rewritten for the next bot. The
+ticket's own suggestion — strip blockquotes — is a **measured no-op**: 0 of
+those 299 bodies contain a `>` line at all.
+
+| | before | after |
+| --- | --- | --- |
+| u/sneakpeekbot `asks-questions` | 97 of 299 (32%) | **0 of 299 (0%)** |
+| u/sneakpeekbot authenticity | `low 16` | **`low 3`** |
+| u/sneakpeekbot `near-duplicate-bodies` | 28 of 197 (14%) | **196 of 197 (99%)** |
+| u/sneakpeekbot automation | `high 69` | **`high 88`** |
+| the other 26 frozen accounts, all three axes | — | not one point |
+
+That third row is the part worth sitting with. `normalizeWords()` shares
+`stripUrls()`, so the automation axis reads the same text — and the quoted
+titles were the **only varying content** in that account's bodies. Removing
+them does not merely stop crediting a bot with questions; it uncovers a
+template that is 99% self-similar to itself. Text that was making a bot look
+more human on one axis was making it look less templated on another.
+
+**What it costs a person, measured live rather than asserted.** The corpus
+cannot answer this: 19 of the 27 frozen profiles carry length-matched
+*synthetic* bodies that contain no markdown links, so pointed at `test/corpus/`
+the cost is zero by construction. `node scripts/measure-quoted-titles.mjs`
+fetches for that reason, and on 2026-08-21 it A/B'd **8,601 real bodies** from
+a content-blind sweep of 15 subreddits, then **24 whole accounts (6,652
+comments)** drawn at even ranks from that sweep's own author ranking and scored
+on all three axes through two copies of the core differing in one line:
+
+| | |
+| --- | --- |
+| bodies whose stripped text changed at all | 131 of 8,601 (1.52%) |
+| bodies that lost a `?` | **2 of 8,601 (0.02%)** |
+| the window's question rate | 14.65% → **14.63%** |
+| help-seeking hits | 51 → 51 |
+| `normalizeWords` tokens | 278,079 → 277,536 (0.20% removed) |
+| accounts whose axis score moved | **1 of 24** — u/AutoModerator, authenticity `low 11` → `low 10` |
+| band crossings | **0** |
+| largest per-account `asks-questions` move | **0.7 points** (the tolerance JIO-290 set is 1–2) |
+
+Three question marks were lost across both arms and all three were hand-read.
+Every one is somebody else's text:
+
+| account | what it lost | what it actually is |
+| --- | --- | --- |
+| u/ElectricMayhem123 | `["How does my comment break Rule 1?"](faq)` | a mod macro's canned FAQ label, alone on its line |
+| u/IndependentMacaroon | `>[wtf are they doing?](imgur)` | blockquoted anime screenshot captions — Reddit's own quote marker agreeing with the rule |
+| u/Human_Drummer4378 | `[Who Invented the Sandwich? \| HISTORY](url)` | a pasted article headline, cited under the person's own sentence |
+
+**Zero authored questions were lost in 15,253 bodies.** Bounds, out loud: one
+sweep on one day; the profile arm is 24 accounts and is not a rate; and a word
+has to be **two** letters to hold a line, so `a) [title](url)` reads as a
+listing — that one is asserted in `test/scoring.test.js` and unmeasured, because
+the sweep contains no instance of it. Escaped brackets are not a bound but they
+are a trap: three real corpus titles are `\[gendered\]`-shaped, and a link-text
+pattern of `[^\]]*` stops at the first `\]`, matches nothing, and makes the
+whole fix a silent no-op on them.
 
 **A confident zero from a window no gap could fit in.** `dormancy-revival`
 (weight 3, the heaviest agenda signal) gated only on item *count*. 299 comments
@@ -1196,6 +1283,7 @@ node scripts/measure-agenda-shape.mjs    # the agenda hold — EVALUATION.md 4c,
 node scripts/measure-reply-share.mjs     # the reply-share spread — EVALUATION.md 4d, offline
 node scripts/measure-interval-cv.mjs     # the interval-CV spread — EVALUATION.md 4e, offline
 node scripts/measure-topical-breadth.mjs # the items-per-group gap — EVALUATION.md 4f, offline
+node scripts/measure-quoted-titles.mjs --sweep --profiles  # JIO-349's cost to people; goes live
 node scripts/measure-interval-crossing.mjs # who JIO-346 crossed — EVALUATION.md 4e, LIVE
 ```
 
@@ -1694,7 +1782,7 @@ source's own unit.
 ## Tests
 
 ```
-npm test                                  # both suites, 164 tests
+npm test                                  # both suites, 171 tests
 node --test test/scoring.test.js           # one file
 npm run evaluate                          # EVALUATION.md's band table, off frozen profiles
 ```
