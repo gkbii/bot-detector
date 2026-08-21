@@ -80,7 +80,15 @@
       "descriptionSimple": "The add-on itself, free and ready to install — the only thing here that runs on your computer. Load it in your browser and it works: no account, nothing to set up."
     }
   ],
-  "media": [],
+  "media": [
+    {
+      "kind": "screenshot",
+      "src": "docs/media/reddit-thread.png",
+      "alt": "A Reddit comment thread with automation and agenda badges shown beside several commenters.",
+      "altSimple": "A Reddit discussion with small score badges next to several people's names.",
+      "capture": null
+    }
+  ],
   "ignore": [
     "docs/**",
     "README.md",
