@@ -23,11 +23,20 @@
  * that stripping, so the pre-taper band is recoverable here and no
  * instrumented copy is needed (`measure-jio329.mjs` needs one).
  *
- * WHAT IT CANNOT SHOW. 19 humans and 8 declared bots, all utility bots. The
- * gap it reports is between THESE populations. A bot that posts three times in
- * every group it enters buys back the full reach credit, and no corpus
- * available to this repo holds one — the taper raises that bot's cost, it does
- * not close the door.
+ * WHAT IT CANNOT SHOW, and this is not hypothetical — it was checked and it
+ * came back with two corrections. 19 humans and 8 declared bots, all utility
+ * bots; the gap below is between THESE populations. A live content-blind sweep
+ * of 42 scorable accounts on 2026-08-21 (EVALUATION.md Finding 4f, second lap)
+ * found the human tail runs down to 2.53 items per group rather than the 3.08
+ * printed here, and found a 25-item person reading the same breadth band as
+ * u/AutoModerator, which is why `DEPTH_MIN_ITEMS` exists. The margin this
+ * script prints is therefore the corpus's, and it is roughly twice the
+ * population's. It is a check that the cut still separates the accounts we
+ * froze, not a measurement of how much room there is.
+ *
+ * Still open: a bot that posts three times in every group it enters buys back
+ * the full reach credit, and no corpus available to this repo holds one — the
+ * taper raises that bot's cost, it does not close the door.
  */
 
 import { scoreAuthenticity } from '../extension/lib/scoring/authenticity.js';
@@ -41,8 +50,10 @@ const COHORT_LABELS = {
   [COHORTS.BOT]: '8 declared bots (self-declared or EVALUATION.md hand-read)',
 };
 
-/** The constant under test, restated here so the script fails loudly if it moves. */
+/** The constants under test, restated here so the script fails loudly if they move. */
 const DEPTH_FULL_CREDIT = 3;
+const REACH_FULL_CREDIT_GROUPS = 15;
+const DEPTH_MIN_ITEMS = REACH_FULL_CREDIT_GROUPS * DEPTH_FULL_CREDIT;
 
 const { accounts } = loadCorpus();
 
@@ -59,6 +70,8 @@ const rows = accounts.map((account) => {
     breadth,
     groups: breadth.value?.distinctGroups ?? null,
     itemsPerGroup: breadth.value?.itemsPerGroup ?? null,
+    items: counts.reduce((a, b) => a + b, 0),
+    tapered: breadth.value?.tapered ?? null,
     reach: breadth.value?.reach ?? null,
     depth: breadth.value?.depth ?? null,
     singletonShare: counts.length ? singletons / counts.length : null,
@@ -101,11 +114,34 @@ const bottomHuman = Math.min(...humans.map((r) => r.itemsPerGroup));
 
 console.log('The gap the taper is drawn from');
 console.log(`  items per group   bots ${span(bots, (r) => r.itemsPerGroup)} · humans ${span(humans, (r) => r.itemsPerGroup)}`);
-console.log(`  no overlap: the busiest bot returns to a group ${topBot.toFixed(2)} times, the thinnest human ${bottomHuman.toFixed(2)}.`);
+console.log(`  no overlap here: the busiest bot returns to a group ${topBot.toFixed(2)} times, the thinnest human ${bottomHuman.toFixed(2)}.`);
 console.log(`  Full credit is set at ${DEPTH_FULL_CREDIT.toFixed(1)} and credit starts at 1.00. NEITHER END IS FITTED TO`);
 console.log('  THIS TABLE: 1.00 is the arithmetic minimum of the measure — one item in every group,');
-console.log('  reach with no depth anywhere — and 3 is a return visit rather than a drive-by, which');
-console.log('  happens to sit just under the thinnest human rather than being placed there.');
+console.log('  reach with no depth anywhere — and 3 is a return visit rather than a drive-by.');
+console.log(`  AND THE MARGIN ABOVE IS THE CORPUS'S, NOT THE POPULATION'S. A live content-blind`);
+console.log(`  sweep of 42 accounts on 2026-08-21 put the human tail at 2.53 rather than ${bottomHuman.toFixed(2)},`);
+console.log(`  with 6 of the 42 within 20% of the edge, so the real headroom above the busiest`);
+console.log(`  bot is 0.47 and not ${(bottomHuman - topBot).toFixed(2)}. The two humans past that edge lose 5.9 and 4.8`);
+console.log('  authenticity points and change no band. The constant is defended by the two');
+console.log('  sentences above it, not by this table\'s margin.');
+console.log('');
+
+// ---------------------------------------------------------------------------
+// The gate under the taper, and what it cost
+// ---------------------------------------------------------------------------
+
+const smallestBot = bots.reduce((a, b) => (b.items < a.items ? b : a));
+const smallestHuman = humans.reduce((a, b) => (b.items < a.items ? b : a));
+console.log(`The gate under the taper: DEPTH_MIN_ITEMS = ${DEPTH_MIN_ITEMS}`);
+console.log(`  Below ${DEPTH_MIN_ITEMS} grouped items the taper is WITHHELD — ${REACH_FULL_CREDIT_GROUPS} groups at ${DEPTH_FULL_CREDIT} items each is the`);
+console.log('  smallest history that can satisfy both halves of this signal at once, so under it');
+console.log("  items-per-group reports the account's SIZE rather than its shape. The same live");
+console.log('  sweep found a 25-item person in 19 groups reading the breadth band of u/AutoModerator.');
+console.log(`  headroom          smallest bot ${smallestBot.username} at ${smallestBot.items} grouped items, ${
+  (smallestBot.items / DEPTH_MIN_ITEMS).toFixed(1)}x the gate`);
+console.log(`                    smallest human ${smallestHuman.username} at ${smallestHuman.items}`);
+console.log(`  accounts the gate frees in this corpus: ${
+  measurable.filter((r) => !r.tapered).map((r) => r.username).join(', ') || 'none — it costs the fix nothing here'}`);
 console.log('');
 
 // ---------------------------------------------------------------------------
@@ -121,8 +157,9 @@ console.log(`    TOO CLOSE TO CUT. The two populations are ${singletonMargin.toF
   closestHuman.singletonShare.toFixed(4)}`);
 console.log(`    against ${closestBot.username} at ${closestBot.singletonShare.toFixed(4)}. A cut there is fitted to the third decimal`);
 console.log(`    place of one person, and one more comment in a group ${closestHuman.username} has already`);
-console.log(`    visited would move it. On items per group the same two populations are ${(bottomHuman - topBot).toFixed(2)} apart,`);
-console.log(`    a factor of ${(bottomHuman / topBot).toFixed(2)}.`);
+console.log(`    visited would move it. On items per group these same 27 accounts are ${(bottomHuman - topBot).toFixed(2)} apart,`);
+console.log(`    a factor of ${(bottomHuman / topBot).toFixed(2)} — a like-for-like comparison of two measures, not a claim about`);
+console.log('    the population, which the block above prices at 0.47.');
 console.log(`  outside top group bots ${span(bots, (r) => r.outside)} · humans ${span(humans, (r) => r.outside)}`);
 console.log('    INVERTED. The bots are MORE spread than the people — being everywhere is the job.');
 console.log('    It is half of the pre-taper reach, which is why the reach column above reads 1.00');
@@ -146,13 +183,20 @@ console.log(`  humans whose depth is tapered at all: ${
   humans.filter((r) => r.depth < 1).map((r) => r.username).join(', ') || 'none'}`);
 console.log('');
 
-console.log('THE BOUND, OUT LOUD');
-console.log(`  A person needs ${DEPTH_FULL_CREDIT} items per group on average for full breadth credit, so a`);
-console.log('  genuine account with 30 comments in 20 different groups is now tapered to near zero');
-console.log('  here. That is a real cost and it is accepted deliberately: one comment in each of');
-console.log('  twenty groups is the same shape as the adversary, and this axis reads low as "no');
+console.log('THE BOUNDS, OUT LOUD');
+console.log(`  A person needs ${DEPTH_FULL_CREDIT} items per group on average for full breadth credit, so a genuine`);
+console.log(`  account with 200 comments in 150 different groups is tapered to near zero here.`);
+console.log('  That is a real cost and it is accepted deliberately: one comment in each of a');
+console.log('  hundred groups is the same shape as the adversary, and this axis reads low as "no');
 console.log('  positive evidence" rather than as an accusation. The other four authenticity');
-console.log('  signals are untouched and still speak for that account.');
+console.log('  signals are untouched and still speak for that account. The live sweep priced it:');
+console.log('  the two humans it caught lost 5.9 and 4.8 points and neither changed band.');
+console.log(`  The gate keeps that cost off SMALL accounts only. An account with ${DEPTH_MIN_ITEMS}+ grouped`);
+console.log('  items and one item in each is still tapered, however ordinary it looks — the gate');
+console.log('  buys room for thin histories, not for wide ones.');
 console.log('  The taper is also priced by the fetch window: 300 comments over 300 groups cannot');
 console.log('  show depth even if the account has it. A bot that concentrates into a handful of');
 console.log('  groups keeps the full credit and must be caught by the automation axis instead.');
+console.log(`  And a bot with fewer than ${DEPTH_MIN_ITEMS} grouped items is handed the gate too. Nothing in`);
+console.log('  this corpus is that small — the smallest declared bot is above — but the gate is a');
+console.log('  statement about history length, and it cannot tell whose history is short.');

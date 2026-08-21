@@ -32,6 +32,36 @@ const MIN_GROUP_ITEMS = 10;
  */
 const DEPTH_FULL_CREDIT = 3;
 
+/** Distinct groups at which the reach half of that signal saturates. */
+const REACH_FULL_CREDIT_GROUPS = 15;
+
+/**
+ * Grouped items below which the depth taper is WITHHELD, because under it the
+ * taper stops measuring the account's shape and starts measuring its size.
+ *
+ * It is the product of the two constants above and not a number chosen next to
+ * a population: `REACH_FULL_CREDIT_GROUPS` groups at `DEPTH_FULL_CREDIT` items
+ * each is the smallest history in which an account can satisfy BOTH halves of
+ * this signal at once. Below it the two are in structural conflict — every item
+ * spent widening the reach is one not available to deepen it — so an account
+ * there is docked for how little it has posted rather than for where it went.
+ */
+const DEPTH_MIN_ITEMS = REACH_FULL_CREDIT_GROUPS * DEPTH_FULL_CREDIT;
+
+/**
+ * Items per group at or below which a tapered account is DESCRIBED as running
+ * sitewide, rather than merely discounted for it.
+ *
+ * Two is where the average group stops being a visit: under it most of what the
+ * account touched it never went back to. The live sweep behind `DEPTH_MIN_ITEMS`
+ * is what makes the distinction load-bearing — real people do land in the
+ * tapered range (2.53 and 2.61 items per group, docked ~20%), and telling
+ * someone their account looks like automation is an accusation this axis
+ * explicitly does not make. A discount is a discount; only the floor of the
+ * measure is a description.
+ */
+const SITEWIDE_ITEMS_PER_GROUP = 2;
+
 /**
  * Admitting error. Cheap to type, but a propaganda account has no reason to —
  * conceding a point is the opposite of the job.
@@ -191,14 +221,33 @@ function sustainedThreadSignal(profile) {
  * eight declared bots in the frozen corpus read `high` here, not the two the
  * ticket named.
  *
- * The discriminator is items per group, and in the corpus it does not overlap:
- * every bot sits at 1.24-2.06 (they visit, they do not return), every human at
- * 3.08-66.7. So full credit needs `DEPTH_FULL_CREDIT` items per group and
- * credit starts at 1.0, which is not a threshold fitted between two adjacent
- * accounts: 1.0 is the arithmetic minimum of the measure — one item in every
- * group, reach with no depth anywhere — and 3 is a return visit rather than a
- * drive-by, sitting at the bottom of the human range. Reproduce both ends with
+ * The discriminator is items per group. Full credit needs `DEPTH_FULL_CREDIT`
+ * items per group and credit starts at 1.0, which is not a threshold fitted
+ * between two adjacent accounts: 1.0 is the arithmetic minimum of the measure —
+ * one item in every group, reach with no depth anywhere — and 3 is a return
+ * visit rather than a drive-by. Reproduce both ends with
  * `node scripts/measure-topical-breadth.mjs`.
+ *
+ * HOW WIDE THE GAP ACTUALLY IS, which is smaller than the corpus says. The 27
+ * frozen accounts read bots 1.24-2.06 against humans 3.08-66.7, no overlap and
+ * a clear 1.02 between the populations. A content-blind live sweep of 42
+ * scorable accounts on 2026-08-21 (Finding 4f) found the human tail runs down
+ * to 2.53, and 6 of the 42 sit within 20% of the edge. The real margin above
+ * the busiest corpus bot is 0.47, not 1.02, and the two humans past the edge
+ * are docked 5.9 and 4.8 authenticity points without changing band. So the
+ * taper cuts where it was aimed, but "nobody is standing in the gap" was a
+ * statement about 19 people rather than about people, and the constant is
+ * defended by its derivation above and not by that margin.
+ *
+ * AND IT IS WITHHELD BELOW `DEPTH_MIN_ITEMS`. The same live sweep found a
+ * 25-item person in 19 groups — 1.32 items each, automation `low 0`, coverage
+ * not truncated — reading the same breadth band as u/AutoModerator and losing
+ * 21 authenticity points for it. Above the floor, items per group measures the
+ * account's shape; at the floor it measures its SIZE, and no history is short
+ * enough to be evidence of automation. The gate costs the fix nothing: the
+ * smallest declared bot in the corpus carries 299 grouped items against a gate
+ * of 45. Withholding a discount is generous, so like every other bound here it
+ * is named in the evidence rather than applied silently.
  *
  * WHY THE SINGLETON SHARE IS NOT THE MEASURE, though it is the obvious one:
  * the share of an account's groups holding exactly one item does separate the
@@ -238,19 +287,31 @@ function topicalBreadthSignal(profile) {
 
   const reach = clamp01(
     0.5 * rescale(outside, 0.15, 0.75)
-    + 0.5 * rescale(histogram.size, 2, 15),
+    + 0.5 * rescale(histogram.size, 2, REACH_FULL_CREDIT_GROUPS),
   );
 
   const itemsPerGroup = total / histogram.size;
-  const depth = rescale(itemsPerGroup, 1, DEPTH_FULL_CREDIT);
+  const tapered = total >= DEPTH_MIN_ITEMS;
+  const rawDepth = rescale(itemsPerGroup, 1, DEPTH_FULL_CREDIT);
+  const depth = tapered ? rawDepth : 1;
   const strength = reach * depth;
 
-  // Every bound that fires says so out loud: a discounted breadth score has to
-  // name the discount, or the evidence sentence describes a range of interests
-  // this signal did not actually credit.
-  const depthNote = depth < 1
-    ? ` That is ${itemsPerGroup.toFixed(2)} items per group — reach without depth, which is what running sitewide looks like rather than what being curious looks like, so the breadth credit is cut to ${pct(depth)} of what the reach alone would score.`
-    : ` At ${itemsPerGroup.toFixed(2)} items per group the account returns to what it touches, so the reach is credited in full.`;
+  // Every bound that fires says so out loud, and that includes the one that
+  // WITHHELD a discount: a breadth score has to name what was and was not
+  // applied, or the sentence describes a range of interests this signal did
+  // not actually credit — or credits one it declined to check. The gate is
+  // named only where it CHANGED something; an account past the gate that would
+  // have kept full credit anyway has had nothing withheld from it.
+  let depthNote;
+  if (!tapered && rawDepth < 1) {
+    depthNote = ` That is ${itemsPerGroup.toFixed(2)} items per group, but ${total} items is under the ${DEPTH_MIN_ITEMS} it takes to be in ${REACH_FULL_CREDIT_GROUPS} groups ${DEPTH_FULL_CREDIT} deep, so the depth taper would be reading how little history there is rather than how it was spent. It is withheld and the reach is credited in full.`;
+  } else if (depth < 1 && itemsPerGroup <= SITEWIDE_ITEMS_PER_GROUP) {
+    depthNote = ` That is ${itemsPerGroup.toFixed(2)} items per group — reach without depth, which is what running sitewide looks like rather than what being curious looks like, so the breadth credit is cut to ${pct(depth)} of what the reach alone would score.`;
+  } else if (depth < 1) {
+    depthNote = ` That is ${itemsPerGroup.toFixed(2)} items per group — the account does go back to what it touches, but short of the ${DEPTH_FULL_CREDIT} that reads as a return rather than a look around, so the breadth credit is cut to ${pct(depth)} of what the reach alone would score.`;
+  } else {
+    depthNote = ` At ${itemsPerGroup.toFixed(2)} items per group the account returns to what it touches, so the reach is credited in full.`;
+  }
 
   return signal({
     key,
@@ -258,7 +319,7 @@ function topicalBreadthSignal(profile) {
     weight,
     strength,
     value: {
-      distinctGroups: histogram.size, topShare, outsideTopShare: outside, entropy, itemsPerGroup, reach, depth,
+      distinctGroups: histogram.size, topShare, outsideTopShare: outside, entropy, itemsPerGroup, reach, depth, tapered,
     },
     evidence: `Active in ${histogram.size} ${plural(histogram.size, 'group')} across ${total} items; the largest accounts for ${pct(topShare)}, leaving ${pct(outside)} elsewhere (spread ${entropy.toFixed(2)} of 1.00).${depthNote}`,
   });

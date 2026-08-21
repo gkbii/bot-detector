@@ -1353,6 +1353,91 @@ test('authenticity: sitewide reach with one item per group is not a range of int
 });
 
 /**
+ * JIO-347, second lap — what a TAPERED PERSON reads on their own badge.
+ *
+ * The Auditor's live sweep put two hand-read humans inside the taper at 2.53 and
+ * 2.61 items per group, docked about 20% and neither changing band. The
+ * evidence string they get was written for u/AutoModerator at 1.27, and it says
+ * the account looks like it is "running sitewide" — an accusation this axis
+ * states outright that it does not make. A discount is a discount; only the
+ * floor of the measure describes a machine.
+ */
+test('authenticity: a mildly tapered account is discounted, not called automation', () => {
+  const rand = rng(75);
+  const stamps = humanTimestamps({ rand, days: 300, activeHours: WAKING_HOURS });
+  const comments = stamps.map((at, i) => comment({
+    id: `mt${i}`, at, group: `sub${Math.floor(i / 2.5)}`, body: randomText(rand),
+  }));
+
+  const sig = findSignal(scoreAccount(profileOf({ comments })).authenticity, 'topical-breadth');
+
+  assert.ok(sig.value.itemsPerGroup > 2 && sig.value.itemsPerGroup < 3,
+    `the fixture must sit inside the taper but above its floor, got ${sig.value.itemsPerGroup}`);
+  assert.ok(sig.value.depth > 0.5 && sig.value.depth < 1, `and be discounted for it, got ${sig.value.depth}`);
+  assert.match(sig.evidence, /the breadth credit is cut to/);
+  assert.doesNotMatch(sig.evidence, /running sitewide/,
+    'a real person docked 20% must not be told their account looks like a machine');
+});
+
+/**
+ * JIO-347, second lap — the near-floor false positive the Auditor's live sweep
+ * of 2026-08-21 found and the frozen corpus could not, because every declared
+ * bot in test/corpus/ carries 299+ grouped items and this account carries 25.
+ *
+ * u/Acrobatic_Quail_6117: 21 comments and 4 posts across 19 groups, 1.32 items
+ * each, automation `low 0`, stream not truncated, bodies unmistakably a person.
+ * It read `topical-breadth` LOW — the same band as u/AutoModerator — and its
+ * authenticity fell from `moderate 33` to `low 12`, a band crossing on a real
+ * person. Above `DEPTH_MIN_ITEMS` items per group measures how an account
+ * spends its history; below it there is not enough history for the number to
+ * mean anything but "small". The fixture is that account's shape to the item.
+ */
+test('authenticity: an account too small to be in 15 groups 3 deep is not tapered for it', () => {
+  const rand = rng(73);
+  const stamps = humanTimestamps({ rand, days: 300, activeHours: WAKING_HOURS }).slice(0, 21);
+  const comments = stamps.map((at, i) => comment({
+    id: `nf${i}`, at, group: `sub${i % 19}`, body: randomText(rand),
+  }));
+  const posts = stamps.slice(0, 4).map((at, i) => post({ id: `nfp${i}`, at, group: `sub${i}` }));
+
+  const sig = findSignal(scoreAccount(profileOf({ comments, posts })).authenticity, 'topical-breadth');
+
+  assert.equal(sig.value.distinctGroups, 19, `the fixture must be the account's shape, got ${sig.value.distinctGroups} groups`);
+  assert.ok(sig.value.itemsPerGroup < 1.5,
+    `and its thinness — 25 items over 19 groups — is the case under test, got ${sig.value.itemsPerGroup}`);
+  assert.equal(sig.value.tapered, false, '25 grouped items is under the gate');
+  assert.equal(sig.value.depth, 1, 'a person with 25 items is not running sitewide, they have barely run at all');
+  assert.equal(sig.band, BAND.HIGH,
+    `a 25-item person must not read the same breadth band as u/AutoModerator, got ${sig.band}`);
+  // Withholding a discount is a bound firing too, and it says so.
+  assert.match(sig.evidence, /depth taper would be reading how little history there is/);
+  assert.doesNotMatch(sig.evidence, /credit is cut/);
+});
+
+/**
+ * The gate's own upper edge, which is the half that can rot silently: it exists
+ * to spare small accounts, and a gate that crept up past the smallest declared
+ * bot (299 grouped items) would hand every one of them their reach back with
+ * `npm run evaluate` still green. Same shape as the sitewide fixture, sized to
+ * clear the gate by a single item.
+ */
+test('authenticity: clearing the gate by one item is enough to be tapered', () => {
+  const rand = rng(74);
+  const stamps = humanTimestamps({ rand, days: 300, activeHours: WAKING_HOURS }).slice(0, 45);
+  const comments = stamps.map((at, i) => comment({
+    id: `ge${i}`, at, group: `sub${i}`, body: randomText(rand),
+  }));
+
+  const sig = findSignal(scoreAccount(profileOf({ comments })).authenticity, 'topical-breadth');
+
+  assert.equal(comments.length, 45, 'the fixture must sit exactly on the gate');
+  assert.equal(sig.value.tapered, true, 'the gate is inclusive: 45 items is enough history to read');
+  assert.equal(sig.value.itemsPerGroup, 1, '45 groups visited once each is the sitewide shape at gate size');
+  assert.equal(sig.band, BAND.LOW, `reach with no depth must not vouch for anyone, got ${sig.band}`);
+  assert.match(sig.evidence, /reach without depth/);
+});
+
+/**
  * The other end of the same taper, pinned separately because the frozen corpus
  * cannot pin it: nothing in test/corpus/ sits between 2.06 and 3.08 items per
  * group, so a change that moved DEPTH_FULL_CREDIT to 6 would leave `npm run

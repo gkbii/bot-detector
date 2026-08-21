@@ -1157,6 +1157,10 @@ accounts frozen in `test/corpus/`. **No network**, like Findings 4c, 4d and 4e:
 `scoreAuthenticity` is pure and the corpus is JSON, so this is arithmetic on
 disk and reproduces byte-for-byte. Run it rather than trusting the tables below.
 
+**Then audited against live data the same day, and it came back with two
+corrections** — both landed, both below under *The second lap*. The corpus is
+19 people, and 19 people reported a gap the population does not have.
+
 This is Finding 4's last paragraph — the authenticity half of the ceiling,
 where two signals *reward* being a bot — and with `asks-questions` closed by
 Finding 2 it is the last open item in JIO-329's definition of done.
@@ -1191,23 +1195,26 @@ per subreddit, which is reach with no depth anywhere in it.
 
 ### Why the taper is items per group, and why neither end is fitted to this table
 
-Items per group separates the two populations with **no overlap and a factor of
-1.49 between them** — every bot at 1.24–2.06, every human at 3.08–66.7. The
-signal is now `reach × depth`, where `depth = rescale(items per group, 1, 3)`.
+Items per group separates the two frozen populations with **no overlap** —
+every bot at 1.24–2.06, every human at 3.08–66.7. The signal is now
+`reach × depth`, where `depth = rescale(items per group, 1, 3)`.
 
 Neither end is a number drawn next to 27 accounts. **1.0 is the arithmetic
 minimum of the measure** — one item in every group, a visit and never a return —
-and **3 is a return visit rather than a drive-by**, which happens to sit just
-under the thinnest human rather than having been placed there. Finding 4e could
-point at the ceiling of a `rescale` and Finding 4d had to make its cut
-categorical inside a three-comment margin; here the measure has a floor of its
-own, and the human population is a factor clear of it rather than a decimal.
+and **3 is a return visit rather than a drive-by**. Finding 4e could point at
+the ceiling of a `rescale` and Finding 4d had to make its cut categorical inside
+a three-comment margin; here the measure has a floor of its own. That
+derivation is the whole defence of the constant, and it has to be, because the
+margin underneath it turned out to be half what this table says — see *The
+second lap*.
 
 **The obvious rival was rejected on its own number.** The share of an account's
 groups holding exactly one item does separate these populations — by **0.0023**:
 u/humdingler at 0.6667 against u/RepostSleuthBot at 0.6689. A cut there is
 fitted to the third decimal place of one person, and one more comment in a
-group they had already visited would move it.
+group they had already visited would move it. On items per group these same 27
+accounts are 1.02 apart — a like-for-like comparison of two measures over one
+table, not a claim about the population.
 
 ### Why this is a taper and NOT `unmeasured()`, unlike 4d and 4e
 
@@ -1246,8 +1253,73 @@ score.
 
 Three bots cross a band and the bots' authenticity cell in the headline table
 becomes **`low ×8` (3–17)**, against thread humans at `moderate ×10, high ×7`
-(38–81). Every human is untouched because every human's depth taper is exactly
-1.00 — the gap is wide enough that nobody is standing in it.
+(38–81). Every frozen human is untouched because every frozen human's depth
+taper is exactly 1.00. Live, 2 of 42 are tapered and neither changes band.
+
+### The second lap — audited live on 2026-08-21, two corrections
+
+The tables above are 27 accounts frozen on 2026-08-18. The Auditor went and
+looked at accounts nobody had chosen, on the same day the taper landed.
+
+**The sample, stated.** 11,882 distinct authors harvested from a recent window
+of **24 deliberately diverse non-political subreddits** (hobbies, regions,
+crafts, help-desks, general chat — not r/politics, which the frozen corpus
+already is). From those, **44 accounts fetched, 42 scorable**, selected
+**content-blind before a single profile was fetched**: a systematic every-297th
+slice of the author list, plus the only 4 authors who appeared in 3 or more of
+the 24 subs — a slice ranked on breadth, which is the counter-example being
+hunted, and which cannot see items-per-group because that is not computable
+until after the fetch. Every tapered and near-edge account was then hand-read
+from its comment bodies. All of them read human. The artifacts were not frozen
+into `test/corpus/`; the accounts are named below, so any of it can be re-fetched.
+
+**Correction 1 — a near-floor false positive, now closed by `DEPTH_MIN_ITEMS`.**
+
+| u/Acrobatic_Quail_6117 | |
+|---|---|
+| history | 21 comments + 4 posts = **25 grouped items** across **19 groups** |
+| items per group | **1.32** |
+| coverage | not truncated — that is the whole account |
+| other axes | automation `low 0`, agenda `low 9` |
+| bodies | plainly a person ("How's that moon now 😂") |
+| `topical-breadth` | **`low`** — the same band as u/AutoModerator |
+| authenticity | **`moderate 33` → `low 12`**, a band crossing on a real person |
+
+Above the floor, items per group measures how an account spends its history.
+At the floor it measures how much of one there is, and no history is short
+enough to be evidence of automation. So the taper is now **withheld below 45
+grouped items**. 45 is `REACH_FULL_CREDIT_GROUPS × DEPTH_FULL_CREDIT` — the two
+constants already in the signal — and is therefore the smallest history in which
+an account can satisfy both halves of it at once; below that they are in
+structural conflict, since every item spent widening the reach is one
+unavailable to deepen it. It is not a number chosen next to this account.
+
+**The gate costs the JIO-347 result nothing.** The smallest declared bot in the
+corpus, u/Anti-ThisBot-IB, carries **299** grouped items — 6.6× the gate — and
+u/AutoModerator 396. Re-fetched live on 2026-08-21 under the gate:
+u/AutoModerator 315 groups at 1.27 each, breadth `low`, authenticity `low 10`;
+u/RemindMeBot 245 groups at 1.23, breadth `low`, authenticity `low 3`;
+u/Acrobatic_Quail_6117 back to breadth `high`, authenticity `moderate 33`.
+No frozen score moves and `expected.json` is untouched by this lap.
+
+**Correction 2 — the margin was the corpus's, not the population's.**
+
+The claim was "no overlap, a factor of 1.49, and 3 happens to sit just under the
+thinnest human". Live, the human tail runs lower:
+
+| | items per group | tapered | authenticity |
+|---|---|---|---|
+| u/leilani238 | 331 items / 131 groups = **2.53** | 0.763 | `low 22`, −5.9, **no band change** |
+| u/Iampepeu | 400 / 153 = **2.61** | 0.807 | `moderate 30`, −4.8, **no band change** |
+| 6 more of the 42 | 3.07, 3.13, 3.23, 3.23, 3.56, 3.57 | 1.00 | within 20% of the edge |
+
+Real headroom above the busiest corpus bot is **0.47, not 1.02**. The cut still
+lands where it was aimed and the pole Delivery could not check comes back
+proportionate — a genuinely broad prolific human is docked single-digit points
+and stays in band — but *"the gap is wide enough that nobody is standing in it"*
+was a statement about 19 people. `authenticity.js`, `measure-topical-breadth.mjs`
+and the README now carry the live number beside the frozen one, and the constant
+rests on its derivation instead of on the margin.
 
 ### What this does not establish
 
@@ -1261,18 +1333,39 @@ comments spread over 300 groups cannot demonstrate depth even if the account has
 it; u/AutoModerator's 82-second window is the extreme case. It cuts the right
 way here only because the volume that truncates the window is itself the bot
 signal, and the two prolific humans in the corpus concentrate rather than spread
-(41 and 67 items per group). A prolific human who genuinely ranged over hundreds
-of subreddits would be docked by this, and none is available to check against.
+(41 and 67 items per group). The prolific-and-genuinely-broad human this was
+written to worry about **has now been checked** — u/leilani238 and u/Iampepeu in
+*The second lap* — and is docked 5.9 and 4.8 points without changing band. That
+is two people on one day, not a bound that has been closed.
 
-**It has a real cost for small accounts, and it is accepted deliberately.** An
-ordinary person with 30 comments in 20 different groups now scores near zero
-here. One comment in each of twenty groups is the same *shape* as the adversary,
-and this axis reads `low` as "we found no positive evidence" rather than as an
+**It has a real cost for BROAD accounts, and it is accepted deliberately.** A
+person with 200 comments across 150 different groups scores near zero here. One
+comment in each of a hundred groups is the same *shape* as the adversary, and
+this axis reads `low` as "we found no positive evidence" rather than as an
 accusation — the other four authenticity signals are untouched and still speak
-for that account. `test/scoring.test.js` pins both ends of the taper, because
-nothing in the frozen corpus sits between 2.06 and 3.08 items per group: a
-change that moved the full-credit constant to 6 would leave `npm run evaluate`
-green while quietly docking half the people on the platform.
+for that account. The live sweep below priced it at 5.9 and 4.8 points on two
+real people, neither of whom changed band. `test/scoring.test.js` pins both ends
+of the taper and both sides of the gate, because nothing in the frozen corpus
+sits between 2.06 and 3.08 items per group or under 117 grouped items: a change
+that moved the full-credit constant to 6, or the gate up past the smallest bot's
+299, would leave `npm run evaluate` green while quietly docking half the people
+on the platform or handing all eight bots their reach back.
+
+**The sentence a tapered person reads was also written for a bot, and is not
+anymore.** The `reach without depth … what running sitewide looks like` string
+was drafted against u/AutoModerator at 1.29 items per group; u/leilani238 at
+2.53 is docked 24% and is a person. Past **2 items per group** — where the
+average group stops being a single visit — the evidence now reads *"the account
+does go back to what it touches, but short of the 3 that reads as a return
+rather than a look around"*. The score is identical. This axis states in its own
+header that `low` is not an accusation, and the evidence string is where that
+promise is either kept or broken.
+
+**A bot with fewer than 45 grouped items is handed the gate too.** It is a
+statement about how much history exists, and it cannot tell whose history is
+short. Nothing in this corpus is that small and an account that thin has little
+for the other signals to read either — but the door is open, and saying so is
+cheaper than pretending it is not.
 
 **Eight declared bots, all utility bots.** "No bot is vouched for by its reach"
 is a statement about eight accounts that announce themselves. It is not a

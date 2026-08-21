@@ -217,7 +217,15 @@ test('no frozen reply-bot votes for its own humanity, and the human margin is st
  * The human half of the assertion is the one that matters: the taper is drawn
  * across a gap between two populations, and a gap only exists while nobody
  * stands in it. If the thinnest human here ever loses their full credit, the
- * constant has drifted onto a real person and the corpus is what says so.
+ * constant has drifted onto a real person and the corpus is what says so. That
+ * is 19 people, and a live sweep on 2026-08-21 found the human tail runs to
+ * 2.53 rather than the 3.08 here — so this is the corpus holding its own line,
+ * not evidence that the population has no one standing in the gap.
+ *
+ * And the third assertion is what makes JIO-347's second lap free: the gate
+ * that spares a 25-item person (`DEPTH_MIN_ITEMS`, 45) only does so because
+ * every declared bot is an order of magnitude past it. A gate that ever crept
+ * up to the smallest of them would hand all eight their reach back.
  */
 test('no frozen bot is vouched for by its own reach, and no frozen human pays for the taper', () => {
   const breadthOf = (account) => verdictOf(account).authenticity.signals
@@ -245,6 +253,17 @@ test('no frozen bot is vouched for by its own reach, and no frozen human pays fo
     `${shallowest.account.username} (${shallowest.breadth.value.itemsPerGroup.toFixed(2)}) no longer sits above the `
     + `deepest bot ${deepestBot.account.username} (${deepestBot.breadth.value.itemsPerGroup.toFixed(2)}), so the `
     + 'populations overlap and this cut separates nothing — re-read both before touching authenticity.js');
+
+  const smallestBot = bots
+    .map((account) => ({ account, breadth: breadthOf(account) }))
+    .reduce((a, b) => {
+      const items = (r) => r.breadth.value.distinctGroups * r.breadth.value.itemsPerGroup;
+      return items(b) < items(a) ? b : a;
+    });
+  assert.equal(smallestBot.breadth.value.tapered, true,
+    `the smallest declared bot ${smallestBot.account.username} carries ${Math.round(
+      smallestBot.breadth.value.distinctGroups * smallestBot.breadth.value.itemsPerGroup,
+    )} grouped items and is now UNDER the DEPTH_MIN_ITEMS gate, which hands it back the reach the taper took`);
 });
 
 test('every frozen account still scores exactly what expected.json records', () => {
