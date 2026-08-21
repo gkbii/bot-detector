@@ -151,6 +151,23 @@ A passing test suite is not evidence this thing works. Any change to the fetch
 window, the pagination or a timing signal deserves a live account before it is
 believed.
 
+## `authenticity`'s "range of interests" signal used to reward omnipresence
+
+That signal scored reach alone — how many groups, how much sits outside the
+largest — and every sitewide utility bot maxed it: `u/AutoModerator` answers in
+307 groups with 98% of itself outside the largest one, so it read a flat 1.000,
+the strongest vouch this signal can give, for doing exactly what makes it a
+bot. Being everywhere is not the same claim as being interested in many
+things, and every declared bot in the frozen corpus was scoring `high` here.
+
+The signal now also prices depth: items per group. In the corpus no bot
+returns to a group more than 2.06 times and no human fewer than 3.08 — visit-
+once and come-back-for-more do not overlap — so full credit needs an account
+to average three items per group, and reach below that is tapered toward zero.
+A taper rather than dropping the signal outright: on the axis that exists to
+vouch, an unmeasured signal only hands its weight to the others, which would
+have raised every gamed bot's score instead of lowering it.
+
 ## `corpus` turns the headline result into a command
 
 The claim the whole thing rests on is that the axes separate the accounts they
