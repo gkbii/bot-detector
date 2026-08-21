@@ -156,7 +156,7 @@ off a single thread, and 8 declared bots. Nothing between `profile` and
 `verdict` touches the network or keeps state, so replaying the corpus through
 the same scorers is JSON in and arithmetic out — `table` is that run, and a band
 that has moved since the last one is printed as a diff and exits non-zero. As it
-stands the humans score 0–17 on `automation`, the bots 39–75, and nothing at all
+stands the humans score 0–17 on `automation`, the bots 44–75, and nothing at all
 sits in between.
 
 Two things about `corpus` are worth saying out loud rather than leaving in a
