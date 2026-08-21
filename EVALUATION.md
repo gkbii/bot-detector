@@ -233,6 +233,29 @@ label, and a query counts as a link tail on its own when it carries an `=`.
 Frozen-corpus scores are unmoved by it, which is a no-regression result and not
 a re-measure: no account in `test/corpus/` exhibits either shape.
 
+**RE-MEASURED LIVE 2026-08-21 (JIO-386).** 24,241 real comment bodies through
+arctic-shift, 17,282 of them A/B'd through two scoring cores differing only in
+`stripUrls()` — two firehose sweeps over 22 subreddits plus 22 whole profiles
+(5,584 comments) through the real `fetchAccount`, scored on all three axes both
+ways. **8 bodies of 17,282 (0.046%) changed, every one of them gaining text
+back and not one of them a question mark**: `2.5/3.5` (u/Imgema), `1.5A/port`
+(u/rogue1102), `5.2k/month` (u/Throwaway_LostOW), `15.8/16GB`
+(u/NanosoftComputers), `$44.56/hour` (u/ScubaAlek) and `3.5/5` (u/Grindhoss).
+
+The correction is to the size of the benefit, not its direction.
+`asks-questions` — the signal this whole finding is about — moved on **0 of 22**
+accounts, and no axis score moved on any of them. The live population of the
+defect is rates and measurements, which land on the automation axis through
+`normalizeWords()`; the review-rating shape the ticket was written around does
+occur (u/Grindhoss) but never once beside a `?`. Bounds: 3 of the 22 profiles
+were `insufficient-data` on `MIN_HISTORY_DAYS`, so 19 carry the score
+comparison, and the firehose is one sweep on one day. A fourth sweep of 6,959
+bodies measured what the new rules *remove* — host rule 2 firings, both genuine
+links; root-relative `/path?a=b` rule **0 firings**, so that rule remains
+asserted by tests and unmeasured in the wild. Finding 2's own numbers hold live:
+u/RemindMeBot **0 of 300**, u/RepostSleuthBot **0 of 300**, u/AutoModerator 38
+of 300. Full tables in README, "And the same rule, running the other way".
+
 ## Finding 3 — `dormancy-revival` returns a confident zero from windows too short to hold a gap
 
 The heaviest agenda signal (weight 3) looks for a ≥120-day silence.

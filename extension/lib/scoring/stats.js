@@ -172,6 +172,20 @@ export function longestZeroRunCircular(counts) {
  * human half of the corpus is length-matched synthetic filler that quotes no
  * ratios. A frozen corpus is proof a change broke nothing, never proof it did
  * anything; the tests in `test/scoring.test.js` are where the fix is asserted.
+ *
+ * So the fix half was measured live too, on 2026-08-21: 24,241 real bodies
+ * through arctic-shift, 17,282 of them A/B'd old-vs-new (two firehose sweeps
+ * plus 22 whole profiles through the real `fetchAccount`, scored on all three
+ * axes both ways). 8 bodies of 17,282 (0.046%) change, every one of them
+ * GAINING text back — `2.5/3.5`, `1.5A/port`, `5.2k/month`, `15.8/16GB`,
+ * `$44.56/hour`, `3.5/5` — and not one of them a question mark. Read the
+ * consequence honestly: this rule's live payout arrives through
+ * `normalizeWords()` on the AUTOMATION axis, not on `asks-questions`, which
+ * moved on 0 of 22 accounts. A fourth sample of 6,959 more bodies measured what
+ * the NEW rules take, which a diff cannot see: the host rule fired twice, both
+ * genuine links, and the root-relative `/path?a=b` rule fired ZERO times — it
+ * is asserted by tests and unmeasured in ordinary human text. README's "And
+ * the same rule, running the other way" carries the tables and the bounds.
  */
 export function stripUrls(text) {
   if (typeof text !== 'string') return '';

@@ -767,6 +767,35 @@ const STRIP_URL_CASES = [
   ['(/message/compose/?to=Bot) is the link', ['is the link'], ['?', 'compose']],
 ];
 
+/**
+ * The same rule, checked against text nobody here invented. Every one of these
+ * is a verbatim fragment from a real comment that the pre-JIO-386 rule ate,
+ * found by A/B-ing both rules over 17,282 live bodies on 2026-08-21 (README,
+ * "And the same rule, running the other way"). They are kept separate from the
+ * list above because they are evidence rather than design: the hand-built
+ * cases say what we MEANT the rule to do, and these say what people wrote.
+ *
+ * Four of the six are shapes the hand-built list does not reach — a unit after
+ * the slash (`1.5A/port`), a size out of a size (`15.8/16GB`), a currency
+ * symbol in front (`$44.56/hour`), and a ratio in non-Latin text where no
+ * surrounding word is a hint (`2.5/3.5`). The last is the only live instance of
+ * the ticket's own review-rating shape, and it is why the ticket was right even
+ * though the measurement is smaller than it claimed.
+ */
+const LIVE_STRIP_URL_CASES = [
+  // [ input, the fragment the old rule destroyed, the account that wrote it ]
+  ['\u039d\u03b1\u03b9 \u03b3\u03b9\u03b1 backup. \u0395\u03c7\u03c9 \u03ad\u03bd\u03b1 \u03c3\u03c5\u03c1\u03c4\u03ac\u03c1\u03b9 \u03bc\u03b5 30+ \u03c3\u03ba\u03bb\u03b7\u03c1\u03bf\u03cd\u03c2 \u03b4\u03af\u03c3\u03ba\u03bf\u03c5\u03c2 2.5/3.5', '2.5/3.5', 'u/Imgema'],
+  ['However, it maxes at 1.5A/port. So, as others have said', '1.5A/port', 'u/rogue1102'],
+  ['Post-tax, I make around 5.2k/month. I pay about 3k for rent', '5.2k/month', 'u/Throwaway_LostOW'],
+  ['15.8/16GB with nothing running on 16GB RAM is not normal', '15.8/16GB', 'u/NanosoftComputers'],
+  ['I currently make $44.56/hour for 37.5 hours per week', '$44.56/hour', 'u/ScubaAlek'],
+  ['My problem is purely a meta one and I still gave it a 3.5/5', '3.5/5', 'u/Grindhoss'],
+];
+
+/** The one thing the new rules removed from that sweep that the old one kept. */
+const LIVE_TRUE_POSITIVE = ['Go to /_layouts/15/people.aspx?MembershipGroupId=0 on the broken site',
+  'MembershipGroupId', 'u/blud_13'];
+
 test('stripUrls: a ratio is not a host, and a query string is not a question', () => {
   for (const [input, survives, removed] of STRIP_URL_CASES) {
     const stripped = stripUrls(input);
@@ -779,6 +808,17 @@ test('stripUrls: a ratio is not a host, and a query string is not a question', (
         `${JSON.stringify(input)} -> ${JSON.stringify(stripped)} kept ${JSON.stringify(fragment)}`);
     }
   }
+});
+
+test('stripUrls: the fragments live accounts actually lost keep their text', () => {
+  for (const [body, fragment, author] of LIVE_STRIP_URL_CASES) {
+    assert.ok(stripUrls(body).includes(fragment),
+      `${author} wrote ${JSON.stringify(fragment)} and the rule ate it: ${JSON.stringify(stripUrls(body))}`);
+  }
+
+  const [body, gone, author] = LIVE_TRUE_POSITIVE;
+  assert.ok(!stripUrls(body).includes(gone),
+    `${author}'s query string is a link and must not survive: ${JSON.stringify(stripUrls(body))}`);
 });
 
 test('normalizeWords: a ratio keeps its tokens, a query string contributes none', () => {

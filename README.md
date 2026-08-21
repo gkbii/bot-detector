@@ -380,6 +380,70 @@ where an earlier rule already removed them, and the human half is length-matched
 synthetic filler that quotes no ratios. A frozen corpus is evidence a change
 broke nothing; it is never evidence the change did anything.
 
+**So it was measured live, and the honest answer is smaller than the ticket
+claimed.** On 2026-08-21, **24,241** real comment bodies through arctic-shift,
+**17,282** of them run through two copies of the scoring core differing in
+exactly one line — `stripUrls()`, pre- and post-fix:
+
+| sample | bodies | measured |
+| --- | --- | --- |
+| firehose, 10 subs (movies, AskReddit, nba, soccer, boardgames, anime, books, buildapc, headphones, Coffee) | 4,807 | old vs new |
+| firehose, 12 subs (antiwork, jobs, personalfinance, careerguidance, NoStupidQuestions, buildapcsales, techsupport, programming, webdev, pcmasterrace, Cooking, fitness) | 6,891 | old vs new |
+| 22 full profiles through the real `fetchAccount`, scored twice | 5,584 | all three axes, old vs new |
+| firehose, 12 subs (letterboxd, television, Games, patientgamers, gaming, boxoffice, anime, manga, programming, webdev, sysadmin, DIY) | 6,959 | what the **new** rules remove — the half a diff is blind to |
+
+**8 of 17,282 bodies (0.046%) changed. Every one of them gained text back, none
+lost any, and not one of them was a question mark.** All eight are real people
+writing numbers:
+
+| account | fragment the old rule ate |
+| --- | --- |
+| u/Imgema | `2.5/3.5` (drive sizes, in Greek) |
+| u/rogue1102 | `1.5A/port` |
+| u/Throwaway_LostOW | `5.2k/month` |
+| u/NanosoftComputers | `15.8/16GB` |
+| u/ScubaAlek | `$44.56/hour` |
+| u/Grindhoss | `3.5/5` (a film rating, in three of the eight) |
+
+Read that against the ticket, which was written around `"would you rate it
+3.5/10?"`. The review-rating shape is real — u/Grindhoss is it — but the live
+population is dominated by **rates and measurements**, and in 17,282 bodies not
+one ratio sat next to a `?`. `asks-questions` moved on **0 of 22** accounts and
+every axis score is identical old-vs-new on all of them. So the payout this fix
+actually collects is through `normalizeWords()` on the **automation** axis,
+where the restored tokens go; the question-credit case in the ticket's Benefit
+section is correct in mechanism and below what 17k live bodies can resolve.
+That is the finding, and it is written down here so nobody re-derives the
+ticket's claim from the ticket.
+
+Eight bodies, seven distinct comments: one Grindhoss comment was caught by both
+the firehose sweep and its own profile, and is counted in each, because those
+are two measurements rather than one.
+
+Two bounds on that, said out loud rather than left in the sample size. **3 of
+the 22 profiles** (u/tehluxman 93 comments, u/_justnick 202, u/Different_type7
+69) came back `insufficient-data` on `MIN_HISTORY_DAYS`, so 19 carry the
+score comparison, not 22. And the firehose is **one sweep on one day** — it says
+what people wrote that day, not what they write.
+
+The fourth sample exists because a diff cannot see a body that *both* rules
+strip, which is where a new false positive would hide. Across 6,959 bodies **4**
+held something the old bare rule would have taken. The new host rule fires on
+**2** of them, and both are genuine links — u/blud_13's
+`people.aspx?MembershipGroupId=0`, which is exactly the query-without-a-path
+shape this fix added, and u/CtrlAltWiz's `github.com/CtrlAltWiz/SiliPuTTY]()`.
+The other two are what the old rule ate and this one does not. **The root-relative `/path?a=b` rule fired
+zero times in 6,959 bodies.** It is asserted by tests and by JIO-290's original
+bot boilerplate, and it is unmeasured in ordinary human text — a rule that has
+never fired in the wild is not a rule that has been shown to be safe there.
+
+JIO-290 still holds on the same live data: u/RemindMeBot **0 of 300**,
+u/RepostSleuthBot **0 of 300**, u/AutoModerator 38 of 300. The six fragments
+above are fixtures in `test/scoring.test.js` as `LIVE_STRIP_URL_CASES`, kept
+apart from the hand-built list because they are evidence rather than design —
+four of them (`1.5A/port`, `15.8/16GB`, `$44.56/hour`, `2.5/3.5`) are shapes
+nobody here would have thought to invent.
+
 **A confident zero from a window no gap could fit in.** `dormancy-revival`
 (weight 3, the heaviest agenda signal) gated only on item *count*. 299 comments
 spanning 0.0 days clear that easily, and it then reported "longest silence is 0
