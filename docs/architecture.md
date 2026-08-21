@@ -23,7 +23,7 @@ flowchart LR
   backend --> shared[(Shared lookup cache)]
   archive --> profile[Account profile]
   profile --> gate[Insufficient-data gate]
-  profile -.->|25 accounts, frozen once by hand| corpus[(Evaluation corpus)]
+  profile -.->|27 accounts, frozen once by hand| corpus[(Evaluation corpus)]
   corpus -.->|replayed through the same scorers| gate
   gate -->|too thin to score| verdict[Three bands, side by side]
   gate --> automation[Automation axis]
@@ -139,6 +139,14 @@ rather than a clean zero, since an unremarkable posting rate is not evidence of
 a human, it is what every account on the platform has. It moved five declared
 bots up and no human by a point.
 
+`conversation-depth` was gated at its other end for the same reason. Never
+replying to anyone is broadcasting rather than talking and still scores, but
+replying to *everyone* is what a summon-bot does by definition, so an account
+with no top-level comment anywhere in the window is now unmeasured instead of
+being handed the strongest vote for a person this axis can cast.
+`u/RemindMeBot` had been collecting exactly that, 299 replies out of 299, from
+the mechanism that makes it a bot.
+
 A passing test suite is not evidence this thing works. Any change to the fetch
 window, the pagination or a timing signal deserves a live account before it is
 believed.
@@ -151,19 +159,23 @@ the 25 profiles behind it was kept — so "the separation has not regressed" was
 sentence rather than something anybody could run, and every later proposal to
 reweight a signal was unfalsifiable.
 
-`corpus` is those 25 accounts frozen as serialised `profile` output: 17 humans
-off a single thread, and 8 declared bots. Nothing between `profile` and
+`corpus` is 27 accounts frozen as serialised `profile` output: those 25 — 17
+humans off a single thread and 8 declared bots — plus 2 prolific commenters
+taken off a ranking rather than a thread, kept as a cohort of their own because
+a different sampling rule is a different claim and averaging the two would hide
+which one an invariant actually rests on. Nothing between `profile` and
 `verdict` touches the network or keeps state, so replaying the corpus through
 the same scorers is JSON in and arithmetic out — `table` is that run, and a band
 that has moved since the last one is printed as a diff and exits non-zero. As it
-stands the humans score 0–17 on `automation`, the bots 44–75, and nothing at all
+stands the humans score 0–25 on `automation`, the bots 44–75, and nothing at all
 sits in between.
 
 Two things about `corpus` are worth saying out loud rather than leaving in a
 comment. **The humans' words are not in it.** Eight accounts that declare
 themselves bots keep their real text, because there the boilerplate *is* the
-evidence and nobody's privacy is in it; the other seventeen are people who
-argued about politics one afternoon and never agreed to be committed to a public
+evidence and nobody's privacy is in it; the other nineteen are people —
+seventeen who argued about politics one afternoon, two picked off a
+prolific-commenter ranking — and none of them agreed to be committed to a public
 repository, so their comment bodies are replaced with filler matched on every
 measurement a signal actually reads — character length, word count, whether a
 question was asked. The one property that cannot survive that swap is repetition

@@ -40,8 +40,8 @@
       "name": "Three Scores, Never One Number",
       "summary": "Automation, agenda and evidence of a real person are scored separately and never averaged into one.",
       "summarySimple": "It gives three separate scores instead of one, and never blends them together.",
-      "detailHtml": "<p>Someone paid to post talking points has a real account age, organic timing and varied language — clean on every automation signal, which averaging would hide. The third answers who argues in good faith, which a tool that only accuses never does. Twenty-five frozen accounts are re-scored on every change: humans land 0–17 on automation, declared bots 44–75, nothing between.</p>",
-      "detailHtmlSimple": "<p>A real person paid to push a message looks completely normal on every automation check. Blending the scores would hide them. The third score exists so the tool can also say when someone seems genuine. A set of 25 real accounts is kept exactly as it was, so anyone can check it still tells bots and people apart.</p>",
+      "detailHtml": "<p>Someone paid to post talking points has a real account age, organic timing and varied language — clean on every automation signal, which averaging would hide. The third answers who argues in good faith, which a tool that only accuses never does. Twenty-seven frozen accounts are re-scored on every change: humans land 0–25 on automation, declared bots 44–75, nothing between.</p>",
+      "detailHtmlSimple": "<p>A real person paid to push a message looks completely normal on every automation check. Blending the scores would hide them. The third score exists so the tool can also say when someone seems genuine. A set of 27 real accounts is kept exactly as it was, so anyone can check it still tells bots and people apart.</p>",
       "nodes": ["profile", "gate", "automation", "agenda", "authenticity", "verdict", "corpus", "table"]
     },
     {

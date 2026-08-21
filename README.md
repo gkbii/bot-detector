@@ -66,6 +66,7 @@ bot-detector/
     probe-prolific-humans.mjs fetches; found the >3/h people now in test/corpus/
     measure-jio329.mjs       fetches; the before/after JIO-329 sweep — EVALUATION.md 4b
     measure-agenda-shape.mjs offline; ranks the corpus on the two shape signals — EVALUATION.md 4c
+    measure-reply-share.mjs  offline; the corpus reply-share spread — EVALUATION.md 4d
     evaluate.mjs             reprints EVALUATION.md's band table from test/corpus/, offline
     lib/bot-declaration.mjs  what counts as "this account declares itself a bot", and why twice
     lib/synthetic-bodies.mjs length-matched stand-ins for the 19 humans' comment text
@@ -924,14 +925,16 @@ node scripts/capture-corpus.mjs # rebuilds test/corpus/ from the live API
 node scripts/probe-prolific-humans.mjs   # hunts the prolific human — EVALUATION.md 4a
 node scripts/measure-jio329.mjs --corpus # JIO-329's cost, offline; --harvest/--fetch go live
 node scripts/measure-agenda-shape.mjs    # the agenda hold — EVALUATION.md 4c, offline
+node scripts/measure-reply-share.mjs     # the reply-share spread — EVALUATION.md 4d, offline
 ```
 
 `capture-corpus.mjs` and `probe-prolific-humans.mjs` are the only two that
 always touch the network, and neither is part of `npm test`.
 `measure-jio329.mjs` goes either way: `--corpus`, `--variants` and `--report`
 read `test/corpus/` or a state file already on disk and fetch nothing, while
-`--harvest`/`--fetch` go live. `measure-agenda-shape.mjs` never fetches at
-all — like `evaluate`, it is JSON in and arithmetic out.
+`--harvest`/`--fetch` go live. `measure-agenda-shape.mjs` and
+`measure-reply-share.mjs` never fetch at all — like `evaluate`, they are JSON in
+and arithmetic out.
 
 `scoreAccount` is pure and the corpus is JSON, so `evaluate` is arithmetic on
 disk: no network, no `node_modules`, and `test/corpus.test.js` asserts that at
