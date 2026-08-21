@@ -17,7 +17,9 @@
 import {
   activityOldestFirst, groupHistogram, reliableActivityOldestFirst,
 } from '../sources/profile.js';
-import { buildAxis, signal, unmeasured } from './axis.js';
+import {
+  BAND_THRESHOLDS, buildAxis, signal, unmeasured,
+} from './axis.js';
 import {
   bareId, clamp01, formatDate, normalizeWords, pct, plural, rescale,
 } from './stats.js';
@@ -72,12 +74,105 @@ const REVIVAL_STALE_DAYS = 1095;
 const MIN_ITEMS_AFTER_GAP = 5;
 
 export function scoreAgenda(profile) {
-  return buildAxis([
+  return buildAxis(holdShapeToCorroboration([
     topicConcentrationSignal(profile),
     stockPhrasingSignal(profile),
     driveBySignal(profile),
     dormancyRevivalSignal(profile),
-  ]);
+  ]));
+}
+
+/**
+ * SHAPE IS NOT A TALKING POINT (JIO-424).
+ *
+ * Two of the four signals here describe the SHAPE of an account's
+ * participation — how concentrated it is, and whether it stays for the reply.
+ * The other two are about what the account actually says and whose history it
+ * is. The header above says all four are "weighted to be read together"; a
+ * weighted mean does not do that, and the difference is measurable.
+ *
+ * Measured over the 27 frozen accounts in `test/corpus/`, no network, by
+ * `scripts/measure-agenda-shape.mjs`:
+ *
+ *   * `topic-concentration` ranks the corpus BACKWARDS against its only ground
+ *     truth. Seven of the 8 declared bots hold the bottom 7 places (2-7% top
+ *     share) and the eighth reaches 16%, which 16 of the 19 humans beat; the
+ *     top of the ranking is two hand-read hobbyists at 77% and 97%. The only
+ *     two accounts in the corpus this signal scores above `low` are both
+ *     people.
+ *   * `drive-by-ratio` separates nothing: bots span 0-91%, people 3-87%, and
+ *     the window floor of 0.35 sits at the MEDIAN thread human (0.36), so it
+ *     reads above zero for 9 of the 17.
+ *
+ * So the two prolific humans of Finding 4a scored agenda `moderate` 55 and 57
+ * — on those two signals alone, with `stock-phrasing` measuring a real ZERO
+ * for both and `dormancy-revival` unmeasurable inside their 2- and 4-day
+ * windows. u/Hartacus, an ordinary thread human, sits at the same 87% drive-by
+ * share and stays `low` only for posting in 38 groups rather than 6. That
+ * is the axis banding a hobbyist on volume and choice of subreddit, which is
+ * this axis's most consequential false positive: a false accusation against a
+ * real person.
+ *
+ * THE RULE: a shape signal may argue as hard as the evidence beside it, and no
+ * harder. Its strength is held to the strongest measured `stock-phrasing` or
+ * `dormancy-revival` — floored at the `moderate` band edge, so it is never
+ * silenced and can always take the axis to the edge of an accusation on its
+ * own. GRADED, not a gate, and that is load-bearing: an on/off rule at the
+ * band edge would have taken u/chilidirigible from 30 to 68 on a
+ * `stock-phrasing` strength moving 0.29 to 0.31, and three of the 17 thread
+ * humans sit within 0.11 of that line on their real bodies. A cliff that steep
+ * next to real accounts is a false positive waiting for a re-capture.
+ *
+ * The floor is `BAND_THRESHOLDS.moderate / 100` rather than a number somebody
+ * picked, for the same reason.
+ *
+ * WHAT THIS DELIBERATELY DOES NOT DO. It does not touch either threshold. The
+ * corpus holds no agenda accounts — the 8 declared bots are utility bots, and
+ * EVALUATION.md records that no population of known-paid accounts exists — so
+ * "where should the gate sit" is a question nothing here can answer, and
+ * moving one on this evidence would be the error JIO-344 named on
+ * ORDINARY_ITEMS_PER_HOUR. What IS measurable is that neither signal separates
+ * anything this repo can label, and the hold is a claim only about that.
+ *
+ * An UNMEASURED corroborating signal corroborates nothing. That is the same
+ * direction axis.js rule 3 already runs in: we do not have the evidence, so we
+ * do not make the accusation.
+ */
+const SHAPE_KEYS = new Set(['topic-concentration', 'drive-by-ratio']);
+const CORROBORATING_KEYS = new Set(['stock-phrasing', 'dormancy-revival']);
+/** An uncorroborated shape signal reaches the band edge and does not cross it. */
+const SHAPE_FLOOR = BAND_THRESHOLDS.moderate / 100;
+
+function holdShapeToCorroboration(signals) {
+  const corroborating = signals.filter((s) => CORROBORATING_KEYS.has(s.key) && s.strength != null);
+  const ceiling = Math.max(SHAPE_FLOOR, ...corroborating.map((s) => s.strength));
+  if (ceiling >= 1) return signals;
+
+  const strongest = corroborating.length
+    ? corroborating.reduce((a, b) => (b.strength > a.strength ? b : a))
+    : null;
+  // Named by BAND, never by strength: `axis.js` strips the internal 0..1 so
+  // nothing downstream can start reading it as a likelihood, and an evidence
+  // string is downstream.
+  const beside = strongest && strongest.strength >= SHAPE_FLOOR
+    ? `the strongest evidence beside it, "${strongest.label}", reads ${strongest.band}, so it is held to that`
+    : `nothing beside it reads above low${
+      corroborating.length < CORROBORATING_KEYS.size ? ', and one of the two could not be measured at all' : ''
+    }, so it is held to the edge of \`moderate\``;
+
+  return signals.map((s) => {
+    if (!SHAPE_KEYS.has(s.key) || s.strength == null || s.strength <= ceiling) return s;
+    // Held, and it says so on the account being judged — a bound that fires
+    // silently is the one nobody can argue with.
+    return signal({
+      key: s.key,
+      label: s.label,
+      weight: s.weight,
+      strength: ceiling,
+      value: { ...s.value, heldToCorroboration: true },
+      evidence: `${s.evidence} A shape like this fits a dedicated hobbyist as well as it fits an agenda account. Here ${beside} rather than counted in full.`,
+    });
+  });
 }
 
 /** Share of all activity in the single largest group. */
@@ -107,7 +202,11 @@ function topicConcentrationSignal(profile) {
     weight,
     strength,
     value: { topGroup, topCount, total, topShare, distinctGroups: histogram.size },
-    evidence: `${pct(topShare)} of activity (${topCount} of ${total} items) sits in one group, "${topGroup}", out of ${histogram.size} ${plural(histogram.size, 'group')} total.${topShare >= 0.7 ? ' A dedicated hobbyist looks like this too — read it alongside the phrasing and dormancy signals rather than on its own.' : ''}`,
+    // The "a dedicated hobbyist looks like this too" caveat that used to hang
+    // off this string now lives in holdShapeToCorroboration(), which appends
+    // it exactly when the read really is shape-only — and holds the number as
+    // well as warning about it, which is the half the sentence never did.
+    evidence: `${pct(topShare)} of activity (${topCount} of ${total} items) sits in one group, "${topGroup}", out of ${histogram.size} ${plural(histogram.size, 'group')} total.`,
   });
 }
 

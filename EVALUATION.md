@@ -426,7 +426,9 @@ thread humans are `low` (0–19) — `topic-concentration` and `drive-by-ratio`
 both reading `high`. That is what a high-volume single-subreddit hobbyist looks
 like to the agenda axis, it is a different axis from the one this ticket is
 about, and it is a question for its own ticket rather than something to fix
-under a rate signal.
+under a rate signal. **That ticket was JIO-424 and it is Finding 4c below.**
+Both accounts are `low` on agenda now, on their frozen bodies and on their real
+ones.
 
 ## Finding 4b — JIO-329 does not raise the risk of a `moderate`, it moves the band edge from 30 to 22
 
@@ -600,6 +602,155 @@ run's ranking simply had nobody in the 22–29 strip. A zero-crossing sweep is
 therefore not evidence that the strip is empty, which is the trap a sample-count
 framing walks into and a band-edge framing does not.
 
+## Finding 4c — the two agenda signals that banded a hobbyist rank the corpus backwards
+
+Measured on **2026-08-21** by `scripts/measure-agenda-shape.mjs`, over the 27
+accounts frozen in `test/corpus/`. **No network** — `scoreAgenda` is pure and
+the corpus is JSON, so unlike Findings 4a and 4b this one is arithmetic on disk
+and reproduces byte-for-byte. Run it rather than trusting the tables below.
+
+Finding 4a closed by filing one line it had not gone looking for: both prolific
+humans score agenda `moderate` 55 and 57 where all 17 thread humans are `low`.
+This is that line, asked properly.
+
+### The measurement
+
+`topic-concentration` — share of activity in the single largest group:
+
+| | range | above `low` on the signal |
+|---|---|---|
+| 8 declared bots | **2–16%** | none |
+| 17 thread humans | 13–49% | none |
+| 2 prolific humans | **77%, 97%** | both |
+
+It ranks the corpus **backwards against its only ground truth.** Seven of the
+eight bots hold the bottom seven places at 2–7%; the eighth, u/RemindMeBot at
+16%, is beaten by 16 of the 19 humans. The only two accounts in the whole
+corpus that this signal scores above `low` are the two hand-read hobbyists. Of
+course they are: a utility bot serves the whole site, and u/AutoModerator posts
+in 307 groups against u/chilidirigible's 6.
+
+`drive-by-ratio` — share of engagements the account never came back to:
+
+| | range | median |
+|---|---|---|
+| 8 declared bots | **0–91%** | 3.5% |
+| 17 thread humans | 3–87% | **36%** |
+| 2 prolific humans | 72%, 87% | — |
+
+It separates nothing. The ranges are nested, five of the eight bots read 0–7%,
+and the signal's own window floor of 0.35 sits **at the median thread human**,
+so it reads above zero for 9 of the 17. u/Hartacus — an ordinary r/politics
+commenter, agenda `low` — sits at **87%, the same as u/chilidirigible.** What
+separated the two was topic concentration alone: 38 groups against 6.
+
+So the axis banded a fifteen-year r/anime regular and a reaction-GIF poster on
+**their volume and their choice of subreddit**, with `stock-phrasing` measuring
+a real zero for both and `dormancy-revival` unable to see a 120-day gap inside
+their 2- and 4-day windows. That is this axis's most consequential false
+positive, and unlike Finding 4a's it is not hypothetical: it is the badge those
+two accounts were wearing.
+
+### The half of the DoD that cannot be measured, said plainly
+
+The ticket asked whether these signals separate hobbyists from **agenda
+accounts**. They do not separate hobbyists from anything the corpus can label,
+and the second half of that question is unanswerable here: the 8 declared bots
+are *utility* bots, and the closing section of this document already records
+that no population of known-paid accounts exists and one cannot easily be
+obtained. There is no self-declaration analogue for a paid poster.
+
+Nothing below should be read as evidence about agenda accounts. It is a
+statement about people.
+
+### The decision: hold the shape signals to the evidence beside them
+
+`agenda.js` has said since it was written that "none of these signals is
+damning alone — a hobbyist is topic-concentrated" and that they are "weighted
+to be read together". A weighted mean does not read anything together; it lets
+two signals out of four carry a band on their own, which is exactly what
+happened. So `holdShapeToCorroboration()` makes the sentence executable:
+
+> A shape signal — `topic-concentration`, `drive-by-ratio` — may argue as hard
+> as the strongest measured `stock-phrasing` or `dormancy-revival` beside it,
+> and no harder. Floored at the `moderate` band edge, so it is never silenced
+> and can always take the axis to the edge of an accusation on its own.
+
+Three things about it.
+
+**No threshold was moved, deliberately.** There is no separating value to move
+one to. On `topic-concentration` the bots are already *below* every account
+this fires on, so a threshold that separated the two populations would have to
+fire on LOW concentration — it would have to run backwards. Moving one on this evidence would be the error
+Finding 4a named on `ORDINARY_ITEMS_PER_HOUR`, in a place where it would be
+harder to see.
+
+**It is graded, not a gate, and that is the load-bearing half.** An on/off rule
+at the band edge would have taken u/chilidirigible from agenda 30 to **68** on
+a `stock-phrasing` strength moving 0.29 to 0.31 — and three of the 17 thread
+humans sit within 0.11 of that line on their real bodies. A cliff that steep
+next to real accounts is a false positive waiting for the next re-capture.
+`test/scoring.test.js` walks a hobbyist's phrasing coverage from 0% to 20% and
+fails if any step moves the score by more than 12 points; today the whole ramp
+is 14 → 51 in steps of nine or fewer.
+
+**An unmeasured corroborating signal corroborates nothing.** Same direction
+`axis.js` rule 3 already runs in: we do not have the evidence, so we do not
+make the accusation. Both prolific humans are in exactly that position on
+`dormancy-revival`.
+
+### What moved
+
+Six of the 81 frozen scores, all downward, and **two bands**: u/humdingler
+`moderate 55 → low 19` and u/chilidirigible `moderate 57 → low 19`. Four thread
+humans move within `low` (u/Hartacus 19 → 6, u/Aubenabee and u/bigbjarne to 9,
+u/Tobeck to 6), which takes the thread-human agenda ceiling from 19 to 13. **No
+bot moved by a point** — all eight read `high` on `stock-phrasing`, so nothing
+of theirs is held — and the automation separation the whole evaluation rests on
+is untouched. `npm run evaluate` exits 0.
+
+### What this does not establish
+
+**The corroborated branch is not exercised by a real person anywhere in this
+corpus.** All 19 human profiles carry length-matched synthetic bodies, so their
+`stock-phrasing` — the signal the hold reads — is not the one the live account
+produced. Only the synthetic propagandist fixture in `test/scoring.test.js`
+exercises the un-held path. A frozen corpus is evidence a change broke nothing;
+it is never evidence the change did anything.
+
+**So the real bodies were solved for rather than assumed.** `manifest.json`
+records each human's agenda score on both the real and the synthesised profile,
+and on this axis bodies feed `stock-phrasing` and nothing else —
+`topic-concentration` reads groups, `drive-by-ratio` reads thread ids,
+`dormancy-revival` reads timestamps. The gap between the two recorded scores
+*is* that signal, so its strength falls out of the weighted average. The script
+prints the whole column; the four rows that matter:
+
+| account | recorded, real bodies | implied `stock-phrasing` | under the hold |
+|---|---:|---:|---:|
+| u/chilidirigible | 63 | 0.16 | **25** |
+| u/humdingler | 55 | 0.00 | **19** |
+| u/bigbjarne | 27 | 0.40 | 26 (not held — its own text corroborates) |
+| u/Hartacus | 28 | 0.37 | 17 |
+
+Both prolific humans are held on their real bodies too, and leave `moderate`
+there as well. That is derived from scores `manifest.json` already recorded,
+not re-measured against the API.
+
+**And the bound that column exposes is the real limit of this rule.** It
+protects an account whose phrasing *and* dormancy both read low, and nothing
+else. Three of the seventeen ordinary humans clear the corroboration floor on
+their own real text (0.31–0.40) — **a hobbyist with a catchphrase gets nothing
+from this fix.** They all still score `low` today, on a weighted average that
+never had a problem with them; but if a concentrated, drive-by account with a
+sign-off ever bands `moderate`, this rule will not have been what failed, and
+it will not have helped either.
+
+**None of it is a live re-measure.** Findings 4a and 4b went to the API. This
+one deliberately did not: the question is about two accounts already frozen, and
+re-fetching them would have changed the very window the ticket was filed
+against.
+
 ## What this evaluation does not establish
 
 The agenda axis has **no real-world validation** and cannot easily get one. The
@@ -609,6 +760,14 @@ fixtures in `test/scoring.test.js`. Every real account tested here scored low on
 it. That is consistent with a healthy thread and equally consistent with the
 axis not firing — this test cannot tell those apart, and nothing in this
 document should be read as evidence that the agenda axis works.
+
+Finding 4c narrows that further and in one direction only. It measured what two
+of the four agenda signals do to **people**, found that one of them ranks 16 of
+the 19 humans above every bot in the corpus and the other separates nothing at
+all, and held both to the evidence beside them. It says nothing
+about what they do to an agenda account, because there is still no population
+to ask. An axis that has now been made harder to fire is not thereby an axis
+that fires correctly.
 
 Sample size is 25 accounts in one thread on one subreddit on one day. Findings 1
 through 3 are defects that reproduce deterministically; the band separation in

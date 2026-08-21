@@ -16,7 +16,7 @@ things the browser cannot do: a Claude read of what an account actually argues,
 and a lookup cache shared between your machines. Nothing requires it.
 
 ```
-npm test        # 139 tests, and they pass with NO node_modules installed
+npm test        # 150 tests, and they pass with NO node_modules installed
 npm install     # only needed for the optional server's one dependency
 npm start       # the optional server
 ```
@@ -65,6 +65,7 @@ bot-detector/
     capture-corpus.mjs       fetches; rebuilds test/corpus/
     probe-prolific-humans.mjs fetches; found the >3/h people now in test/corpus/
     measure-jio329.mjs       fetches; the before/after JIO-329 sweep — EVALUATION.md 4b
+    measure-agenda-shape.mjs offline; ranks the corpus on the two shape signals — EVALUATION.md 4c
     evaluate.mjs             reprints EVALUATION.md's band table from test/corpus/, offline
     lib/bot-declaration.mjs  what counts as "this account declares itself a bot", and why twice
     lib/synthetic-bodies.mjs length-matched stand-ins for the 19 humans' comment text
@@ -191,6 +192,15 @@ The signals, with their weights:
 | Uniform comment length (1.5) | | |
 | Never replies to replies (1.5) | | |
 | Karma accumulation rate (1) | | |
+
+One column in that table does not combine by plain weighted average, and it is
+the one where a false positive is an accusation against a person. **Single-
+subject focus and Posts and leaves are held to the evidence beside them**:
+neither may argue harder than the strongest measured Recurring stock phrases or
+Revived dormant account, floored at the `moderate` band edge so neither is ever
+silenced. The section on it is below; the short version is that a hobbyist is
+topic-concentrated and posts and leaves, and those two signals alone were
+enough to band two real people.
 
 Three rules live in `axis.js` rather than in each scorer's good intentions:
 
@@ -378,6 +388,87 @@ truncation would have left the bug live for precisely the young accounts this
 axis gets pointed at — and a young account looking clean on the heaviest agenda
 signal is the failure mode worth caring about. There is a test for the complete
 case specifically, so nobody narrows it back.
+
+## The agenda axis banded a hobbyist, and shape was all it had
+
+The section above is four false positives found by pointing the thing at live
+accounts. This is a fifth, found by *freezing* two of them: when JIO-344 put
+u/humdingler and u/chilidirigible into `test/corpus/` to answer a question
+about posting rate, they arrived wearing an agenda badge nobody had asked
+about. **Both scored agenda `moderate` — 55 and 57 — where all 17 thread humans
+were `low` (0–19).** A reaction-GIF poster in r/Superstonk and a fifteen-year
+r/anime regular, told they might be pushing something.
+
+The whole of it came from two signals, and `scripts/measure-agenda-shape.mjs`
+ranks the frozen corpus on both (no network — the corpus is JSON and
+`scoreAgenda` is pure):
+
+* **Single-subject focus ranks the corpus backwards against its only ground
+  truth.** Seven of the eight declared bots hold the bottom seven places at
+  2–7% top-group share, the eighth reaches 16%, and 16 of the 19 humans beat
+  it. The only two accounts in the corpus this signal scores above `low` are
+  the two hobbyists, at 77% and 97%. Of course: a utility bot serves the whole
+  site, and u/AutoModerator posts in 307 groups against u/chilidirigible's 6.
+* **Posts and leaves separates nothing.** Bots span 0–91%, people 3–87%, and
+  the signal's own window floor of 0.35 sits *at the median thread human* of
+  0.36. u/Hartacus — an ordinary r/politics commenter — reads **87%, the same
+  as u/chilidirigible**. What separated the two was the other signal alone: 38
+  groups against 6.
+
+So the axis was banding people on their volume and their choice of subreddit,
+while `stock-phrasing` measured a real **zero** for both and `dormancy-revival`
+could not see a 120-day gap inside their 2- and 4-day windows. That is the
+axis's most consequential false positive and it was not hypothetical: it was
+the badge those two accounts were wearing.
+
+**The fix is not a threshold, deliberately.** There is no separating value to
+move one to: the bots are already *below* every account Single-subject focus
+fires on, so a threshold that separated the two populations would have to fire
+on low concentration — it would have to run backwards. `agenda.js` has said since it was written that
+"none of these signals is damning alone — a hobbyist is topic-concentrated" and
+that they are "weighted to be read together". A weighted mean does not read
+anything together, so `holdShapeToCorroboration()` makes that sentence
+executable: **a shape signal may argue as hard as the strongest measured
+`stock-phrasing` or `dormancy-revival` beside it, and no harder**, floored at
+the `moderate` band edge so it can always take the axis to the edge of an
+accusation on its own and never past it. Both accounts read `low 19` now, four
+thread humans move down within `low`, and **not one bot moves by a point** —
+every one of the eight reads `high` on stock phrasing, so nothing of theirs is
+held.
+
+**It is graded rather than a gate, and that is the load-bearing half.** An
+on/off rule at the same edge would have taken u/chilidirigible from agenda 30
+to **68** on a stock-phrasing strength moving 0.29 to 0.31 — and three of the
+17 thread humans sit within 0.11 of that line on their real bodies. A cliff
+that steep standing next to real accounts is a false positive waiting for the
+next re-capture, so there is a test that walks a hobbyist's phrasing coverage
+from 0% to 20% and fails if any step moves the score by more than 12 points.
+
+**Every hold says so on the account being judged**, in the evidence string, on
+screen: the measurement it made, that nothing beside it reads above low, and
+that it was therefore held. A discount applied silently is one nobody can argue
+with.
+
+**Two bounds on it, stated because they are not obvious.** First, the
+corroborated path is exercised by *no real person in this repository* — all 19
+human profiles carry synthetic bodies, so their stock phrasing is not the live
+account's, and only the propagandist fixture in `test/scoring.test.js`
+exercises the un-held branch. That gap is why the real bodies were solved for
+rather than assumed: `manifest.json` records each human's agenda score on both
+profiles, bodies feed stock phrasing and nothing else on this axis, so the
+difference *is* that signal. Both hobbyists come out held on their real bodies
+too — 63 → 25 and 55 → 19.
+
+Second, and this is the honest limit: **the rule protects an account whose
+phrasing and dormancy both read low, and nothing else.** Three of the
+seventeen ordinary humans clear the corroboration floor on their own real text.
+A hobbyist with a catchphrase gets nothing from this fix.
+
+And the thing this cannot say at all: whether either signal fires on an actual
+agenda account. The eight bots in the corpus are *utility* bots; there is no
+population of accounts known to be paid, and `EVALUATION.md` has recorded from
+the start that one cannot easily be obtained. An axis made harder to fire is
+not thereby an axis that fires correctly.
 
 ## Volume bought immunity from the strongest check
 
@@ -667,12 +758,15 @@ npm run evaluate -- --update    # accept today's scores as the new baseline
 node scripts/capture-corpus.mjs # rebuilds test/corpus/ from the live API
 node scripts/probe-prolific-humans.mjs   # hunts the prolific human — EVALUATION.md 4a
 node scripts/measure-jio329.mjs --corpus # JIO-329's cost, offline; --harvest/--fetch go live
+node scripts/measure-agenda-shape.mjs    # the agenda hold — EVALUATION.md 4c, offline
 ```
 
-Those three are the only scripts here that touch the network, and none of them
-is part of `npm test`. `measure-jio329.mjs` is the one that also has an offline
-mode: `--corpus`, `--variants` and `--report` read `test/corpus/` or a state
-file already on disk and fetch nothing.
+`capture-corpus.mjs` and `probe-prolific-humans.mjs` are the only two that
+always touch the network, and neither is part of `npm test`.
+`measure-jio329.mjs` goes either way: `--corpus`, `--variants` and `--report`
+read `test/corpus/` or a state file already on disk and fetch nothing, while
+`--harvest`/`--fetch` go live. `measure-agenda-shape.mjs` never fetches at
+all — like `evaluate`, it is JSON in and arithmetic out.
 
 `scoreAccount` is pure and the corpus is JSON, so `evaluate` is arithmetic on
 disk: no network, no `node_modules`, and `test/corpus.test.js` asserts that at
@@ -741,11 +835,11 @@ demonstration that the population exists, **not** a measured false-positive
 rate — the sweep deliberately aimed at the busiest authors on Reddit, so
 nothing here says how *common* a >3/h person is. And they moved a number that
 mattered: the human ceiling on automation goes from 17 to 25. They also carry a
-finding this ticket did not go looking for and is not fixing — **both score
-agenda `moderate` (55 and 57) where all 17 thread humans are `low` (0–19)**,
+finding the ticket that admitted them did not go looking for — **both scored
+agenda `moderate` (55 and 57) where all 17 thread humans were `low` (0–19)**,
 on `topic-concentration` and `drive-by-ratio`, which is what a high-volume
-single-subreddit hobbyist looks like to that axis. It is filed rather than
-absorbed.
+single-subreddit hobbyist looks like to that axis. That was filed rather than
+absorbed, and it is the section below: both read `low 19` now.
 
 **Bot bodies are real; human bodies are not.** Nobody's privacy is at stake in
 `u/RemindMeBot`'s boilerplate, and the bot half is precisely where the wording
@@ -1141,7 +1235,7 @@ source's own unit.
 ## Tests
 
 ```
-npm test                                  # both suites, 139 tests
+npm test                                  # both suites, 150 tests
 node --test test/scoring.test.js           # one file
 npm run evaluate                          # EVALUATION.md's band table, off frozen profiles
 ```

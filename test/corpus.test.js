@@ -133,6 +133,34 @@ test('a prolific human fires the rate signal and STILL scores automation low', (
     `the fastest frozen human (${fastest.value.itemsPerHour.toFixed(2)}/h) no longer overlaps the slowest frozen bot (${slowestBot.value.itemsPerHour.toFixed(2)}/h) — if this is real and not a re-capture artifact, README's rewritten threshold section needs re-reading`);
 });
 
+/**
+ * THE SECOND THING THIS COHORT PINS (JIO-424).
+ *
+ * These two were admitted for their posting RATE, and while they sat here they
+ * also scored agenda `moderate` 55 and 57 where all 17 thread humans were
+ * `low` — on `topic-concentration` and `drive-by-ratio` alone, the two signals
+ * that describe the shape of a hobby as accurately as they describe the shape
+ * of an agenda. `holdShapeToCorroboration()` in agenda.js is what stopped that,
+ * and this is the account it was measured on.
+ *
+ * The whole corpus is pinned to the point by the test below, so this adds no
+ * new arithmetic; it names the accounts and the reason, so that a re-baseline
+ * has to argue with a sentence rather than with a number in a JSON file.
+ */
+test('a prolific human is not accused of an agenda for having one subject', () => {
+  for (const account of prolificHumans) {
+    const verdict = verdictOf(account);
+    assert.equal(verdict.agenda.band, 'low',
+      `${account.username} scores agenda ${verdict.agenda.band} ${verdict.agenda.score} — a hobbyist earned an agenda badge`);
+
+    const topic = verdict.agenda.signals.find((sig) => sig.key === 'topic-concentration');
+    assert.ok(topic.value.topShare > 0.7,
+      `${account.username} is no longer the concentrated account this pins (${topic.value.topShare})`);
+    assert.equal(topic.value.heldToCorroboration, true,
+      `${account.username}'s concentration is no longer being held, so this test would pass for the wrong reason`);
+  }
+});
+
 test('every frozen account still scores exactly what expected.json records', () => {
   assert.ok(expected, 'test/corpus/expected.json is missing — run: npm run evaluate -- --update');
   for (const account of accounts) {

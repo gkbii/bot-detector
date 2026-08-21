@@ -49,7 +49,10 @@
     "than a hand re-measure (JIO-343). `capture:corpus` is one of the three",
     "scripts here that go to the network -- probe-prolific-humans.mjs (JIO-344)",
     "and measure-jio329.mjs (JIO-405) are the others -- and none is part of",
-    "`test`; all three are run by hand."
+    "`test`; all three are run by hand. measure-agenda-shape.mjs (JIO-424) is",
+    "run by hand too but never fetches: like `evaluate` it reads test/corpus/",
+    "and nothing else, which is why it has no script entry to protect it from",
+    "being run by accident."
   ],
   "scripts": {
     "start": "node server/index.js",

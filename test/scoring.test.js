@@ -229,6 +229,32 @@ const QUESTIONS = [
 /** Varied too — two fixed suffixes colliding would forge a phrase nobody wrote. */
 const FILLERS = ['is that right?', 'right?', 'or no?', 'surely?', 'yes?'];
 
+/**
+ * A DEDICATED HOBBYIST (JIO-424). One subreddit, high volume, one top-level
+ * comment per thread and never a return visit — the exact shape
+ * `topic-concentration` and `drive-by-ratio` are both built to read, in a
+ * person who is pushing nothing. This is u/humdingler and u/chilidirigible,
+ * hand-built: the two live accounts that made the axis band a hobbyist.
+ *
+ * Deliberately spans 300 days, so `dormancy-revival` is MEASURED at zero
+ * rather than merely unmeasurable — a measured zero must not corroborate
+ * either.
+ */
+function hobbyistProfile() {
+  const rand = rng(41);
+  const stamps = humanTimestamps({ rand, days: 300, activeHours: WAKING_HOURS, perDay: 6 });
+  const comments = stamps.map((at, i) => comment({
+    id: `hb${i}`,
+    at,
+    group: rand() < 0.92 ? 'thehobby' : `g${Math.floor(rand() * 3)}`,
+    body: randomText(rand),
+    score: 1 + Math.floor(rand() * 30),
+    thread: `t3_hb${i}`, // one and done, every time
+    isTopLevel: true,
+  }));
+  return profileOf({ comments, karma: { post: 800, comment: 9000, total: 9800 } });
+}
+
 /** A real person the tool should be able to vouch for. */
 function genuineProfile() {
   const rand = rng(23);
@@ -844,6 +870,96 @@ test('automation: the rate is measured over the RELIABLE window, so an ancient p
   const rate = findSignal(scoreAccount(withAncient).automation, 'sustained-posting-rate');
   assert.equal(rate.band, BAND.HIGH, 'the 2014 submission is below the reliable start and must be dropped');
   assert.ok(rate.value.spanSeconds < 6 * 3600, `expected a 5-hour span, got ${rate.value.spanSeconds}s`);
+});
+
+/**
+ * THE FALSE POSITIVE THIS AXIS COULD LEAST AFFORD (JIO-424).
+ *
+ * Two of the four agenda signals describe the SHAPE of an account's
+ * participation, and both are true of a hobbyist. Read as a plain weighted
+ * mean they banded u/humdingler and u/chilidirigible `moderate` 55 and 57 on
+ * nothing but volume and choice of subreddit, while `stock-phrasing` measured
+ * a real zero for both. The header of agenda.js has always said these signals
+ * are "weighted to be read together"; this is that sentence, executed.
+ *
+ * If this fails, the axis has gone back to accusing people of having a hobby.
+ * HAND-READ the account before changing it.
+ */
+test('agenda: single-subject focus and posts-and-leaves cannot band an account on their own', () => {
+  const verdict = scoreAccount(hobbyistProfile()).agenda;
+  const topic = findSignal(verdict, 'topic-concentration');
+  const driveBy = findSignal(verdict, 'drive-by-ratio');
+
+  // The shape really is there — this is not a fixture that fails to fire.
+  assert.ok(topic.value.topShare > 0.85, `expected a concentrated account, got ${topic.value.topShare}`);
+  assert.ok(driveBy.value.share > 0.85, `expected a drive-by shape, got ${driveBy.value.share}`);
+
+  // And neither corroborating signal reads above low, including a MEASURED
+  // zero on dormancy rather than an unmeasurable one.
+  assert.equal(findSignal(verdict, 'stock-phrasing').band, BAND.LOW);
+  assert.equal(findSignal(verdict, 'dormancy-revival').band, BAND.LOW);
+
+  assert.equal(topic.value.heldToCorroboration, true);
+  assert.equal(driveBy.value.heldToCorroboration, true);
+  assert.equal(verdict.band, BAND.LOW,
+    `a hobbyist must not earn an agenda band, got ${verdict.band} (${verdict.score})`);
+});
+
+test('agenda: a held signal says so on the account being judged', () => {
+  const topic = findSignal(scoreAccount(hobbyistProfile()).agenda, 'topic-concentration');
+
+  // The measurement survives the hold — a reader has to be able to see both
+  // what was measured and what was counted.
+  assert.match(topic.evidence, /sits in one group/);
+  assert.match(topic.evidence, /fits a dedicated hobbyist/);
+  assert.match(topic.evidence, /nothing beside it reads above low/);
+  assert.match(topic.evidence, /held to the edge of `moderate` rather than counted in full/);
+});
+
+/**
+ * The other half of the same rule. The hold is GRADED — a shape signal is
+ * held to the strength of the evidence beside it, not switched off — so a
+ * talking point recurring across unrelated threads buys the shape signals back
+ * their band. Without this the hold would be a blanket discount on two signals
+ * rather than a statement about reading them together, and the propagandist
+ * would quietly get cheaper to be.
+ */
+test('agenda: a talking point buys the shape signals back their strength', () => {
+  const verdict = scoreAccount(propagandistProfile()).agenda;
+
+  for (const key of ['topic-concentration', 'drive-by-ratio']) {
+    const sig = findSignal(verdict, key);
+    assert.equal(sig.band, BAND.HIGH,
+      `${key} was held below its own band despite a talking point recurring across threads`);
+    assert.doesNotMatch(sig.evidence, /nothing beside it reads above low/);
+  }
+  assert.equal(verdict.band, BAND.HIGH);
+});
+
+/**
+ * THE CLIFF THIS RULE DOES NOT HAVE, pinned because the graded shape is the
+ * whole reason it is written the way it is. An on/off gate at the band edge
+ * would have moved u/chilidirigible from agenda 30 to 68 on a `stock-phrasing`
+ * strength crossing 0.30, and three of the 17 thread humans sit within 0.11 of
+ * that line on their real bodies. So: a hair more corroboration must buy a
+ * hair more agenda, never a band.
+ */
+test('agenda: corroboration is graded, so no small change in phrasing moves a band', () => {
+  const base = hobbyistProfile();
+  const talkingPoint = 'the mainstream media refuses to report the real numbers';
+
+  let previous = null;
+  for (const share of [0, 0.04, 0.08, 0.12, 0.16, 0.2]) {
+    const comments = base.comments.map((c, i) => (
+      i / base.comments.length < share ? { ...c, body: `${c.body} ${talkingPoint}.` } : c
+    ));
+    const score = scoreAccount({ ...base, comments }).agenda.score;
+    if (previous !== null) {
+      assert.ok(score - previous <= 12,
+        `agenda jumped ${previous} -> ${score} on a small change in phrasing coverage (${share})`);
+    }
+    previous = score;
+  }
 });
 
 test('agenda: drive-by counts unanswered replies on own posts and names the proxy half', () => {
