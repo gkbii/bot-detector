@@ -64,6 +64,7 @@ bot-detector/
   scripts/                   NOT shipped, NOT imported by anything, NOT run by npm test
     capture-corpus.mjs       fetches; rebuilds test/corpus/
     probe-prolific-humans.mjs fetches; found the >3/h people now in test/corpus/
+    measure-jio329.mjs       fetches; the before/after JIO-329 sweep — EVALUATION.md 4b
     evaluate.mjs             reprints EVALUATION.md's band table from test/corpus/, offline
     lib/bot-declaration.mjs  what counts as "this account declares itself a bot", and why twice
     lib/synthetic-bodies.mjs length-matched stand-ins for the 19 humans' comment text
@@ -525,16 +526,36 @@ measure them (a 3.7-day window, and a long-running r/anime regular with no
 JIO-329's premise — `conversation-depth` and `interval-regularity` both going
 unmeasured — they come out **`moderate 32`, and without this signal `low 28`**.
 So this signal supplies the 4 points that cross the band, and JIO-329 supplies
-the rest by removing two measured near-zeros from a weighted average. One real
-person crosses a band, and it is a cost of the two changes together rather than
-of either alone. It is written down before JIO-329 lands rather than found
-afterwards, and u/chilidirigible is in the corpus precisely so that `npm run
-evaluate` fails on the day it happens instead of printing `OK`. (Those two
-projections are not reproducible from the public verdict — `axis.js` publishes
-`band` and not `strength` by design — so they were computed on an instrumented
-copy of `stripInternal`. EVALUATION.md Finding 4a measured 33/29 for the same
-account against its live 2026-08-20 window; 32/28 is the frozen 2026-08-21
-one.)
+the rest by removing two measured near-zeros from a weighted average. It is
+written down before JIO-329 lands rather than found afterwards, and
+u/chilidirigible is in the corpus precisely so that `npm run evaluate` fails on
+the day it happens instead of printing `OK`. (Those two projections are not
+reproducible from the public verdict — `axis.js` publishes `band` and not
+`strength` by design — so they were computed on an instrumented copy of
+`stripInternal`. EVALUATION.md Finding 4a measured 33/29 for the same account
+against its live 2026-08-20 window; 32/28 is the frozen 2026-08-21 one.)
+
+**"A cost of the two changes together" was the wrong reading, and the sentence
+that said so is gone.** It was true of u/chilidirigible and it does not
+generalise, which the whole-ranking sweep in **EVALUATION.md Finding 4b** then
+showed: of the seven live accounts that cross under JIO-329, **five cross with
+this signal `unmeasured`**, at 0.01 to 2.26 items an hour. Two of them have no
+measured evidence of automation whatsoever beyond `posting-hour-dead-zone` and
+land on exactly 30. So this signal is not a co-author of JIO-329's cost — it
+was simply the only lens available on the day, because the only prolific human
+then in the corpus was one it happened to measure.
+
+**What that sweep established, and it belongs here rather than only there.**
+JIO-329 removes 3.5 of 15.5 weight, so for an ordinary profile at the common
+measured weight of 13.5 it multiplies the automation score by 13.5/10 = **1.35**
+— and a multiplier on the score is a divisor on the band edge. `moderate` stops
+beginning at 30 and begins at **22.2** on today's scale. Measured against 124
+live accounts, every single one scoring 22–29 today crossed and nothing at 21 or
+below did. The lever that number is sensitive to is `MIN_MEASURED_WEIGHT_FRACTION`
+and the weights themselves, **not** `ORDINARY_ITEMS_PER_HOUR` and not the band
+edge — moving `moderate` to 35 would still leave two of the seven above it and
+would silently re-band the other two axes, which have nothing to do with any of
+this.
 
 ## The blind spot: an account the index has never heard of
 
@@ -645,10 +666,13 @@ npm run evaluate -- --detail    # one line per account
 npm run evaluate -- --update    # accept today's scores as the new baseline
 node scripts/capture-corpus.mjs # rebuilds test/corpus/ from the live API
 node scripts/probe-prolific-humans.mjs   # hunts the prolific human — EVALUATION.md 4a
+node scripts/measure-jio329.mjs --corpus # JIO-329's cost, offline; --harvest/--fetch go live
 ```
 
-Those two are the only scripts here that touch the network, and neither is part
-of `npm test`.
+Those three are the only scripts here that touch the network, and none of them
+is part of `npm test`. `measure-jio329.mjs` is the one that also has an offline
+mode: `--corpus`, `--variants` and `--report` read `test/corpus/` or a state
+file already on disk and fetch nothing.
 
 `scoreAccount` is pure and the corpus is JSON, so `evaluate` is arithmetic on
 disk: no network, no `node_modules`, and `test/corpus.test.js` asserts that at

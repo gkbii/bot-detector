@@ -46,9 +46,10 @@
     "profiles frozen in test/corpus/ and exits non-zero if any of the 81 scores",
     "moved. It reads nothing but JSON -- no network, no node_modules -- so",
     "'the 17-human / 8-bot separation is not regressed' is a command rather",
-    "than a hand re-measure (JIO-343). `capture:corpus` is one of the two",
-    "scripts here that go to the network -- probe-prolific-humans.mjs is the",
-    "other (JIO-344) -- and neither is part of `test`; both are run by hand."
+    "than a hand re-measure (JIO-343). `capture:corpus` is one of the three",
+    "scripts here that go to the network -- probe-prolific-humans.mjs (JIO-344)",
+    "and measure-jio329.mjs (JIO-405) are the others -- and none is part of",
+    "`test`; all three are run by hand."
   ],
   "scripts": {
     "start": "node server/index.js",

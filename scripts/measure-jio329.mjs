@@ -4,6 +4,8 @@
  *   node scripts/measure-jio329.mjs --harvest            # content-blind ranking
  *   node scripts/measure-jio329.mjs --fetch --budget-s 500   # resumable, repeat
  *   node scripts/measure-jio329.mjs --report
+ *   node scripts/measure-jio329.mjs --resample --from A.json --rule top --state B.json
+ *   node scripts/measure-jio329.mjs --variants           # the weight choice, no network
  *   node scripts/measure-jio329.mjs --corpus             # frozen arm, no network
  *   node scripts/measure-jio329.mjs --read u/a,u/b       # bodies, for hand-reading
  *
@@ -36,6 +38,15 @@
  * settled by the harvest and cannot be steered afterwards by anyone who does
  * not like the answer.
  *
+ * AND THE HARVEST KEEPS THE WHOLE RANKING, not just the sample it drew from it.
+ * The first cut stored only the 80 picks, so asking a second question of the
+ * same window — the TOP of the ranking, Finding 4a's population — meant either
+ * re-harvesting into a different window or a throwaway script, and the audit
+ * that first ran this needed exactly that and wrote one. `--resample` re-draws
+ * from a harvest already on disk with no network at all, so the two live arms
+ * below are two samples of ONE window rather than two windows, and the
+ * comparison between them is about the population and not about the day.
+ *
  * HOW THE "AFTER" ARM IS COMPUTED, AND WHY IT IS AN INSTRUMENTED COPY.
  * `axis.js` publishes `band` and `value` and deliberately strips `strength`,
  * so JIO-329's arm cannot be recomputed from a public verdict. Finding 4a's
@@ -46,6 +57,13 @@
  * scorer from there. The real tree is never touched, the transform is a single
  * documented substitution that fails loudly if it does not match, and re-running
  * this command reproduces the numbers.
+ *
+ * WHY IT ALSO SCORES THE VARIANTS JIO-329 DID NOT PICK. "Drop both signals" is
+ * one of four ways to spend the 3.5 weight, and a measurement that only scores
+ * the chosen one cannot justify it over the others. `--variants` replays every
+ * drop-set against rows already on disk — no network, no re-fetch — so the
+ * question "would dropping just one have cost less?" is answered with the same
+ * accounts rather than with an argument.
  *
  * WHAT IT DOES NOT DO. It does not decide who is a person. Band crossings are
  * NAMED and then hand-read with `--read`, which prints bodies to the terminal
@@ -85,6 +103,9 @@ const PAGES = Number(value('--pages', '12'));
 const PACE_MS = Number(value('--pace-ms', '1000'));
 const SAMPLE = Number(value('--sample', '80'));
 const BUDGET_S = Number(value('--budget-s', '480'));
+const RULE = value('--rule', 'even');
+/** Names to add to a sample whatever rank they landed at, for continuity with an earlier arm. */
+const INCLUDE = value('--include', '').split(',').map((s) => s.trim().replace(/^\/?(?:u|user)\//i, '')).filter(Boolean);
 const STATE = value('--state', path.join(os.tmpdir(), 'bot-detector-jio329', 'state.json'));
 const SUBS = value('--subs', null)?.split(',').map((s) => s.trim()) ?? [
   'AskReddit', 'AmItheAsshole', 'wallstreetbets', 'nba', 'movies',
@@ -192,19 +213,45 @@ async function harvest() {
 }
 
 /**
- * Evenly-spaced ranks across the WHOLE ranking. Finding 4a took the top 48;
- * this deliberately does not, because the question is what happens to ordinary
- * people and the top of a volume ranking is nobody ordinary. AutoModerator is
- * dropped for the reason `probe-prolific-humans.mjs` drops it — already frozen
- * in the corpus, and not an account this is asking about.
+ * Draw a sample from a ranking. `even` takes evenly-spaced ranks across the
+ * WHOLE ranking, which is this script's own question: what happens to ordinary
+ * people, of whom the top of a volume ranking holds none. `top` takes the head
+ * of it, which is Finding 4a's population and is here so the two can be
+ * compared within one window rather than across two. AutoModerator is dropped
+ * for the reason `probe-prolific-humans.mjs` drops it — already frozen in the
+ * corpus, and not an account this is asking about.
+ *
+ * `--include` appends named accounts at whatever rank they actually hold, so an
+ * arm can carry an earlier finding's accounts forward. They are marked, because
+ * a hand-picked row in a content-blind sample is exactly the row that must not
+ * be counted as though the sampler had found it.
  */
-function stratify(ranked, n) {
+function draw(ranked, n, rule) {
   const pool = ranked.filter((r) => r.author !== 'AutoModerator');
-  if (pool.length <= n) return pool.map((r, i) => ({ ...r, rank: i + 1 }));
   const picks = [];
-  for (let i = 0; i < n; i += 1) {
-    const idx = Math.floor((i * (pool.length - 1)) / (n - 1));
-    picks.push({ ...pool[idx], rank: idx + 1 });
+  if (rule === 'top') {
+    picks.push(...pool.slice(0, n).map((r, i) => ({ ...r, rank: i + 1 })));
+  } else if (rule === 'even') {
+    if (pool.length <= n) picks.push(...pool.map((r, i) => ({ ...r, rank: i + 1 })));
+    else {
+      for (let i = 0; i < n; i += 1) {
+        const idx = Math.floor((i * (pool.length - 1)) / (n - 1));
+        picks.push({ ...pool[idx], rank: idx + 1 });
+      }
+    }
+  } else {
+    throw new Error(`--rule must be 'even' or 'top', not ${JSON.stringify(rule)}`);
+  }
+
+  for (const author of INCLUDE) {
+    if (picks.some((p) => p.author === author)) continue;
+    const idx = pool.findIndex((p) => p.author === author);
+    if (idx < 0) {
+      console.error(`  --include ${author}: not in this window's ranking at all; adding at rank -1`);
+      picks.push({ author, n: 0, rank: -1, included: true });
+    } else {
+      picks.push({ ...pool[idx], rank: idx + 1, included: true });
+    }
   }
   return picks;
 }
@@ -214,6 +261,25 @@ function stratify(ranked, n) {
 function loadState() {
   if (!fs.existsSync(STATE)) return null;
   return JSON.parse(fs.readFileSync(STATE, 'utf8'));
+}
+
+/** A fresh state: the whole ranking, the sample drawn from it, and no rows yet. */
+function stateFrom(ranked, provenance) {
+  const sample = draw(ranked, SAMPLE, RULE);
+  const included = sample.filter((s) => s.included).length;
+  console.error(`\n${ranked.length} distinct authors; --rule ${RULE} sampled ${sample.length - included} at ranks `
+    + `${sample.slice(0, 4).map((s) => s.rank).join(', ')} … ${sample[sample.length - 1 - included].rank}`
+    + (included ? `, plus ${included} named by --include` : ''));
+  console.error(`state: ${STATE}`);
+  return {
+    ...provenance,
+    rule: RULE,
+    distinctAuthors: ranked.length,
+    totalComments: ranked.reduce((a, r) => a + r.n, 0),
+    ranked,
+    sample,
+    rows: [],
+  };
 }
 
 function saveState(state) {
@@ -233,31 +299,25 @@ const bandOf = (score) => (score < BAND_MODERATE ? 'low' : score < BAND_HIGH ? '
  * because dropping 3.5 of 15.5 can push a thinly-measured account under it and
  * turn a score into `insufficient-data`.
  */
+function project(signals, dropped) {
+  const sum = (rows, f) => rows.reduce((a, s) => a + f(s), 0);
+  const kept = signals.filter((s) => s.strength != null && !dropped.includes(s.key));
+  const mw = sum(kept, (s) => s.weight);
+  const gated = !kept.length || mw / AXIS_TOTAL_WEIGHT < MIN_MEASURED_WEIGHT_FRACTION;
+  const score = gated ? null : Math.round((sum(kept, (s) => s.weight * s.strength) / mw) * 100);
+  return { score, band: score == null ? 'insufficient-data' : bandOf(score), measuredWeight: mw, gated };
+}
+
 function arms(automation) {
   if (automation.score == null) return { before: null, after: null, signals: [] };
-  const measured = automation.signals.filter((s) => s.strength != null);
-  const sum = (rows, f) => rows.reduce((a, s) => a + f(s), 0);
-
-  const mwA = sum(measured, (s) => s.weight);
-  const scoreA = Math.round((sum(measured, (s) => s.weight * s.strength) / mwA) * 100);
-
-  const kept = measured.filter((s) => !DROPPED.includes(s.key));
-  const mwB = sum(kept, (s) => s.weight);
-  const gated = !kept.length || mwB / AXIS_TOTAL_WEIGHT < MIN_MEASURED_WEIGHT_FRACTION;
-  const scoreB = gated ? null : Math.round((sum(kept, (s) => s.weight * s.strength) / mwB) * 100);
-
-  return {
-    before: { score: scoreA, band: bandOf(scoreA), measuredWeight: mwA },
-    after: {
-      score: scoreB,
-      band: scoreB == null ? 'insufficient-data' : bandOf(scoreB),
-      measuredWeight: mwB,
-      gated,
-    },
-    signals: automation.signals.map((s) => ({
-      key: s.key, weight: s.weight, strength: s.strength ?? null, band: s.band,
-    })),
-  };
+  const signals = automation.signals.map((s) => ({
+    key: s.key, weight: s.weight, strength: s.strength ?? null, band: s.band,
+  }));
+  // The before-arm drops nothing, so its gate cannot fire — axis.js already
+  // reported a score, which is what `automation.score != null` above means.
+  const before = project(signals, []);
+  return { before: { score: before.score, band: before.band, measuredWeight: before.measuredWeight },
+    after: project(signals, DROPPED), signals };
 }
 
 async function fetchArm(scoreAccount, state) {
@@ -380,6 +440,74 @@ function carried(r) {
   }
 }
 
+/* ------------------------------------------------------------- variants */
+
+/**
+ * The four ways to spend the 3.5 weight, replayed against rows already on disk.
+ * `signals` carries every strength, so no account is re-fetched and no second
+ * scoring pass runs — this is the same arithmetic axis.js does, with a
+ * different set of keys removed from numerator and denominator.
+ */
+const VARIANTS = [
+  { label: 'today (drop nothing)', dropped: [] },
+  { label: 'drop conversation-depth (1.5)', dropped: ['conversation-depth'] },
+  { label: 'drop interval-regularity (2)', dropped: ['interval-regularity'] },
+  { label: 'JIO-329: drop both (3.5)', dropped: DROPPED },
+];
+
+function variants(rows, title) {
+  const scored = rows.filter((r) => !r.error && r.before && r.signals?.length);
+  console.log(`\n# variants — ${title}`);
+  console.log(`# ${scored.length} scored account(s); every column is recomputed from the same stored strengths`);
+  if (!scored.length) return;
+
+  // Where the class is known, the mean shift on its own says nothing: what
+  // matters is whether the bots move further than the people, because that
+  // difference IS the axis's discriminating power. So it is split.
+  const known = scored.filter((r) => r.class);
+  const signed = (n) => `${n >= 0 ? '+' : ''}${n.toFixed(1)}`;
+  console.log(`\n${'variant'.padEnd(32)}${'rise'.padStart(6)}${'fall'.padStart(6)}${'mean'.padStart(7)}`
+    + `${'gated'.padStart(7)}${'crossings'.padStart(11)}`
+    + (known.length ? `${'human'.padStart(8)}${'max'.padStart(5)}${'bot'.padStart(8)}${'min'.padStart(5)}${'gap'.padStart(6)}` : ''));
+
+  const detail = [];
+  for (const v of VARIANTS) {
+    const proj = scored.map((r) => ({ r, base: project(r.signals, []), now: project(r.signals, v.dropped) }));
+    const live = proj.filter((p) => p.now.score != null);
+    const deltas = live.map((p) => p.now.score - p.base.score);
+    const mean = deltas.reduce((a, b) => a + b, 0) / (deltas.length || 1);
+    const crossed = live.filter((p) => p.now.band !== p.base.band);
+
+    let classCols = '';
+    if (known.length) {
+      const of = (cls) => live.filter((p) => p.r.class === cls);
+      const meanOf = (rows) => rows.reduce((a, p) => a + (p.now.score - p.base.score), 0) / (rows.length || 1);
+      const humanMax = Math.max(...of('human').map((p) => p.now.score));
+      const botMin = Math.min(...of('bot').map((p) => p.now.score));
+      classCols = signed(meanOf(of('human'))).padStart(8) + String(humanMax).padStart(5)
+        + signed(meanOf(of('bot'))).padStart(8) + String(botMin).padStart(5)
+        + String(botMin - humanMax).padStart(6);
+    }
+
+    console.log(v.label.padEnd(32)
+      + String(deltas.filter((d) => d > 0).length).padStart(6)
+      + String(deltas.filter((d) => d < 0).length).padStart(6)
+      + signed(mean).padStart(7)
+      + String(proj.length - live.length).padStart(7)
+      + String(crossed.length).padStart(11)
+      + classCols);
+    detail.push({ v, crossed });
+  }
+
+  for (const { v, crossed } of detail) {
+    if (!crossed.length) continue;
+    console.log(`\n  ${v.label} — who crosses:`);
+    for (const p of crossed) {
+      console.log(`    ${p.r.username.padEnd(34)} ${p.base.band} ${p.base.score} -> ${p.now.band} ${p.now.score}`);
+    }
+  }
+}
+
 /* ------------------------------------------------------------ frozen arm */
 
 async function corpusArm(scoreAccount) {
@@ -410,8 +538,10 @@ async function corpusArm(scoreAccount) {
 
 async function main() {
   if (flag('--help')) {
-    console.log('node scripts/measure-jio329.mjs [--harvest] [--fetch] [--report] [--corpus] [--read u/a,u/b]');
-    console.log('  --pages N --pace-ms N --sample N --budget-s N --subs a,b --state PATH');
+    console.log('node scripts/measure-jio329.mjs [--harvest] [--resample --from PATH] [--fetch]');
+    console.log('  [--report] [--variants] [--corpus] [--corpus --variants] [--read u/a,u/b]');
+    console.log('  --pages N --pace-ms N --sample N --rule even|top --include u/a,u/b');
+    console.log('  --budget-s N --subs a,b --state PATH');
     return;
   }
 
@@ -429,26 +559,40 @@ async function main() {
 
   if (flag('--harvest')) {
     const ranked = await harvest();
-    const sample = stratify(ranked, SAMPLE);
-    saveState({
-      harvestedAt: new Date().toISOString(),
-      subs: SUBS, pages: PAGES,
-      distinctAuthors: ranked.length,
-      totalComments: ranked.reduce((a, r) => a + r.n, 0),
-      sample,
-      rows: [],
-    });
-    console.error(`\n${ranked.length} distinct authors; sampled ${sample.length} at ranks `
-      + `${sample.slice(0, 4).map((s) => s.rank).join(', ')} … ${sample.at(-1).rank}`);
-    console.error(`state: ${STATE}`);
+    saveState(stateFrom(ranked, {
+      harvestedAt: new Date().toISOString(), subs: SUBS, pages: PAGES,
+    }));
+    return;
+  }
+
+  // Re-draw from a harvest already on disk. No network: the whole point is that
+  // a second question about the SAME window costs nothing and cannot silently
+  // become a question about a different day.
+  if (flag('--resample')) {
+    const from = value('--from', null);
+    if (!from) throw new Error('--resample needs --from <state written by --harvest>');
+    const src = JSON.parse(fs.readFileSync(from, 'utf8'));
+    if (!src.ranked) {
+      throw new Error(`${from} was written before the harvest kept its ranking; re-harvest to resample from it`);
+    }
+    const existing = loadState();
+    if (existing?.rows?.length) {
+      throw new Error(`${STATE} already holds ${existing.rows.length} fetched row(s) — resampling would orphan them; pass --state <new path>`);
+    }
+    saveState(stateFrom(src.ranked, {
+      harvestedAt: src.harvestedAt, subs: src.subs, pages: src.pages, resampledFrom: from,
+    }));
     return;
   }
 
   if (flag('--corpus')) {
     const scoreAccount = await instrumentedScorer();
     const rows = await corpusArm(scoreAccount);
-    report(rows, `frozen corpus under JIO-329 — ${new Date().toISOString()}`,
-      'test/corpus/, no network; the arm npm run evaluate would print the day JIO-329 lands');
+    if (flag('--variants')) variants(rows, 'frozen corpus, test/corpus/');
+    else {
+      report(rows, `frozen corpus under JIO-329 — ${new Date().toISOString()}`,
+        'test/corpus/, no network; the arm npm run evaluate would print the day JIO-329 lands');
+    }
     return;
   }
 
@@ -460,10 +604,16 @@ async function main() {
     await fetchArm(scoreAccount, state);
   }
 
+  const provenance = `r/${state.subs.join(' r/')} · ${state.totalComments} comments · ${state.distinctAuthors} `
+    + `distinct authors · ${state.sample.length} sampled, --rule ${state.rule ?? 'even'}`;
+
+  if (flag('--variants')) {
+    variants(state.rows, `${provenance}, harvested ${state.harvestedAt}`);
+    return;
+  }
+
   if (flag('--report') || flag('--fetch')) {
-    report(state.rows, `measure-jio329 — harvested ${state.harvestedAt}`,
-      `r/${state.subs.join(' r/')} · ${state.totalComments} comments · ${state.distinctAuthors} distinct authors · `
-      + `${state.sample.length} sampled at even ranks through the whole ranking`);
+    report(state.rows, `measure-jio329 — harvested ${state.harvestedAt}`, provenance);
   }
 }
 

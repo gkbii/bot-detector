@@ -1,8 +1,8 @@
 /**
  * Capture `test/corpus/` — the frozen evaluation corpus. Goes to the network on
  * purpose; it is not run by `npm test`, by `npm run evaluate`, or by anything
- * in the extension. `probe-prolific-humans.mjs` is the only other script here
- * that fetches, and it feeds this one (see PROLIFIC_HUMANS below).
+ * in the extension. Two other scripts here fetch: `probe-prolific-humans.mjs`,
+ * which feeds this one (see PROLIFIC_HUMANS below), and `measure-jio329.mjs`.
  *
  *   node scripts/capture-corpus.mjs                 # fill in what is missing
  *   node scripts/capture-corpus.mjs --force         # re-capture everything
@@ -99,11 +99,17 @@ const COHORT_BOT = 'declared-bot';
  *                     the two populations overlap, which is the claim README
  *                     used to deny.
  *   u/chilidirigible  3.42/h — automation `low 25`, the highest-scoring of the
- *                     six and the one JIO-329 pushes to `moderate 33` when it
- *                     takes `conversation-depth` and `interval-regularity` to
- *                     unmeasured. Without it in here, a real person crossing a
- *                     band is a thing that happens with `npm run evaluate`
- *                     still printing OK.
+ *                     six and the one JIO-329 pushes to `moderate 32` from
+ *                     this frozen profile, when it takes `conversation-depth`
+ *                     and `interval-regularity` to unmeasured. Without it in
+ *                     here, a real person crossing a band is a thing that
+ *                     happens with `npm run evaluate` still printing OK.
+ *                     It is the only account in here that crosses, and it is
+ *                     NOT the whole cost: the live sweep in EVALUATION.md
+ *                     Finding 4b crossed seven, five of them at rates this
+ *                     signal never measures. Every human in this corpus was
+ *                     sampled by volume or off one r/politics thread, so what
+ *                     is pinned here is that the cost EXISTS, not its size.
  *
  * ADMISSION IS RE-CHECKABLE, like the bot half's. A bot has to declare itself
  * in its own committed text; a prolific-probe human has to actually FIRE

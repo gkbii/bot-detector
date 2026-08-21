@@ -375,6 +375,14 @@ and u/Mysterious_Sleep7443 crosses `low 23` → `moderate 33` at 0.53/h — a ra
 at which this signal never fires at all. JIO-329 needs its own live re-measure
 before it lands.
 
+**That re-measure is Finding 4b below (JIO-405), and it did not agree with the
+reading here.** These 44 accounts are the top of a volume ranking, so the
+question "what does this do to ordinary people?" was still unasked. Asked
+properly — evenly-spaced ranks through a whole 7,351-author ranking — the answer
+is not a count of unlucky accounts at all: JIO-329 multiplies an ordinary
+automation score by about 1.35, which moves the `moderate` band edge from 30
+down to **22.2** on today's scale.
+
 **Closed on 2026-08-21, in three parts.**
 
 1. *The evidence string.* It asserted throughput "above the 3 an hour a person
@@ -419,6 +427,178 @@ both reading `high`. That is what a high-volume single-subreddit hobbyist looks
 like to the agenda axis, it is a different axis from the one this ticket is
 about, and it is a question for its own ticket rather than something to fix
 under a rate signal.
+
+## Finding 4b — JIO-329 does not raise the risk of a `moderate`, it moves the band edge from 30 to 22
+
+Measured live on **2026-08-21** by `scripts/measure-jio329.mjs`, which is
+committed and is the only way to ask this question: `axis.js` publishes `band`
+and deliberately strips `strength`, so a JIO-329 arm cannot be recomputed from
+a public verdict at all. The script scores an **instrumented copy** of
+`extension/lib/` — `stripInternal` rewritten to the identity in a temp tree,
+one substitution that throws if it stops matching — and refuses to run if the
+patch silently no-ops, because a no-op would make every after-score identical
+to its before-score and read as *"JIO-329 changes nothing"*.
+
+**Why this finding exists at all.** Finding 4a closed with one line of
+arithmetic and one account: dropping two signals that read 0.0 for ordinary
+people removes measured zeros from a weighted average and therefore raises it,
+and u/chilidirigible crossed. That was 44 accounts off the **top** of a
+prolific-commenter ranking, harvested to answer a different question. The
+population JIO-329 is about is everybody it was not aimed at.
+
+### The measurement
+
+One content-blind harvest — 10 subreddits, 11,425 comments, **7,351 distinct
+authors** ranked before anything was fetched — sampled twice, with **no second
+harvest**, so the difference between the two arms is the population and not the
+day:
+
+| arm | sample | scored | rise / fall / same | mean | crossings |
+|---|---|---:|---|---:|---:|
+| **A — whole ranking** | 80 at even ranks 1…7350 | 78 | **59 / 6 / 13** | **+2.6** | **4** |
+| **B — top of ranking** | ranks 1–48, plus the two named in 4a | 46 | 32 / 2 / 12 | +2.3 | 3 |
+| **C — frozen corpus** | `test/corpus/`, no network | 27 | 20 / 0 / 7 | +6.5 | 6 |
+
+Arm C is the arm `npm run evaluate` will print the day JIO-329 lands, and it is
+reproducible by anyone at any time: `node scripts/measure-jio329.mjs --corpus`.
+
+### Every account scoring 22–29 today crosses. All of them. That is not a sample result
+
+The seven live crossings are not seven unlucky accounts. For an account whose
+automation signals are otherwise near zero — which is what an ordinary person
+looks like — the score is a weighted mean over measured weight, so removing 3.5
+of it multiplies the score by `mw / (mw - 3.5)`: **×1.35** at the common
+measured weight of 13.5, ×1.39 at 12.5, ×1.29 at 15.5.
+
+A multiplier on the score is a **divisor on the band edge**. `moderate` starts
+at 30, so after JIO-329 it starts at **30 / 1.35 = 22.2** on today's scale.
+Sorting both live arms by today's score and checking that prediction against
+what actually happened:
+
+* **every one of the 7 accounts scoring 22–29 today crossed** into `moderate`;
+* **no account scoring 21 or less crossed**, in either arm;
+* there were no other crossings, and nothing was lost to the measured-weight
+  gate in any arm.
+
+So the honest statement is not *"4 of 78 crossed"* — that is a fact about how
+many people happen to live in an 8-point band. It is: **JIO-329 lowers the
+effective `moderate` threshold for a typical human profile from 30 to 22.2, and
+then the sample only says how crowded that strip is.**
+
+How crowded, stated so it cannot be read as better than it is: **5 of the 122
+content-blind accounts, 4.1%**. Two of arm B's three crossings are
+u/chilidirigible and u/Mysterious_Sleep7443, carried in **by name** from Finding
+4a because they are the accounts that raised this question — they are in the
+table below and they are excluded from that rate, because an account picked for
+being interesting cannot also be evidence of how often interesting turns up.
+`--include` marks such rows in the state file for exactly this reason.
+
+**Half the population is one signal wide, and it is always the same signal.**
+38 of arm A's 78 accounts have exactly one non-zero automation signal, and for
+every one of the 38 it is `posting-hour-dead-zone` (weight 3). For that shape
+the axis *is* that one signal:
+3s/13.5 today, 3s/10 after. At full strength that is precisely **22 → 30**, the
+band edge to the point.
+
+### The seven, named, with the signal that carried each
+
+Hand-read with `--read`, which prints bodies and writes none. All seven read as
+people: a WSB options trader, a WNBA and r/nba fan, a UK nostalgia poster, a
+motorcyclist, an AskReddit regular, a crypto poster, a fifteen-year r/anime
+regular.
+
+| account | arm | today | after | carried by | rate |
+|---|---|---|---|---|---|
+| u/-PMYourTastefulNudes | B (rank 24) | low 27 | **moderate 39** | `cross-thread-bursts` 1.00×2 | 6.08/h, fired |
+| u/chilidirigible | B (rank 954) | low 27 | **moderate 34** | `posting-hour-dead-zone` 0.79×3 | 3.33/h, fired |
+| u/outsidehere | A (rank 5489) | low 25 | **moderate 34** | `posting-hour-dead-zone` 0.63×3, `cross-thread-bursts` 0.66×2 | 2.26/h, **unmeasured** |
+| u/upyoursbigtime | A (rank 6977) | low 24 | **moderate 33** | `posting-hour-dead-zone` 0.97×3 | 0.05/h, **unmeasured** |
+| u/Mysterious_Sleep7443 | B (rank 5129) | low 23 | **moderate 32** | `posting-hour-dead-zone` 0.95×3 | 0.52/h, **unmeasured** |
+| u/nickmarvin | A (rank 5210) | low 22 | **moderate 30** | `posting-hour-dead-zone` 1.00×3, alone | 0.01/h, **unmeasured** |
+| u/TheFansHitTheShit | A (rank 6698) | low 22 | **moderate 30** | `posting-hour-dead-zone` 1.00×3, alone | 0.05/h, **unmeasured** |
+
+**Five of the seven cross with `sustained-posting-rate` unmeasured**, at rates
+of 0.01 to 2.26 an hour. Finding 4a's one crossing could be read as a cost
+shared with JIO-344, and README says so; these five cannot. They are JIO-329's
+own, and the two at exactly 30 have **no other measured evidence of automation
+at all** — `posting-hour-dead-zone` is their entire score.
+
+**And the largest single rise is a person, one point below `high`.**
+u/insomniac4sure goes `moderate 47` → `moderate 64` (+17) — one point under
+`high`. The account posts in r/lymphoma about living off grapes during chemo and
+tells an AmItheAsshole story about a brother-in-law who stayed three years, and
+it plays two mobile games that post on its behalf: *"I solved this puzzle in 13
+moves"*, forty-odd times, plus a referral link. `near-duplicate-bodies` is right
+about the text and wrong about the account. It did not cross a band, so no rule
+here names it; it is named anyway, because "nothing crossed above `moderate`"
+would otherwise be a true sentence covering a 64.
+
+### Re-justifying the weight choice against this, rather than against the premise
+
+3.5 weight can be spent four ways, and `--variants` replays all four against the
+same stored strengths — no re-fetch, no second scoring pass. Against
+`test/corpus/`, where the class of every account is known:
+
+| variant | bots → `high` | humans crossing | human mean | human max | bot mean | bot min | **gap** |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| today | 0 | 0 | — | 25 | — | 39 | **14** |
+| drop `conversation-depth` (1.5) | 1 | 0 | +0.8 | 28 | +4.4 | 44 | **16** |
+| drop `interval-regularity` (2) | 2 | 0 | +0.9 | 29 | +10.4 | 46 | **17** |
+| **JIO-329 — drop both (3.5)** | **5** | 1 | +1.9 | 32 | **+17.3** | 54 | **22** |
+
+**Dropping both is the right call, and the reason is the last column.** Finding
+4 is that seven of eight declared bots top out at `moderate`; dropping both is
+the only variant that breaks that for most of them — **five** of the eight reach
+`high`, against two for `interval-regularity` alone and one for
+`conversation-depth` alone. And the axis does not merely inflate: the bots
+move **nine times further than the people** (+17.3 against +1.9), so the gap
+between the human ceiling and the bot floor **widens from 14 points to 22**. The
+change costs people a band and buys back more separation than it spends. On the
+live arms, where no class is known, the same shape holds and is sharper:
+dropping either signal **alone** costs **zero** crossings in arm A, and dropping
+both costs four. The cost is in the last 1.5 of weight, not spread across it.
+
+**Two levers the measurement rules out, so that nobody spends a week on them.**
+`ORDINARY_ITEMS_PER_HOUR` is not one: five of the seven crossed with that signal
+unmeasured, and Finding 4a already established there is no separating value for
+it. Nor is the band edge: moving `moderate` from 30 to 35 would spare five of
+the seven and leave u/-PMYourTastefulNudes at 39 and u/chilidirigible at 34
+regardless, while silently re-banding the agenda and authenticity axes, which
+have nothing to do with this. And no test on the two signals' own values can
+separate the populations either — **`conversation-depth` and
+`interval-regularity` read 0.000 for the people here AND 0.000 for
+u/RemindMeBot**. That identity is exactly why dropping them helps the bots and
+hurts the people in the same motion, and why the separation has to come from
+the other signals rather than from a smarter condition on these two.
+
+### What this does not establish
+
+Seven hand-read accounts are a demonstration, not a false-positive rate. The
+sweep is content-blind but it is a sweep of ten busy subreddits over a few
+hours, so "4.1% of accounts sit in the 22–29 strip" is a statement about that
+window and not about Reddit — and the two arms disagree about it even inside
+that window (4 of 78 sampled by rank, 1 of 44 sampled off the top). The
+band-edge arithmetic is the durable half and does not depend on the sample at
+all.
+
+**None of the seven is frozen.** They are live accounts that will keep posting,
+and a re-run tomorrow gets a different newest-300 window and different numbers —
+the disagreement below is that effect, not a bug. u/chilidirigible is in
+`test/corpus/` already (JIO-344) and crosses there too, so `npm run evaluate`
+does fail on the day JIO-329 lands; what is *not* pinned is that the cost lands
+on **ordinary** accounts as well as prolific ones, because every human in the
+corpus was sampled by volume or by one r/politics thread.
+
+**An earlier run of arm A disagreed, and the disagreement is the point.** The
+audit that first ran this script, four hours earlier on the same day and against
+its own harvest, measured the whole-ranking arm at 41 rise / 9 fall / 27
+unchanged, mean +1.2, **zero crossings**, top after-score 28 — and read that as
+JIO-329 being free for ordinary people. Its top-of-ranking arm reproduces here
+exactly (33/2/12, mean +2.3, three crossings); its whole-ranking arm does not.
+Two windows, two answers, and **the band-edge arithmetic explains both**: that
+run's ranking simply had nobody in the 22–29 strip. A zero-crossing sweep is
+therefore not evidence that the strip is empty, which is the trap a sample-count
+framing walks into and a band-edge framing does not.
 
 ## What this evaluation does not establish
 
