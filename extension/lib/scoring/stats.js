@@ -119,6 +119,8 @@ export function longestZeroRunCircular(counts) {
 const MARKDOWN_LINK = /\[(?:\\[\s\S]|[^[\]\\])*\]\([^\s)]*\)?/g;
 /** A word of the author's: two or more letters in any script. */
 const AUTHOR_WORD = /\p{L}{2,}/u;
+/** A block quote line — Reddit's `>`, and the `&gt;` some sources escape it to. */
+const QUOTED_LINE = /^(?:&gt;|>).*$/gim;
 
 /** See "WHOSE WORDS ARE IN THE BRACKETS" below. Per line, never per body. */
 function stripUnauthoredLinkText(text) {
@@ -170,11 +172,21 @@ function stripUnauthoredLinkText(text) {
  *
  * Deliberately NOT "strip all link text" (32.4% -> 1.0% on this account, and
  * it reverses that promise), and deliberately NOT a `#N:`-shaped rule, which
- * would fit one bot's template and no other. Two things it costs, stated
- * rather than discovered: a comment whose WHOLE body is one bare
- * `[question?](url)` and nothing else loses its question, and a word has to be
- * TWO letters to hold a line, so `a) [title](url)` is read as a listing —
- * a lone letter beside a link is a bullet far more often than it is a word.
+ * would fit one bot's template and no other. Two things it costs, and both
+ * were stated here before they were measured — they have since been measured,
+ * which is the only reason to keep writing costs down:
+ *
+ *   * a comment whose WHOLE body is one bare `[question?](url)` and nothing
+ *     else loses its question. REAL, and it happens to people: u/DukeOfGeek's
+ *     `[Dibs?](gif)` (31 -> 30 questions of 300, authenticity 34 -> 33) and
+ *     u/VintageRCFishArtist's `[this?](youtu.be/…)` (23 -> 22 of 300, no axis
+ *     moved), one each in two independent 20-24 account profile arms.
+ *   * a word has to be TWO letters to hold a line, so `a) [title](url)` is
+ *     read as a listing — a lone letter beside a link is a bullet far more
+ *     often than it is a word. Measured at ZERO: across two disjoint live
+ *     sweeps of ~17,000 bodies, 0 of 413 lines this rule killed had ANY letter
+ *     outside the brackets, so the shape is asserted by tests and has never
+ *     been seen in the wild.
  *
  * Escaped brackets are real and the pattern eats them — three corpus titles
  * are `\[gendered\]`-shaped, and a link-text pattern of `[^\]]*` would stop at
@@ -200,6 +212,34 @@ function stripUnauthoredLinkText(text) {
  * the promise the slash used to keep. The root-relative rule needs the `=` for
  * a sharper reason — without it `and/or`, `he/she` and `12/25` are all one
  * lenient rule away from being links.
+ *
+ * WHOSE WORDS ARE ON THE LINE AT ALL (JIO-349, second half). A block quote is
+ * the same defect stated by the author themselves: `>Do you know what an
+ * agenda is?` followed by "Yes, that's why I'm asking what you think mine is
+ * here" is one question asked BY the parent commenter and answered by this
+ * one, and `asks-questions` used to score the reply for both. This strip is
+ * not new — `normalizeWords()` has always dropped `^>` and `^&gt;` lines, so
+ * the AUTOMATION axis has always read a quote as somebody else's words. It
+ * simply lived one call too late for `stripUrls()`, and therefore for
+ * `questionSignal()`, to see it. Moving it here is what makes that function's
+ * docstring — "both halves of this signal see the same text" — true rather
+ * than aspirational, and it is why `normalizeWords()` below no longer carries
+ * its own copy: one definition of "somebody else said this", read by every
+ * caller.
+ *
+ * Measured live 2026-08-21 before it landed, 4,574 bodies over 10 subreddits:
+ * 3.48% of bodies carry a `>` line and 20 of 4,574 (0.44%) were credited for a
+ * question that sits ENTIRELY inside one — 2.4% of every question the signal
+ * counted. End to end that is u/No_Rex 128 -> 85 of 300 and u/Lucky-Earther
+ * 62 -> 48; the SIGNAL is badly wrong and the AXIS moves 1-2 points, which is
+ * exactly the shape JIO-290 found and the reason a suite-green false positive
+ * survives so long. The move is safe for the automation axis because the
+ * pattern was kept CHARACTER-FOR-CHARACTER as `normalizeWords()` had it, and
+ * that is checked rather than assumed: `normalizeWords()` is byte-identical on
+ * all 7,469 frozen bodies against a core holding the old arrangement. The
+ * bound that buys, out loud: the anchor is hard at column 0, so a quote
+ * indented by a space is not seen. Widening it is a change to automation, not
+ * to this signal, and belongs to whoever measures that.
  *
  * `normalizeWords()` below shares this rather than keeping its own narrower
  * `https?://` strip, so there is one definition of "this is a link, not
@@ -235,7 +275,7 @@ function stripUnauthoredLinkText(text) {
  */
 export function stripUrls(text) {
   if (typeof text !== 'string') return '';
-  return stripUnauthoredLinkText(text)
+  return stripUnauthoredLinkText(text.replace(QUOTED_LINE, ' '))
     .replace(/\]\([^\s)]*/g, '](')
     .replace(/\b[a-z][a-z0-9+.-]*:\/\/\S+/gi, ' ')
     .replace(/\bmailto:\S+/gi, ' ')
@@ -246,14 +286,15 @@ export function stripUrls(text) {
 /**
  * Words, lowercased, with urls, quoted text and punctuation removed. Quotes
  * are dropped because a reply that quotes its parent otherwise looks like a
- * near-duplicate of whatever it is answering.
+ * near-duplicate of whatever it is answering — and that strip now lives in
+ * `stripUrls()` above rather than here (JIO-349), because `questionSignal()`
+ * calls `stripUrls()` directly and was crediting an account for questions this
+ * function had always known were somebody else's.
  */
 export function normalizeWords(text) {
   if (typeof text !== 'string') return [];
   return stripUrls(text)
     .toLowerCase()
-    .replace(/^&gt;.*$/gm, ' ')
-    .replace(/^>.*$/gm, ' ')
     .replace(/[^a-z0-9'\s]/g, ' ')
     .split(/\s+/)
     .filter(Boolean);

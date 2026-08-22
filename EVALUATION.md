@@ -280,8 +280,20 @@ question JIO-290 promised to keep.
 The automation row is the same second-order effect JIO-386 saw and is worth
 reading twice: the quoted titles were the ONLY varying content in that
 account's bodies, so removing them does not merely stop crediting it with
-questions, it reveals a template that is 99% self-similar. Text that made a bot
-look more human on one axis was making it look less templated on another.
+questions, it reveals a template that is 99% self-similar.
+
+**CORRECTED 2026-08-22 — that was generalised from n=1.** The sentence
+originally here, "text that made a bot look more human on one axis was making
+it look less templated on another", is false as a general claim and an audit
+caught it. A signal-level A/B of all 27 frozen profiles shows the other three
+link-carrying bots moving the OTHER way: u/RepostSleuthBot `near-duplicate-bodies`
+185 of 200 -> 169, u/sub_doesnt_exist_bot 125 of 200 -> 117, u/RemindMeBot
+200 -> 199, with `stock-phrasing` down for three of them as well (u/RemindMeBot
+299 phrases -> 289). Stripping text usually leaves LESS to be self-similar with.
+u/sneakpeekbot inverts that only because the stripped text was the sole varying
+part of an otherwise fixed template. No axis score moves on any of the four, so
+"every other frozen account, all 3 axes: unmoved" above stands exactly as
+written — the number was right and the because-clause was one account.
 
 The ticket's own proposed fix — strip blockquotes — is a **measured no-op**:
 0 of those 299 bodies contain a `>` line.
@@ -311,10 +323,75 @@ somebody else's text: a mod macro's canned `["How does my comment break Rule
 headline `[Who Invented the Sandwich? | HISTORY](url)` on a line of its own
 (u/Human_Drummer4378). **Zero authored questions were lost in 15,253 bodies.**
 
-Bounds: one sweep on one day; the profile arm is 24 accounts, not a rate; and
-the rule needs a word of TWO letters to hold a line, so `a) [title](url)` reads
-as a listing — asserted in `test/scoring.test.js` rather than measured, because
-the sweep contains no instance of it.
+Bounds: one sweep on one day, and the profile arm is 24 accounts, not a rate.
+
+**THE TWO STATED COSTS ARE NOW MEASURED (2026-08-22).** Both were written down
+here and in `stats.js` before anyone had seen one, which is the only reason
+either could be looked for. The `a) [title](url)` bound — the rule needs a word
+of TWO letters to hold a line — is measured at **ZERO**: across two disjoint
+live sweeps totalling ~17,000 bodies, **0 of 413** lines the rule killed had any
+letter at all outside the brackets. It remains asserted in
+`test/scoring.test.js` and unseen in the wild. The whole-body `[question?](url)`
+bound is **real and it costs people questions**: u/DukeOfGeek's entire comment is
+`[Dibs?](gif)` (31 -> 30 questions of 300, authenticity 34 -> 33) and
+u/VintageRCFishArtist's is `[this?](youtu.be/…)` (23 -> 22 of 300, no axis
+moved), one each in two independent profile arms of 20 and 24 accounts. Neither
+crossed a band.
+
+**THE SECOND HALF, CLOSED 2026-08-22 (JIO-349).** The ticket's Definition of
+Done reads "quoted **or block-quoted** third-party text is excluded", and only
+the first half had shipped. `normalizeWords()` has dropped `^>` and `^&gt;`
+lines since it was written, so the AUTOMATION axis always read a block quote as
+somebody else's words — but the strip lived one call too late for `stripUrls()`,
+and therefore for `asks-questions`, to see it. The two axes disagreed about who
+said what for as long as both existed, while `questionSignal`'s docstring
+claimed "both halves of this signal see the same text". Moving one `.replace()`
+into `stripUrls()` makes that sentence true; the docstring is corrected in the
+same commit.
+
+The frozen corpus cannot show this one either — 6 of 7,469 bodies carry a `>`
+line, and the only signal that moves is u/AutoModerator's `asks-questions`,
+35 -> 34 of 296, with no axis and no band. Measured live instead, **17,177
+bodies over 15 subreddits** plus **24 whole accounts (6,133 comments)** drawn at
+even ranks from that sweep's own author ranking, against a core with BOTH
+JIO-349 rules reverted, every lost `?` re-tested against a quote-strip-only core
+so the two can be attributed:
+
+| | |
+| --- | --- |
+| bodies carrying a `>` line at all | 283 of 17,177 (1.65%) |
+| bodies whose stripped text changed | 563 of 17,177 (3.28%) |
+| bodies that lost a `?` | 51 — **2.00% of every question counted** |
+| attributed: quote strip / link-text rule | **47** / 4 |
+| window question rate | 14.88% → **14.58%** (0.30 points) |
+| help-seeking hits | 97 → 93 |
+| `normalizeWords` tokens | 547,016 → 545,860, **all of it the link rule** |
+| accounts whose axis score moved | **2 of 24** |
+| band crossings | **0** |
+| largest per-account `asks-questions` move | **2.0 points** (tolerance: 1–2) |
+
+**24 lost question marks hand-read across seven accounts; 23 are somebody
+else's.** u/notthegoatseguy is the largest mover and the one to read: 6 of 59
+lost, five of them pasted Reddit help-article titles alone on a line
+(`[What is karma? – Reddit Help](url)`) and one a textbook quote-and-answer — a
+person who links documentation and answers other people's questions, credited
+with six questions they never asked. u/AftyOfTheUK loses 10, every one a
+`>quoted question` answered in flat declaratives. The one exception is
+u/VintageRCFishArtist's `[this?](url)`, which is the link-rule bound above, not
+this rule.
+
+The 2.0 sits at the TOP of the tolerance and is reported rather than rounded
+off. It is a fix and not a cost — all six questions behind it were hand-read and
+all six belong to somebody else — but a tolerance bounds how much a change may
+move a person, not how much it will, and at this size the hand-read is the
+result rather than the table. Further bounds: the pattern is anchored at column
+0 and kept CHARACTER-FOR-CHARACTER as `normalizeWords()` had it, so moving it
+cannot move automation — checked, not assumed: `normalizeWords()` is
+byte-identical on all 7,469 frozen bodies against a core holding the old
+arrangement — and the same anchor means a quote indented by a space is not
+seen; 2 of the 24 profiles were `insufficient-data`,
+so 22 carry the score comparison; and 24 of the 51 losses were read, chosen as
+the accounts that moved most, which is a worst case rather than a sample.
 
 ## Finding 3 — `dormancy-revival` returns a confident zero from windows too short to hold a gap
 

@@ -70,7 +70,7 @@ bot-detector/
     measure-interval-cv.mjs  offline; the corpus interval-CV spread — EVALUATION.md 4e
     measure-topical-breadth.mjs offline; the corpus items-per-group gap — EVALUATION.md 4f
     measure-interval-crossing.mjs fetches; who JIO-346 pushed over the edge, live — EVALUATION.md 4e
-    measure-quoted-titles.mjs fetches; what JIO-349's quoted-title strip costs a person — EVALUATION.md 2
+    measure-quoted-titles.mjs fetches; what JIO-349's two quote strips cost a person — EVALUATION.md 2
     evaluate.mjs             reprints EVALUATION.md's band table from test/corpus/, offline
     lib/bot-declaration.mjs  what counts as "this account declares itself a bot", and why twice
     lib/synthetic-bodies.mjs length-matched stand-ins for the 19 humans' comment text
@@ -504,8 +504,20 @@ That third row is the part worth sitting with. `normalizeWords()` shares
 `stripUrls()`, so the automation axis reads the same text — and the quoted
 titles were the **only varying content** in that account's bodies. Removing
 them does not merely stop crediting a bot with questions; it uncovers a
-template that is 99% self-similar to itself. Text that was making a bot look
-more human on one axis was making it look less templated on another.
+template that is 99% self-similar to itself.
+
+That is one account, and the tempting generalisation from it — *text that made
+a bot look more human on one axis was making it look less templated on another*
+— **is wrong, and an audit measured it wrong.** A signal-level A/B of all 27
+frozen profiles finds the other three link-carrying bots moving the *other*
+way: u/RepostSleuthBot `near-duplicate-bodies` 185 of 200 → **169**,
+u/sub_doesnt_exist_bot 125 of 200 → **117**, u/RemindMeBot 200 → **199**, and
+`stock-phrasing` down for three of them too (u/RemindMeBot 299 phrases → 289).
+Stripping text usually leaves *less* to be self-similar with; u/sneakpeekbot
+inverts that only because the stripped text was the sole varying part of an
+otherwise fixed template. No axis score moves on any of the four, which is why
+the row above still reads "not one point" — the number was right and the
+because-clause was n=1.
 
 **What it costs a person, measured live rather than asserted.** The corpus
 cannot answer this: 19 of the 27 frozen profiles carry length-matched
@@ -537,13 +549,86 @@ Every one is somebody else's text:
 | u/Human_Drummer4378 | `[Who Invented the Sandwich? \| HISTORY](url)` | a pasted article headline, cited under the person's own sentence |
 
 **Zero authored questions were lost in 15,253 bodies.** Bounds, out loud: one
-sweep on one day; the profile arm is 24 accounts and is not a rate; and a word
-has to be **two** letters to hold a line, so `a) [title](url)` reads as a
-listing — that one is asserted in `test/scoring.test.js` and unmeasured, because
-the sweep contains no instance of it. Escaped brackets are not a bound but they
-are a trap: three real corpus titles are `\[gendered\]`-shaped, and a link-text
-pattern of `[^\]]*` stops at the first `\]`, matches nothing, and makes the
-whole fix a silent no-op on them.
+sweep on one day, and the profile arm is 24 accounts, not a rate. Escaped
+brackets are not a bound but they are a trap: three real corpus titles are
+`\[gendered\]`-shaped, and a link-text pattern of `[^\]]*` stops at the first
+`\]`, matches nothing, and makes the whole fix a silent no-op on them.
+
+Two costs this rule was known to carry were written down here before anyone had
+seen one, and an audit has since gone and looked for both. **The `a) [title](url)`
+bound is measured at zero** — across two disjoint live sweeps totalling ~17,000
+bodies, **0 of 413** lines the rule killed had any letter at all outside the
+brackets, so the shape remains asserted by `test/scoring.test.js` and unseen in
+the wild. **The whole-body `[question?](url)` bound is real and costs people
+questions**: u/DukeOfGeek's entire comment is `[Dibs?](gif)` (31 → 30 questions
+of 300, authenticity 34 → 33) and u/VintageRCFishArtist's is `[this?](youtu.be/…)`
+(23 → 22 of 300, no axis moved) — one each in two independent profile arms.
+Neither crossed a band. Writing a cost down is how it gets found; leaving it as
+"asserted rather than measured" is how it stays a guess.
+
+**And the question you were answering (JIO-349, second half).** The rule above
+closed the bot's route in. It left a person's: a block quote of the parent
+comment. `>Do you know what an agenda is?` followed by "Yes, that's why I'm
+asking what you think mine is here" is one question asked by *somebody else* and
+answered by this account, and `asks-questions` scored the reply for it.
+
+The strip that fixes it is not new and was never in dispute — `normalizeWords()`
+has dropped `^>` and `^&gt;` lines since it was written, so the **automation**
+axis had always read a quote as somebody else's words. It simply lived one call
+too late for `stripUrls()`, and therefore for `asks-questions`, to see it. The
+two axes disagreed about who said what for as long as both existed, and the
+signal's own docstring claimed they could not. Moving one `.replace()` up a call
+makes that sentence true.
+
+The corpus cannot show this either — 6 of 7,469 frozen bodies carry a `>` line —
+so it was A/B'd live the same way, **17,177 bodies over 15 subreddits** and
+**24 whole accounts (6,133 comments)** drawn at even ranks from that sweep's own
+author ranking, against a core with *both* JIO-349 rules reverted — the ticket's
+tolerance is about the ticket, so the arm reverts the ticket, and every lost `?`
+is then re-tested against a quote-strip-only core so the two rules can be told
+apart:
+
+| | |
+| --- | --- |
+| bodies carrying a `>` line at all | 283 of 17,177 (1.65%) |
+| bodies whose stripped text changed | 563 of 17,177 (3.28%) |
+| bodies that lost a `?` | 51 of 17,177 — **2.00% of every question counted** |
+| …attributed: the quote strip / the link-text rule | **47** / 4 |
+| the window's question rate | 14.88% → **14.58%**, i.e. **0.30 points** |
+| help-seeking hits | 97 → 93 |
+| `normalizeWords` tokens | 547,016 → 545,860 (0.21%) — **all of it the link rule**; the quote move removes exactly zero, because the before arm still carries `normalizeWords()`'s own copy of that strip |
+| accounts whose axis score moved | **2 of 24** (2 more were `insufficient-data`) |
+| band crossings | **0** |
+| largest per-account `asks-questions` move | **2.0 points** — the top of the 1–2 tolerance, not inside it with room |
+
+**24 lost question marks were hand-read across seven accounts, and 23 are
+somebody else's.** The largest mover is the one to read: u/notthegoatseguy loses
+6 of 59, five of them pasted Reddit help-article titles
+(`[What is karma? – Reddit Help](url)`, alone on a line) and one a textbook
+quote-and-answer — a person who links documentation and answers other people's
+questions, scored for six questions they did not ask. u/AftyOfTheUK loses 10,
+every one a `>quoted question` answered in flat declaratives. The single
+exception is u/VintageRCFishArtist's `[this?](url)` above, which is the
+link-rule bound, not this one.
+
+That 2.0 is the number to be uncomfortable with and it is stated rather than
+rounded off. It sits at the top of the tolerance JIO-290 set, and it is a *fix*
+rather than a *cost* — every question behind it was hand-read and six of six
+belong to somebody else. A tolerance is a bound on how much a change may move a
+person's score, not a promise it will not; when the move is this big the
+hand-read is the deliverable, not the table.
+
+Bounds on this half, out loud. The pattern is anchored hard at column 0 and was
+kept **character-for-character** as `normalizeWords()` had it, so that moving it
+could not move the automation axis. That is checked rather than assumed:
+`normalizeWords()` is **byte-identical on all 7,469 frozen bodies** against a
+core carrying the old arrangement, which is the whole reason the move is safe —
+and it is also why **a quote indented by a space is not seen**.
+Widening it is a change to automation, not to this signal, and belongs to
+whoever measures that. Two of the 24 profiles were `insufficient-data`, so 22
+carry the score comparison; one sweep, one day; and 51 lost question marks were
+found but 24 hand-read — the seven accounts read are the ones that moved most,
+which is the worst case and not a sample.
 
 **A confident zero from a window no gap could fit in.** `dormancy-revival`
 (weight 3, the heaviest agenda signal) gated only on item *count*. 299 comments

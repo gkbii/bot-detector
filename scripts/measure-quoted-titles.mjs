@@ -10,7 +10,8 @@
  * reason. Run by hand; not part of `npm test` or `npm run evaluate`.
  *
  * WHY IT HAS TO FETCH. JIO-349 stops `stripUrls()` from crediting an account
- * with question marks that sit inside link text nobody on that account wrote.
+ * with question marks nobody on that account wrote — inside link text it only
+ * listed, or inside a block quote it was replying to.
  * The frozen corpus proves the fix on the bot — u/sneakpeekbot's
  * `asks-questions` goes 97 of 299 to 0 of 299 — and proves nothing at all
  * about the cost, because 19 of the 27 corpus profiles carry length-matched
@@ -40,14 +41,25 @@
  * a measurement nobody runs.
  *
  * HOW THE "BEFORE" ARM IS COMPUTED. `extension/lib/` is copied to a temp tree
- * and exactly one line is rewritten: `stripUrls()`'s call to
- * `stripUnauthoredLinkText` becomes the identity. The real tree is never
- * touched, the substitution fails loudly if the needle has moved, and the
- * patched copy is PROVEN to differ from the original on a fixture before any
- * number is believed — a silent no-op there would print "nothing moved" and
- * read as a clean result. This is `measure-jio329.mjs`'s device, kept, for the
- * reason it was built: a before-arm reconstructed by hand in the script drifts
- * away from the code it claims to be a copy of.
+ * and rewritten back to the state of the code before JIO-349: `stripUrls()`'s
+ * call to `stripUnauthoredLinkText` becomes the identity, its block-quote
+ * strip is removed, and `normalizeWords()` gets back the private copy of that
+ * strip it used to carry. The real tree is never touched, every substitution
+ * fails loudly if its needle has moved, and the patched copy is PROVEN to
+ * differ from the original on a fixture per rule before any number is believed
+ * — a silent no-op there would print "nothing moved" and read as a clean
+ * result. This is `measure-jio329.mjs`'s device, kept, for the reason it was
+ * built: a before-arm reconstructed by hand in the script drifts away from the
+ * code it claims to be a copy of.
+ *
+ * TWO RULES, ATTRIBUTED SEPARATELY. JIO-349 landed in two commits — the link
+ * TEXT rule first, the block-quote strip after an audit found the ticket's
+ * second Definition-of-Done bullet unmet. The before arm reverts both, because
+ * the tolerance the ticket names is about the ticket; but every lost `?` is
+ * also re-tested against a quote-strip-only arm, so the report can say which
+ * of the two rules took it. A combined number that stays inside tolerance
+ * bounds both rules; an attribution is what tells you whether the next one is
+ * affordable.
  *
  * WHAT IT DOES NOT DO. It does not decide who is a person. Every account it
  * names is named as an account whose score MOVED, for a human to read; it
@@ -101,38 +113,73 @@ const SUBS = value('--subs', null)?.split(',').map((s) => s.trim()) ?? [
 /* ---------------------------------------------------------------- the copy */
 
 /**
- * Copy `extension/lib/` to a temp tree and make `stripUnauthoredLinkText` a
- * no-op, giving a scoring core identical to today's in every respect except
- * JIO-349. Verified against a fixture before it is used.
+ * Substitutions that walk `extension/lib/scoring/stats.js` back to the code as
+ * it stood before JIO-349. Each is asserted present, so a rewrite upstream
+ * stops this script rather than silently measuring nothing.
  */
-async function beforeArm() {
-  const dir = path.join(os.tmpdir(), 'bot-detector-jio349', 'lib');
+const REVERSIONS = [
+  // The block-quote strip, added in JIO-349's second commit. Removing it here
+  // also restores the pre-JIO-349 ORDER: nothing was stripped before the link
+  // rule ran.
+  ["return stripUnauthoredLinkText(text.replace(QUOTED_LINE, ' '))", 'return stripUnauthoredLinkText(text)'],
+  // The link TEXT rule, JIO-349's first commit.
+  ['return stripUnauthoredLinkText(text)', 'return String(text)'],
+  // `normalizeWords()` used to carry its own copy of the quote strip. Put it
+  // back, or the before arm understates the AUTOMATION axis rather than
+  // measuring it.
+  [
+    "    .toLowerCase()\n    .replace(/[^a-z0-9'\\s]/g, ' ')",
+    "    .toLowerCase()\n    .replace(/^&gt;.*$/gm, ' ')\n    .replace(/^>.*$/gm, ' ')\n    .replace(/[^a-z0-9'\\s]/g, ' ')",
+  ],
+];
+
+/** The one rule of the two whose cost the audit asked to see attributed. */
+const QUOTE_ONLY = [REVERSIONS[0]];
+
+/**
+ * Copy `extension/lib/` to a temp tree under `tag/` and apply `reversions`,
+ * giving a scoring core identical to today's except for the named rules.
+ * Verified against a fixture before it is used.
+ */
+async function armWith(tag, reversions, fixture) {
+  const dir = path.join(os.tmpdir(), 'bot-detector-jio349', tag);
   fs.rmSync(dir, { recursive: true, force: true });
   fs.mkdirSync(path.dirname(dir), { recursive: true });
   fs.cpSync(path.join(REPO, 'extension', 'lib'), dir, { recursive: true });
 
   const statsPath = path.join(dir, 'scoring', 'stats.js');
-  const src = fs.readFileSync(statsPath, 'utf8');
-  const NEEDLE = 'return stripUnauthoredLinkText(text)';
-  if (!src.includes(NEEDLE)) {
-    throw new Error(`stats.js no longer contains ${NEEDLE} — this substitution is stale, fix it here rather than guessing`);
+  let src = fs.readFileSync(statsPath, 'utf8');
+  for (const [needle, replacement] of reversions) {
+    if (!src.includes(needle)) {
+      throw new Error(`stats.js no longer contains ${JSON.stringify(needle)} — this substitution is stale, fix it here rather than guessing`);
+    }
+    src = src.replace(needle, replacement);
   }
-  fs.writeFileSync(statsPath, src.replace(NEEDLE, 'return String(text)'));
+  fs.writeFileSync(statsPath, src);
 
   const mod = await import(path.join(dir, 'scoring', 'index.js'));
   const stats = await import(path.join(dir, 'scoring', 'stats.js'));
 
   // Prove the patch took. A silent no-op here would make every before-arm
   // number identical to its after-arm number and read as "nothing moved".
-  const fixture = '\\#1: [Is this a question?](https://example.com/a) | [3 comments](https://example.com/b)';
   if (!stats.stripUrls(fixture).includes('?')) {
-    throw new Error('the before-arm still strips quoted link text: the substitution did not take');
+    throw new Error(`the ${tag} arm still strips this: the substitution did not take`);
   }
   if (stripUrls(fixture).includes('?')) {
-    throw new Error('the after-arm does NOT strip quoted link text: there is nothing here to measure');
+    throw new Error(`the after-arm does NOT strip this: there is nothing here to measure (${tag})`);
   }
   return { scoreAccount: mod.scoreAccount, stripUrls: stats.stripUrls, normalizeWords: stats.normalizeWords };
 }
+
+/** Both JIO-349 rules reverted — the arm the ticket's tolerance is about. */
+const beforeArm = () => armWith(
+  'lib',
+  REVERSIONS,
+  '\\#1: [Is this a question?](https://example.com/a) | [3 comments](https://example.com/b)',
+);
+
+/** Only the block-quote strip reverted, so a lost `?` can be attributed. */
+const quoteOnlyArm = () => armWith('lib-quote', QUOTE_ONLY, '>Is this a question?\nno.');
 
 /* ------------------------------------------------------------- the network */
 
@@ -180,6 +227,10 @@ function emptyState() {
     sweep: {
       done: [], bodies: 0, changed: 0, questionsBefore: 0, questionsAfter: 0, questionsLost: 0,
       helpBefore: 0, helpAfter: 0, wordsBefore: 0, wordsAfter: 0, byAuthor: {}, examples: [],
+      // Attribution of the two rules. `quotedBodies` is how much of ordinary
+      // human text the quote strip can reach at all; `lostToQuote` is how much
+      // of `questionsLost` it, rather than the link rule, accounts for.
+      quotedBodies: 0, lostToQuote: 0, lostToLinkText: 0,
     },
     profiles: { sample: [], rows: [] },
   };
@@ -192,7 +243,7 @@ function emptyState() {
  * subreddit granularity: `sweep.done` names the ones already folded in, so a
  * second call continues rather than double-counting.
  */
-async function sweep(state, before) {
+async function sweep(state, before, quoteOnly) {
   const deadline = Date.now() + BUDGET_S * 1000;
   const s = state.sweep;
   for (const sub of SUBS) {
@@ -215,6 +266,8 @@ async function sweep(state, before) {
         seen += 1;
         s.bodies += 1;
 
+        if (/^(?:&gt;|>)/im.test(body)) s.quotedBodies += 1;
+
         const oldText = before.stripUrls(body);
         const newText = stripUrls(body);
         const oldQ = oldText.includes('?');
@@ -223,6 +276,11 @@ async function sweep(state, before) {
         if (newQ) s.questionsAfter += 1;
         if (oldQ && !newQ) {
           s.questionsLost += 1;
+          // Which of the two rules took it. The quote-only arm still runs the
+          // link rule, so a `?` it also loses is one the link rule already had;
+          // a `?` it KEEPS is one only the quote strip removes.
+          if (quoteOnly.stripUrls(body).includes('?')) s.lostToQuote += 1;
+          else s.lostToLinkText += 1;
           if (s.examples.length < 25) s.examples.push({ author, sub, len: body.length });
         }
         if (HELP_SEEKING_PATTERNS.some((re) => re.test(oldText))) s.helpBefore += 1;
@@ -322,7 +380,9 @@ function report(state) {
   console.log(`  bodies whose text changed ${s.changed} (${pct(s.changed, s.bodies)})`);
   console.log(`  read as a question before  ${s.questionsBefore} (${pct(s.questionsBefore, s.bodies)})`);
   console.log(`  read as a question after   ${s.questionsAfter} (${pct(s.questionsAfter, s.bodies)})`);
-  console.log(`  questions lost            ${s.questionsLost} (${pct(s.questionsLost, s.bodies)} of bodies)`);
+  console.log(`  questions lost            ${s.questionsLost} (${pct(s.questionsLost, s.bodies)} of bodies, ${pct(s.questionsLost, s.questionsBefore)} of questions)`);
+  console.log(`    of which the quote strip ${s.lostToQuote}; the link-text rule ${s.lostToLinkText}`);
+  console.log(`  bodies carrying a > line  ${s.quotedBodies} (${pct(s.quotedBodies, s.bodies)})`);
   console.log(`  help-seeking before/after ${s.helpBefore} / ${s.helpAfter}`);
   console.log(`  normalizeWords tokens     ${s.wordsBefore} -> ${s.wordsAfter} (${pct(s.wordsBefore - s.wordsAfter, s.wordsBefore)} removed)`);
 
@@ -377,7 +437,7 @@ let state = readState() ?? emptyState();
 
 if (flag('--sweep') || flag('--profiles')) {
   const before = await beforeArm();
-  if (flag('--sweep')) await sweep(state, before);
+  if (flag('--sweep')) await sweep(state, before, await quoteOnlyArm());
   if (flag('--profiles')) {
     if (!state.sweep.done.length) throw new Error('--profiles draws its sample from the sweep; run --sweep first');
     await profiles(state, before);

@@ -1017,6 +1017,9 @@ const QUOTED_TITLE_CASES = [
     ['does anyone know?', 'hey', 'cannot work it out'], []],
   // Reddit's own quotation marker, agreeing with the rule: a screenshot
   // caption of somebody else's dialogue (u/IndependentMacaroon, live sweep).
+  // NOTE this one is killed by the LINE rule above, not by the `>` — the
+  // blockquote cases that actually exercise the quote strip are separate,
+  // below, because an audit found this case reading as coverage it is not.
   ['>[wtf are they doing?](https://i.imgur.com/rC63ktR.png)', [], ['?', 'wtf']],
   // A pasted article headline on its own line (u/Human_Drummer4378, live
   // sweep). The person's own sentence above it is untouched.
@@ -1086,6 +1089,104 @@ test('authenticity: quoted post titles are not the account asking anything', () 
   assert.equal(sig.value.questions, 0,
     `other people's post titles must not read as questions, got ${sig.value.questions} of ${sig.value.sample}`);
   assert.equal(sig.band, BAND.LOW);
+});
+
+// ---------------------------------------------------------------------------
+// JIO-349, second half — a question you QUOTED is not a question you asked
+// ---------------------------------------------------------------------------
+
+/**
+ * `normalizeWords()` has always dropped `^>` lines, so the automation axis has
+ * always read a quote as somebody else's words — but the strip lived one call
+ * too late for `stripUrls()`, so `asks-questions` credited the reply with the
+ * parent's question. Measured live before the move: 2.4% of every question the
+ * signal counted was one the account was ANSWERING, and end to end that is
+ * u/No_Rex 128 -> 85 of 300.
+ *
+ * These cases are separate from `QUOTED_TITLE_CASES` on purpose. The one there
+ * that LOOKS like blockquote coverage — `>[wtf are they doing?](imgur)` — is
+ * killed by the line rule, and the `>` plays no part; an audit caught it
+ * reading as coverage that did not exist, so the quote strip gets its own
+ * cases that no other rule can explain.
+ */
+const BLOCK_QUOTE_CASES = [
+  // [ input, must survive, must not survive ]
+  // The textbook shape, hand-read from a live sweep (u/Lucky-Earther): the
+  // question is the parent's, the answer is the author's, and only one of
+  // those two is evidence that this account asks things.
+  ['>Do you know what an agenda is?\n\nYes, that is why I am asking what you think mine is here.',
+    ['that is why I am asking'], ['?', 'Do you know what an agenda']],
+  // The same line as some sources escape it. `stripUrls()` runs before
+  // anything lowercases, so this pattern is case-insensitive where
+  // `normalizeWords()` could afford not to be.
+  ['&gt;Is this a question?\n&GT;And is this one?\nNo.', ['No.'], ['?', 'Is this', 'And is this']],
+  // Nested quotes are quotes. A `>>` line is somebody quoting somebody else,
+  // which is one further from the author, not closer.
+  ['>>What about this?\n>Or this?\nNeither.', ['Neither.'], ['?', 'What about', 'Or this']],
+  // The author's own question below a quote is still theirs. This is the
+  // JIO-290 promise again, one rule along: the strip is per LINE, so it cannot
+  // swallow the reply.
+  ['>They said it was fine.\n\nDid they say why?', ['Did they say why?'], ['They said it was fine']],
+  // A `>` that is not in column 0 is arithmetic, not a quotation. This is the
+  // bound the anchor buys, asserted so nobody loosens it by accident.
+  ['is 5 > 3, or am I wrong?', ['5 > 3', '?'], []],
+];
+
+test('stripUrls: a question inside a block quote belongs to whoever was quoted', () => {
+  for (const [input, survives, removed] of BLOCK_QUOTE_CASES) {
+    const stripped = stripUrls(input);
+    for (const fragment of survives) {
+      assert.ok(stripped.includes(fragment),
+        `${JSON.stringify(input)} -> ${JSON.stringify(stripped)} lost ${JSON.stringify(fragment)}`);
+    }
+    for (const fragment of removed) {
+      assert.ok(!stripped.includes(fragment),
+        `${JSON.stringify(input)} -> ${JSON.stringify(stripped)} kept ${JSON.stringify(fragment)}`);
+    }
+  }
+});
+
+test('normalizeWords: moving the quote strip into stripUrls left it exactly where it was', () => {
+  // The move is only safe because it is a no-op for this caller — the whole
+  // automation axis reads these tokens, and a quote it started counting would
+  // make every reply look less templated than it is.
+  assert.deepEqual(normalizeWords('>they asked something\n\nand I answered'), ['and', 'i', 'answered']);
+  assert.deepEqual(normalizeWords('&gt;they asked something\n\nand I answered'), ['and', 'i', 'answered']);
+  // And an inline `>` is still not a quote here either, so the two callers
+  // cannot disagree about who said what.
+  assert.deepEqual(normalizeWords('is 5 > 3'), ['is', '5', '3']);
+});
+
+test('authenticity: the question you were answering is not one you asked', () => {
+  // A person who replies to questions all day and asks none. Before the strip
+  // moved, this account scored on every single body.
+  const quoting = Array.from({ length: 60 }, (_, i) => comment({
+    id: `bq${i}`,
+    at: NOW - 200 * DAY + i * 3 * DAY,
+    group: `g${i % 20}`,
+    body: `>Does anyone know how ${i} works?\n\nIt works the way the manual says it does, near enough.`,
+  }));
+  const quotingSig = findSignal(
+    scoreAccount(profileOf({ comments: quoting, firstSeenUtc: NOW - 400 * DAY })).authenticity,
+    'asks-questions',
+  );
+  assert.equal(quotingSig.value.questions, 0,
+    `a quoted question is the parent's, got ${quotingSig.value.questions} of ${quotingSig.value.sample}`);
+  assert.equal(quotingSig.value.helpSeeking, 0,
+    'the help-seeking half reads the same text, so "does anyone know" inside a quote is not a plea either');
+
+  // The control, and the reason the rule is per line rather than per body: the
+  // same accounts quote AND ask, and dropping both would trade one blind spot
+  // for another exactly as stripping all link text would.
+  const asking = quoting.map((c, i) => comment({
+    id: `ba${i}`, at: c.at, group: c.group, body: `${c.body}\n\nOr am I misreading it?`,
+  }));
+  const askingSig = findSignal(
+    scoreAccount(profileOf({ comments: asking, firstSeenUtc: NOW - 400 * DAY })).authenticity,
+    'asks-questions',
+  );
+  assert.equal(askingSig.value.questions, asking.length,
+    `the line the author typed is still theirs, got ${askingSig.value.questions} of ${askingSig.value.sample}`);
 });
 
 test('automation: a fetch window under three days cannot claim a sleep cycle', () => {

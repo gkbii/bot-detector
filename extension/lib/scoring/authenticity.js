@@ -341,6 +341,17 @@ function topicalBreadthSignal(profile) {
  * are English phrases, and a phrase that only occurs inside a link target
  * (`/r/AskDocs/how-do-i-...`) was not said by anyone. Both halves of this
  * signal therefore see the same text — what the author actually typed.
+ *
+ * "WHAT THE AUTHOR ACTUALLY TYPED" TOOK TWO MORE TICKETS TO BE TRUE (JIO-349).
+ * The sentence above was written when `stripUrls()` removed link TARGETS only,
+ * and two kinds of other people's words walked straight past it. A template
+ * that lists strangers' post titles as link TEXT — u/sneakpeekbot, 97 of 299
+ * comments reading as questions. And a block quote of the parent comment,
+ * which `normalizeWords()` had dropped for the automation axis since it was
+ * written while this signal counted it: 2.4% of every question counted here
+ * was one the account was ANSWERING. Both are closed inside `stripUrls()`, so
+ * this function's one call still gets all of it, and the two axes still cannot
+ * disagree about who said what.
  */
 function questionSignal(profile) {
   const key = 'asks-questions';
