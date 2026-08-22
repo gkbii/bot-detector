@@ -179,6 +179,24 @@ history and starts describing how little of one it has, so the taper is now
 withheld below that floor and the account keeps full reach credit instead of
 paying for its size.
 
+## A quoted stranger's words aren't questions the account asked
+
+`asks-questions` treated a `?` inside a markdown link's visible text as
+something its author typed — right for `hey [does anyone know?](url)`, wrong
+for a bot whose template quotes strangers' post titles:
+`\#1: [Is it possible to bring this dog back to the states?](url)`. Link text
+now counts only on a line where a word outside the brackets shows the author
+wrote something there too; a line that is nothing but quoted titles has none.
+u/sneakpeekbot had been credited with 97 of its 299 comments this way, on the
+signal that exists to vouch for a person; it now gets zero.
+
+The same quoted titles were the only thing making its templated line look
+different from the next one. Once they were gone, `near-duplicate-bodies`
+found 196 of 197 compared comments identical instead of 28, so the same
+fabricated text that had been inflating `authenticity` was suppressing
+`automation` underneath it — stripped correctly, one account moved 19 points
+up on one axis in the same pass that moved it 13 down on the other.
+
 ## `corpus` turns the headline result into a command
 
 The claim the whole thing rests on is that the axes separate the accounts they
