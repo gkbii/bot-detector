@@ -197,6 +197,13 @@ fabricated text that had been inflating `authenticity` was suppressing
 `automation` underneath it — stripped correctly, one account moved 19 points
 up on one axis in the same pass that moved it 13 down on the other.
 
+A block quote of the parent comment was the other half of the same defect:
+`>Do you know what an agenda is?` followed by an answer is a question asked
+*to* the account, not by it, and `asks-questions` had been counting it anyway
+— the strip that drops quoted lines existed already, but ran one step too late
+to reach this signal. Fixing that moved u/No_Rex from 128 to 85 credited
+questions out of 300.
+
 ## `corpus` turns the headline result into a command
 
 The claim the whole thing rests on is that the axes separate the accounts they
