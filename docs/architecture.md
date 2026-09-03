@@ -294,3 +294,61 @@ N, because the newest N answers a different question and overweights whatever
 the account is arguing about today — and its cap is a privacy budget as much as
 a token budget, since every comment in it is a piece of a real stranger's
 posting.
+
+## The tree, annotated
+
+
+```
+bot-detector/
+  extension/                 the product — MV3, load-unpacked, no build step
+    manifest.json
+    background.js            the service worker: owns the lookup queue, cap, backoff, cache
+    lib/sources/
+      arcticShift.js         the ONLY module that knows the archive's URLs, or the word "subreddit"
+      profile.js             AccountProfile — the platform-neutral shape everything downstream sees
+    lib/scoring/
+      index.js               scoreAccount() — three axes, no blended number, pure function
+      axis.js                bands, signals, the insufficient-data gate
+      automation.js          axis 1: is a machine posting this
+      agenda.js              axis 2: is this account pushing something
+      authenticity.js        axis 3: positive evidence of a real person
+      stats.js               the shared arithmetic (entropy, CV, shingles, …)
+    providers/
+      index.js               the seam: local scoring, or your backend, degrading loudly
+      local.js               default — fetch + score in this browser
+      backend.js             optional — the wire contract with server/
+    content/
+      badge.js               everything drawn on the page (platform-neutral)
+      reddit.js              the Reddit adapter: DOM -> {container, anchor, username}
+      badge.css
+    popup.html/.js           status readout: which provider produced these verdicts
+    options.html/.js         settings, the backend probe, cache controls
+  server/                    OPTIONAL. Adds a Claude read + a shared cache. Nothing else.
+    index.js                 node:http, two routes: /api/health, /api/verdict
+    config.js                the only reader of bot-detector/.env
+    deterministic.js         lazily imports the EXTENSION's fetch + scoring. One implementation.
+    pack.js                  the evidence pack: which comments the model may talk about
+    agenda.js                the Claude call, with citation verification
+    cache.js                 node:sqlite — profiles / verdicts / LLM reads, three TTLs
+    username.js              normalisation as a security boundary (this value enters a URL)
+  scripts/                   NOT shipped, NOT imported by anything, NOT run by npm test
+    capture-corpus.mjs       fetches; rebuilds test/corpus/
+    probe-prolific-humans.mjs fetches; found the >3/h people now in test/corpus/
+    measure-jio329.mjs       fetches; the before/after JIO-329 sweep — EVALUATION.md 4b
+    measure-agenda-shape.mjs offline; ranks the corpus on the two shape signals — EVALUATION.md 4c
+    measure-reply-share.mjs  offline; the corpus reply-share spread — EVALUATION.md 4d
+    measure-interval-cv.mjs  offline; the corpus interval-CV spread — EVALUATION.md 4e
+    measure-topical-breadth.mjs offline; the corpus items-per-group gap — EVALUATION.md 4f
+    measure-interval-crossing.mjs fetches; who JIO-346 pushed over the edge, live — EVALUATION.md 4e
+    measure-quoted-titles.mjs fetches; what JIO-349's two quote strips cost a person — EVALUATION.md 2
+    evaluate.mjs             reprints EVALUATION.md's band table from test/corpus/, offline
+    lib/bot-declaration.mjs  what counts as "this account declares itself a bot", and why twice
+    lib/synthetic-bodies.mjs length-matched stand-ins for the 19 humans' comment text
+  test/                      the shared core's suite
+  test/corpus/               27 frozen buildProfile outputs — the evaluation as a diff
+  server/test/               the backend's suite
+  docs/                      the diagram and feature list this project's public page is generated from
+    architecture.md          one mermaid flowchart, stable node ids, and the reasoning
+    project.json             features, each naming the diagram ids it touches
+    architecture.svg         GENERATED from architecture.md -- do not hand-edit
+```

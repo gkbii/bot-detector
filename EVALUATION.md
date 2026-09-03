@@ -1626,3 +1626,1037 @@ rate — the sweep was deliberately aimed at the busiest authors on the platform
 so nothing here says how *common* a >3/h person is among ordinary accounts.
 The two now frozen in `test/corpus/` inherit that limit exactly: they make the
 counter-example re-runnable, and two hand-read accounts are still not a rate.
+
+---
+
+# Appendix — narrative moved out of the README
+
+The README carried a second, longer telling of the findings above until it
+reached 1,969 lines. The prose is preserved here verbatim rather than deleted.
+**It overlaps the numbered findings above and has not yet been merged into
+them** — that merge is the outstanding job on this file. Where the two
+disagree, the numbered finding is the one with the measurement behind it.
+
+Verified before the move: of 88 distinctive identifiers in this text, 8 appear
+nowhere else in this file (`LIVE_STRIP_URL_CASES`, `MIN_ITEMS_FOR_RATE`,
+`SATURATED_ITEMS_PER_HOUR`, and five named accounts), which is why it is an
+appendix rather than a deletion.
+
+## Four false positives, all found against live accounts
+
+The test suite passed through every one of these — 106 green tests while two of
+them were live. They were found by running the thing against real accounts,
+which is the only reason they are fixed. Each one now has a test that fails
+without its fix; that is the actual deliverable, because the suite being green
+is what let them survive in the first place.
+
+**A forged 12-year dormancy.** Comments and posts are fetched as *separate*
+newest-first windows with different depths. An account with 1.59M comments
+returned its newest 299 — about an hour of activity — plus one submission from
+2014. Merged naively, that reads as a twelve-year dormancy followed by a
+revival, which is the single **heaviest agenda signal** (weight 3) firing on
+nothing but the shape of our own pagination. `reliableTimelineStart()` now drops
+everything older than the oldest item of any truncated stream: below that point
+we hold partial data and cannot tell absence from not-having-asked. It is
+deliberately conservative — a real gap in a complete stream gets discarded
+because the *other* stream was truncated — because inventing a gap is far worse
+than missing one.
+
+**A human sleep-cycle alibi for a bot.** The same account's ~300 comments span
+under six hours, and necessarily leave 18 hours of the day empty. The hour
+histogram read that as "17 consecutive quiet hours, consistent with a sleep
+cycle" — a perfect human alibi, manufactured entirely by the fetch window. A
+sleep cycle is a claim about days, so it now needs days:
+`MIN_SPAN_DAYS_FOR_HOUR_PROFILE = 3`. **That one fix moved the account from 48
+to 62.**
+
+Related, and the same species of care: a quiet hour is one holding less than
+20% of the account's average hour, not one that is strictly empty. A prolific
+human eventually lands a comment in every hour of the day across insomnia,
+travel and timezone changes, and a strict-zero test would call them a bot for
+it.
+
+**A query string counted as a question.** `asks-questions` was
+`body.includes('?')` against the raw body, so every `?context=3` and
+`message/compose/?to=` in a bot's own boilerplate read as curiosity. Live on
+2026-08-17, before the fix: **u/RemindMeBot 295 of 299 comments "ask a
+question", u/RepostSleuthBot 299 of 299** — the maximum on the one signal whose
+entire purpose is positive evidence of a *person*, awarded to two template bots.
+`stripUrls()` in `stats.js` now removes markdown link targets, anything with a
+scheme, bare `host.tld/path` and `host.tld?a=b` tokens, and root-relative
+`/path?a=b` before the test; both accounts scored **0 of 299** on the same live
+data afterwards, and two humans moved 118→107 and 15→14. That ratio is the
+whole point: the defect was invisible on humans and total on the adversary,
+which is exactly the shape a suite of hand-built fixtures cannot see.
+
+Two details are load-bearing. The link **text** survives when the author wrote
+a sentence around it, because `hey [does anyone know?](url)` is a question its
+author asked — see "Whose words are in the brackets" below for the line where
+that stops being true. And the help-seeking patterns run over the *same
+stripped body*, so both halves of the signal read what the author actually
+typed rather than one reading the raw text and the other not.
+
+**And the same rule, running the other way (JIO-386).** The bare host rule was
+`[\w-]+(?:\.[\w-]+)+/` — two dot-joined word chunks and a slash. A numeric
+ratio is that shape, so `"would you rate it 3.5/10?"` was cut to
+`"would you rate it"`: a *person* lost a genuine question, and `normalizeWords()`
+lost the tokens, on the one signal that is positive evidence of a person. A
+host now has to end in an **alphabetic** top-level label of two or more
+letters, which `3.5/10` and `10.50/hour` fail on `5` and `50` — and so do
+`U.S./Canada`, `A.I./ML` and `v1.2.3/build`, three more things the old rule
+quietly ate. Stated rather than left to be discovered: a bare IPv4 literal with
+a path (`1.1.1.1/help?x=1`) has no alphabetic label anywhere and survives. With
+a scheme it does not, and a scheme is how anyone writes one.
+
+The same fix closes the other direction. Requiring the slash left `?` behind in
+`example.com?utm=1` and `/search?q=cats`, so a query counts as a link tail on
+its own now — but only if it carries an `=`. That is what keeps
+"see example.com?" a question, the promise the slash used to keep, and it is
+what stops the root-relative rule reading `and/or`, `he/she` and `12/25` as
+links.
+
+Worth knowing before trusting the corpus on this one: the rewrite changes **not
+one** of the 7469 stripped bodies in `test/corpus/`, and `npm run evaluate`
+reprints all 81 frozen scores unmoved. That is the no-regression half and
+nothing more. The corpus *cannot* show the fix — its 606 bare-`host.tld?` and
+595 root-relative-`/path?` bodies all sit inside a markdown target or a scheme,
+where an earlier rule already removed them, and the human half is length-matched
+synthetic filler that quotes no ratios. A frozen corpus is evidence a change
+broke nothing; it is never evidence the change did anything.
+
+**So it was measured live, and the honest answer is smaller than the ticket
+claimed.** On 2026-08-21, **24,241** real comment bodies through arctic-shift,
+**17,282** of them run through two copies of the scoring core differing in
+exactly one line — `stripUrls()`, pre- and post-fix:
+
+| sample | bodies | measured |
+| --- | --- | --- |
+| firehose, 10 subs (movies, AskReddit, nba, soccer, boardgames, anime, books, buildapc, headphones, Coffee) | 4,807 | old vs new |
+| firehose, 12 subs (antiwork, jobs, personalfinance, careerguidance, NoStupidQuestions, buildapcsales, techsupport, programming, webdev, pcmasterrace, Cooking, fitness) | 6,891 | old vs new |
+| 22 full profiles through the real `fetchAccount`, scored twice | 5,584 | all three axes, old vs new |
+| firehose, 12 subs (letterboxd, television, Games, patientgamers, gaming, boxoffice, anime, manga, programming, webdev, sysadmin, DIY) | 6,959 | what the **new** rules remove — the half a diff is blind to |
+
+**8 of 17,282 bodies (0.046%) changed. Every one of them gained text back, none
+lost any, and not one of them was a question mark.** All eight are real people
+writing numbers:
+
+| account | fragment the old rule ate |
+| --- | --- |
+| u/Imgema | `2.5/3.5` (drive sizes, in Greek) |
+| u/rogue1102 | `1.5A/port` |
+| u/Throwaway_LostOW | `5.2k/month` |
+| u/NanosoftComputers | `15.8/16GB` |
+| u/ScubaAlek | `$44.56/hour` |
+| u/Grindhoss | `3.5/5` (a film rating, in three of the eight) |
+
+Read that against the ticket, which was written around `"would you rate it
+3.5/10?"`. The review-rating shape is real — u/Grindhoss is it — but the live
+population is dominated by **rates and measurements**, and in 17,282 bodies not
+one ratio sat next to a `?`. `asks-questions` moved on **0 of 22** accounts and
+every axis score is identical old-vs-new on all of them. So the payout this fix
+actually collects is through `normalizeWords()` on the **automation** axis,
+where the restored tokens go; the question-credit case in the ticket's Benefit
+section is correct in mechanism and below what 17k live bodies can resolve.
+That is the finding, and it is written down here so nobody re-derives the
+ticket's claim from the ticket.
+
+Eight bodies, seven distinct comments: one Grindhoss comment was caught by both
+the firehose sweep and its own profile, and is counted in each, because those
+are two measurements rather than one.
+
+Two bounds on that, said out loud rather than left in the sample size. **3 of
+the 22 profiles** (u/tehluxman 93 comments, u/_justnick 202, u/Different_type7
+69) came back `insufficient-data` on `MIN_HISTORY_DAYS`, so 19 carry the
+score comparison, not 22. And the firehose is **one sweep on one day** — it says
+what people wrote that day, not what they write.
+
+The fourth sample exists because a diff cannot see a body that *both* rules
+strip, which is where a new false positive would hide. Across 6,959 bodies **4**
+held something the old bare rule would have taken. The new host rule fires on
+**2** of them, and both are genuine links — u/blud_13's
+`people.aspx?MembershipGroupId=0`, which is exactly the query-without-a-path
+shape this fix added, and u/CtrlAltWiz's `github.com/CtrlAltWiz/SiliPuTTY]()`.
+The other two are what the old rule ate and this one does not. **The root-relative `/path?a=b` rule fired
+zero times in 6,959 bodies.** It is asserted by tests and by JIO-290's original
+bot boilerplate, and it is unmeasured in ordinary human text — a rule that has
+never fired in the wild is not a rule that has been shown to be safe there.
+
+JIO-290 still holds on the same live data: u/RemindMeBot **0 of 300**,
+u/RepostSleuthBot **0 of 300**, u/AutoModerator 38 of 300. The six fragments
+above are fixtures in `test/scoring.test.js` as `LIVE_STRIP_URL_CASES`, kept
+apart from the hand-built list because they are evidence rather than design —
+four of them (`1.5A/port`, `15.8/16GB`, `$44.56/hour`, `2.5/3.5`) are shapes
+nobody here would have thought to invent.
+
+**Whose words are in the brackets (JIO-349).** JIO-290's "the link text is the
+author's" was right about people and wrong about one kind of bot, and
+u/sneakpeekbot spent four days in the gap: **97 of its 299 comments still read
+as questions** after the URL strip, on a template that quotes *other people's
+post titles*.
+
+```
+Here's a sneak peek of /r/Thailand using the [top posts](url) of the year!
+
+\#1: [Is it possible to bring this dog we fell in love with back to the states?](url) | [384 comments](url)
+\#2: [I opened another branch of my restaurant. AMA](url) | [336 comments](url)
+```
+
+Not one of those question marks belongs to the account printing them. It is
+Finding 2's false positive exactly — a template bot taking a third of the
+maximum on the one signal that exists to *vouch* for a person — one layer in
+from where JIO-290 stopped.
+
+The rule now reads **what surrounds the brackets, not what is inside them**,
+one line at a time: remove every `[text](target)` from the line, and if what is
+left holds no word of the author's — two or more letters, any script — then
+nobody wrote that line, they only listed things. `\#1: … | …` leaves `\#1:  | `
+and goes. `hey [does anyone know?](url)` leaves `hey` and stays, which is how
+JIO-290's promise survives intact.
+
+Two shapes it is deliberately *not*. Stripping **all** link text fixes the
+account outright (32.4% → 1.0%) and reverses that promise, so it is off the
+table. A `#N:`-shaped rule would fit one bot's template and nothing else, and
+would be the kind of fix that has to be rewritten for the next bot. The
+ticket's own suggestion — strip blockquotes — is a **measured no-op**: 0 of
+those 299 bodies contain a `>` line at all.
+
+| | before | after |
+| --- | --- | --- |
+| u/sneakpeekbot `asks-questions` | 97 of 299 (32%) | **0 of 299 (0%)** |
+| u/sneakpeekbot authenticity | `low 16` | **`low 3`** |
+| u/sneakpeekbot `near-duplicate-bodies` | 28 of 197 (14%) | **196 of 197 (99%)** |
+| u/sneakpeekbot automation | `high 69` | **`high 88`** |
+| the other 26 frozen accounts, all three axes | — | not one point |
+
+That third row is the part worth sitting with. `normalizeWords()` shares
+`stripUrls()`, so the automation axis reads the same text — and the quoted
+titles were the **only varying content** in that account's bodies. Removing
+them does not merely stop crediting a bot with questions; it uncovers a
+template that is 99% self-similar to itself.
+
+That is one account, and the tempting generalisation from it — *text that made
+a bot look more human on one axis was making it look less templated on another*
+— **is wrong, and an audit measured it wrong.** A signal-level A/B of all 27
+frozen profiles finds the other three link-carrying bots moving the *other*
+way: u/RepostSleuthBot `near-duplicate-bodies` 185 of 200 → **169**,
+u/sub_doesnt_exist_bot 125 of 200 → **117**, u/RemindMeBot 200 → **199**, and
+`stock-phrasing` down for three of them too (u/RemindMeBot 299 phrases → 289).
+Stripping text usually leaves *less* to be self-similar with; u/sneakpeekbot
+inverts that only because the stripped text was the sole varying part of an
+otherwise fixed template. No axis score moves on any of the four, which is why
+the row above still reads "not one point" — the number was right and the
+because-clause was n=1.
+
+**What it costs a person, measured live rather than asserted.** The corpus
+cannot answer this: 19 of the 27 frozen profiles carry length-matched
+*synthetic* bodies that contain no markdown links, so pointed at `test/corpus/`
+the cost is zero by construction. `node scripts/measure-quoted-titles.mjs`
+fetches for that reason, and on 2026-08-21 it A/B'd **8,601 real bodies** from
+a content-blind sweep of 15 subreddits, then **24 whole accounts (6,652
+comments)** drawn at even ranks from that sweep's own author ranking and scored
+on all three axes through two copies of the core differing in one line:
+
+| | |
+| --- | --- |
+| bodies whose stripped text changed at all | 131 of 8,601 (1.52%) |
+| bodies that lost a `?` | **2 of 8,601 (0.02%)** |
+| the window's question rate | 14.65% → **14.63%** |
+| help-seeking hits | 51 → 51 |
+| `normalizeWords` tokens | 278,079 → 277,536 (0.20% removed) |
+| accounts whose axis score moved | **1 of 24** — u/AutoModerator, authenticity `low 11` → `low 10` |
+| band crossings | **0** |
+| largest per-account `asks-questions` move | **0.7 points** (the tolerance JIO-290 set is 1–2) |
+
+Three question marks were lost across both arms and all three were hand-read.
+Every one is somebody else's text:
+
+| account | what it lost | what it actually is |
+| --- | --- | --- |
+| u/ElectricMayhem123 | `["How does my comment break Rule 1?"](faq)` | a mod macro's canned FAQ label, alone on its line |
+| u/IndependentMacaroon | `>[wtf are they doing?](imgur)` | blockquoted anime screenshot captions — Reddit's own quote marker agreeing with the rule |
+| u/Human_Drummer4378 | `[Who Invented the Sandwich? \| HISTORY](url)` | a pasted article headline, cited under the person's own sentence |
+
+**Zero authored questions were lost in 15,253 bodies.** Bounds, out loud: one
+sweep on one day, and the profile arm is 24 accounts, not a rate. Escaped
+brackets are not a bound but they are a trap: three real corpus titles are
+`\[gendered\]`-shaped, and a link-text pattern of `[^\]]*` stops at the first
+`\]`, matches nothing, and makes the whole fix a silent no-op on them.
+
+Two costs this rule was known to carry were written down here before anyone had
+seen one, and an audit has since gone and looked for both. **The `a) [title](url)`
+bound is measured at zero** — across two disjoint live sweeps totalling ~17,000
+bodies, **0 of 413** lines the rule killed had any letter at all outside the
+brackets, so the shape remains asserted by `test/scoring.test.js` and unseen in
+the wild. **The whole-body `[question?](url)` bound is real and costs people
+questions**: u/DukeOfGeek's entire comment is `[Dibs?](gif)` (31 → 30 questions
+of 300, authenticity 34 → 33) and u/VintageRCFishArtist's is `[this?](youtu.be/…)`
+(23 → 22 of 300, no axis moved) — one each in two independent profile arms.
+Neither crossed a band. Writing a cost down is how it gets found; leaving it as
+"asserted rather than measured" is how it stays a guess.
+
+**And the question you were answering (JIO-349, second half).** The rule above
+closed the bot's route in. It left a person's: a block quote of the parent
+comment. `>Do you know what an agenda is?` followed by "Yes, that's why I'm
+asking what you think mine is here" is one question asked by *somebody else* and
+answered by this account, and `asks-questions` scored the reply for it.
+
+The strip that fixes it is not new and was never in dispute — `normalizeWords()`
+has dropped `^>` and `^&gt;` lines since it was written, so the **automation**
+axis had always read a quote as somebody else's words. It simply lived one call
+too late for `stripUrls()`, and therefore for `asks-questions`, to see it. The
+two axes disagreed about who said what for as long as both existed, and the
+signal's own docstring claimed they could not. Moving one `.replace()` up a call
+makes that sentence true.
+
+The corpus cannot show this either — 6 of 7,469 frozen bodies carry a `>` line —
+so it was A/B'd live the same way, **17,177 bodies over 15 subreddits** and
+**24 whole accounts (6,133 comments)** drawn at even ranks from that sweep's own
+author ranking, against a core with *both* JIO-349 rules reverted — the ticket's
+tolerance is about the ticket, so the arm reverts the ticket, and every lost `?`
+is then re-tested against a quote-strip-only core so the two rules can be told
+apart:
+
+| | |
+| --- | --- |
+| bodies carrying a `>` line at all | 283 of 17,177 (1.65%) |
+| bodies whose stripped text changed | 563 of 17,177 (3.28%) |
+| bodies that lost a `?` | 51 of 17,177 — **2.00% of every question counted** |
+| …attributed: the quote strip / the link-text rule | **47** / 4 |
+| the window's question rate | 14.88% → **14.58%**, i.e. **0.30 points** |
+| help-seeking hits | 97 → 93 |
+| `normalizeWords` tokens | 547,016 → 545,860 (0.21%) — **all of it the link rule**; the quote move removes exactly zero, because the before arm still carries `normalizeWords()`'s own copy of that strip |
+| accounts whose axis score moved | **2 of 24** (2 more were `insufficient-data`) |
+| band crossings | **0** |
+| largest per-account `asks-questions` move | **2.0 points** — the top of the 1–2 tolerance, not inside it with room |
+
+**24 lost question marks were hand-read across seven accounts, and 23 are
+somebody else's.** The largest mover is the one to read: u/notthegoatseguy loses
+6 of 59, five of them pasted Reddit help-article titles
+(`[What is karma? – Reddit Help](url)`, alone on a line) and one a textbook
+quote-and-answer — a person who links documentation and answers other people's
+questions, scored for six questions they did not ask. u/AftyOfTheUK loses 10,
+every one a `>quoted question` answered in flat declaratives. The single
+exception is u/VintageRCFishArtist's `[this?](url)` above, which is the
+link-rule bound, not this one.
+
+That 2.0 is the number to be uncomfortable with and it is stated rather than
+rounded off. It sits at the top of the tolerance JIO-290 set, and it is a *fix*
+rather than a *cost* — every question behind it was hand-read and six of six
+belong to somebody else. A tolerance is a bound on how much a change may move a
+person's score, not a promise it will not; when the move is this big the
+hand-read is the deliverable, not the table.
+
+Bounds on this half, out loud. The pattern is anchored hard at column 0 and was
+kept **character-for-character** as `normalizeWords()` had it, so that moving it
+could not move the automation axis. That is checked rather than assumed:
+`normalizeWords()` is **byte-identical on all 7,469 frozen bodies** against a
+core carrying the old arrangement, which is the whole reason the move is safe —
+and it is also why **a quote indented by a space is not seen**.
+Widening it is a change to automation, not to this signal, and belongs to
+whoever measures that. Two of the 24 profiles were `insufficient-data`, so 22
+carry the score comparison; one sweep, one day; and 51 lost question marks were
+found but 24 hand-read — the seven accounts read are the ones that moved most,
+which is the worst case and not a sample.
+
+**A confident zero from a window no gap could fit in.** `dormancy-revival`
+(weight 3, the heaviest agenda signal) gated only on item *count*. 299 comments
+spanning 0.0 days clear that easily, and it then reported "longest silence is 0
+days, below the 120-day threshold" — arithmetically the only sentence available,
+presented as a finding. Across the 25 accounts in `EVALUATION.md` it returned a
+clean `low` 25 times and `insufficient-data` never, so a weight-3 signal was a
+near-constant zero diluting every other agenda signal. It now measures the span
+of the reliable window first and returns `unmeasured()` below
+`MIN_DORMANCY_GAP_DAYS`, the way `posting-hour-dead-zone` has always gated on
+`MIN_SPAN_DAYS_FOR_HOUR_PROFILE`.
+
+The gate is on the **span alone, deliberately not on `coverage.truncated`**. A
+complete nine-day history cannot hold a 120-day silence either, so gating on
+truncation would have left the bug live for precisely the young accounts this
+axis gets pointed at — and a young account looking clean on the heaviest agenda
+signal is the failure mode worth caring about. There is a test for the complete
+case specifically, so nobody narrows it back.
+
+## The agenda axis banded a hobbyist, and shape was all it had
+
+The section above is four false positives found by pointing the thing at live
+accounts. This is a fifth, found by *freezing* two of them: when JIO-344 put
+u/humdingler and u/chilidirigible into `test/corpus/` to answer a question
+about posting rate, they arrived wearing an agenda badge nobody had asked
+about. **Both scored agenda `moderate` — 55 and 57 — where all 17 thread humans
+were `low` (0–19).** A reaction-GIF poster in r/Superstonk and a fifteen-year
+r/anime regular, told they might be pushing something.
+
+The whole of it came from two signals, and `scripts/measure-agenda-shape.mjs`
+ranks the frozen corpus on both (no network — the corpus is JSON and
+`scoreAgenda` is pure):
+
+* **Single-subject focus ranks the corpus backwards against its only ground
+  truth.** Seven of the eight declared bots hold the bottom seven places at
+  2–7% top-group share, the eighth reaches 16%, and 16 of the 19 humans beat
+  it. The only two accounts in the corpus this signal scores above `low` are
+  the two hobbyists, at 77% and 97%. Of course: a utility bot serves the whole
+  site, and u/AutoModerator posts in 307 groups against u/chilidirigible's 6.
+* **Posts and leaves separates nothing.** Bots span 0–91%, people 3–87%, and
+  the signal's own window floor of 0.35 sits *at the median thread human* of
+  0.36. u/Hartacus — an ordinary r/politics commenter — reads **87%, the same
+  as u/chilidirigible**. What separated the two was the other signal alone: 38
+  groups against 6.
+
+So the axis was banding people on their volume and their choice of subreddit,
+while `stock-phrasing` measured a real **zero** for both and `dormancy-revival`
+could not see a 120-day gap inside their 2- and 4-day windows. That is the
+axis's most consequential false positive and it was not hypothetical: it was
+the badge those two accounts were wearing.
+
+**The fix is not a threshold, deliberately.** There is no separating value to
+move one to: the bots are already *below* every account Single-subject focus
+fires on, so a threshold that separated the two populations would have to fire
+on low concentration — it would have to run backwards. `agenda.js` has said since it was written that
+"none of these signals is damning alone — a hobbyist is topic-concentrated" and
+that they are "weighted to be read together". A weighted mean does not read
+anything together, so `holdShapeToCorroboration()` makes that sentence
+executable: **a shape signal may argue as hard as the strongest measured
+`stock-phrasing` or `dormancy-revival` beside it, and no harder**, floored at
+the `moderate` band edge so it can always take the axis to the edge of an
+accusation on its own and never past it. Both accounts read `low 19` now, four
+thread humans move down within `low`, and **not one bot moves by a point** —
+every one of the eight reads `high` on stock phrasing, so nothing of theirs is
+held.
+
+**It is graded rather than a gate, and that is the load-bearing half.** An
+on/off rule at the same edge would have taken u/chilidirigible from agenda 30
+to **68** on a stock-phrasing strength moving 0.29 to 0.31 — and two of the 17
+thread humans sit within 0.11 of that line on their real bodies, at 0.37 and
+0.40. A cliff that steep standing next to real accounts is a false positive
+waiting for the next re-capture, so there is a test that walks a hobbyist's
+phrasing coverage from 0% to 20% and fails if any step moves the score by more
+than 12 points.
+
+**Strongest, not weakest — and until recently nothing could tell.** Holding
+shape to the *weakest* measured corroborator rather than the strongest passed
+the whole suite and `npm run evaluate`: no account in the corpus and no other
+fixture had both corroborators measured with one of them strong, so `max` was
+unpinned prose. The second propagandist fixture is exactly that shape — a
+talking point recurring across threads beside a `dormancy-revival` measured at
+**zero** over a 300-day span. A `min` there holds a real propagandist to the
+band edge on the strength of evidence it does *not* have, which is this rule
+inverted; the test fails on it now.
+
+**Every hold says so on the account being judged**, in the evidence string, on
+screen: the measurement it made, which signal beside it set the ceiling and
+what that signal reads — or that nothing beside it reads above low, and that
+one of the two could not be measured at all — and that it was therefore held. A
+discount applied silently is one nobody can argue with. That last clause is the
+case both live accounts were actually in: captured over 2- and 4-day windows,
+neither could be measured for dormancy at all, and *we did not look* must not
+render as *we looked and found nothing*. It had no test until now — dropping
+the filter that produces it passed the whole suite and `evaluate`, because
+`Math.max` swallows the unmeasured `null` and no score moves.
+
+**Two bounds on it, stated because they are not obvious.** First, nothing
+committed to this repository exercises the corroborated path on a real person —
+all 19 human profiles carry synthetic bodies, so their stock phrasing is not
+the live account's, and only the two propagandist fixtures in
+`test/scoring.test.js` take the un-held branch. That gap is why the real bodies
+were solved for rather than assumed: `manifest.json` records each human's
+agenda score on both profiles, bodies feed stock phrasing and nothing else on
+this axis, so the difference *is* that signal. Both hobbyists come out held on their real bodies
+too — 63 → 25 and 55 → 19. A live re-fetch of ten accounts on 2026-08-21
+confirmed all three: 55 → `low` 19 and 64 → `low` 26 for the two hobbyists,
+u/bigbjarne un-held at a live stock phrasing of 0.45 — the first real account
+to take the corroborated branch — and the three bots in it unmoved. That run
+was a hand check and is **not** reproducible from this repo: the committed
+script is offline on purpose, and a re-fetch today returns a different window.
+
+Second, and this is the honest limit: **the rule protects an account whose
+phrasing and dormancy both read low, and nothing else.** Two of the seventeen
+ordinary humans clear the corroboration floor on their own real text, at 0.37
+and 0.40. A hobbyist with a catchphrase gets nothing from this fix.
+
+And the thing this cannot say at all: whether either signal fires on an actual
+agenda account. The eight bots in the corpus are *utility* bots; there is no
+population of accounts known to be paid, and `EVALUATION.md` has recorded from
+the start that one cannot easily be obtained. An axis made harder to fire is
+not thereby an axis that fires correctly.
+
+## Volume bought immunity from the strongest check
+
+The section above is four false positives. This is the opposite failure and it
+had been sitting in `EVALUATION.md` as Finding 4 since the live run: **seven of
+eight unmistakable bots topped out at `moderate` on automation.** Not a wrong
+answer — the bands still separated — but a reader who takes `moderate` as
+"probably fine" gets the easiest case on the platform wrong.
+
+The first of its three causes is the one this section is about, and it is
+structural rather than a bug: **`posting-hour-dead-zone` is unavailable exactly
+where automation is highest.** It is the heaviest signal in the axis (weight 3)
+and it needs a 3-day span, for the very good reason two sections up — a sleep
+cycle is a claim about days, and 299 comments spanning an hour manufacture a
+17-hour "sleep gap" out of nothing but our own fetch window. But the more
+prolific the account, the shorter the window its per-lookup limit covers, so
+the guard fires hardest on the loudest bots. In `test/corpus/`, five of the
+eight reach it: u/AutoModerator's reliable window is 297 items spanning **82
+seconds**, u/RemindMeBot's is 10.4 hours. Being fast enough is a way to buy
+your way out of the strongest check there is.
+
+Weakening `MIN_SPAN_DAYS_FOR_HOUR_PROFILE` is not the fix. It is a fix, for a
+false positive that was live. So `sustained-posting-rate` (weight 2) fills that
+window instead, and the reason it *can* is the whole of why this section
+exists:
+
+**Throughput survives truncation; a schedule does not.** An hour histogram
+built from 82 seconds is measuring our pagination — the account did not choose
+to be silent in the other 23 hours, we simply never asked. A *rate* built from
+the same 82 seconds is a ratio of two things we genuinely observed. 297 items
+in 82 seconds is a fact about the account no matter how much older history we
+failed to fetch, and no amount of missing history can make it smaller. That
+asymmetry is why one signal has to gate on days and the other does not, and it
+is the sentence to reread before anyone "harmonises" the two guards.
+
+Three things about it are load-bearing.
+
+**It is one-directional: an ordinary rate is `unmeasured`, never a low score.**
+Below `ORDINARY_ITEMS_PER_HOUR` the signal reports nothing at all, and its
+evidence string says in as many words that this is not a clean result. Everyone
+on the platform posts at an ordinary rate; scoring that as a measured zero
+would hand a free vote-for-a-person to every patient bot in the world in
+exchange for a signal that only ever fires on the loud ones. The measured range
+therefore starts at 0.5 rather than 0, because a strength under 0.25 reads as
+`direction: 'lowers'` in `axis.js` and would drag the average down — which is
+precisely the vote this signal is not allowed to cast.
+
+**The gate is where throughput becomes worth weighing — it is NOT a ceiling on
+people, and there is no gap for it to sit in.** 3 items/hour is 72 a day
+sustained across the entire retrieved window, nights included. This section
+used to argue the number from a gap: the frozen humans top out at 0.92/h and
+the five bots run 5.5–13,039/h, so put the gate between them. That gap was an
+artifact of a corpus with no prolific human in it, and going and looking
+destroyed it (EVALUATION.md Finding 4a). A content-blind sweep of 22
+subreddits found seven accounts above the gate and **six of the seven hand-read
+as people**, the fastest of them at **5.90/h — above u/RemindMeBot's 5.5/h**.
+The populations overlap. No value of `ORDINARY_ITEMS_PER_HOUR` separates them:
+raising it to 6 silences RemindMeBot and still measures the human.
+
+**So what protects a prolific person is the shape of this signal, not the
+position of its gate**, and that is the sentence to keep. One-directional, so
+an ordinary rate is `unmeasured` and never a vote either way. Floored at
+`RATE_FLOOR_STRENGTH = 0.5`, so the measured range starts at neutral. Log-scaled
+to `SATURATED_ITEMS_PER_HOUR`, so the distance from 3/h to 300/h is what the
+strength is spent on rather than the distance from 3/h to 6/h. And weight 2 of
+15.5. Put together, the 5.90/h human earns strength **0.573** — 0.073 above
+neutral — and scores automation `low 16`. u/humdingler (5.90/h, `low 16`) and
+u/chilidirigible (3.42/h, `low 29`) are frozen in `test/corpus/` and
+`test/corpus.test.js` asserts both halves of that: that they still clear the
+gate, and that they are still `low`. A claim about shape is exactly the kind
+that keeps sounding true after it stops being true, so it is pinned to two real
+people rather than left in this paragraph.
+
+Moving the threshold is therefore not the lever it looks like. It cannot buy
+separation that does not exist, and the two errors it trades between still do
+not cost the same: a missed bot is a `moderate` band instead of a `high` one,
+and a caught human is a false accusation.
+
+**The 82-second window is what fixes the minimum-span guard at 60 seconds, and
+the arithmetic is not close.** Before this signal the five bots measured 10.5
+of the axis's 13.5 weight, with only the hour profile missing. Both remaining
+signals invert on reply-bots, and both have since gone: JIO-345 took
+`conversation-depth` to unmeasured for those five and JIO-346 has now taken
+`interval-regularity` at the pole where it inverts — which is 7.0/13.5 = 0.519,
+one signal above `MIN_MEASURED_WEIGHT_FRACTION`. Add
+this signal and have it *fire*: 9.0/15.5 = 0.581, and the axis still reports.
+Add it and have it stay silent — which any minimum span of an hour or more
+would do to AutoModerator — and it is 7.0/15.5 = **0.452**, below the gate.
+That is strictly worse than never adding the signal at all: the loudest bot on
+Reddit would come back `insufficient-data`. A guard that looks merely cautious
+can invert the thing it is guarding, so 60 seconds is there only to stop a
+degenerate window dividing by zero, and the real guard is on item count
+(`MIN_ITEMS_FOR_RATE = 30`) where "sustained" actually lives.
+
+It is deliberately not a duplicate of the two signals it sits next to.
+`cross-thread-bursts` wants a run inside 120 seconds and says nothing about the
+other 23 hours; this is the average over the whole window and is diluted by
+every quiet stretch in it — an account that drains a queue once a day scores
+there and not here. `interval-regularity` is a coefficient of variation, which
+is unitless on purpose and reports only whether a rhythm is *mechanical*, so a
+summon-driven bot posting as irregularly as the humans summoning it is now
+`unmeasured` there (JIO-346) rather than scored clean. This asks the question CV
+deliberately refuses, and asks it of a window CV has to give up on: not how
+evenly, but how much.
+
+**What it moved, and what it did not.** Against the frozen corpus, six scores
+changed and **every one of them is a bot**: AutoModerator `moderate 63 -> high
+69`, RemindMeBot 62 → 64, sneakpeekbot 47 → 50, Anti-ThisBot-IB 35 → 39, and —
+because a weighted average works in both directions — RepostSleuthBot 76 → 75
+and sub_doesnt_exist_bot 53 → 52. Not one of the 17 thread humans moved by a
+single point, because for all 17 the signal is unmeasured. The bot floor rose
+from 35 to 39 and their ceiling stayed at 17.
+
+That was measured before the corpus had a prolific human in it, and admitting
+two narrowed the margin it describes: **the human ceiling on automation is now
+25, not 17** (u/chilidirigible, 3.42/h), against a bot floor of 39. The bands
+still do not overlap and the separation invariant still holds, but 14 points of
+gap is the honest number and 22 was the number a thread sample happened to
+produce. (JIO-345 has since taken that floor to 44 and the gap to 19 without
+moving a human, and JIO-346 then took it to 54 — and unlike JIO-345 it *did*
+move the ceiling, from 25 to **29**, so the gap in force is 25 points against a
+ceiling four points nearer the band edge. Both are sections below.) Each cohort
+is printed as its own row by `npm run evaluate` so that one can never quietly
+widen the other.
+
+**What it measures that you might not expect it to**, stated because this
+started life as a bound nobody had checked. A person who genuinely sustains
+more than 3 items an hour across a truncated window — 300 comments inside a
+four-day argument — *is* measured here. The old text said so and added that the
+corpus held no such human to check it against, which made it an honest bound
+and an unfalsifiable one: `test/corpus/`'s 17 humans are the authors of one
+r/politics thread and are ordinary-volume commenters by construction, so no
+re-run of it could ever produce the counter-example.
+
+**THAT BOUND FIRED — see EVALUATION.md, Finding 4a.** `node
+scripts/probe-prolific-humans.mjs` went and looked: 22 subreddits, ~23,000
+comments, 16,264 distinct authors ranked before anything was fetched. Seven of
+the top 48 cleared the gate and six hand-read as people. They are not rare
+freaks — they are a GIF poster in r/Superstonk, a fifteen-year r/anime regular,
+a baseball fan in September. Two of them are now in `test/corpus/` as the
+`prolific-probe` cohort, and `npm run evaluate` prints their rate and their
+band on every run.
+
+The `sustained` framing is the mitigation and it is not a proof: one furious
+evening is diluted by the rest of the window, and 30 items is the floor below
+which the signal refuses to call anything a rate.
+
+**The residue that is still real, and it has a name and a number.** At 3.42/h
+u/chilidirigible scores automation `low 29` — well above the 20 the thread
+humans top out at, mostly on `posting-hour-dead-zone`, which for once *does*
+measure them (a 3.7-day window, and a long-running r/anime regular with no
+6-hour quiet stretch in it). That was `low 25` until JIO-346 took
+`interval-regularity` to unmeasured above CV 1.0; **half of JIO-329's premise
+has now landed, and this account absorbed 4 of its points.** Recomputed from
+the frozen profile with the other half applied — `conversation-depth` going
+unmeasured for ordinary repliers too — they come out **`moderate 32`, and
+without this signal `low 28`**, which are the same two numbers this section
+projected before either change landed. So this signal supplies the 4 points
+that cross the band, and JIO-329 supplies the rest by removing measured
+near-zeros from a weighted average. It was written down before any of it landed
+rather than found afterwards, and u/chilidirigible is in the corpus precisely
+so that `npm run evaluate` fails on the day it happens instead of printing
+`OK` — which it did, on 2026-08-21, twice. (Those two projections are not
+reproducible from the public verdict — `axis.js` publishes `band` and not
+`strength` by design — so they were computed on an instrumented copy of
+`stripInternal`. EVALUATION.md Finding 4a measured 33/29 for the same account
+against its live 2026-08-20 window; 32/28 is the frozen 2026-08-21 one, and it
+reproduced unchanged after JIO-346 spent 2 of the 3.5 weight.)
+
+**"A cost of the two changes together" was the wrong reading, and the sentence
+that said so is gone.** It was true of u/chilidirigible and it does not
+generalise, which the whole-ranking sweep in **EVALUATION.md Finding 4b** then
+showed: of the seven live accounts that cross under JIO-329, **five cross with
+this signal `unmeasured`**, at 0.01 to 2.26 items an hour. Two of them have no
+measured evidence of automation whatsoever beyond `posting-hour-dead-zone` and
+land on exactly 30. So this signal is not a co-author of JIO-329's cost — it
+was simply the only lens available on the day, because the only prolific human
+then in the corpus was one it happened to measure.
+
+**What that sweep established, and it belongs here rather than only there.**
+JIO-329 removes 3.5 of 15.5 weight, so for an ordinary profile at the measured
+weight of 13.5 that was common **when the sweep ran** it multiplies the
+automation score by 13.5/10 = **1.35** — and a multiplier on the score is a
+divisor on the band edge. `moderate` stops beginning at 30 and begins at
+**22.2**. Measured against 124 live accounts, every single one scoring 22–29
+then crossed and nothing at 21 or below did.
+
+**Read those numbers against the scale of the day they were taken, because 2 of
+the 3.5 has since landed.** JIO-346 (below) took `interval-regularity` to
+`unmeasured` for very nearly everybody, so the common human measured weight is
+now **11.5**, not 13.5 — 15 of the 19 frozen humans, and every ordinary account
+in the live arm. 22.2 is the *destination* of all 3.5 of weight, not the edge in
+force now: today's effective edge is about **25.6** for that shape, and JIO-329's
+remaining 1.5 (`conversation-depth` for ordinary repliers) is what carries it
+the rest of the way to 22.2. EVALUATION.md Finding 4e prices that half against
+the new baseline.
+
+The lever the band-edge figure is sensitive to is `MIN_MEASURED_WEIGHT_FRACTION`
+and the weights themselves, **not** `ORDINARY_ITEMS_PER_HOUR` and not the band
+edge — moving `moderate` to 35 would still leave two of the seven above it and
+would silently re-band the other two axes, which have nothing to do with any of
+this.
+
+## Replying to everyone is not evidence of a person
+
+The section above is one of the three reasons EVALUATION.md's Finding 4 gave
+for seven of eight declared bots topping out at `moderate`. This is another of
+them, and it is the one where the tool was not merely blind but **actively
+wrong**.
+
+`conversation-depth` scored `1 - rescale(replyShare, 0.02, 0.3)`. Never
+replying to another commenter reads as broadcasting rather than talking, which
+is true and is the half of the signal that works. But the arithmetic ran both
+ways, so a reply share above 30% earned **strength 0** — the strongest vote for
+humanity this axis can cast, at the signal's full weight. **u/RemindMeBot
+replies to a summoning commenter 299 times out of 299 and does nothing else at
+all, and was cleared by the exact mechanism that makes it a bot.** JIO-405
+measured the same thing from the other side and found the two populations
+identical here: the signal reads **0.000 for ordinary people AND 0.000 for
+u/RemindMeBot**.
+
+**The whole separation is three comments, which is what decides the shape of
+the fix.** Measured over the frozen corpus by `node
+scripts/measure-reply-share.mjs` (no network — it reads `test/corpus/` and
+nothing else): the five summon-bots sit at exactly 100.0% replies, and the 19
+humans run from u/Hartacus at 40.0% up to u/MundaneFacts at **99.0%**. That is
+3 top-level comments in 300 standing between a person and every reply-bot in
+the corpus. A percentile drawn off 19 human data points at a margin that thin
+would not survive the twentieth human, so there is no threshold to pick.
+
+**So the cut is a fact about the window rather than a number.** An account with
+**no top-level comment anywhere in its retrieved history** returns
+`unmeasured()` — axis.js rule 3, applied to a *pole* of a measurement rather
+than to a sample that was too thin. Every human in the corpus clears it; the
+thinnest clears it by three comments and the rest by ten or more. The broadcast
+pole is untouched and still separates: u/AmputatorBot (21.7% replies),
+u/AutoModerator (8.4%) and u/RepostSleuthBot (8.0%) all sit below every human
+in the corpus and are read exactly as before.
+
+**What it moved.** Five of the 81 frozen scores, every one a bot, every one
+upward: u/RemindMeBot `moderate 64 → high 73`, u/sub_doesnt_exist_bot 52 → 58,
+u/same_subreddit_bot 51 → 57, u/sneakpeekbot 50 → 57, u/Anti-ThisBot-IB 39 →
+44. Not one human moved by a point, because all 19 have top-level comments and
+for all 19 the signal is measured exactly as it was. The bot floor rose from 39
+to 44 against an unchanged human ceiling of 25, so the gap widened from 14
+points to 19, and Finding 4's "seven of eight top out at `moderate`" became
+five of eight. (JIO-346, the section below, then took it to two of eight — and
+moved the human ceiling, which this change did not.)
+
+**A bound that was checked rather than assumed:** taking 1.5 of weight away
+from the five loudest bots could have pushed them under
+`MIN_MEASURED_WEIGHT_FRACTION` and turned the fix into an `insufficient-data`
+verdict for exactly the accounts it was aimed at — the failure mode the
+82-second window produced above. It does not. The worst case is 11.0/15.5 =
+**0.710**, which is 3.25 of weight clear of the gate.
+
+**Two limits, stated here because neither is visible in a passing suite.**
+
+A reply-bot that drops a single top-level comment in 300 escapes this cut and
+still collects its zero. Closing that needs a threshold inside the
+three-comment margin, next to a real account, and nothing in this corpus can
+justify one. `test/scoring.test.js` asserts the escape as well as the catch, so
+it stays a stated bound rather than something found later.
+
+And **the discount below the cut is untouched.** An ordinary reply rate still
+votes for a person at full weight, and all 19 frozen humans still band `low` on
+this signal. Withdrawing *that* is JIO-329 — 3.5 of 15.5 weight, together with
+`interval-regularity` — and all 3.5 of it moves the `moderate` band edge from 30
+to 22.2 for every account on the platform, at a measured cost on real people
+that this change deliberately does not pay. (**2 of that 3.5 has now landed**,
+in JIO-346 two sections down: the edge is already at roughly 25.6 for the common
+shape, and it is `conversation-depth`'s remaining 1.5 that would take it to
+22.2.) The two are separable and this one is the half that costs nobody a band.
+The section below is the other signal in that pair, gated the same way and on
+the same day, and it is **not** free: it moved the human ceiling four points.
+
+## An uneven cadence is not evidence of a person
+
+The last of Finding 4's three reasons, closed on the same day as the one above
+and in the same shape — and unlike that one, **this one cost real people
+points.**
+
+`interval-regularity` scored `1 - rescale(cv, 0.15, 1.0)`. A cadence too even
+to be anyone's day is a scheduler, which is true and is the half of the signal
+that works. But `rescale` **clamps at its ceiling**, so every account from CV
+1.0 upward earned **strength exactly 0.000** — the strongest vote for humanity
+this axis can cast, at weight 2 — and the badge told them *"that is the
+irregular, clumpy spacing typical of a person"*.
+
+**A summon-driven bot does not own its own rhythm.** u/RemindMeBot posts when
+people ask it to, so its irregularity is its users' irregularity, and the tool
+was reading demand for the account as evidence about the account. Everything
+that arrives on human demand was actively discounted for arriving on human
+demand.
+
+**The number to look at is how many accounts scored the same.** `node
+scripts/measure-interval-cv.mjs` (no network — `test/corpus/` and nothing
+else): **26 of the 27 frozen accounts sit at or above CV 1.0**, all 19 humans
+(1.53 to 5.29) and seven of the eight declared bots (1.08 to 16.09), and every
+one of them scored 0.000. The live arm is starker — re-run against the
+whole-ranking sweep of ten busy subreddits harvested for EVALUATION.md Finding
+4b, **all 77 scored accounts returned strength exactly 0.000**. Not 77
+near-zeros; one constant, 77 times. A signal that returns the same number for a
+content-blind sample of a live platform is not a weak signal, it is an unread
+one.
+
+**So the gate is the ceiling of the existing scale, not a number picked next to
+a population.** At or above CV 1.0 the signal returns `unmeasured()` — axis.js
+rule 3 again, applied to a *pole*. Finding 4d had to reason its way to a
+categorical cut because its margin was three comments wide; here the arithmetic
+had already chosen, because 1.0 is where `rescale` stopped varying. Below it
+nothing changes: the strength still climbs to a full-weight 1.0 at CV 0.15, and
+u/sub_doesnt_exist_bot (CV 0.94) is the one frozen account still measured.
+
+**The alternative, and why it was not built.** The other option on the ticket
+was to measure **response latency** — parent comment to this account's reply —
+which is a rhythm the account genuinely does own. It was probed live rather
+than assumed: `/api/comments/ids?ids=` returns `created_utc` 120 ids at a time
+and all 299 of u/RemindMeBot's parents are comments, so it is buildable. It
+needs a new `AccountProfile` field, a second fetch pass in `arcticShift.js` and
+a re-capture of all 27 frozen profiles before `npm run evaluate` could measure
+it — and PLATFORMS.md's contiguity rule forbids feeding this signal family from
+a payload whose contiguity cannot be proven, which parent timestamps fetched by
+id lookup cannot. That is a ticket of its own if it is ever worth one.
+
+**What it moved.** 17 of the 81 frozen scores. Seven bots: u/RemindMeBot `high
+73 → 89`, u/RepostSleuthBot `high 75 → 89`, u/AutoModerator `high 69 → 82`,
+u/AmputatorBot `moderate 60 → high 71`, u/same_subreddit_bot and u/sneakpeekbot
+both `moderate 57 → high 69`, u/Anti-ThisBot-IB `moderate 44 → 54`. Three of
+those cross a band, the bot floor rises from 44 to 54, and Finding 4's "seven of
+eight top out at `moderate`" becomes **two of eight**. The worst
+measured-weight case is 9.0/15.5 = **0.581**, still 1.25 of weight clear of
+`MIN_MEASURED_WEIGHT_FRACTION`, so no bot was gated into `insufficient-data` by
+its own fix.
+
+**And ten humans, which is the part that is not free.** They move +1 to +4 and
+in the frozen corpus all stay `low`, but **u/chilidirigible's ceiling went
+25 → 29, one point under the band edge.** That is not an accident of one
+profile: removing 2 of 15.5 weight multiplies an ordinary score by `mw/(mw−2)`,
+and a multiplier on the score is a divisor on the band edge. **That edge is
+shape-dependent, not universal.** `30×(mw_pre−2)/mw_pre` across the 19 corpus
+humans as they measure live: **25.2** at a pre-cut weight of 12.5 (three of
+them), **25.6** at 13.5 (fifteen — the common shape), **26.1** at 15.5, which is
+u/chilidirigible's own all-eight-signals shape and so the figure that actually
+governs this account. Thinner profiles fall further — 24.5 at 11, the shape
+three of the eight bots have. Quote 25.6 as the typical edge, not as the edge.
+
+**And one human did cross — live, on the day this landed.** All 19 corpus humans
+were re-fetched 2026-08-21 through the shipped `fetchAccount`
+(`node scripts/measure-interval-crossing.mjs --all-humans`). One crossed:
+**u/chilidirigible scores automation `moderate 30`** today, where reconstructing
+`interval-regularity` at the clamped 0.000 it used to earn at weight 2 puts the
+same fetch at **`low 26`** before the change — bracketed 25.69–26.56 across the
+rounding, so the band is robust to it, and reproduced across four independent
+fetches. So "nobody in the corpus was standing in the 26–29 strip" and "none of
+the 77 live accounts crossed" are both true and **neither is the whole story**:
+`test/corpus/` was captured 2026-08-18 and this account drifted a point in three
+days, and the 77-account sweep's before-scores top out at 24 with
+u/chilidirigible not in that arm at all.
+
+**One of nineteen, and the other eighteen are not close** — the runner-up
+(u/Hartacus, `low 23`) is seven points short. The strip is populated, not
+crowded. But two zero-crossing samples were never evidence that it was empty,
+and the account found standing in it is the same one both of those sentences
+name as the human ceiling.
+
+**Which makes the corpus load-bearing in a way worth saying out loud.** `npm run
+evaluate` gates its exit code on `no human above low, no bot at low`; against a
+corpus re-captured today it would print `BROKEN`, name u/chilidirigible and exit
+1. The separation holds *of a 2026-08-18 snapshot*, at the boundary, on one
+point of drift — not comfortably. EVALUATION.md Finding 4e carries the full
+measurement and the re-capture question, which is George's call and not one to
+settle inside this change. The band-edge arithmetic is still the durable half,
+and it says this change spent most of the human cost JIO-329 was priced for.
+
+**Two bounds, stated because neither is visible in a passing suite.**
+
+This signal now says **nothing at all** about 26 of the 27 frozen accounts — 2
+of the axis's 15.5 weight going quiet for very nearly everybody. That is a real
+loss of coverage, not a free fix. It is also the honest reading of what was
+already there, because those 26 scores were the same 0.000 whatever the account
+was.
+
+And **a scheduler that jitters past CV 1.0 buys exactly the silence a person
+gets.** It is not a new hole — it collected a confident vote for its humanity
+before, which was worse — but this does not close it, and no population
+available to this repo holds an adversarial bot to check against.
+`test/scoring.test.js` asserts both sides of the gate, so the escape stays a
+stated bound rather than something found later.
+
+## Running everywhere is not a range of interests
+
+Finding 4's last paragraph, and the one that lands on the axis that exists to
+**vouch** for people rather than to suspect them.
+
+`topical-breadth` scored `0.5 × how much sits outside the largest group + 0.5 ×
+rescale(distinct groups, 2, 15)`, and both halves saturate on sitewide
+automation. u/AutoModerator answers in **307 subreddits** with 98% of itself
+outside the largest, so it took a flat **1.000** — the largest vouch this signal
+can award anybody — and its badge said *range of interests*. The second half is
+not merely saturated but inverted: share outside the largest group runs 0.84–0.98
+for the corpus bots against 0.03–0.87 for its humans. **Being everywhere is the
+job.**
+
+**The ticket named two accounts. The measurement said all eight.** JIO-347 was
+filed off u/AutoModerator (333 subreddits, live) and u/RemindMeBot (175); `node
+scripts/measure-topical-breadth.mjs` (no network — `test/corpus/` and nothing
+else) reads `high` here for **every declared bot in the corpus**, none of which
+had been re-checked because the ticket did not name them.
+
+**The discriminator is items per group.** In the corpus every bot sits at
+**1.24–2.06** — they visit, they never return — and every human at
+**3.08–66.7**. So the signal is now `reach × depth`, with
+`depth = rescale(items per group, 1, 3)`. Neither end of that is a number picked
+next to a population: **1.0 is the arithmetic minimum of the measure** (one item
+in every group, reach with no depth anywhere), and **3 is a return visit rather
+than a drive-by**.
+
+**The gap is about half what those 27 accounts said, and that is worth knowing
+before anyone moves the constant.** A content-blind live sweep of 42 scorable
+accounts on 2026-08-21 — the Auditor's, ranked before a profile was fetched —
+put the human tail at **2.53** rather than 3.08, with 6 of the 42 within 20% of
+the edge. Real headroom above the busiest corpus bot is **0.47, not 1.02**. The
+cut still lands where it was aimed and the two humans past the edge lose 5.9 and
+4.8 authenticity points **without changing band**, but "nobody is standing in the
+gap" was a statement about 19 people. The constant rests on its derivation, not
+on that margin.
+
+**And below 45 grouped items the taper is withheld entirely**, because that is
+where it stops measuring the account and starts measuring its size. The same
+sweep found a 25-item person in 19 groups — 1.32 items each, automation `low 0`,
+stream not truncated — reading the *same breadth band as u/AutoModerator* and
+falling `moderate 33 → low 12` for it. 45 is `15 groups × 3 items`, the two
+constants already in the signal: it is the smallest history in which an account
+can satisfy both halves at once, and under it every item spent widening the
+reach is one unavailable to deepen it. The gate costs the fix nothing — the
+smallest declared bot in the corpus carries **299** grouped items, 6.6× the gate
+— and because withholding a discount is generous, the evidence string names it
+the same way it names the discount.
+
+The obvious rival was rejected on its own number. The share of an account's
+groups holding exactly one item *does* separate these populations — by
+**0.0023**, u/humdingler at 0.6667 against u/RepostSleuthBot at 0.6689. A cut
+there is fitted to the third decimal place of one person.
+
+**And this one is a taper, not an `unmeasured()`, unlike the two sections above
+it.** Both of those closed an inverting signal by declining to score its bad
+pole. Here that same fix makes the defect *worse*: `buildAxis` averages over
+measured weight only, so dropping a signal redistributes its weight — a penalty
+on a suspicion axis and a **gift** on a vouching one. Going `unmeasured()` would
+have raised all eight bots' authenticity scores. A signal that has read "reach
+without depth" has measured something and must score it low rather than look
+away, and the evidence string names the discount out loud: *"That is 1.29 items
+per group — reach without depth … so the breadth credit is cut to 14% of what
+the reach alone would score."*
+
+**A discount is a discount; only the floor of the measure is a description.**
+That sentence was written for u/AutoModerator at 1.29, and the live sweep put
+two hand-read people inside the taper at 2.53 and 2.61, docked about 20%. Being
+told your account "looks like running sitewide" is an accusation this axis says
+outright that it does not make, so past **2 items per group** — where the
+average group stops being a single visit — the wording is a plain discount
+instead: *"the account does go back to what it touches, but short of the 3 that
+reads as a return rather than a look around."* Same arithmetic, and
+`test/scoring.test.js` pins the split, because the sentence is the part a real
+person actually reads.
+
+**What it moved.** 8 of the 81 frozen scores, every one a bot going down:
+u/AmputatorBot `low 25 → 3`, u/RemindMeBot `25 → 5`, u/same_subreddit_bot
+`25 → 6`, u/AutoModerator `low 29 → 8`, u/RepostSleuthBot `25 → 13`,
+u/Anti-ThisBot-IB `moderate 32 → low 15`, u/sneakpeekbot `moderate 38 → low 16`,
+u/sub_doesnt_exist_bot `moderate 38 → low 17`. Three cross a band, the bots'
+authenticity cell becomes `low ×8` (3–17) against thread humans at 38–81, and
+**not one human moved a point in either direction** — every frozen human's taper
+is exactly 1.00. Live, two of 42 are tapered and neither changes band.
+
+**Three bounds, stated because a passing suite shows none of them.**
+
+A genuine *broad* account — 200 comments across 150 different groups — still
+scores near zero here, and the gate does not help it: 45 items buys room for a
+thin history, not a wide one. That is a real cost, accepted deliberately: one
+comment in each of a hundred groups is the same *shape* as the adversary, and
+`low` on this axis means no positive evidence was found rather than that
+anything was found. The other four authenticity signals are untouched and still
+speak for that account, and the live sweep priced the cost at 5.9 and 4.8 points
+with no band change. `test/scoring.test.js` pins **both** ends of the taper and
+**both** sides of the gate, because nothing in the corpus sits between 2.06 and
+3.08 items per group or under 117 grouped items — a change that moved the
+full-credit constant to 6, or the gate up past the smallest bot's 299, would
+leave `npm run evaluate` green while quietly docking half the people on the
+platform or handing all eight bots their reach back.
+
+**A bot with fewer than 45 grouped items gets the gate too.** It is a statement
+about how much history there is, and it cannot tell whose history is short.
+Nothing in the corpus is that small, and an account that thin has little for any
+of the other signals to read either — but the door is open and saying so is
+cheaper than pretending it is not.
+
+And **a bot that returns to what it touches keeps the full credit.** Three items
+per group buys back everything the taper takes; no population available to this
+repo holds an account doing it on purpose. This raises the price of the vouch
+rather than closing the door, and that bot has to be caught on the automation
+axis instead.
+
+## The blind spot: an account the index has never heard of
+
+The defects above are false positives. This one is the opposite and it is
+worse, because a false positive is at least visible: **the newest 15–20% of a
+live thread got no verdict at all**, and the badge blamed the account for it.
+
+`fetchAccount` used to treat an empty `/api/users/search` as "no such account"
+and return `null` — one line, `if (!meta) return null`. Against a real
+r/politics thread on 2026-08-05, **35 of 236 authors (14.8%) returned empty
+from that endpoint while `/api/comments/search` served their comments
+normally.** They were not deleted, suspended or mistyped. They were posting at
+the time we asked.
+
+**It is a cutoff, not a lag, and that is the whole point.** Every one of the
+201 indexed accounts in that thread carried the *same*
+`comment_stats_updated_at` — 2025-03-25. The newest `earliest_comment_at` among
+them was 2025-03-14, and 0 of 196 had commented within a week of the probe.
+That is not a stats blob being recomputed slowly; it is a snapshot taken once.
+A re-probe on 2026-08-16 measured **20.0%**, up from 14.8% eleven days earlier,
+and **the growth is the proof**: a lag shrinks, a cutoff widens every day that
+passes. So the blind spot is not random — it is *exactly* the population most
+worth checking, because a brand-new account is the shape astroturf takes.
+
+The fix is that **the users index does not get to decide whether an account
+exists**. On a miss we ask the comment and post streams anyway and, if either
+serves anything, assemble the profile from those alone. Live, after the fix,
+`u/runnertrailsBay` — the loudest voice in that thread and one of the 35 —
+scores `automation low 12 · agenda low 2 · authenticity moderate 55` off 145
+comments and no index entry at all.
+
+Four things are load-bearing:
+
+* **Absence has to be agreed by all three endpoints.** An index miss with empty
+  streams is still `null`, because a deleted or mistyped name has to stay
+  distinguishable from a new one. Splitting that single test in two is the fix
+  in miniature, and both halves are asserted.
+* **A request failure still throws; only an *empty result* falls back.** An
+  outage and an absent account are different facts. Falling back on a 500 would
+  quietly convert a broken endpoint into a stream of confident-looking thin
+  profiles that all resemble young accounts — the exact reading the tool is
+  meant to be careful about.
+* **`karma` stays `null`, never `0`**, per rule 1 of `profile.js`, and
+  `karma-velocity` (weight 1 of 12.5) degrades to `insufficient-data` *on its
+  own* with no special-casing. That is the seam working: one signal reports what
+  it could not measure instead of the whole lookup vanishing.
+* **`firstSeenUtc` from the oldest retrieved item is a *floor*, not an age**,
+  and `coverage.errors` says so in the words the badge renders. This was decided
+  deliberately rather than fallen into: for an old, prolific, comment-only
+  account whose window filled up, the understated age trips `MIN_HISTORY_DAYS`
+  and gates the whole verdict to `insufficient-data`. That is the answer we
+  want. What we actually hold in that case is 300 comments spanning forty
+  minutes, and scoring it would be a verdict on our own pagination rather than
+  on the account — the same mistake as the forged dormancy above, arriving
+  through a different door. There is a test asserting the gate fires, so nobody
+  "fixes" it into a clean band later.
+
+Understating age is also the safe direction on its own terms: it can only ever
+push a verdict *towards* `insufficient-data`, never towards a clean score.
+
+
+## A bug only the real runtime could find
+
+`extension/lib/sources/arcticShift.js` defaults its injected fetch to
+`globalThis.fetch.bind(globalThis)`. The `.bind` is load-bearing, not defensive
+style.
+
+The default is later called as `ctx.fetchImpl(...)`, which hands `fetch` a
+receiver that is not the global scope. **Node does not care, so every one of the
+106 tests passed either way.** But in an MV3 service worker `fetch` is a native
+WebIDL method that requires its own global as the receiver, and an unbound
+reference throws `Failed to execute 'fetch' on 'WorkerGlobalScope': Illegal
+invocation` — on *every single lookup*. Every badge in the actual unpacked
+extension failed while the suite was green.
+
+It cannot be caught by a test in Node, because the injected stub is a plain
+function with no receiver rules. The comment at the fix says exactly that, so
+the next reader does not simplify it back.
+
