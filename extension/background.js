@@ -16,6 +16,8 @@
  *   BD_LOOKUP        {platform, username, deep?, force?} -> {verdict, provider, degraded, degradedReason?, cached}
  *   BD_STATUS        {}                                  -> {mode, backendUrl, backendDown, settings, queue, cache}
  *   BD_CLEAR_CACHE   {}                                  -> {cleared}
+ *   BD_CLEAR_LOG     {}                                  -> {cleared}
+ *   BD_GET_LOG       {}                                  -> {entries, max}
  *   BD_PROBE_BACKEND {url}                               -> {ok, agenda, error?}
  */
 
@@ -154,6 +156,121 @@ async function clearCache() {
 }
 
 // ---------------------------------------------------------------------------
+// Signal log — the full per-signal working behind every lookup, kept so "why
+// did this account read low?" is answerable after the fact instead of one
+// badge card at a time. Every verdict already carries its evidence sentences;
+// this just stops throwing them away.
+//
+// It lives in chrome.storage.session on purpose: diagnostics, not data. It is
+// per-machine, never synced, never uploaded, and gone when the browser closes.
+// One entry per account (a re-lookup replaces the old entry and bumps a
+// counter) so a busy thread revisiting the same names does not flood it.
+// ---------------------------------------------------------------------------
+const LOG_KEY = 'bd:v1:signal-log';
+const MAX_LOG_ENTRIES = 150;
+const LOG_FLUSH_MS = 2000;
+
+let logMemo = null;
+let logDirty = false;
+let logFlushTimer = null;
+
+async function loadLog() {
+  if (logMemo) return logMemo;
+  try {
+    const got = await chrome.storage.session.get(LOG_KEY);
+    logMemo = (got && Array.isArray(got[LOG_KEY])) ? got[LOG_KEY] : [];
+  } catch {
+    logMemo = [];
+  }
+  return logMemo;
+}
+
+function markLogDirty() {
+  logDirty = true;
+  if (logFlushTimer) return;
+  logFlushTimer = setTimeout(() => {
+    logFlushTimer = null;
+    flushLog();
+  }, LOG_FLUSH_MS);
+}
+
+async function flushLog() {
+  if (!logDirty || !logMemo) return;
+  logDirty = false;
+  try {
+    await chrome.storage.session.set({ [LOG_KEY]: logMemo });
+  } catch {
+    // Most likely the session-storage quota. Retrying the same payload would
+    // fail the same way forever, so shed the oldest half and let the next
+    // flush try smaller. Diagnostics losing their tail beats diagnostics
+    // silently stuck at their last successful write.
+    if (logMemo.length > 1) logMemo.length = Math.floor(logMemo.length / 2);
+    logDirty = true;
+  }
+}
+
+async function recordLookup(platform, username, details) {
+  const log = await loadLog();
+  const key = cacheKey(platform, username);
+  const prior = log.findIndex((e) => e.key === key);
+  const lookups = prior === -1 ? 1 : (log[prior].lookups || 1) + 1;
+  if (prior !== -1) log.splice(prior, 1);
+  const entry = {
+    key, at: new Date().toISOString(), platform, username, lookups, ...details,
+  };
+  log.unshift(entry);
+  if (log.length > MAX_LOG_ENTRIES) log.length = MAX_LOG_ENTRIES;
+  markLogDirty();
+  // Mirror a one-liner to the worker console (chrome://extensions ->
+  // "Inspect views: service worker") with the full entry attached to expand.
+  console.debug(`[bot-detector] ${summariseEntry(entry)}`, entry);
+}
+
+function summariseEntry(entry) {
+  const who = `${entry.platform}:u/${entry.username}`;
+  if (entry.outcome !== 'scored') {
+    return `${who} — lookup failed: ${entry.error?.message || 'unknown error'}`;
+  }
+  const axis = (name) => {
+    const a = entry.axes?.[name];
+    return a ? `${name} ${a.band}${a.score != null ? ` ${a.score}` : ''}` : `${name} ?`;
+  };
+  const how = [entry.provider, entry.cached ? 'cached' : null, entry.degraded ? 'degraded' : null]
+    .filter(Boolean).join(', ');
+  return `${who} — ${axis('automation')} · ${axis('agenda')} · ${axis('authenticity')} (${how})`;
+}
+
+/** The loggable slice of a lookup result: everything the badge card gets. */
+function loggableResult(entry) {
+  const v = entry.verdict || {};
+  const axis = (a) => (a ? { band: a.band, score: a.score, signals: a.signals } : null);
+  return {
+    outcome: 'scored',
+    provider: entry.provider,
+    cached: Boolean(entry.cached),
+    degraded: Boolean(entry.degraded),
+    degradedReason: entry.degradedReason,
+    headline: v.headline,
+    fetchedAt: v.fetchedAt,
+    coverage: v.coverage,
+    axes: {
+      automation: axis(v.automation),
+      agenda: axis(v.agenda),
+      authenticity: axis(v.authenticity),
+    },
+  };
+}
+
+async function clearLog() {
+  const log = await loadLog();
+  const cleared = log.length;
+  logMemo = [];
+  logDirty = true;
+  await flushLog();
+  return cleared;
+}
+
+// ---------------------------------------------------------------------------
 // Queue — global concurrency cap, minimum gap, shared backoff, dedupe.
 // ---------------------------------------------------------------------------
 const queue = [];
@@ -206,8 +323,14 @@ async function runJob(job) {
     // for the entry itself. It carries its own reason string, so a cache hit
     // still tells the truth about how it was produced.
     await writeCache(job.platform, job.username, entry);
+    recordLookup(job.platform, job.username, loggableResult({ ...entry, cached: false }))
+      .catch(() => {});
     job.resolve({ ...entry, cached: false });
   } catch (err) {
+    recordLookup(job.platform, job.username, {
+      outcome: 'error',
+      error: { message: (err && err.message) || String(err), kind: (err && err.kind) || 'error' },
+    }).catch(() => {});
     consecutiveFailures += 1;
     const explicit = Number(err && err.retryAfterMs);
     const backoff = Number.isFinite(explicit) && explicit > 0
@@ -229,7 +352,11 @@ async function requestVerdict(req) {
 
   if (!req.force) {
     const cached = await readCache(platform, username, { needDeep: deep });
-    if (cached) return { ...cached, cached: true };
+    if (cached) {
+      recordLookup(platform, username, loggableResult({ ...cached, cached: true }))
+        .catch(() => {});
+      return { ...cached, cached: true };
+    }
   }
 
   const key = `${platform}:${username.toLowerCase()}:${deep ? 'deep' : 'shallow'}`;
@@ -269,6 +396,12 @@ const handlers = {
   },
   async BD_CLEAR_CACHE() {
     return { cleared: await clearCache() };
+  },
+  async BD_GET_LOG() {
+    return { entries: await loadLog(), max: MAX_LOG_ENTRIES };
+  },
+  async BD_CLEAR_LOG() {
+    return { cleared: await clearLog() };
   },
   async BD_PROBE_BACKEND(msg) {
     const url = normaliseBackendUrl(msg && msg.url);

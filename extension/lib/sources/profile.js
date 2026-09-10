@@ -170,12 +170,16 @@ export function activityOldestFirst(profile) {
   const items = [];
   for (const c of profile.comments) {
     if (Number.isFinite(c.createdUtc)) {
-      items.push({ kind: 'comment', createdUtc: c.createdUtc, group: c.group });
+      items.push({
+        kind: 'comment', createdUtc: c.createdUtc, group: c.group, id: c.id ?? null, threadId: c.threadId ?? null,
+      });
     }
   }
   for (const p of profile.posts) {
     if (Number.isFinite(p.createdUtc)) {
-      items.push({ kind: 'post', createdUtc: p.createdUtc, group: p.group });
+      items.push({
+        kind: 'post', createdUtc: p.createdUtc, group: p.group, id: p.id ?? null, threadId: null,
+      });
     }
   }
   return items.sort((a, b) => a.createdUtc - b.createdUtc);

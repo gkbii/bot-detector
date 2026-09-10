@@ -18,10 +18,10 @@ import {
   activityOldestFirst, groupHistogram, reliableActivityOldestFirst,
 } from '../sources/profile.js';
 import {
-  BAND_THRESHOLDS, buildAxis, signal, unmeasured,
+  BAND_THRESHOLDS, buildAxis, exampleRef, signal, unmeasured,
 } from './axis.js';
 import {
-  bareId, clamp01, formatDate, normalizeWords, pct, plural, rescale,
+  bareId, clamp01, formatDate, linkedDomains, normalizeWords, pct, plural, rescale,
 } from './stats.js';
 
 const SECONDS_PER_DAY = 86400;
@@ -73,12 +73,59 @@ const REVIVAL_FRESH_DAYS = 365;
 const REVIVAL_STALE_DAYS = 1095;
 const MIN_ITEMS_AFTER_GAP = 5;
 
+/**
+ * Link-domain concentration (JIO-430). Before this signal the axis had no eye
+ * at all on the push mechanism spam and promotion actually use: steering
+ * readers to ONE destination, over and over, from wherever the account is
+ * standing. Ordinary linking spreads across destinations; an affiliate, a
+ * shill or a self-promoter links home.
+ *
+ * INFRASTRUCTURE HOSTS ARE EXCLUDED, and the list must stay infrastructural:
+ * these are the places content merely LIVES — image hosts, video hosts, the
+ * platform itself — where the domain identifies a host and not a message.
+ * Everyone concentrates on youtube.com; that is what youtube.com is for. Do
+ * not add subject-matter sites here — excluding a destination is exempting it.
+ */
+const MIN_LINKED_COMMENTS = 8;
+const MIN_LINK_THREADS = 3;
+const LINK_FOCUS_ORDINARY_SHARE = 0.5;
+const LINK_FOCUS_SATURATED_SHARE = 0.95;
+const INFRASTRUCTURE_DOMAINS = new Set([
+  'reddit.com', 'redd.it', 'redditmedia.com', 'redditstatic.com',
+  'imgur.com', 'youtube.com', 'youtu.be', 'wikipedia.org', 'wikimedia.org',
+  'giphy.com', 'gfycat.com', 'streamable.com', 'twitter.com', 'x.com',
+  'imgflip.com', 'preview.redd.it',
+]);
+
+/** Cross-group reposts need this many titled posts before a share means anything. */
+const MIN_POSTS_FOR_REPOST = 5;
+
+/**
+ * Pre-history gap (JIO-431): the dormancy dormancy-revival cannot see. That
+ * signal measures gaps BETWEEN retrieved items, so an account that existed for
+ * years before its first item — created, parked or purchased, then put to work
+ * — shows it nothing. The creation-to-first-activity gap is measurable exactly
+ * when the retrieved history is COMPLETE: only then is "no items before this"
+ * a fact about the account rather than about our pagination.
+ *
+ * A YEAR, NOT 120 DAYS, and a SHAPE signal rather than a corroborator — both
+ * for the same person: the lurker. Reading for years before the first comment
+ * is one of the most ordinary biographies on the platform, which is exactly
+ * the false-positive shape JIO-424 exists for, so this signal may take the
+ * axis to the edge of an accusation and never past it on its own.
+ */
+const MIN_PRE_HISTORY_GAP_DAYS = 365;
+const STRONG_PRE_HISTORY_GAP_DAYS = 2190;
+
 export function scoreAgenda(profile) {
   return buildAxis(holdShapeToCorroboration([
     topicConcentrationSignal(profile),
     stockPhrasingSignal(profile),
     driveBySignal(profile),
     dormancyRevivalSignal(profile),
+    linkDomainSignal(profile),
+    titleRepostSignal(profile),
+    preHistoryGapSignal(profile),
   ]));
 }
 
@@ -139,8 +186,44 @@ export function scoreAgenda(profile) {
  * direction axis.js rule 3 already runs in: we do not have the evidence, so we
  * do not make the accusation.
  */
-const SHAPE_KEYS = new Set(['topic-concentration', 'drive-by-ratio']);
+/**
+ * All three newer signals joined the SHAPE side of the hold, none the
+ * corroborating side, and each for a person their own evidence string already
+ * names: `pre-history-gap` reads a lurker's biography as readily as a parked
+ * account's, `link-domain-concentration` reads a devotee of one site as
+ * readily as a promoter, and `title-repost` reads someone sharing their own
+ * work with three related communities as readily as a spam run. The
+ * corroborator role was considered for the latter two — they ARE about what
+ * the account disseminates — and rejected on arithmetic: a corroborating
+ * link-domain at a middling share would lift the hold off a hobbyist's
+ * topic-concentration, which is JIO-424's false positive returning through a
+ * new door. The accounts these three are aimed at carry high `stock-phrasing`
+ * anyway (templated promotion is templated), so for them the hold releases and
+ * nothing is lost; the account with none of that beside it is exactly the one
+ * that must not be accused on shape alone.
+ */
+const SHAPE_KEYS = new Set([
+  'topic-concentration', 'drive-by-ratio', 'pre-history-gap',
+  'link-domain-concentration', 'title-repost',
+]);
 const CORROBORATING_KEYS = new Set(['stock-phrasing', 'dormancy-revival']);
+
+/**
+ * What a barely-qualifying measurement on the one-directional signals below
+ * reads as. The same constant, for the same reason, as automation's
+ * RATE_FLOOR_STRENGTH: each of the three fires only past an "ordinary" floor,
+ * and the floor is where the observation becomes worth WEIGHING, not where
+ * innocence ends — a strength near 0 there would read `direction: 'lowers'`
+ * and cast the vote-for-ordinariness these signals are not allowed to cast
+ * (it was cast: the first cut took u/AutoModerator's agenda from 64 to 56 for
+ * having a link concentration just over the floor). The measured range starts
+ * at neutral and only climbs.
+ */
+const ONE_DIRECTIONAL_FLOOR_STRENGTH = 0.5;
+
+function flooredStrength(fraction) {
+  return ONE_DIRECTIONAL_FLOOR_STRENGTH + (1 - ONE_DIRECTIONAL_FLOOR_STRENGTH) * clamp01(fraction);
+}
 /** An uncorroborated shape signal reaches the band edge and does not cross it. */
 const SHAPE_FLOOR = BAND_THRESHOLDS.moderate / 100;
 
@@ -158,7 +241,7 @@ function holdShapeToCorroboration(signals) {
   const beside = strongest && strongest.strength >= SHAPE_FLOOR
     ? `the strongest evidence beside it, "${strongest.label}", reads ${strongest.band}, so it is held to that`
     : `nothing beside it reads above low${
-      corroborating.length < CORROBORATING_KEYS.size ? ', and one of the two could not be measured at all' : ''
+      corroborating.length < CORROBORATING_KEYS.size ? ', and not every corroborating signal could be measured' : ''
     }, so it is held to the edge of \`moderate\``;
 
   return signals.map((s) => {
@@ -266,11 +349,13 @@ function stockPhrasingSignal(profile) {
 
   const covered = new Set();
   let top = null;
+  let topEntry = null;
   for (const [phrase, entry] of qualifying) {
     for (const idx of entry.comments) covered.add(idx);
     const rank = entry.comments.size * (1 + entry.groups.size);
     if (!top || rank > top.rank) {
       top = { phrase, rank, comments: entry.comments.size, groups: entry.groups.size, threads: entry.threads.size };
+      topEntry = entry;
     }
   }
 
@@ -286,7 +371,14 @@ function stockPhrasingSignal(profile) {
     weight,
     strength,
     value: {
-      phraseCount: qualifying.length, coveredComments: covered.size, compared: docs.length, coveredShare, top,
+      phraseCount: qualifying.length,
+      coveredComments: covered.size,
+      compared: docs.length,
+      coveredShare,
+      top,
+      example: topEntry
+        ? exampleRef('comment', profile.comments[topEntry.comments.values().next().value])
+        : null,
     },
     evidence: top
       ? `${qualifying.length} ${STOCK_NGRAM_SIZE}-word ${plural(qualifying.length, 'phrase')} ${plural(qualifying.length, 'recurs', 'recur')} across unrelated threads, covering ${covered.size} of ${docs.length} comments (${pct(coveredShare)}). The most repeated is "${top.phrase}" — ${top.comments} comments across ${top.threads} ${plural(top.threads, 'thread')} and ${top.groups} ${plural(top.groups, 'group')}. A signature sign-off looks like this too, so read the phrase itself rather than the count.`
@@ -311,6 +403,16 @@ function stockPhrasingSignal(profile) {
  *
  * The proxy is weaker and is named as a proxy on screen rather than being
  * quietly folded in as if it were the real measurement.
+ *
+ * A POST OLDER THAN THE OLDEST RETRIEVED COMMENT IS NOT JUDGED (JIO-432,
+ * found while building own-post-return, which shares this arithmetic). Posts
+ * and comments are separate newest-first windows with different depths, so
+ * for a post below the comment window "the account never commented in its own
+ * thread" is a claim about our pagination, not about the account — the answer
+ * may simply sit below the comments we fetched. Same rule as JIO-291's
+ * forged dormancy: absence and not-having-asked must not be conflated, and
+ * this one inflated the drive-by share of every post-heavy account whose
+ * posts window reaches years deeper than its comments window.
  */
 function driveBySignal(profile) {
   const key = 'drive-by-ratio';
@@ -318,19 +420,26 @@ function driveBySignal(profile) {
   const weight = 2;
 
   const commentedThreads = new Map(); // bare thread id -> comments in it
+  let oldestCommentUtc = Infinity;
   for (const c of profile.comments) {
+    if (Number.isFinite(c.createdUtc) && c.createdUtc < oldestCommentUtc) oldestCommentUtc = c.createdUtc;
     const thread = bareId(c.threadId);
     if (!thread) continue;
     if (!commentedThreads.has(thread)) commentedThreads.set(thread, []);
     commentedThreads.get(thread).push(c);
   }
 
-  const postsWithReplies = profile.posts.filter((p) => Number.isFinite(p.replyCount) && p.replyCount > 0);
+  const postsWithReplies = profile.posts.filter((p) => Number.isFinite(p.replyCount) && p.replyCount > 0
+    && Number.isFinite(p.createdUtc) && p.createdUtc >= oldestCommentUtc);
   const abandonedPosts = postsWithReplies.filter((p) => !commentedThreads.has(bareId(p.id)));
 
   let oneAndDone = 0;
+  let oneAndDoneExample = null;
   for (const comments of commentedThreads.values()) {
-    if (comments.length === 1 && comments[0].isTopLevel === true) oneAndDone += 1;
+    if (comments.length === 1 && comments[0].isTopLevel === true) {
+      oneAndDone += 1;
+      if (!oneAndDoneExample) oneAndDoneExample = comments[0];
+    }
   }
 
   const engagements = postsWithReplies.length + commentedThreads.size;
@@ -360,6 +469,9 @@ function driveBySignal(profile) {
       threads: commentedThreads.size,
       engagements,
       share,
+      example: abandonedPosts.length
+        ? exampleRef('post', abandonedPosts[0])
+        : exampleRef('comment', oneAndDoneExample),
     },
     evidence: `${pct(share)} of ${engagements} engagements look like drive-bys: ${postClause}, and ${oneAndDone} of ${commentedThreads.size} threads got a single top-level comment and no return visit. The second half is a proxy — the source does not say whether those comments drew replies, only that the account never came back.`,
   });
@@ -475,7 +587,228 @@ function dormancyRevivalSignal(profile) {
       gapEnd: best.end,
       itemsAfterGap: itemsAfter,
       daysSinceRevival,
+      example: exampleRef(timeline[best.index].kind, timeline[best.index]),
     },
     evidence: `The account went silent for ${Math.round(best.gapDays)} days (${formatDate(best.start)} to ${formatDate(best.end)}) and then resumed, posting ${itemsAfter} of its ${timeline.length} retrieved items since.${staleNote}${truncationNote}`,
+  });
+}
+
+/**
+ * Link-domain concentration — see the constants block for the design and the
+ * infrastructure-host rule. One-directional: spreading links across many
+ * destinations is what ordinary linking looks like, not evidence of no agenda,
+ * so below the floor this reports nothing. The top domain must also span
+ * several threads — a run of links to one site inside one conversation is one
+ * conversation, not a campaign.
+ */
+function linkDomainSignal(profile) {
+  const key = 'link-domain-concentration';
+  const label = 'Steers readers to one site';
+  const weight = 1.5;
+
+  const linked = [];
+  for (const c of profile.comments) {
+    const domains = linkedDomains(c.body).filter((d) => !INFRASTRUCTURE_DOMAINS.has(d));
+    if (domains.length) {
+      linked.push({
+        domains, thread: c.threadId ?? c.id, group: c.group, src: c,
+      });
+    }
+  }
+
+  if (linked.length < MIN_LINKED_COMMENTS) {
+    return unmeasured({
+      key,
+      label,
+      weight,
+      evidence: `Only ${linked.length} ${plural(linked.length, 'comment')} link anywhere beyond the platform's own image and video hosts — needs at least ${MIN_LINKED_COMMENTS} before a destination pattern means anything.`,
+    });
+  }
+
+  const perDomain = new Map(); // domain -> {comments, threads:Set, groups:Set}
+  for (const c of linked) {
+    for (const domain of c.domains) {
+      let entry = perDomain.get(domain);
+      if (!entry) {
+        entry = { comments: 0, threads: new Set(), groups: new Set() };
+        perDomain.set(domain, entry);
+      }
+      entry.comments += 1;
+      if (c.thread) entry.threads.add(c.thread);
+      if (c.group) entry.groups.add(c.group);
+    }
+  }
+
+  const [topDomain, top] = [...perDomain.entries()].reduce((a, b) => (b[1].comments > a[1].comments ? b : a));
+  const share = top.comments / linked.length;
+  const exemplar = linked.find((c) => c.domains.includes(topDomain));
+  const value = {
+    topDomain,
+    topComments: top.comments,
+    threads: top.threads.size,
+    groups: top.groups.size,
+    linkedComments: linked.length,
+    share,
+    example: exemplar ? exampleRef('comment', exemplar.src) : null,
+  };
+
+  if (top.threads.size < MIN_LINK_THREADS) {
+    return unmeasured({
+      key,
+      label,
+      weight,
+      value,
+      evidence: `The most-linked site, ${topDomain}, appears in only ${top.threads.size} ${plural(top.threads.size, 'thread')} — inside ${MIN_LINK_THREADS} it is one conversation rather than a pattern, so this says nothing either way.`,
+    });
+  }
+
+  if (share < LINK_FOCUS_ORDINARY_SHARE) {
+    return unmeasured({
+      key,
+      label,
+      weight,
+      value,
+      evidence: `The most-linked site, ${topDomain}, appears in ${top.comments} of ${linked.length} link-carrying comments (${pct(share)}) — links here spread across destinations the way ordinary linking does, which is not evidence of anything either way.`,
+    });
+  }
+
+  const strength = flooredStrength(rescale(share, LINK_FOCUS_ORDINARY_SHARE, LINK_FOCUS_SATURATED_SHARE));
+
+  return signal({
+    key,
+    label,
+    weight,
+    strength,
+    value,
+    evidence: `${top.comments} of ${linked.length} link-carrying comments (${pct(share)}) link the same site, ${topDomain}, across ${top.threads.size} threads and ${top.groups.size} ${plural(top.groups.size, 'group')}. Steering readers repeatedly to one destination is the mechanism promotion and coordinated pushing actually use — though a genuine devotee of one site produces the same shape, so read the domain itself.`,
+  });
+}
+
+/**
+ * The same title submitted to several groups. Nothing else on any axis reads
+ * post titles at all, and cross-posting one message wherever it might land is
+ * the cheapest dissemination there is. Titles are compared after
+ * normalizeWords(), so punctuation and links do not hide a repeat.
+ * One-directional: never reposting is how most accounts post, and says
+ * nothing.
+ */
+function titleRepostSignal(profile) {
+  const key = 'title-repost';
+  const label = 'Same post in many groups';
+  const weight = 1;
+
+  const titled = profile.posts
+    .map((p) => ({ title: normalizeWords(p.title).join(' '), group: p.group, src: p }))
+    .filter((p) => p.title.length > 0);
+
+  if (titled.length < MIN_POSTS_FOR_REPOST) {
+    return unmeasured({
+      key,
+      label,
+      weight,
+      evidence: `Only ${titled.length} retrieved ${plural(titled.length, 'submission')} with a readable title — needs at least ${MIN_POSTS_FOR_REPOST} before a repost pattern means anything.`,
+    });
+  }
+
+  const groupsByTitle = new Map();
+  for (const p of titled) {
+    if (!groupsByTitle.has(p.title)) groupsByTitle.set(p.title, new Set());
+    if (p.group) groupsByTitle.get(p.title).add(p.group);
+  }
+
+  const reposted = titled.filter((p) => groupsByTitle.get(p.title).size >= 2);
+  const share = reposted.length / titled.length;
+  const widest = [...groupsByTitle.entries()].reduce((a, b) => (b[1].size > a[1].size ? b : a));
+  const widestPost = titled.find((p) => p.title === widest[0]);
+  const value = {
+    reposted: reposted.length,
+    titled: titled.length,
+    share,
+    widestTitle: widest[0],
+    widestGroups: widest[1].size,
+    example: widestPost ? exampleRef('post', widestPost.src) : null,
+  };
+
+  if (!reposted.length) {
+    return unmeasured({
+      key,
+      label,
+      weight,
+      value,
+      evidence: `No title among the ${titled.length} retrieved submissions was posted to more than one group. That is how most accounts post, so it says nothing about this account either way.`,
+    });
+  }
+
+  const strength = flooredStrength(rescale(share, 0.15, 0.7));
+
+  return signal({
+    key,
+    label,
+    weight,
+    strength,
+    value,
+    evidence: `${reposted.length} of ${titled.length} submissions (${pct(share)}) carry a title the account also posted in another group — the widest, "${widest[0].slice(0, 60)}", went to ${widest[1].size} groups. Cross-posting one message wherever it might land is dissemination, not conversation; note that sharing your own content to a few related communities is ordinary behaviour too.`,
+  });
+}
+
+/**
+ * Pre-history gap — see the constants block. Three gates, each load-bearing:
+ * the account age must come from the source rather than from our own oldest
+ * item (when the users index missed, `firstSeenUtc` IS the oldest item and the
+ * gap is zero by construction); the retrieved history must be COMPLETE, since
+ * below a truncated window we cannot tell absence from not-having-asked
+ * (JIO-291's rule, applied to the other end of the timeline); and the gap must
+ * be at least a year, because months between creating an account and first
+ * posting is simply how joining works.
+ */
+function preHistoryGapSignal(profile) {
+  const key = 'pre-history-gap';
+  const label = 'Account predates its history';
+  const weight = 1;
+
+  const timeline = activityOldestFirst(profile);
+
+  if (!Number.isFinite(profile.firstSeenUtc)) {
+    return unmeasured({
+      key, label, weight, evidence: 'The source gave no account-creation date, so the stretch before the first retrieved item cannot be dated.',
+    });
+  }
+  if (profile.coverage?.truncated) {
+    return unmeasured({
+      key, label, weight, evidence: 'The retrieved history is truncated, so older activity may simply not have been fetched — the stretch before the oldest retrieved item is not known to be silence.',
+    });
+  }
+  if (timeline.length < MIN_ITEMS_AFTER_GAP) {
+    return unmeasured({
+      key, label, weight, evidence: `Only ${timeline.length} timestamped ${plural(timeline.length, 'item')} — too few to call anything the start of the account's history.`,
+    });
+  }
+
+  const gapDays = (timeline[0].createdUtc - profile.firstSeenUtc) / SECONDS_PER_DAY;
+  const value = {
+    gapDays,
+    firstActivityUtc: timeline[0].createdUtc,
+    example: exampleRef(timeline[0].kind, timeline[0]),
+  };
+
+  if (gapDays < MIN_PRE_HISTORY_GAP_DAYS) {
+    return unmeasured({
+      key,
+      label,
+      weight,
+      value,
+      evidence: `The account's first retrieved item comes ${Math.max(0, Math.round(gapDays))} days after the account was created — inside the year this signal requires, and an ordinary interval says nothing either way.`,
+    });
+  }
+
+  const strength = flooredStrength(rescale(gapDays, MIN_PRE_HISTORY_GAP_DAYS, STRONG_PRE_HISTORY_GAP_DAYS));
+
+  return signal({
+    key,
+    label,
+    weight,
+    strength,
+    value,
+    evidence: `The account existed for ${Math.round(gapDays / 365 * 10) / 10} years before the first item in its complete retrieved history (created ${formatDate(profile.firstSeenUtc)}, first activity ${formatDate(timeline[0].createdUtc)}). A parked or purchased account looks like this — and so does a person who read for years before first commenting, which is why this signal cannot accuse on its own. Activity in communities the archive does not index would also be invisible here.`,
   });
 }

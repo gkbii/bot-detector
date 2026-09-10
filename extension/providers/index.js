@@ -29,6 +29,11 @@ export const DEFAULT_SETTINGS = Object.freeze({
   backendUrl: '',
   autoScan: true,
   scanPosts: true,
+  // Off by default: badges render as click-to-check buttons and nothing is
+  // fetched until the user asks. Auto-lookup on scroll is the opt-in, because
+  // it is the expensive mode — every visible commenter costs the public
+  // archive ~6 requests.
+  autoLookup: false,
 });
 
 /** How long a failed backend is considered down before we try it again. */
@@ -52,7 +57,7 @@ if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.onChanged)
   });
 }
 
-/** @returns {Promise<{backendUrl: string, autoScan: boolean, scanPosts: boolean}>} */
+/** @returns {Promise<{backendUrl: string, autoScan: boolean, scanPosts: boolean, autoLookup: boolean}>} */
 export async function getSettings() {
   if (settingsMemo) return settingsMemo;
   let stored = {};
@@ -65,6 +70,7 @@ export async function getSettings() {
     backendUrl: normaliseBackendUrl(stored.backendUrl),
     autoScan: stored.autoScan !== false,
     scanPosts: stored.scanPosts !== false,
+    autoLookup: stored.autoLookup === true,
   };
   return settingsMemo;
 }

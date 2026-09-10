@@ -91,6 +91,26 @@ export function signal({ key, label, weight, strength, value, evidence, directio
 }
 
 /**
+ * A reference to ONE concrete item behind a signal — the single example a
+ * reader can open and judge for themselves. Platform-neutral on purpose: the
+ * scorers know ids and threads, never URLs, and the UI's platform adapter is
+ * what turns this into a link. Returns null when the item cannot be addressed,
+ * and a signal without one simply renders without a link — an aggregate
+ * measurement (a rate, an entropy) genuinely has no single example, and
+ * inventing one would point the reader at evidence that does not carry the
+ * claim.
+ */
+export function exampleRef(kind, item) {
+  if (!item || typeof item !== 'object' || !item.id) return null;
+  return Object.freeze({
+    kind,
+    id: item.id,
+    threadId: item.threadId ?? null,
+    group: item.group ?? null,
+  });
+}
+
+/**
  * Build a signal we could not measure. It still appears in the output — the
  * UI should show "couldn't check this" rather than silently listing six
  * signals where the other account listed seven.

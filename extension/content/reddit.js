@@ -127,7 +127,7 @@
   const containerSpec = new WeakMap();  // container -> {kind}
   const badgePayload = new WeakMap();   // badge -> last lookup result
   const badgeUser = new WeakMap();      // badge -> username
-  let settings = { autoScan: true, scanPosts: true };
+  let settings = { autoScan: true, scanPosts: true, autoLookup: false };
   let backendConfigured = false;
   let selfUser = null;
   let selfTries = 0;
@@ -302,7 +302,9 @@
 
     // The one and only write to Reddit's DOM.
     anchor.insertAdjacentElement('afterend', badge);
-    lookup(badge, username, false);
+    // On-demand by default: the badge sits idle until clicked, and inserting
+    // it costs the archive nothing. Auto-lookup is the opt-in.
+    if (settings.autoLookup) lookup(badge, username, false);
   }, 'attach');
 
   function readUsername(container, spec) {
@@ -361,7 +363,7 @@
   // -------------------------------------------------------------------------
   // Lookup + panel
   // -------------------------------------------------------------------------
-  async function lookup(badge, username, force) {
+  async function lookup(badge, username, force, openWhenDone = false) {
     if (extensionDead || !badge.isConnected) return;
     UI.setPending(badge);
     try {
@@ -369,7 +371,7 @@
       if (!badge.isConnected) return;
       badgePayload.set(badge, data);
       UI.setVerdict(badge, data);
-      if (UI.isPanelOpenFor(badge)) showPanel(badge);
+      if (openWhenDone || UI.isPanelOpenFor(badge)) showPanel(badge);
     } catch (err) {
       if (!badge.isConnected) return;
       UI.setError(badge, (err && err.message) || 'lookup failed');
@@ -382,7 +384,11 @@
     if (event.stopPropagation) event.stopPropagation();
     const payload = badgePayload.get(badge);
     if (!payload) {
-      lookup(badge, badgeUser.get(badge), true);
+      // First check of this account — the on-demand entry point. NOT forced:
+      // the 12h cache should answer a name already checked today. The panel
+      // opens on completion because a click here means "show me", not "warm
+      // the badge up". Re-check (force) lives in the panel footer.
+      lookup(badge, badgeUser.get(badge), false, true);
       return;
     }
     if (UI.isPanelOpenFor(badge)) {
@@ -392,12 +398,44 @@
     showPanel(badge);
   }, 'activate');
 
+  /**
+   * Turn a scorer's platform-neutral example reference ({kind, id, threadId,
+   * group}) into a reddit.com permalink. This lives HERE and not in badge.js
+   * because badge.js must never learn what a Reddit URL looks like — a second
+   * platform gets its own adapter with its own version of this.
+   *
+   * Every part is validated against the character sets Reddit actually uses
+   * before it is placed in a URL; anything unexpected returns null and the
+   * panel simply renders no link.
+   */
+  const EXAMPLE_ID_RE = /^[a-z0-9]{1,16}$/i;
+  const EXAMPLE_GROUP_RE = /^[A-Za-z0-9_-]{2,30}$/;
+
+  function exampleUrl(example) {
+    if (!example || typeof example !== 'object') return null;
+    const bare = (id) => (typeof id === 'string' ? id.replace(/^[a-z]\d+_/i, '') : null);
+    const id = bare(example.id);
+    if (!id || !EXAMPLE_ID_RE.test(id)) return null;
+    const sub = typeof example.group === 'string' && EXAMPLE_GROUP_RE.test(example.group)
+      ? `r/${example.group}/` : '';
+    if (example.kind === 'post') {
+      return `https://www.reddit.com/${sub}comments/${id}/`;
+    }
+    if (example.kind === 'comment') {
+      const thread = bare(example.threadId);
+      if (!thread || !EXAMPLE_ID_RE.test(thread)) return null;
+      return `https://www.reddit.com/${sub}comments/${thread}/_/${id}/`;
+    }
+    return null;
+  }
+
   function showPanel(badge, deepRunning = false) {
     const payload = badgePayload.get(badge);
     const username = badgeUser.get(badge);
     UI.openPanel(badge, payload, {
       backendConfigured,
       deepRunning,
+      exampleUrl,
       onRetry: () => lookup(badge, username, true),
       // Click-to-run only, and only with a backend configured. A deep read
       // costs the backend an LLM call per account; firing one automatically
@@ -468,6 +506,9 @@
       else stop();
     }
     if (changes.scanPosts) settings.scanPosts = changes.scanPosts.newValue !== false;
+    // Applies to badges attached from now on; badges already sitting idle stay
+    // idle rather than firing a burst of lookups for the whole visible page.
+    if (changes.autoLookup) settings.autoLookup = changes.autoLookup.newValue === true;
     if (changes.backendUrl) backendConfigured = Boolean(changes.backendUrl.newValue);
   }, 'settings-change'));
 

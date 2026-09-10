@@ -11,14 +11,14 @@ server**. There is also an optional Node server that adds a Claude read and a
 shared cache; nothing requires it.
 
 ```sh
-npm test        # 174 tests, and they pass with NO node_modules installed
+npm test        # 185 tests, and they pass with NO node_modules installed
 npm install     # only needed for the optional server's one dependency
 npm start       # the optional server
 ```
 
 ## Install
 
-**Requirements: Chrome 111 or newer — or any Chromium browser (Edge, Brave,
+**Requirements: Chrome 112 or newer — or any Chromium browser (Edge, Brave,
 Arc, Vivaldi). That is the entire list.** No build step, no `npm install`, no
 Node, no account, no API key, no server.
 
@@ -34,15 +34,26 @@ copy out just the `extension/` directory — it is self-contained.)
 3. Click **Load unpacked** and select the `extension/` directory inside your
    clone. Select the directory containing `manifest.json` itself, not the repo
    root and not `manifest.json` as a file.
-4. Open any Reddit thread. Badges appear next to usernames as you scroll.
+4. Open any Reddit thread. A small "bot?" button appears next to usernames as
+   you scroll; click one to fetch and score that account. The panel opens on
+   the short read — the headline, the three bands, and only the checks that
+   stood out, each in plain language with a "see an example" link to one
+   concrete comment or post behind the finding and a "why?" that unfolds the
+   full evidence sentence. **Full report** switches to every signal with its
+   working and weight; nothing is removed, only folded.
 
-That is the whole install. The first badge should appear within a second or two
-of a username scrolling into view.
+That is the whole install. Nothing to configure, and the first button should
+appear within a second or two of a username scrolling into view.
 
-Optional, both off by default: the toolbar icon shows which provider produced
-the verdicts you are looking at, plus queue depth and cache size; the options
-page (extension → Details → Extension options) toggles auto-scanning and is
-where a backend URL goes if you run one.
+Optional bits, all off by default:
+
+* Click the toolbar icon for a status readout — which provider produced the
+  verdicts you are looking at, the queue depth, the cache size. It exists
+  because local mode and backend mode look identical from the outside and only
+  one of them sends usernames to a server.
+* The options page (extension → Details → Extension options) toggles the check
+  buttons, automatic lookup-on-scroll and post-page scanning, and is where a
+  backend URL goes if you run one.
 
 Load-unpacked extensions stay installed across restarts, but Chrome will nag
 about developer mode every so often — there is no Web Store listing, and
@@ -136,7 +147,7 @@ The full annotated tree is in [`docs/architecture.md`](docs/architecture.md).
 ## Tests
 
 ```sh
-npm test                          # both suites, 174 tests
+npm test                          # both suites, 185 tests
 node --test test/scoring.test.js  # one file
 npm run evaluate                  # the band table, off the frozen corpus
 ```

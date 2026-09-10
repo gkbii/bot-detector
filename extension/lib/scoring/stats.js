@@ -284,6 +284,87 @@ export function stripUrls(text) {
 }
 
 /**
+ * Remove QUOTED content — text the account reproduced rather than wrote
+ * (JIO-427; the sneakpeekbot residue EVALUATION.md left open after JIO-290).
+ *
+ * Counting text an account is QUOTING as its own words is a different defect
+ * from counting its URLs, and stripUrls() cannot fix it: link TEXT survives
+ * that strip on purpose, because `[does anyone know?](url)` is a question its
+ * author wrote. u/sneakpeekbot's template quotes other people's post titles as
+ * link text — `#2: [Any News On The CRKD Drum Kit?](url)` — and still read 94
+ * of 299 on `asks-questions` after the URL fix, off questions real people
+ * asked somewhere else.
+ *
+ * Two shapes are removed, and only two:
+ *
+ *   * BLOCKQUOTE LINES (`> …` / `&gt; …`) — markdown's own way of marking
+ *     "someone else said this". normalizeWords() has always dropped them; the
+ *     pattern-matching signals read the raw body and did not.
+ *   * LINK-LISTING LINES — a line that contains two or more markdown links and
+ *     NOTHING alphabetic outside them. Such a line is a listing of other
+ *     content (title | comments, item | source), not a sentence: everything a
+ *     reader can read on it arrived as link text, which is exactly where
+ *     stripUrls() must not look.
+ *
+ * The two-link minimum is the guard on the second rule. A line that is one
+ * markdown link and nothing else — `[does anyone know?](url)` — keeps its
+ * text, preserving JIO-290's promise. The stated cost: an author who writes
+ * their OWN words as the only text of a multi-link line loses them here. That
+ * line is shaped exactly like a listing, and inventing a way to tell the two
+ * apart from one comment would be guessing dressed as parsing.
+ */
+export function stripQuotedContent(text) {
+  if (typeof text !== 'string') return '';
+  return text
+    .split('\n')
+    .filter((line) => {
+      if (/^\s*(?:&gt;|>)/.test(line)) return false;
+      const links = line.match(/\[[^\]]*\]\([^\s)]*\)/g);
+      if (!links || links.length < 2) return true;
+      return /[a-z]/i.test(line.replace(/\[[^\]]*\]\([^\s)]*\)/g, ' '));
+    })
+    .join('\n');
+}
+
+/**
+ * The registrable domains an author links to, one entry per distinct domain.
+ *
+ * Hosts are read from the same three places stripUrls() treats as links —
+ * markdown targets, schemed URLs, and bare `host.tld/…` / `host.tld?a=b`
+ * tokens — and reduced to a registrable approximation: the last two labels,
+ * or three when the second-to-last is a country-code registry convention
+ * (`bbc.co.uk` -> `bbc.co.uk`, not `co.uk`, which would merge every UK site
+ * into one "domain" and manufacture concentration out of a nationality).
+ *
+ * JIO-386's shape rule applies here too: the last label must be ALPHABETIC and
+ * two or more letters, so `3.5/10` is a ratio and `1.1.1.1` is not a domain.
+ */
+const CC_SECOND_LEVEL = new Set(['co', 'com', 'net', 'org', 'gov', 'ac', 'edu']);
+
+export function linkedDomains(text) {
+  if (typeof text !== 'string') return [];
+  const hosts = [];
+  for (const m of text.matchAll(/\]\(([^\s)]+)\)/g)) {
+    if (/^[/#]/.test(m[1])) continue; // root-relative or anchor: no host to read
+    const host = m[1].replace(/^[a-z][a-z0-9+.-]*:\/\//i, '').split(/[/?#]/)[0];
+    if (/^[\w-]+(?:\.[\w-]+)+$/.test(host)) hosts.push(host);
+  }
+  for (const m of text.matchAll(/\b[a-z][a-z0-9+.-]*:\/\/([^\s/?#)]+)/gi)) hosts.push(m[1]);
+  for (const m of text.matchAll(/(?:^|[\s(])((?:[\w-]+\.)+[a-z]{2,})(?=\/|\?[^\s?]*=)/gim)) hosts.push(m[1]);
+
+  const domains = new Set();
+  for (const host of hosts) {
+    const labels = host.toLowerCase().replace(/^www\./, '').split('.').filter(Boolean);
+    if (labels.length < 2) continue;
+    const tld = labels[labels.length - 1];
+    if (!/^[a-z]{2,}$/.test(tld)) continue;
+    const take = labels.length >= 3 && tld.length === 2 && CC_SECOND_LEVEL.has(labels[labels.length - 2]) ? 3 : 2;
+    domains.add(labels.slice(-take).join('.'));
+  }
+  return [...domains];
+}
+
+/**
  * Words, lowercased, with urls, quoted text and punctuation removed. Quotes
  * are dropped because a reply that quotes its parent otherwise looks like a
  * near-duplicate of whatever it is answering — and that strip now lives in

@@ -24,6 +24,7 @@ async function refresh() {
     $('mode').textContent = down ? 'local (backend down)' : backend ? 'your backend' : 'this browser';
     $('mode').className = `v ${down ? 'warn' : backend ? 'backend' : 'local'}`;
     $('autoScan').checked = status.settings.autoScan !== false;
+    $('autoLookup').checked = status.settings.autoLookup === true;
     $('cache').textContent = `${status.cache.entries} / ${status.cache.max}`;
     $('queue').textContent = `${status.queue.queued} / ${status.queue.active}`;
 
@@ -43,6 +44,10 @@ async function refresh() {
 
 $('autoScan').addEventListener('change', async (event) => {
   await chrome.storage.sync.set({ autoScan: event.target.checked });
+});
+
+$('autoLookup').addEventListener('change', async (event) => {
+  await chrome.storage.sync.set({ autoLookup: event.target.checked });
 });
 
 $('clearCache').addEventListener('click', async () => {

@@ -90,7 +90,7 @@ test('every account belongs to exactly one of the three cohorts, and they add up
  * gap" between people and bots. It does not: a content-blind sweep found six
  * people above it, one of them faster than u/RemindMeBot (EVALUATION.md
  * Finding 4a). What actually keeps those people `low` is the SHAPE of the
- * signal — one-directional, floored at 0.5, log-scaled, weight 2 of 15.5 — and
+ * signal — one-directional, floored at 0.5, log-scaled, weight 2 of 18.5 — and
  * a claim about shape is exactly the kind that stays true-sounding after it
  * stops being true. So it is pinned to two real profiles.
  *

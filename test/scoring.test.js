@@ -1246,9 +1246,10 @@ test('automation: 299 items in 5 hours reads high on throughput, in the very win
 
 test('automation: an 82-second window still measures throughput — the binding real case', () => {
   // u/AutoModerator's reliable window in test/corpus/ is 297 items spanning 82
-  // seconds. Any minimum-span guard it fails leaves the axis at 7.0 of 15.5
-  // measured, below MIN_MEASURED_WEIGHT_FRACTION, which is strictly worse than
-  // never adding this signal at all.
+  // seconds. Any minimum-span guard it fails would have left the 15.5-weight
+  // axis of the day at 7.0 measured, below MIN_MEASURED_WEIGHT_FRACTION —
+  // strictly worse than never adding this signal at all. (The axis totals 18.5
+  // since JIO-428/429; the argument and this fixture are unchanged.)
   const rate = findSignal(scoreAccount(fastProfile(82 / 3600, 297)).automation, 'sustained-posting-rate');
 
   assert.notEqual(rate.band, BAND.INSUFFICIENT, '82 seconds of 297 items is a throughput fact');
@@ -1393,7 +1394,7 @@ test('agenda: a corroborator that could not be measured is named as unmeasured',
 
   const topic = findSignal(verdict, 'topic-concentration');
   assert.equal(topic.value.heldToCorroboration, true);
-  assert.match(topic.evidence, /nothing beside it reads above low, and one of the two could not be measured at all/);
+  assert.match(topic.evidence, /nothing beside it reads above low, and not every corroborating signal could be measured/);
   assert.equal(verdict.band, BAND.LOW);
 });
 
@@ -1766,8 +1767,17 @@ test('every signal carries a weight, a direction and an arguable evidence senten
 test('an unmeasurable signal is reported as unmeasured, not as a clean zero', () => {
   const rand = rng(67);
   // Enough comments to open the gate, but no karma and no post history at all.
+  // A third are top-level: the deprivation this test is about is karma, and
+  // the fixture's all-replies default would silently stack a SECOND unmeasured
+  // signal (conversation-depth's JIO-345 pole) on top of it. With the
+  // one-directional gates (rate, interval past JIO-346, clock, template) all
+  // legitimately unmeasured on an ordinary account, that second stack drags
+  // the measured weight under MIN_MEASURED_WEIGHT_FRACTION and the axis
+  // honestly reports no-result — a different scenario than this test pins.
   const stamps = humanTimestamps({ rand, days: 200, activeHours: WAKING_HOURS });
-  const comments = stamps.map((at, i) => comment({ id: `u${i}`, at, body: randomText(rand) }));
+  const comments = stamps.map((at, i) => comment({
+    id: `u${i}`, at, body: randomText(rand), isTopLevel: i % 3 === 0,
+  }));
 
   const verdict = scoreAccount(profileOf({
     comments, karma: { post: null, comment: null, total: null },
@@ -1800,4 +1810,262 @@ test('truncated coverage is carried into the verdict and stated in the headline'
 
   assert.equal(verdict.coverage.truncated, true);
   assert.match(verdict.headline, /Based on the most recent \d+ comments/);
+});
+
+// ---------------------------------------------------------------------------
+// JIO-427..431 — the prototype signals, and the quote strip they share.
+// Each of these entered at low weight with a one-directional shape: the
+// firing case is asserted AND the ordinary case is asserted unmeasured,
+// because a new signal quietly voting "ordinary" on every account on the
+// platform is the exact failure sustained-posting-rate documents.
+// ---------------------------------------------------------------------------
+
+/** A sneakpeekbot-shaped body: quoted titles as link text in listing lines. */
+function peekBody(i) {
+  return `Here's a sneak peek of /r/sub${i} using the [top posts](https://np.reddit.com/r/sub${i}/top/) of the year!\n\n`
+    + `\\#1: [Any News On The CRKD Drum Kit?](https://i.redd.it/a${i}.jpeg) | [384 comments](https://np.reddit.com/r/sub${i}/comments/x${i}/)\n`
+    + `\\#2: [Is this worth buying?](https://i.redd.it/b${i}.jpeg) | [99 comments](https://np.reddit.com/r/sub${i}/comments/y${i}/)\n\n`
+    + '----\n'
+    + '^^I\'m ^^a ^^bot ^^| ^^[Contact](https://www.reddit.com/message/compose/?to=x) ^^| ^^[Info](https://np.reddit.com/r/x/)';
+}
+
+test('authenticity: questions the account is QUOTING are not its own questions (JIO-427)', () => {
+  const comments = Array.from({ length: 30 }, (_, i) => comment({
+    id: `pk${i}`, at: NOW - 20 * DAY + i * 3600 * 12, body: peekBody(i), thread: `t3_pk${i}`,
+  }));
+  const verdict = scoreAccount(profileOf({ comments }));
+
+  const questions = findSignal(verdict.authenticity, 'asks-questions');
+  // Every body carries two quoted questions and zero of its own.
+  assert.equal(questions.value.questions, 0,
+    `${questions.value.questions} quoted titles still count as the account's questions`);
+});
+
+test('authenticity: a concession the account is QUOTING is not its own concession (JIO-427)', () => {
+  const rand = rng(427);
+  const comments = Array.from({ length: 20 }, (_, i) => comment({
+    id: `q${i}`,
+    at: NOW - 20 * DAY + i * 3600 * 13,
+    body: `&gt; fair point, you're right about that\n\n${randomText(rand)}`,
+    thread: `t3_q${i}`,
+  }));
+  const quoted = scoreAccount(profileOf({ comments }));
+  assert.equal(findSignal(quoted.authenticity, 'self-correction').value.hits, 0,
+    'a blockquoted concession counted as the account\'s own');
+
+  // The control: the same words OUTSIDE a quote still count.
+  const own = comments.map((c, i) => ({ ...c, body: `fair point, that changes it. ${randomText(rand)}`, id: `o${i}` }));
+  const verdict = scoreAccount(profileOf({ comments: own }));
+  assert.ok(findSignal(verdict.authenticity, 'self-correction').value.hits > 0);
+});
+
+test('authenticity: personal narrative fires on lived detail and reads zero as absence, not evidence', () => {
+  const rand = rng(431);
+  const stamps = humanTimestamps({ rand, days: 200, activeHours: WAKING_HOURS });
+  const lived = ['my wife keeps saying so.', 'when i was a kid this was different.', 'i used to run that route.'];
+  const comments = stamps.map((at, i) => comment({
+    id: `n${i}`, at, body: i % 4 === 0 ? `${lived[i % 3]} ${randomText(rand)}` : randomText(rand),
+  }));
+  const verdict = scoreAccount(profileOf({ comments }));
+  const narrative = findSignal(verdict.authenticity, 'personal-narrative');
+  assert.notEqual(narrative.band, BAND.INSUFFICIENT);
+  assert.ok(narrative.value.hits > 0);
+  assert.match(narrative.evidence, /first-person lived detail/);
+
+  const bland = scoreAccount(profileOf({
+    comments: stamps.map((at, i) => comment({ id: `b${i}`, at, body: randomText(rand) })),
+  }));
+  const zero = findSignal(bland.authenticity, 'personal-narrative');
+  assert.equal(zero.value.hits, 0);
+  assert.match(zero.evidence, /absence of positive evidence/);
+});
+
+test('authenticity: coming back to answer replies on your own post is positive evidence', () => {
+  const rand = rng(433);
+  const stamps = humanTimestamps({ rand, days: 200, activeHours: WAKING_HOURS });
+  const posts = Array.from({ length: 5 }, (_, i) => post({
+    id: `own${i}`, at: NOW - (100 - i * 10) * DAY, replyCount: 12,
+  }));
+  // The account comments inside four of its five submissions' threads.
+  const comments = stamps.map((at, i) => comment({
+    id: `r${i}`, at, body: randomText(rand), thread: i < 4 ? `t3_own${i}` : `t3_other${i}`,
+  }));
+  const verdict = scoreAccount(profileOf({ comments, posts }));
+  const returns = findSignal(verdict.authenticity, 'own-post-return');
+  assert.equal(returns.value.answered, 4);
+  assert.notEqual(returns.band, BAND.INSUFFICIENT);
+
+  // Too few posts with replies -> unmeasured, never a mark against the account.
+  const thin = scoreAccount(profileOf({ comments, posts: posts.slice(0, 2) }));
+  assert.equal(findSignal(thin.authenticity, 'own-post-return').band, BAND.INSUFFICIENT);
+});
+
+test('automation: a scheduler posting on a clock boundary is caught; ordinary seconds say nothing (JIO-428)', () => {
+  // Every six hours, always at second :05 of minute :00 — a cron line.
+  const base = Math.floor((NOW - 25 * DAY) / 60) * 60 + 5;
+  const cron = Array.from({ length: 80 }, (_, i) => comment({
+    id: `cr${i}`, at: base + i * 21600, body: `reminder number ${i} for the daily schedule thread`, thread: `t3_cr${i}`,
+  }));
+  const caught = findSignal(scoreAccount(profileOf({ comments: cron })).automation, 'clock-alignment');
+  assert.notEqual(caught.band, BAND.INSUFFICIENT);
+  assert.equal(caught.band, BAND.HIGH);
+  assert.match(caught.evidence, /land on the same/);
+
+  // A person's timestamps are uniform mod 60: one-directional, so unmeasured.
+  const rand = rng(428);
+  const stamps = humanTimestamps({ rand, days: 300, activeHours: WAKING_HOURS });
+  assert.ok(stamps.length >= 60, 'fixture must clear the item gate for the assert to bite');
+  const human = stamps.map((at, i) => comment({ id: `h${i}`, at, body: randomText(rand) }));
+  const ordinary = findSignal(scoreAccount(profileOf({ comments: human })).automation, 'clock-alignment');
+  assert.equal(ordinary.band, BAND.INSUFFICIENT);
+  assert.match(ordinary.evidence, /says nothing about this account either way/);
+});
+
+test('automation: an identical scaffold with varied words is a template; varied prose has no scaffold (JIO-429)', () => {
+  const rand = rng(429);
+  const stamps = humanTimestamps({ rand, days: 100, activeHours: WAKING_HOURS }).slice(0, 30);
+
+  // Same furniture every time — intro line, two bulleted links, a rule — with
+  // entirely different words, which is exactly what near-duplicate cannot see.
+  const templated = stamps.map((at, i) => comment({
+    id: `tp${i}`,
+    at,
+    body: `${randomText(rand, 8, 14)}\n\n- [${randomText(rand, 3, 6)}](https://site${i}.example/a)\n- [${randomText(rand, 3, 6)}](https://site${i}.example/b)\n\n----`,
+    thread: `t3_tp${i}`,
+  }));
+  const caught = findSignal(scoreAccount(profileOf({ comments: templated })).automation, 'template-structure');
+  assert.notEqual(caught.band, BAND.INSUFFICIENT);
+  assert.match(caught.evidence, /share one exact scaffold/);
+
+  // Three plain paragraphs share a skeleton too — and that shape must count
+  // for nothing, because it is just what writing looks like.
+  const plain = stamps.map((at, i) => comment({
+    id: `pl${i}`, at, body: `${randomText(rand)}\n\n${randomText(rand)}\n\n${randomText(rand)}`,
+  }));
+  const prose = findSignal(scoreAccount(profileOf({ comments: plain })).automation, 'template-structure');
+  assert.equal(prose.band, BAND.INSUFFICIENT);
+});
+
+test('agenda: steering every link to one site fires, is held without corroboration, and ordinary linking says nothing (JIO-430)', () => {
+  const rand = rng(430);
+  const stamps = humanTimestamps({ rand, days: 200, activeHours: WAKING_HOURS }).slice(0, 40);
+
+  const promoter = stamps.map((at, i) => comment({
+    id: `pm${i}`,
+    at,
+    body: `${randomText(rand)} https://promoshop.com/deal/${i}`,
+    thread: `t3_pm${i}`,
+    group: `g${i % 6}`,
+  }));
+  const verdict = scoreAccount(profileOf({ comments: promoter }));
+  const focus = findSignal(verdict.agenda, 'link-domain-concentration');
+  assert.notEqual(focus.band, BAND.INSUFFICIENT);
+  assert.equal(focus.value.topDomain, 'promoshop.com');
+  // Nothing beside it corroborates, so it may reach the edge of an accusation
+  // and not cross it — the JIO-424 rule, applied to its own newest signal.
+  assert.equal(focus.value.heldToCorroboration, true);
+  assert.notEqual(verdict.agenda.band, BAND.HIGH);
+
+  // Links spread across destinations: one-directional, unmeasured.
+  const varied = stamps.map((at, i) => comment({
+    id: `vr${i}`, at, body: `${randomText(rand)} https://site${i}.example/page`, thread: `t3_vr${i}`,
+  }));
+  const spread = findSignal(scoreAccount(profileOf({ comments: varied })).agenda, 'link-domain-concentration');
+  assert.equal(spread.band, BAND.INSUFFICIENT);
+
+  // The platform's own hosts are where content lives, not a destination being pushed.
+  const infra = stamps.map((at, i) => comment({
+    id: `in${i}`, at, body: `${randomText(rand)} https://i.imgur.com/x${i}.jpg`, thread: `t3_in${i}`,
+  }));
+  const hosts = findSignal(scoreAccount(profileOf({ comments: infra })).agenda, 'link-domain-concentration');
+  assert.equal(hosts.band, BAND.INSUFFICIENT);
+  assert.match(hosts.evidence, /image and video hosts/);
+});
+
+test('agenda: one title submitted across groups fires and is held; unique titles say nothing (JIO-430)', () => {
+  const rand = rng(434);
+  const stamps = humanTimestamps({ rand, days: 200, activeHours: WAKING_HOURS });
+  const comments = stamps.map((at, i) => comment({ id: `tc${i}`, at, body: randomText(rand) }));
+
+  const reposts = [
+    ...[0, 1, 2].map((i) => post({ id: `rp${i}`, at: NOW - (50 - i) * DAY, group: `g${i}`, title: 'Check out this amazing new supplement' })),
+    ...[3, 4, 5].map((i) => post({ id: `rp${i}`, at: NOW - (40 - i) * DAY, group: `g${i}`, title: `an unrelated post ${i}` })),
+  ];
+  const verdict = scoreAccount(profileOf({ comments, posts: reposts }));
+  const repost = findSignal(verdict.agenda, 'title-repost');
+  assert.notEqual(repost.band, BAND.INSUFFICIENT);
+  assert.equal(repost.value.widestGroups, 3);
+  assert.equal(repost.value.heldToCorroboration, true);
+
+  const unique = reposts.map((p, i) => ({ ...p, title: `a different subject entirely ${i}`, id: `un${i}` }));
+  const none = findSignal(scoreAccount(profileOf({ comments, posts: unique })).agenda, 'title-repost');
+  assert.equal(none.band, BAND.INSUFFICIENT);
+  assert.match(none.evidence, /how most accounts post/);
+});
+
+test('agenda: years of silence before the first item of a COMPLETE history fires, is held, and names the lurker (JIO-431)', () => {
+  const rand = rng(435);
+  const stamps = humanTimestamps({ rand, days: 100, activeHours: WAKING_HOURS });
+  const comments = stamps.map((at, i) => comment({ id: `pg${i}`, at, body: randomText(rand) }));
+
+  const parked = scoreAccount(profileOf({ comments, firstSeenUtc: NOW - 2000 * DAY }));
+  const gap = findSignal(parked.agenda, 'pre-history-gap');
+  assert.notEqual(gap.band, BAND.INSUFFICIENT);
+  assert.match(gap.evidence, /read for years before first commenting/,
+    'the lurker — the person this signal would falsely accuse — must be named on screen');
+  assert.equal(gap.value.heldToCorroboration, true);
+
+  // Truncated history: the stretch below the window is not known to be silence.
+  const truncated = scoreAccount(profileOf({ comments, firstSeenUtc: NOW - 2000 * DAY, truncated: true }));
+  assert.equal(findSignal(truncated.agenda, 'pre-history-gap').band, BAND.INSUFFICIENT);
+
+  // An index-missed account carries firstSeenUtc derived from its own oldest
+  // item; the gap is zero by construction and must stay unmeasured.
+  const floored = scoreAccount(profileOf({ comments, firstSeenUtc: Math.min(...stamps) }));
+  assert.equal(findSignal(floored.agenda, 'pre-history-gap').band, BAND.INSUFFICIENT);
+});
+
+test('the one-directional prototypes never vote "ordinary" downward: a barely-firing measurement reads neutral, not lowers', () => {
+  // Link concentration just past its floor: 5 of 9 linked comments on one site.
+  const rand = rng(436);
+  const stamps = humanTimestamps({ rand, days: 200, activeHours: WAKING_HOURS }).slice(0, 20);
+  const comments = stamps.map((at, i) => comment({
+    id: `fb${i}`,
+    at,
+    body: i < 9 ? `${randomText(rand)} https://${i < 5 ? 'onesite.com' : `other${i}.example`}/p/${i}` : randomText(rand),
+    thread: `t3_fb${i}`,
+  }));
+  const focus = findSignal(scoreAccount(profileOf({ comments })).agenda, 'link-domain-concentration');
+  assert.notEqual(focus.band, BAND.INSUFFICIENT, 'fixture must clear the firing floor for the assert to bite');
+  assert.notEqual(focus.direction, 'lowers',
+    'a barely-qualifying concentration cast the vote-for-ordinariness one-directional signals are not allowed to cast');
+});
+
+/**
+ * THE BOUND THAT FIRED ON THE LIVE RE-FETCH (2026-09-07). The first cut of
+ * template-structure counted a single line holding a single link as a
+ * scaffold. u/chilidirigible — frozen by JIO-344 precisely so automation
+ * changes would have to face a prolific human — had 65 of 125 formatted
+ * comments reading exactly that ("here's the source: [link]"), fired the
+ * signal at 52%, and crossed to automation `moderate 30` live. A one-line
+ * link-drop and a quote-then-reply are the two most ordinary "formatted"
+ * shapes a person produces, and neither may fire this signal.
+ */
+test('automation: one-line link-drops and quote-replies are not scaffolding', () => {
+  const rand = rng(437);
+  const stamps = humanTimestamps({ rand, days: 200, activeHours: WAKING_HOURS }).slice(0, 40);
+
+  const linkDropper = stamps.map((at, i) => comment({
+    id: `ld${i}`, at, body: `[${randomText(rand, 4, 8)}](https://news${i}.example/story)`, thread: `t3_ld${i}`,
+  }));
+  const drops = findSignal(scoreAccount(profileOf({ comments: linkDropper })).automation, 'template-structure');
+  assert.equal(drops.band, BAND.INSUFFICIENT,
+    'a person who mostly posts one-line link comments read as templated — the chilidirigible false positive is back');
+
+  const quoteReplier = stamps.map((at, i) => comment({
+    id: `qr${i}`, at, body: `&gt; ${randomText(rand, 5, 9)}\n\n${randomText(rand)}`, thread: `t3_qr${i}`,
+  }));
+  const quotes = findSignal(scoreAccount(profileOf({ comments: quoteReplier })).automation, 'template-structure');
+  assert.equal(quotes.band, BAND.INSUFFICIENT,
+    'a person who habitually quotes-then-replies read as templated');
 });

@@ -11,8 +11,9 @@
  * committed verbatim to a public repository, so their bodies are replaced.
  *
  * WHY IT IS NOT JUST LOREM IPSUM. Replacing text changes the score unless the
- * replacement carries the same measurements. Five things in the scoring core
- * read a body, and this module reproduces each of them exactly:
+ * replacement carries the same measurements. When this module was written,
+ * five things in the scoring core read a body, and it reproduces each of them
+ * exactly:
  *
  *   1. `length-uniformity` (automation, weight 1.5) — the TRIMMED CHARACTER
  *      LENGTH, and nothing else about the text. Reproduced to the character.
@@ -34,6 +35,20 @@
  * The canonical forms are the generic English phrases the patterns are made
  * of ("fair point", "does anyone know"), not the person's own sentence. They
  * carry the measurement without carrying the words.
+ *
+ * WHAT IS NOT PRESERVED, BEYOND THE WORDS (JIO-427..431). The scoring core
+ * has since grown body-readers this synthesis does not reproduce, and a
+ * frozen human's scores are known to sit below the live account's on them:
+ * `personal-narrative` (authenticity, 1.5) reads a measured 0 on every
+ * synthetic body, because the lexicon carries no lived-detail phrases;
+ * `link-domain-concentration` (agenda, 1.5) and `template-structure`
+ * (automation, 1.5) read nothing, because links and line structure are not
+ * reproduced — which for those two one-directional signals means `unmeasured`,
+ * the same reading most ordinary accounts get live. The README's prototype-
+ * signals section carries the live spot-check that bounds the narrative gap
+ * (1–5 real hits per live human against the frozen 0). Re-capturing with a
+ * richer synthesis would close it; until then the frozen authenticity column
+ * is a floor, not the number.
  *
  * Everything else a signal reads — timestamps, groups, thread ids, scores,
  * reply positions, karma, account age — is metadata, is untouched, and is

@@ -18,7 +18,7 @@
 import { commentsOldestFirst, groupHistogram } from '../sources/profile.js';
 import { buildAxis, signal, unmeasured } from './axis.js';
 import {
-  clamp01, normalizedEntropy, pct, plural, rescale, stripUrls,
+  bareId, clamp01, normalizedEntropy, pct, plural, rescale, stripQuotedContent, stripUrls,
 } from './stats.js';
 
 const MIN_COMMENTS = 10;
@@ -94,6 +94,34 @@ const HELP_SEEKING_PATTERNS = [
   /\bgenuine question\b/i,
 ];
 
+/**
+ * Lived first-person detail — a partner, a childhood, a commute, an opinion
+ * owned as one's own. Pointless for a utility bot to fake and expensive for a
+ * template to vary, which is what qualifies it for this axis. Weighted LOW
+ * (1.5, alongside asks-questions) for the honest reason: in 2026 a language
+ * model writes "my wife" as fluently as a person does, so this vouches against
+ * crude automation and says nothing against a well-run persona.
+ *
+ * TWO BOUNDS, STATED. The corpus cannot validate the human side: all 19 frozen
+ * humans carry length-matched synthetic bodies that preserve question marks
+ * and the two lists above but NOT these phrases, so every corpus human reads a
+ * measured 0 here and their frozen authenticity scores sit slightly below what
+ * the live account would earn. And the patterns are English idioms; an account
+ * writing another language earns nothing, which is an absence of evidence and
+ * must stay one.
+ */
+const PERSONAL_NARRATIVE_PATTERNS = [
+  /\bmy (?:wife|husband|partner|girlfriend|boyfriend|fianc[eé]e?|kids?|son|daughter|mom|mum|dad|mother|father|brother|sister|grandm(?:a|other)|grandp(?:a|father)|dog|cat|roommate|landlord|boss|coworkers?|neighbou?rs?)\b/i,
+  /\bwhen i was\b/i,
+  /\bi grew up\b/i,
+  /\bgrowing up\b/i,
+  /\bi used to\b/i,
+  /\b(?:my|our) (?:job|shift|commute|apartment|house|hometown|childhood|wedding|degree)\b/i,
+  /\byears? ago,? (?:i|we|my)\b/i,
+  /\bin my (?:20s|30s|40s|50s|60s|twenties|thirties|forties|fifties|experience)\b/i,
+  /\bpersonally,? i\b/i,
+];
+
 /** Threads with at least this many comments count as sustained back-and-forth. */
 const SUSTAINED_MIN_COMMENTS = 3;
 
@@ -107,6 +135,9 @@ const DOMINANT_MIN_SCORED_COMMENTS = 10;
 const DISSENT_DAMPING_START = 0.35;
 const DISSENT_DAMPING_END = 0.8;
 
+/** Own posts that drew replies need at least this many before a return rate means anything. */
+const MIN_OWN_POSTS_WITH_REPLIES = 3;
+
 export function scoreAuthenticity(profile) {
   return buildAxis([
     selfCorrectionSignal(profile),
@@ -114,7 +145,23 @@ export function scoreAuthenticity(profile) {
     topicalBreadthSignal(profile),
     questionSignal(profile),
     offScriptDissentSignal(profile),
+    personalNarrativeSignal(profile),
+    ownPostReturnSignal(profile),
   ]);
+}
+
+/**
+ * Every pattern signal on this axis reads `authoredText()` — the body with
+ * quoted content AND links removed — rather than the raw body (JIO-427).
+ * `self-correction` used to read raw: a bot whose template blockquotes its
+ * summoner's "you're right, my bad" was one boilerplate change away from
+ * collecting the second-heaviest vouch this axis has, and a URL slug
+ * containing `correction` already matched `/\bcorrection\b/i` today. Same
+ * principle as JIO-290's strip, applied to the other way words arrive in a
+ * body without being written by its author.
+ */
+function authoredText(body) {
+  return stripUrls(stripQuotedContent(body));
 }
 
 function selfCorrectionSignal(profile) {
@@ -131,7 +178,8 @@ function selfCorrectionSignal(profile) {
 
   const examples = [];
   let hits = 0;
-  for (const body of bodies) {
+  for (const raw of bodies) {
+    const body = authoredText(raw);
     const matched = SELF_CORRECTION_PATTERNS.find((re) => re.test(body));
     if (matched) {
       hits += 1;
@@ -352,6 +400,12 @@ function topicalBreadthSignal(profile) {
  * was one the account was ANSWERING. Both are closed inside `stripUrls()`, so
  * this function's one call still gets all of it, and the two axes still cannot
  * disagree about who said what.
+ *
+ * `authoredText()` layers `stripQuotedContent()` in front of that — JIO-427's
+ * earlier cut at the same residue, written in parallel with JIO-349. The two
+ * agree on every case either was built for (one drops a listing line whole
+ * where the other blanks its text), so the pre-pass is a belt-and-braces
+ * guard rather than a second opinion.
  */
 function questionSignal(profile) {
   const key = 'asks-questions';
@@ -368,7 +422,7 @@ function questionSignal(profile) {
   let questions = 0;
   let helpSeeking = 0;
   for (const raw of bodies) {
-    const body = stripUrls(raw);
+    const body = authoredText(raw);
     if (body.includes('?')) questions += 1;
     if (HELP_SEEKING_PATTERNS.some((re) => re.test(body))) helpSeeking += 1;
   }
@@ -472,5 +526,113 @@ function offScriptDissentSignal(profile) {
     strength,
     value: { topGroup, scored: scored.length, downvoted: downvoted.length, share, worstScores: worst },
     evidence: `${downvoted.length} of ${scored.length} scored comments (${pct(share)}) in the account's dominant group ("${topGroup}") were net-downvoted, worst at ${worst.join(', ')}.${dampingNote}`,
+  });
+}
+
+/**
+ * Lived first-person detail. See PERSONAL_NARRATIVE_PATTERNS above for what
+ * qualifies it for this axis and the two stated bounds (synthetic corpus
+ * bodies read 0; English only). Zero hits is a measured zero, like
+ * self-correction's: on this axis a clean absence of positive evidence is a
+ * real finding, and the evidence string says which kind of statement it is.
+ */
+function personalNarrativeSignal(profile) {
+  const key = 'personal-narrative';
+  const label = 'Speaks from a life';
+  const weight = 1.5;
+
+  const bodies = profile.comments.map((c) => c.body).filter((b) => typeof b === 'string' && b.length);
+  if (bodies.length < MIN_COMMENTS) {
+    return unmeasured({
+      key, label, weight, evidence: `Only ${bodies.length} comments with retrievable text — needs at least ${MIN_COMMENTS}.`,
+    });
+  }
+
+  const examples = [];
+  let hits = 0;
+  for (const raw of bodies) {
+    const body = authoredText(raw);
+    const matched = PERSONAL_NARRATIVE_PATTERNS.find((re) => re.test(body));
+    if (matched) {
+      hits += 1;
+      if (examples.length < 3) {
+        const m = body.match(matched);
+        if (m) examples.push(m[0].trim().toLowerCase());
+      }
+    }
+  }
+
+  const share = hits / bodies.length;
+  const strength = rescale(share, 0.01, 0.12);
+
+  return signal({
+    key,
+    label,
+    weight,
+    strength,
+    value: { hits, sample: bodies.length, share, examples },
+    evidence: hits
+      ? `${hits} of ${bodies.length} comments (${pct(share)}) carry first-person lived detail — e.g. ${examples.map((e) => `"${e}"`).join(', ')}. A template has no life to mention; note that a written persona can fake this cheaply, so it argues against crude automation and no further.`
+      : `None of the ${bodies.length} comments mention first-person lived detail. That is an absence of positive evidence, not evidence of anything — and these patterns are English idioms, so an account writing another language earns nothing here either way.`,
+  });
+}
+
+/**
+ * Comes back to answer replies on its OWN submissions. The inverse face of
+ * agenda's drive-by measurement, and deliberately only its EXACT half: a post
+ * with a known reply count either got a comment from its author in-thread or
+ * it did not. Posting something, watching people respond, and returning to
+ * talk to them is participation a broadcast queue has no reason to perform.
+ *
+ * The overlap with `drive-by-ratio` is real and acknowledged: the same
+ * observation votes there against the account's agenda-shape and here for its
+ * personhood. The axes are independent by design, and abandoning your own
+ * threads genuinely is evidence in both directions at once.
+ *
+ * ONLY POSTS INSIDE THE COMMENT WINDOW ARE JUDGED, and this was a live finding
+ * on the frozen corpus rather than a precaution: posts and comments arrive as
+ * separate newest-first windows with different depths, so a post older than
+ * the oldest retrieved comment reads "never answered" when the answer simply
+ * sits below the comment window — u/bigbjarne showed 0 of 59 posts answered
+ * over a posts window years deeper than the comments one. That is JIO-291's
+ * rule (absence versus not-having-asked) arriving through yet another door.
+ */
+function ownPostReturnSignal(profile) {
+  const key = 'own-post-return';
+  const label = 'Answers replies on own posts';
+  const weight = 1.5;
+
+  const commentedThreads = new Set();
+  let oldestCommentUtc = Infinity;
+  for (const c of profile.comments) {
+    const thread = bareId(c.threadId);
+    if (thread) commentedThreads.add(thread);
+    if (Number.isFinite(c.createdUtc) && c.createdUtc < oldestCommentUtc) oldestCommentUtc = c.createdUtc;
+  }
+
+  const postsWithReplies = profile.posts.filter((p) => Number.isFinite(p.replyCount) && p.replyCount > 0
+    && Number.isFinite(p.createdUtc) && p.createdUtc >= oldestCommentUtc);
+  if (postsWithReplies.length < MIN_OWN_POSTS_WITH_REPLIES) {
+    return unmeasured({
+      key,
+      label,
+      weight,
+      evidence: `Only ${postsWithReplies.length} of the account's own submissions both drew replies and sit inside the retrieved comment window — needs at least ${MIN_OWN_POSTS_WITH_REPLIES} before a return rate means anything. (A post older than the oldest retrieved comment is not judged: a return below that window would be invisible.)`,
+    });
+  }
+
+  const answered = postsWithReplies.filter((p) => commentedThreads.has(bareId(p.id)));
+  const share = answered.length / postsWithReplies.length;
+  const strength = rescale(share, 0.15, 0.75);
+
+  return signal({
+    key,
+    label,
+    weight,
+    strength,
+    value: { answered: answered.length, postsWithReplies: postsWithReplies.length, share },
+    evidence: answered.length
+      ? `Came back to comment in ${answered.length} of ${postsWithReplies.length} of its own submissions that drew replies (${pct(share)}). Returning to talk to your repliers is participation a broadcast queue does not perform.`
+      : `None of the account's ${postsWithReplies.length} submissions that drew replies got a comment from the account itself. An absence of positive evidence — the account may simply read without replying.`,
   });
 }

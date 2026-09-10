@@ -2582,6 +2582,124 @@ repo holds an account doing it on purpose. This raises the price of the vouch
 rather than closing the door, and that bot has to be caught on the automation
 axis instead.
 
+## Seven prototype signals, and the live check that pruned one (JIO-427..432)
+
+The axes had coverage holes you could name: nothing anywhere read post titles,
+nothing read link destinations — so the push mechanism actual promotion uses
+was invisible — nothing checked timestamps against a clock, the near-duplicate
+check shingles over words so a template with heavy variable fill slips it, and
+the authenticity axis had exactly five ways to vouch for anyone. Seven signals
+entered at once, every one at the bottom of its axis's weight table (1–1.5),
+because a prototype's weight should reflect its validation, and none of these
+has been measured against live traffic at scale.
+
+**Automation** gained *Posts on a clock boundary* (a scheduler fires at a fixed
+second of its minute or minute of its hour; a person's timestamps are uniform
+mod 60) and *Identical comment scaffolding* (the same lines, bullets and
+links-per-line in the same order while the words vary — what
+`near-duplicate-bodies` cannot see through a fill-in-the-blanks template).
+**Agenda** gained *Steers readers to one site* (top linked domain across the
+link-carrying comments, platform image/video hosts excluded), *Same post in
+many groups* (one normalized title submitted across groups — nothing else on
+any axis read titles at all) and *Account predates its history* (years between
+account creation and the first item of a provably COMPLETE history — the
+dormancy `dormancy-revival` cannot see, measurable only because JIO-291 made
+"complete" a thing the pager can prove). **Authenticity** gained *Speaks from a
+life* (first-person lived detail, the same pattern machinery as
+`self-correction`) and *Answers replies on own posts* (the exact half of the
+drive-by measurement, run in the direction that vouches). All of it ships with
+`stripQuotedContent()` (JIO-427), which is what finally closed the sneakpeekbot
+quoted-title residue struck through above.
+
+**Every one-directional signal in the set is floored at neutral, and the first
+cut proves why in one number.** Each fires only past an "ordinary" threshold —
+and an ordinary reading is what *everyone* has, so it reports `unmeasured`
+below the floor rather than casting a vote. The first cut let a measurement
+just past the floor score ~0, which reads `direction: 'lowers'`, and
+u/AutoModerator's agenda dropped 64 → 56 for having a link concentration barely
+over 50% — the inversion `RATE_FLOOR_STRENGTH` exists to prevent, shipped
+three signals wide. The measured range now starts at 0.5 everywhere the signal
+is one-directional.
+
+**All three new agenda signals are held to corroboration, none corroborates.**
+Each one's own evidence string names the person it would falsely accuse — the
+devotee of one site, the person cross-posting a question to related
+communities, the lurker who read for years before commenting — and that is the
+JIO-424 criterion for a shape signal. The corroborator role was considered for
+the link and title signals, which genuinely are about what an account
+disseminates, and rejected on arithmetic: a middling link concentration would
+have lifted the hold off a hobbyist's topic-concentration, the exact false
+positive JIO-424 fixed, returning through a new door. The accounts these
+signals are aimed at read `high` on stock phrasing anyway (templated promotion
+is templated), so for them the hold releases and nothing is lost. And the
+holds were not hypothetical: real thread humans in the corpus cross-post — "can
+we afford a new 500k house" went to 3 groups, and title-repost fires on five of
+five humans it was spot-checked on. Every one is held, every human stays `low`.
+
+**What moved: 50 of the 81 frozen scores, and the borders all moved the right
+way.** Automation: five moves, all bots, all up; the bot floor rose 44 → 48
+against an unchanged human ceiling of 25, so the gap is 23 points. Agenda: the
+bots went from 36–64 to **47–70** — all five reply-bots jumped +11 because
+*Steers readers to one site* reads their own footers (u/RemindMeBot links
+wolframalpha.com in 300 of 300 link-carrying comments, u/sneakpeekbot
+github.com in 295 of 295, u/RepostSleuthBot repostsleuth.com in 271 of 271:
+the signal built for affiliate spam turns out to describe utility-bot
+boilerplate exactly) — and u/RepostSleuthBot crossed to `high`. The thread
+humans' agenda tightened 0–13 → 0–11. Authenticity: the bots fell from 25–38
+to 21–32 with seven of eight now `low`, u/sneakpeekbot most of all (38 → 23,
+the quote strip taking back the questions it was quoting).
+
+**The live check pruned exactly the false positive the corpus was built to
+catch.** A 2026-09-07 spot-check fetched six accounts live through the real
+`fetchAccount`. u/chilidirigible — frozen by JIO-344 precisely so automation
+changes would have to face a prolific human — came back automation **`moderate
+30`**: the first cut of *Identical comment scaffolding* counted a single line
+holding a single link as a scaffold, and 65 of their 125 formatted comments
+are exactly that, because "here's the source: [link]" is one of the most
+ordinary comment shapes a person produces. A one-line link-drop and a
+quote-then-reply now have no scaffold at all, u/chilidirigible reads `low 27`
+live, and the bound is pinned by a test named for them. The same check found
+the one discovery in the set: **u/AutoModerator posts 62% of its items at a
+single minute of the hour** — a scheduler signature on the loudest bot on the
+platform that no other signal reads — while every human measured an ordinary
+2–6% spread and the summon-bots, correctly, read nothing (being summoned is
+uniform mod 60 too).
+
+**Building the return-rate signal found a JIO-291-class defect in an existing
+one (JIO-432).** Posts and comments arrive as separate newest-first windows
+with different depths, and `drive-by-ratio` judged posts sitting BELOW the
+comment window: for those, "the account never commented in its own thread" is
+a claim about our pagination — the return may simply sit below the comments we
+fetched. u/bigbjarne read 0 of 59 own posts answered over a posts window years
+deeper than the comments one. Both signals now judge only posts inside the
+retrieved comment window, and the fix moved 28 frozen scores on its own —
+every human's agenda down or flat, every human's authenticity up, u/Hartacus
+and u/bigbjarne back to `high` where the unjudgeable posts had been dragging
+them.
+
+**Bounds, stated because a green suite cannot show them.** *Speaks from a
+life* reads a measured 0 for all 19 frozen humans — their corpus bodies are
+length-matched synthetic filler that preserves the question mark and the two
+older pattern lists but not these phrases — so the corpus systematically
+understates live human authenticity here; the live spot-check read 1–5 real
+hits ("my wife", "my cat", "when i was") on every human fetched, and 0–4 on
+the bots, so the signal separates in the right direction and its frozen
+column is known to be the floor. *Account predates its history* is unmeasured
+on all 27 frozen accounts (every one is either truncated or index-floored) and
+has never fired outside its own tests — a rule that has never fired in the
+wild is not a rule that has been shown safe there. *Posts on a clock boundary*
+fired on exactly one account anywhere, the right one. The measured-weight
+headroom was recomputed under the new totals (18.5 / 13.5 / 14): the worst
+fractions are 0.676 on automation, 0.679 on authenticity, and **0.519 on
+agenda** — u/AmputatorBot sits one small mostly-unmeasured agenda signal away
+from the reporting gate, so the next agenda signal must either fire on
+utility bots or weigh well under 0.5. And the standing limit stands: there is
+still no population of known-paid accounts, so none of this shows an agenda
+signal firing on an actual agenda account — an axis with more eyes is not
+thereby an axis that has seen the adversary.
+
+*(Landed with the JIO-427..432 batch, which merged alongside JIO-346..349; the score movements below were measured against the pre-JIO-346 baseline.)*
+
 ## The blind spot: an account the index has never heard of
 
 The defects above are false positives. This one is the opposite and it is

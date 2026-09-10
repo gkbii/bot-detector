@@ -10,11 +10,12 @@
  */
 
 import {
+  activityOldestFirst,
   commentsOldestFirst,
   reliableActivityOldestFirst,
 } from '../sources/profile.js';
 import {
-  buildAxis, signal, unmeasured,
+  buildAxis, exampleRef, signal, unmeasured,
 } from './axis.js';
 import {
   clamp01, coefficientOfVariation, formatDate, jaccard, longestZeroRunCircular,
@@ -99,7 +100,7 @@ const MIN_SPAN_SECONDS_FOR_RATE = 60;
  * What keeps a prolific person `low` is the SHAPE of this signal rather than
  * the position of this number — one-directional, floored at
  * `RATE_FLOOR_STRENGTH`, log-scaled to `SATURATED_ITEMS_PER_HOUR`, and weight
- * 2 of 15.5. The 5.90/h human earns strength 0.573, i.e. 0.073 above neutral,
+ * 2 of 18.5. The 5.90/h human earns strength 0.573, i.e. 0.073 above neutral,
  * and scores automation `low 14`. So this is the threshold at which throughput
  * becomes worth WEIGHING, not the throughput at which an account becomes a
  * machine, and moving it is not the lever it looks like. u/humdingler (5.90/h)
@@ -116,8 +117,17 @@ const SATURATED_ITEMS_PER_HOUR = 300;
  * below 0.25 reads as `direction: 'lowers'` in axis.js and drags the weighted
  * average down, which is the vote for a person this signal is not allowed to
  * cast. The measured range therefore starts at neutral and only ever climbs.
+ *
+ * Shared by every one-directional signal in this axis — clock-alignment and
+ * template-structure fire past an "ordinary" floor exactly the way the rate
+ * does, and a barely-past-the-floor measurement scoring ~0 would cast the
+ * same forbidden vote.
  */
 const RATE_FLOOR_STRENGTH = 0.5;
+
+function oneDirectionalStrength(fraction) {
+  return RATE_FLOOR_STRENGTH + (1 - RATE_FLOOR_STRENGTH) * clamp01(fraction);
+}
 
 const MIN_INTERVALS = 10;
 
@@ -150,6 +160,56 @@ const BROADCAST_REPLY_SHARE = 0.02;
 /** ...and by this share the signal has spent its argument and reads zero. */
 const CONVERSATIONAL_REPLY_SHARE = 0.3;
 
+/**
+ * Clock alignment (JIO-428). A scheduler fires at a fixed second of its minute
+ * or minute of its hour; a person's timestamps are uniform mod 60. Needs
+ * enough items that a spike cannot be luck: with 60 items over 60 buckets the
+ * expected count per bucket is 1, and the chance of any bucket reaching 15% of
+ * the sample by coincidence is far below 1%.
+ *
+ * ONE-DIRECTIONAL, like sustained-posting-rate and for the same reason: an
+ * ordinary spread of seconds is what everyone has — person, summon-bot and
+ * burst-bot alike — so it is the absence of evidence of a scheduler, not
+ * evidence of a person, and scoring it would hand every event-driven bot a
+ * vote for its own humanity. Below the floor this signal reports nothing.
+ */
+const MIN_ITEMS_FOR_CLOCK = 60;
+const CLOCK_BUCKETS = 60;
+const CLOCK_ORDINARY_TOP_SHARE = 0.15;
+const CLOCK_SATURATED_TOP_SHARE = 0.7;
+
+/**
+ * Template structure (JIO-429). `near-duplicate-bodies` shingles over WORDS,
+ * so a template with heavy variable fill — quoted titles, injected names, a
+ * different link every time — can slip under the Jaccard threshold while its
+ * SKELETON (same lines, same links-per-line, same rules and bullets) is
+ * identical in every comment. This reads the skeleton.
+ *
+ * Guards, because ordinary prose must be invisible to it: only comments with
+ * REAL structure participate (three-plus lines, two-plus links, or quote/
+ * bullet/heading/rule furniture), the winning skeleton must itself contain a
+ * non-plain-text element (every three-paragraph plain comment shares a
+ * skeleton, and that shape means nothing), and below the firing floor it is
+ * one-directional unmeasured — varied structure is what writing looks like,
+ * not evidence of a person.
+ *
+ * A SINGLE LINE WITH A SINGLE LINK IS NOT A SCAFFOLD, and that is a live
+ * finding rather than a precaution: the first cut counted it, and on a live
+ * re-fetch of 2026-09-07 u/chilidirigible — the prolific human JIO-344 froze
+ * precisely so this class of change would have to face them — had 65 of 125
+ * formatted comments reading skeleton "t1", one line, one link. "Here's the
+ * source: [link]" is among the most ordinary comment shapes a person
+ * produces, and it took their automation to `moderate 30`: a human crossed a
+ * band. Such comments now have no scaffold at all — they are excluded from
+ * the numerator AND the denominator, not merely barred from winning, because
+ * leaving them in the denominator would let a hundred ordinary link-drops
+ * dilute a real template below the firing floor.
+ */
+const MIN_STRUCTURED_COMMENTS = 10;
+const STRUCTURE_ORDINARY_TOP_SHARE = 0.4;
+const STRUCTURE_SATURATED_TOP_SHARE = 0.9;
+const STRUCTURE_MAX_LINKS_PER_LINE = 3;
+
 export function scoreAutomation(profile) {
   return buildAxis([
     postingHourSignal(profile),
@@ -160,6 +220,8 @@ export function scoreAutomation(profile) {
     karmaVelocitySignal(profile),
     duplicateBodySignal(profile),
     conversationDepthSignal(profile),
+    clockAlignmentSignal(profile),
+    templateStructureSignal(profile),
   ]);
 }
 
@@ -291,7 +353,7 @@ function sustainedRateSignal(profile) {
     });
   }
 
-  const strength = clamp01(RATE_FLOOR_STRENGTH + (1 - RATE_FLOOR_STRENGTH) * rescale(
+  const strength = oneDirectionalStrength(rescale(
     Math.log10(perHour),
     Math.log10(ORDINARY_ITEMS_PER_HOUR),
     Math.log10(SATURATED_ITEMS_PER_HOUR),
@@ -434,6 +496,7 @@ function burstSignal(profile) {
   let burstComments = 0;
   let largestBurst = 0;
   let largestBurstSpan = null;
+  let largestBurstExample = null;
   let run = [comments[0]];
 
   const closeRun = () => {
@@ -448,6 +511,7 @@ function burstSignal(profile) {
             threads: threads.size,
             at: run[0].createdUtc,
           };
+          largestBurstExample = exampleRef('comment', run[0]);
         }
       }
     }
@@ -472,7 +536,9 @@ function burstSignal(profile) {
     label,
     weight,
     strength,
-    value: { burstComments, share, largestBurst, largestBurstSpan },
+    value: {
+      burstComments, share, largestBurst, largestBurstSpan, example: largestBurstExample,
+    },
     evidence: largestBurst
       ? `${burstComments} of ${comments.length} comments (${pct(share)}) fall in rapid bursts across unrelated threads — the largest was ${largestBurst} comments in ${largestBurstSpan.threads} different threads within ${largestBurstSpan.seconds} seconds on ${formatDate(largestBurstSpan.at)}.`
       : `No runs of ${BURST_MIN_SIZE}+ comments within ${BURST_GAP_SECONDS}s across unrelated threads.`,
@@ -564,7 +630,7 @@ function duplicateBodySignal(profile) {
 
   const docs = profile.comments
     .slice(0, DUPLICATE_MAX_COMPARED)
-    .map((c) => ({ id: c.id, words: normalizeWords(c.body) }))
+    .map((c) => ({ id: c.id, src: c, words: normalizeWords(c.body) }))
     .filter((d) => d.words.length >= DUPLICATE_MIN_WORDS)
     .map((d) => ({ ...d, set: shingles(d.words, DUPLICATE_SHINGLE_SIZE) }))
     .filter((d) => d.set.size > 0);
@@ -578,6 +644,7 @@ function duplicateBodySignal(profile) {
   const duplicated = new Set();
   let maxSimilarity = 0;
   let example = null;
+  let firstDuplicate = null;
 
   for (let i = 0; i < docs.length; i += 1) {
     for (let j = i + 1; j < docs.length; j += 1) {
@@ -587,6 +654,7 @@ function duplicateBodySignal(profile) {
         example = [docs[i], docs[j]];
       }
       if (score >= DUPLICATE_JACCARD) {
+        if (!firstDuplicate) firstDuplicate = docs[i];
         duplicated.add(docs[i].id ?? i);
         duplicated.add(docs[j].id ?? j);
       }
@@ -601,7 +669,13 @@ function duplicateBodySignal(profile) {
     label,
     weight,
     strength,
-    value: { duplicated: duplicated.size, compared: docs.length, share, maxSimilarity },
+    value: {
+      duplicated: duplicated.size,
+      compared: docs.length,
+      share,
+      maxSimilarity,
+      example: firstDuplicate ? exampleRef('comment', firstDuplicate.src) : null,
+    },
     evidence: duplicated.size
       ? `${duplicated.size} of ${docs.length} compared comments (${pct(share)}) are near-duplicates of another comment by the same account (peak similarity ${maxSimilarity.toFixed(2)}), e.g. "${snippet(example[0].words)}".`
       : `No near-duplicate comments among the ${docs.length} compared (peak similarity ${maxSimilarity.toFixed(2)}, threshold ${DUPLICATE_JACCARD}).`,
@@ -692,6 +766,170 @@ function conversationDepthSignal(profile) {
     evidence: replies === 0
       ? `All ${known.length} comments are top-level responses to a submission; the account has never replied to another commenter.`
       : `${replies} of ${known.length} comments (${pct(replyShare)}) are replies to other commenters rather than top-level drops. This signal measures distance from the broadcast pole and nothing else — at or below ${pct(BROADCAST_REPLY_SHARE)} replies an account is broadcasting rather than talking — so a rate above that is the absence of that evidence rather than evidence of a person.`,
+  });
+}
+
+/**
+ * Clock alignment — see the constants block for the design. Both granularities
+ * are checked and the stronger one reported: second-of-minute catches a
+ * per-minute or fixed-offset scheduler, minute-of-hour an hourly one.
+ *
+ * Per-item and window-independent on purpose: which second of its minute a
+ * comment landed on is a fact about that comment no matter how much history
+ * the fetch missed, so this uses the whole timestamped timeline the way
+ * sustained-posting-rate gets to use raw throughput — truncation cannot forge
+ * it. (A burst spraying 300 items over 82 seconds spreads them across all 60
+ * seconds and reads as ordinary here; the burst signal is where that shape is
+ * scored.)
+ */
+function clockAlignmentSignal(profile) {
+  const key = 'clock-alignment';
+  const label = 'Posts on a clock boundary';
+  const weight = 1.5;
+
+  const timeline = activityOldestFirst(profile);
+  if (timeline.length < MIN_ITEMS_FOR_CLOCK) {
+    return unmeasured({
+      key,
+      label,
+      weight,
+      evidence: `Only ${timeline.length} timestamped ${plural(timeline.length, 'item')} — needs at least ${MIN_ITEMS_FOR_CLOCK} before a clock-alignment spike can be told from luck.`,
+    });
+  }
+
+  const granularities = [
+    { name: 'second of its minute', unit: 'second', of: (t) => t % CLOCK_BUCKETS },
+    { name: 'minute of its hour', unit: 'minute', of: (t) => Math.floor(t / 60) % CLOCK_BUCKETS },
+  ];
+
+  let top = null;
+  for (const g of granularities) {
+    const buckets = new Array(CLOCK_BUCKETS).fill(0);
+    for (const item of timeline) buckets[g.of(item.createdUtc)] += 1;
+    const max = Math.max(...buckets);
+    const share = max / timeline.length;
+    if (!top || share > top.share) {
+      top = { granularity: g.name, unit: g.unit, bucket: buckets.indexOf(max), count: max, share };
+    }
+  }
+
+  const value = { ...top, items: timeline.length };
+
+  if (top.share < CLOCK_ORDINARY_TOP_SHARE) {
+    return unmeasured({
+      key,
+      label,
+      weight,
+      value,
+      evidence: `The busiest ${top.unit} holds ${top.count} of ${timeline.length} items (${pct(top.share)}), an ordinary spread. Everyone's timestamps look like this — person, summon-bot and burst-bot alike — so it says nothing about this account either way; only a scheduler-shaped spike would.`,
+    });
+  }
+
+  const strength = oneDirectionalStrength(rescale(top.share, CLOCK_ORDINARY_TOP_SHARE, CLOCK_SATURATED_TOP_SHARE));
+
+  const inBucket = top.unit === 'second'
+    ? (t) => t % CLOCK_BUCKETS === top.bucket
+    : (t) => Math.floor(t / 60) % CLOCK_BUCKETS === top.bucket;
+  const exemplar = timeline.find((item) => inBucket(item.createdUtc));
+
+  return signal({
+    key,
+    label,
+    weight,
+    strength,
+    value: { ...value, example: exemplar ? exampleRef(exemplar.kind, exemplar) : null },
+    evidence: `${top.count} of ${timeline.length} items (${pct(top.share)}) land on the same ${top.granularity} (:${String(top.bucket).padStart(2, '0')}), where an even spread would put ${Math.round(timeline.length / CLOCK_BUCKETS)} there. Timestamps aligned to a clock boundary are how a scheduler posts and not how typing does.`,
+  });
+}
+
+/**
+ * The structural skeleton of one body: one token per non-empty line — its kind
+ * (quote, bullet/numbered, heading, horizontal rule, plain text) plus its
+ * markdown-link count, capped so a footer with six links and one with seven
+ * read as the same furniture.
+ */
+function structureSkeleton(body) {
+  if (typeof body !== 'string') return { skeleton: '', lines: 0, links: 0 };
+  const lines = body.split('\n').map((l) => l.trim()).filter(Boolean);
+  let links = 0;
+  const tokens = lines.map((line) => {
+    const linkCount = Math.min((line.match(/\]\(/g) || []).length, STRUCTURE_MAX_LINKS_PER_LINE);
+    links += linkCount;
+    let kind = 't';
+    if (/^(?:&gt;|>)/.test(line)) kind = 'q';
+    else if (/^(?:[-*+]\s|\\?#?\d+[.:)]\s?|\\#)/.test(line)) kind = 'b';
+    else if (/^#{1,6}\s/.test(line)) kind = 'h';
+    else if (/^(?:[-*_]\s*){3,}$/.test(line)) kind = 'r';
+    return kind + linkCount;
+  });
+  return { skeleton: tokens.join('|'), lines: lines.length, links };
+}
+
+/** Does a skeleton contain anything beyond plain unlinked text lines? */
+function skeletonHasFurniture(skeleton) {
+  return /[qbhr]|t[1-9]/.test(skeleton);
+}
+
+function templateStructureSignal(profile) {
+  const key = 'template-structure';
+  const label = 'Identical comment scaffolding';
+  const weight = 1.5;
+
+  const structured = profile.comments
+    .slice(0, DUPLICATE_MAX_COMPARED)
+    .map((c) => ({ ...structureSkeleton(c.body), src: c }))
+    .filter((s) => s.lines >= 3 || s.links >= 2
+      || (s.lines >= 2 && skeletonHasFurniture(s.skeleton)));
+
+  if (structured.length < MIN_STRUCTURED_COMMENTS) {
+    return unmeasured({
+      key,
+      label,
+      weight,
+      evidence: `Only ${structured.length} ${plural(structured.length, 'comment')} carry enough formatting to have a scaffold at all — needs at least ${MIN_STRUCTURED_COMMENTS}. Plain prose has no scaffold to compare, which says nothing about this account either way.`,
+    });
+  }
+
+  const counts = new Map();
+  for (const s of structured) {
+    const entry = counts.get(s.skeleton) ?? { count: 0, lines: s.lines, links: s.links };
+    entry.count += 1;
+    counts.set(s.skeleton, entry);
+  }
+  // Only a genuinely multi-part scaffold can win. Furniture alone is not
+  // enough: every three-paragraph plain comment shares "t0|t0|t0", and every
+  // quote-then-reply shares "q0|t0" — both are just what writing looks like.
+  // A template is a scaffold with parts: three-plus lines or two-plus links,
+  // AND something in it beyond plain text.
+  const qualifying = [...counts.entries()].filter(([skeleton, meta]) => skeletonHasFurniture(skeleton)
+    && (meta.lines >= 3 || meta.links >= 2));
+  const top = qualifying.length ? qualifying.reduce((a, b) => (b[1].count > a[1].count ? b : a)) : null;
+  const share = top ? top[1].count / structured.length : 0;
+  const value = top
+    ? { topSkeleton: top[0], repeated: top[1].count, structured: structured.length, share }
+    : { structured: structured.length, share: 0 };
+
+  if (!top || share < STRUCTURE_ORDINARY_TOP_SHARE) {
+    return unmeasured({
+      key,
+      label,
+      weight,
+      value,
+      evidence: `No formatting scaffold recurs across ${pct(STRUCTURE_ORDINARY_TOP_SHARE)} of the ${structured.length} formatted comments — their structure varies the way written comments do. Varied structure is not evidence of a person, so this says nothing either way.`,
+    });
+  }
+
+  const strength = oneDirectionalStrength(rescale(share, STRUCTURE_ORDINARY_TOP_SHARE, STRUCTURE_SATURATED_TOP_SHARE));
+
+  const exemplar = structured.find((s) => s.skeleton === top[0]);
+
+  return signal({
+    key,
+    label,
+    weight,
+    strength,
+    value: { ...value, example: exemplar ? exampleRef('comment', exemplar.src) : null },
+    evidence: `${top[1].count} of ${structured.length} formatted comments (${pct(share)}) share one exact scaffold — the same lines, bullets and links-per-line in the same order — even where their words differ. Fill-in-the-blanks output keeps its scaffold while varying its words; writing varies both.`,
   });
 }
 

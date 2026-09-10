@@ -7,17 +7,17 @@
    },
    "agenda": {
     "band": "low",
-    "score": 5
+    "score": 3
    },
    "authenticity": {
     "band": "moderate",
-    "score": 55
+    "score": 46
    }
   },
   "AmputatorBot": {
    "automation": {
     "band": "high",
-    "score": 71
+    "score": 74
    },
    "agenda": {
     "band": "moderate",
@@ -31,15 +31,15 @@
   "Anti-ThisBot-IB": {
    "automation": {
     "band": "moderate",
-    "score": 54
+    "score": 57
    },
    "agenda": {
     "band": "moderate",
-    "score": 36
+    "score": 47
    },
    "authenticity": {
     "band": "low",
-    "score": 15
+    "score": 12
    }
   },
   "Aubenabee": {
@@ -49,11 +49,11 @@
    },
    "agenda": {
     "band": "low",
-    "score": 9
+    "score": 4
    },
    "authenticity": {
     "band": "moderate",
-    "score": 61
+    "score": 51
    }
   },
   "AutoModerator": {
@@ -63,11 +63,11 @@
    },
    "agenda": {
     "band": "moderate",
-    "score": 64
+    "score": 62
    },
    "authenticity": {
     "band": "low",
-    "score": 8
+    "score": 7
    }
   },
   "Biscopiphany": {
@@ -81,7 +81,7 @@
    },
    "authenticity": {
     "band": "moderate",
-    "score": 59
+    "score": 52
    }
   },
   "Donkletown": {
@@ -94,8 +94,8 @@
     "score": 2
    },
    "authenticity": {
-    "band": "high",
-    "score": 70
+    "band": "moderate",
+    "score": 62
    }
   },
   "DooberBooberDoo": {
@@ -105,11 +105,11 @@
    },
    "agenda": {
     "band": "low",
-    "score": 1
+    "score": 0
    },
    "authenticity": {
     "band": "moderate",
-    "score": 53
+    "score": 52
    }
   },
   "Hartacus": {
@@ -119,11 +119,11 @@
    },
    "agenda": {
     "band": "low",
-    "score": 6
+    "score": 8
    },
    "authenticity": {
     "band": "high",
-    "score": 71
+    "score": 65
    }
   },
   "KevinGreeneSolar": {
@@ -136,8 +136,8 @@
     "score": 11
    },
    "authenticity": {
-    "band": "high",
-    "score": 65
+    "band": "moderate",
+    "score": 58
    }
   },
   "MundaneFacts": {
@@ -151,7 +151,7 @@
    },
    "authenticity": {
     "band": "moderate",
-    "score": 57
+    "score": 50
    }
   },
   "Parahelix": {
@@ -165,7 +165,7 @@
    },
    "authenticity": {
     "band": "moderate",
-    "score": 59
+    "score": 50
    }
   },
   "Qrahe": {
@@ -179,21 +179,21 @@
    },
    "authenticity": {
     "band": "moderate",
-    "score": 38
+    "score": 32
    }
   },
   "RemindMeBot": {
    "automation": {
     "band": "high",
-    "score": 89
+    "score": 87
    },
    "agenda": {
     "band": "moderate",
-    "score": 36
+    "score": 47
    },
    "authenticity": {
     "band": "low",
-    "score": 5
+    "score": 4
    }
   },
   "RepostSleuthBot": {
@@ -202,12 +202,12 @@
     "score": 89
    },
    "agenda": {
-    "band": "moderate",
-    "score": 64
+    "band": "high",
+    "score": 70
    },
    "authenticity": {
     "band": "low",
-    "score": 13
+    "score": 11
    }
   },
   "TCBloo": {
@@ -217,11 +217,11 @@
    },
    "agenda": {
     "band": "low",
-    "score": 5
+    "score": 3
    },
    "authenticity": {
     "band": "moderate",
-    "score": 55
+    "score": 48
    }
   },
   "Tobeck": {
@@ -231,11 +231,11 @@
    },
    "agenda": {
     "band": "low",
-    "score": 6
+    "score": 0
    },
    "authenticity": {
-    "band": "high",
-    "score": 69
+    "band": "moderate",
+    "score": 61
    }
   },
   "WhatTheHali24": {
@@ -245,11 +245,11 @@
    },
    "agenda": {
     "band": "low",
-    "score": 0
+    "score": 4
    },
    "authenticity": {
     "band": "moderate",
-    "score": 59
+    "score": 48
    }
   },
   "___AirBuddDwyer___": {
@@ -259,11 +259,11 @@
    },
    "agenda": {
     "band": "low",
-    "score": 13
+    "score": 11
    },
    "authenticity": {
-    "band": "high",
-    "score": 66
+    "band": "moderate",
+    "score": 58
    }
   },
   "batmansthebomb": {
@@ -273,11 +273,11 @@
    },
    "agenda": {
     "band": "low",
-    "score": 3
+    "score": 0
    },
    "authenticity": {
-    "band": "high",
-    "score": 66
+    "band": "moderate",
+    "score": 58
    }
   },
   "bigbjarne": {
@@ -287,11 +287,11 @@
    },
    "agenda": {
     "band": "low",
-    "score": 9
+    "score": 4
    },
    "authenticity": {
     "band": "high",
-    "score": 81
+    "score": 71
    }
   },
   "chilidirigible": {
@@ -305,7 +305,7 @@
    },
    "authenticity": {
     "band": "low",
-    "score": 16
+    "score": 14
    }
   },
   "humdingler": {
@@ -315,11 +315,11 @@
    },
    "agenda": {
     "band": "low",
-    "score": 19
+    "score": 15
    },
    "authenticity": {
     "band": "moderate",
-    "score": 52
+    "score": 45
    }
   },
   "runnertrailsBay": {
@@ -333,21 +333,21 @@
    },
    "authenticity": {
     "band": "moderate",
-    "score": 55
+    "score": 46
    }
   },
   "same_subreddit_bot": {
    "automation": {
     "band": "high",
-    "score": 69
+    "score": 73
    },
    "agenda": {
     "band": "moderate",
-    "score": 36
+    "score": 47
    },
    "authenticity": {
     "band": "low",
-    "score": 6
+    "score": 5
    }
   },
   "sneakpeekbot": {
@@ -357,7 +357,7 @@
    },
    "agenda": {
     "band": "moderate",
-    "score": 36
+    "score": 47
    },
    "authenticity": {
     "band": "low",
@@ -371,11 +371,11 @@
    },
    "agenda": {
     "band": "moderate",
-    "score": 36
+    "score": 47
    },
    "authenticity": {
     "band": "low",
-    "score": 17
+    "score": 14
    }
   }
  }

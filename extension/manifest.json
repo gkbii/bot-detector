@@ -3,7 +3,7 @@
   "name": "Bot Detector",
   "version": "0.1.0",
   "description": "Badges Reddit commenters with automation and agenda signals. Scores locally in your browser by default — no account, no key, no server.",
-  "minimum_chrome_version": "111",
+  "minimum_chrome_version": "112",
   "permissions": [
     "storage"
   ],

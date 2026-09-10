@@ -42,6 +42,27 @@
   th { width: 34%; font-weight: 600; }
   code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; }
   .mode { font-weight: 600; }
+  details.log-entry { border-top: 1px solid #e8ebef; padding: 6px 0; }
+  details.log-entry summary { cursor: pointer; font-size: 13.5px; line-height: 1.45; }
+  details.log-entry summary .who { font-weight: 600; }
+  details.log-entry summary .meta { opacity: 0.65; }
+  .log-headline { font-size: 13px; margin: 8px 0 2px; }
+  .log-note { font-size: 12.5px; opacity: 0.72; margin: 2px 0; }
+  .log-axis { font-size: 13px; font-weight: 600; margin: 12px 0 2px; }
+  table.log-signals { margin: 2px 0 4px; }
+  table.log-signals th, table.log-signals td { padding: 4px 8px 4px 0; font-size: 12.5px; }
+  table.log-signals th { width: auto; white-space: nowrap; font-weight: 600; }
+  table.log-signals td.num { white-space: nowrap; }
+  .band-low { color: #14663a; }
+  .band-moderate { color: #7a5300; }
+  .band-high { color: #a3231b; }
+  .band-insufficient-data { opacity: 0.6; }
+  @media (prefers-color-scheme: dark) {
+    details.log-entry { border-top-color: #2b3037; }
+    .band-low { color: #7fd6a2; }
+    .band-moderate { color: #f0c86a; }
+    .band-high { color: #f2a29a; }
+  }
   @media (prefers-color-scheme: dark) {
     body { background: #16181c; color: #e3e7ec; }
     section { border-color: #33383f; }
@@ -59,15 +80,22 @@
 <body>
 
 <h1>Bot Detector</h1>
-<p class="sub">Badges Reddit commenters with automation and agenda signals as you scroll, and shows the working behind every band.</p>
+<p class="sub">Puts a check button next to Reddit commenters; click one for automation and agenda signals, with the working behind every band.</p>
 
 <section>
   <h2 style="margin-top:0">Scanning</h2>
   <label class="row">
     <input type="checkbox" id="autoScan">
     <span>
-      <strong>Badge commenters automatically</strong>
-      <span class="hint">Accounts are looked up as they scroll into view, never all at once. Turning this off removes every badge and stops all lookups.</span>
+      <strong>Show a check button on commenters</strong>
+      <span class="hint">Adds a small “bot?” button next to each name as it scrolls into view. The button itself costs nothing — no account is looked up until you click one. Turning this off removes every badge.</span>
+    </span>
+  </label>
+  <label class="row">
+    <input type="checkbox" id="autoLookup">
+    <span>
+      <strong>Look accounts up automatically</strong>
+      <span class="hint">Off (the default): nothing is fetched until you click a button. On: every commenter is looked up as they scroll into view — the old behaviour. That is ~6 archive requests per name, so busy threads score slowly and lean hard on a free public service.</span>
     </span>
   </label>
   <label class="row">
@@ -118,12 +146,31 @@
   </div>
 </section>
 
+<section>
+  <h2 style="margin-top:0">Signal log</h2>
+  <p class="hint" style="margin-top:0">
+    The full working behind every account scored this browser session: each heuristic's band, weight,
+    measured value and the evidence sentence that justifies it — including the signals that could
+    <em>not</em> be measured, which contribute nothing to a score. This is the answer to "why did this
+    account read low?". Stored only on this machine, capped at 150 accounts, and gone when the browser
+    closes.
+  </p>
+  <div class="status" id="logStatus"></div>
+  <div class="actions">
+    <button id="refreshLog">Refresh</button>
+    <button id="exportLog">Export JSON</button>
+    <button id="clearLog">Clear log</button>
+  </div>
+  <div id="logList" style="margin-top: 10px"></div>
+</section>
+
 <!--
   Permission justification. Least privilege matters more than usual here: this
   thing runs on pages you are logged into. Every entry in manifest.json:
 
-    "storage"                              settings (sync) + the verdict cache (local). No other
-                                           storage area, and nothing is ever sent anywhere from it.
+    "storage"                              settings (sync), the verdict cache (local), and the signal
+                                           log (session — per-machine, gone on browser close). Nothing
+                                           is ever sent anywhere from any of them.
     content_scripts "*://*.reddit.com/*"   reads the Reddit pages you are already looking at, to find
                                            usernames. Note this is the content script's MATCH pattern
                                            and NOT a host_permission: reddit.com is deliberately absent
@@ -152,7 +199,7 @@
   <table>
     <tr>
       <th><code>storage</code></th>
-      <td>Your settings and the verdict cache. Nothing is uploaded from it.</td>
+      <td>Your settings, the verdict cache, and the signal log above. Nothing is uploaded from any of them.</td>
     </tr>
     <tr>
       <th><code>*://*.reddit.com/*</code></th>

@@ -63,6 +63,22 @@
   font-weight: 700 !important;
 }
 
+/* Idle = a button, not a verdict. Dashed and hollow like `insufficient-data`,
+   so an unchecked account never reads as a checked one; hover fills it in to
+   say "this is clickable". */
+.bd-chip-idle {
+  background: transparent !important;
+  border: 1px dashed #a8b0ba !important;
+  color: #5c6470 !important;
+}
+
+.bd-badge:hover .bd-chip-idle,
+.bd-badge:focus-visible .bd-chip-idle {
+  background: #eef0f3 !important;
+  border-style: solid !important;
+  color: #3c4249 !important;
+}
+
 .bd-chip-pending {
   color: #5c6470 !important;
   background: #eef0f3 !important;
@@ -336,6 +352,99 @@
   opacity: 0.7;
 }
 
+/* --- simple (default) view ----------------------------------------------- */
+.bd-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 4px;
+}
+
+.bd-concerns {
+  border-top: 0;
+  padding-top: 6px;
+}
+
+.bd-concern {
+  padding: 7px 0;
+  border-top: 1px dotted #e2e6eb;
+}
+
+.bd-concern:first-child {
+  border-top: 0;
+}
+
+.bd-concern-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bd-concern-head .bd-dot {
+  flex: 0 0 8px;
+}
+
+.bd-concern-text {
+  font-weight: 600;
+  font-size: 12.5px;
+}
+
+.bd-concern-axis {
+  margin-left: auto;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.5;
+}
+
+.bd-concern-links {
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  margin-top: 2px;
+  padding-left: 16px;
+}
+
+.bd-example {
+  font-size: 11.5px;
+  color: #2f6cc4;
+  text-decoration: none;
+}
+
+.bd-example:hover {
+  text-decoration: underline;
+}
+
+.bd-why {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: 11.5px;
+  color: inherit;
+  opacity: 0.55;
+  cursor: pointer;
+}
+
+.bd-why:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.bd-hidden {
+  display: none;
+}
+
+.bd-concern .bd-signal-evidence {
+  padding-left: 16px;
+}
+
+.bd-simple-meta {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #e8ebef;
+}
+
 .bd-coverage {
   padding-top: 10px;
   border-top: 1px solid #e8ebef;
@@ -387,6 +496,18 @@
 /* --- dark ---------------------------------------------------------------- */
 @media (prefers-color-scheme: dark) {
   .bd-chip {
+    background: #2a2f36 !important;
+    color: #d7dce2 !important;
+  }
+
+  .bd-chip-idle {
+    background: transparent !important;
+    border-color: #6b737d !important;
+    color: #9aa3ad !important;
+  }
+
+  .bd-badge:hover .bd-chip-idle,
+  .bd-badge:focus-visible .bd-chip-idle {
     background: #2a2f36 !important;
     color: #d7dce2 !important;
   }
@@ -466,11 +587,36 @@
     border-color: #453a75;
     color: #c3b6f5;
   }
+
+  .bd-concern {
+    border-top-color: #262b31;
+  }
+
+  .bd-simple-meta {
+    border-top-color: #2b3037;
+  }
+
+  .bd-example {
+    color: #7aa7e8;
+  }
 }
 
 /* Reddit rendering dark while the OS is light. Same values, explicit class. */
 .bd-badge.bd-dark .bd-chip {
   background: #2a2f36 !important;
+  color: #d7dce2 !important;
+}
+
+.bd-badge.bd-dark .bd-chip-idle {
+  background: transparent !important;
+  border: 1px dashed #6b737d !important;
+  color: #9aa3ad !important;
+}
+
+.bd-badge.bd-dark:hover .bd-chip-idle,
+.bd-badge.bd-dark:focus-visible .bd-chip-idle {
+  background: #2a2f36 !important;
+  border-style: solid !important;
   color: #d7dce2 !important;
 }
 
@@ -528,4 +674,16 @@
 .bd-panel.bd-dark .bd-btn {
   background: #22262c;
   border-color: #3a4048;
+}
+
+.bd-panel.bd-dark .bd-concern {
+  border-top-color: #262b31;
+}
+
+.bd-panel.bd-dark .bd-simple-meta {
+  border-top-color: #2b3037;
+}
+
+.bd-panel.bd-dark .bd-example {
+  color: #7aa7e8;
 }
