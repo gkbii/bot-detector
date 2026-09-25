@@ -40,20 +40,97 @@
 // system prompt says so explicitly and the schema gives it nowhere to put such
 // a claim.
 
-import config from './config.js';
-import { renderPack } from './pack.js';
+import config from './config.ts';
+import { renderPack } from './pack.ts';
+import { AgendaError, errorMessage } from '../extension/errors.js';
+import type { EvidencePack } from './types.ts';
 
-export class AgendaError extends Error {
-  constructor(code, message) {
-    super(message);
-    this.name = 'AgendaError';
-    this.code = code;
-  }
+/** What the model is asked to return. Nothing here is trusted before checking. */
+export interface ModelCitation {
+  id?: string;
+  note?: string;
+}
+export interface ModelFinding {
+  key?: string;
+  label?: string;
+  rationale?: string;
+  band?: string;
+  citations?: ModelCitation[];
+}
+export interface ModelResponse {
+  band?: string;
+  summary?: string;
+  notes?: string;
+  findings?: ModelFinding[];
 }
 
-let client = null;
+/** A citation that survived being checked against the pack. */
+export interface ResolvedCitation {
+  id: string;
+  note: string | undefined;
+  commentId: string | undefined;
+  group: string | undefined;
+  createdUtc: number | undefined;
+  threadId: string | undefined;
+}
+/** A finding that kept at least one resolvable citation. */
+export interface Finding {
+  key: string | undefined;
+  label: string | undefined;
+  rationale: string | undefined;
+  band: string;
+  citations: ResolvedCitation[];
+}
+/** Something thrown away, and why. A dropped cite is reported, never silent. */
+export interface DroppedCitation {
+  finding: string;
+  citation: string | null;
+  reason: string;
+}
+export interface ResolvedFindings {
+  findings: Finding[];
+  dropped: DroppedCitation[];
+}
 
-async function getClient() {
+// AgendaError moved to ../extension/errors.js, the one coded taxonomy. Still
+// exported from here because server/index.ts and the server tests import it
+// from this module and branch on `instanceof`.
+export { AgendaError };
+
+/**
+ * The SDK surface this file uses, declared structurally rather than imported.
+ *
+ * `@anthropic-ai/sdk` is the repo's one dependency, it is imported LAZILY so the
+ * deterministic half runs without it, and the whole suite typechecks with NO
+ * node_modules present -- so importing its declarations would break exactly the
+ * property that lazy import exists to protect. Three methods and four fields is
+ * the entire contract; a mismatch surfaces on the one call that makes it.
+ */
+export interface MessagesClient {
+  messages: {
+    create(params: {
+      model: string;
+      max_tokens: number;
+      system: string;
+      messages: { role: string; content: string }[];
+      /** Structured output. NOT the deprecated top-level `output_format`. */
+      output_config?: { format: { type: string; schema: unknown } };
+    }): Promise<MessageResponse>;
+  };
+}
+
+export interface MessageResponse {
+  stop_reason?: string;
+  stop_details?: { category?: string } | null;
+  content?: { type: string; text?: string }[];
+  /** Echoed back by the API; recorded on the read so a cached one is auditable. */
+  model?: string;
+  usage?: unknown;
+}
+
+let client: MessagesClient | null = null;
+
+async function getClient(): Promise<MessagesClient> {
   if (client) return client;
   if (!config.anthropicApiKey) {
     throw new AgendaError(
@@ -64,13 +141,19 @@ async function getClient() {
   }
   // Imported lazily so this module (and its tests) load without the SDK
   // installed -- the deterministic half of the server has no need of it.
-  let Anthropic;
+  let Anthropic: new (opts: { apiKey: string }) => MessagesClient;
   try {
-    ({ default: Anthropic } = await import('@anthropic-ai/sdk'));
+    // The specifier is built rather than literal so the typechecker does not
+    // try to resolve a package that is deliberately absent; the lazy import is
+    // what keeps the deterministic half runnable with nothing installed.
+    const specifier = '@anthropic-ai/sdk';
+    ({ default: Anthropic } = (await import(specifier)) as {
+      default: new (opts: { apiKey: string }) => MessagesClient;
+    });
   } catch (err) {
     throw new AgendaError(
       'sdk-missing',
-      `@anthropic-ai/sdk is not installed in bot-detector/ (${err.message})`
+      `@anthropic-ai/sdk is not installed in bot-detector/ (${errorMessage(err)})`
     );
   }
   client = new Anthropic({ apiKey: config.anthropicApiKey });
@@ -78,7 +161,7 @@ async function getClient() {
 }
 
 /** Test-only: injects a fake client (an object exposing `messages.create`). */
-export function _setClientForTests(fake) {
+export function _setClientForTests(fake: MessagesClient | null) {
   client = fake;
 }
 
@@ -179,7 +262,7 @@ Never speculate about identity. Do not guess or imply who the account belongs to
 
 Note what the sample cannot settle. It is a spread across the account's groups and history, not the whole of it.`;
 
-export function buildUserMessage(rendered) {
+export function buildUserMessage(rendered: string): string {
   return `Here is the evidence pack.\n\n${rendered}\n\nWhat does this account's posting look like?`;
 }
 
@@ -195,9 +278,9 @@ export function buildUserMessage(rendered) {
  * returns no LLM block in that case, which is the correct outcome, not an
  * error condition.
  */
-export function resolveFindings(parsed, pack) {
-  const findings = [];
-  const dropped = [];
+export function resolveFindings(parsed: ModelResponse, pack: EvidencePack): ResolvedFindings {
+  const findings: Finding[] = [];
+  const dropped: DroppedCitation[] = [];
 
   for (const finding of parsed.findings || []) {
     const citations = [];
@@ -207,11 +290,13 @@ export function resolveFindings(parsed, pack) {
     const badCitations = [];
 
     for (const citation of finding.citations || []) {
-      const entry = pack.byId.get(citation.id);
+      // A citation with no id at all is as unresolvable as one naming a
+      // comment that is not in the pack, and is reported the same way.
+      const entry = citation.id === undefined ? undefined : pack.byId.get(citation.id);
       if (!entry) {
         badCitations.push({
           finding: finding.key || finding.label || '(unnamed)',
-          citation: citation.id,
+          citation: citation.id ?? null,
           reason: 'no such comment in the evidence pack',
         });
         continue;
@@ -242,7 +327,7 @@ export function resolveFindings(parsed, pack) {
       key: finding.key,
       label: finding.label,
       rationale: finding.rationale,
-      band: BANDS.includes(finding.band) ? finding.band : 'insufficient-data',
+      band: finding.band !== undefined && BANDS.includes(finding.band) ? finding.band : 'insufficient-data',
       citations,
     });
   }
@@ -268,7 +353,12 @@ export async function readAgenda({
   client: injected,
   model = config.agendaModel,
   maxTokens = config.agendaMaxTokens,
-} = {}) {
+}: {
+  pack: EvidencePack;
+  client?: MessagesClient;
+  model?: string;
+  maxTokens?: number;
+}) {
   if (!pack || !Array.isArray(pack.entries) || pack.entries.length === 0) {
     throw new AgendaError('empty-pack', 'readAgenda(): the evidence pack has no comments in it');
   }
@@ -313,13 +403,13 @@ export async function readAgenda({
     throw new AgendaError('no-text-block', 'readAgenda(): no text block in Claude response');
   }
 
-  let parsed;
+  let parsed: ModelResponse;
   try {
-    parsed = JSON.parse(textBlock.text);
+    parsed = JSON.parse(String(textBlock.text)) as ModelResponse;
   } catch (err) {
     throw new AgendaError(
       'unparseable',
-      `readAgenda(): failed to parse Claude's JSON response: ${err.message}`
+      `readAgenda(): failed to parse Claude's JSON response: ${errorMessage(err)}`
     );
   }
 
@@ -338,7 +428,7 @@ export async function readAgenda({
 
   return {
     read: {
-      band: BANDS.includes(parsed.band) ? parsed.band : 'insufficient-data',
+      band: parsed.band !== undefined && BANDS.includes(parsed.band) ? parsed.band : 'insufficient-data',
       summary: parsed.summary || '',
       notes: parsed.notes || '',
       findings,

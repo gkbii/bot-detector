@@ -1,0 +1,20 @@
+{
+  "//": "SELF-CONTAINED ON PURPOSE. Every other repo in the fleet extends a shared base by absolute path; this one is public and must typecheck on a laptop that has never heard of the machine it was written on, so the options are inlined and `scripts/typecheck.js` fetches the compiler with npx rather than reading one from somewhere outside the repo. Sources run on Node 24's native type stripping, so this never emits: it only checks. erasableSyntaxOnly is what keeps a .ts file runnable without a compiler -- no enums, no namespaces, no parameter properties.",
+  "compilerOptions": {
+    "strict": true,
+    "noEmit": true,
+    "target": "es2024",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": false,
+    "erasableSyntaxOnly": true,
+    "allowJs": true,
+    "checkJs": true,
+    "skipLibCheck": true,
+    "types": ["node"]
+  },
+  "//include": "server/ is the typed half. The extension is NOT checked here, and that is a bound rather than an oversight: its browser-facing files are written against the DOM and the `chrome.*` extension API, whose ambient types are npm packages (@types/chrome), and this repo's whole test suite runs with no node_modules. See docs/decisions/0012-the-typed-half-is-the-server.md. extension/errors.js and extension/log.js are pulled in anyway, because server/ imports them.",
+  "include": ["server/**/*", "scripts/render-registry.js", "scripts/typecheck.js"],
+  "exclude": ["node_modules", "data", "server/test", "probe-out"]
+}

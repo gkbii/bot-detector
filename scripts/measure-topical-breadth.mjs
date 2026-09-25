@@ -21,7 +21,7 @@
  * It reads PUBLISHED signals only — `band` and `value`, never `strength`,
  * which `axis.js` strips on purpose. `value.reach` and `value.depth` survive
  * that stripping, so the pre-taper band is recoverable here and no
- * instrumented copy is needed (`measure-jio329.mjs` needs one).
+ * instrumented copy is needed (`measure-band-edge.mjs` needs one).
  *
  * WHAT IT CANNOT SHOW, and this is not hypothetical — it was checked and it
  * came back with two corrections. 19 humans and 8 declared bots, all utility

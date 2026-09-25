@@ -1,13 +1,13 @@
 /**
- * `node scripts/measure-jio329.mjs` — the live re-measure that gates JIO-329.
+ * `node scripts/measure-band-edge.mjs` — the live re-measure that gates JIO-329.
  *
- *   node scripts/measure-jio329.mjs --harvest            # content-blind ranking
- *   node scripts/measure-jio329.mjs --fetch --budget-s 500   # resumable, repeat
- *   node scripts/measure-jio329.mjs --report
- *   node scripts/measure-jio329.mjs --resample --from A.json --rule top --state B.json
- *   node scripts/measure-jio329.mjs --variants           # the weight choice, no network
- *   node scripts/measure-jio329.mjs --corpus             # frozen arm, no network
- *   node scripts/measure-jio329.mjs --read u/a,u/b       # bodies, for hand-reading
+ *   node scripts/measure-band-edge.mjs --harvest            # content-blind ranking
+ *   node scripts/measure-band-edge.mjs --fetch --budget-s 500   # resumable, repeat
+ *   node scripts/measure-band-edge.mjs --report
+ *   node scripts/measure-band-edge.mjs --resample --from A.json --rule top --state B.json
+ *   node scripts/measure-band-edge.mjs --variants           # the weight choice, no network
+ *   node scripts/measure-band-edge.mjs --corpus             # frozen arm, no network
+ *   node scripts/measure-band-edge.mjs --read u/a,u/b       # bodies, for hand-reading
  *
  * GOES TO THE NETWORK, like `capture-corpus.mjs` and `probe-prolific-humans.mjs`
  * and for the same reason, and like both it is run by hand and is not part of
@@ -538,7 +538,7 @@ async function corpusArm(scoreAccount) {
 
 async function main() {
   if (flag('--help')) {
-    console.log('node scripts/measure-jio329.mjs [--harvest] [--resample --from PATH] [--fetch]');
+    console.log('node scripts/measure-band-edge.mjs [--harvest] [--resample --from PATH] [--fetch]');
     console.log('  [--report] [--variants] [--corpus] [--corpus --variants] [--read u/a,u/b]');
     console.log('  --pages N --pace-ms N --sample N --rule even|top --include u/a,u/b');
     console.log('  --budget-s N --subs a,b --state PATH');
@@ -613,7 +613,7 @@ async function main() {
   }
 
   if (flag('--report') || flag('--fetch')) {
-    report(state.rows, `measure-jio329 — harvested ${state.harvestedAt}`, provenance);
+    report(state.rows, `measure-band-edge — harvested ${state.harvestedAt}`, provenance);
   }
 }
 

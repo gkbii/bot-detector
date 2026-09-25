@@ -148,7 +148,7 @@
         return fn(...args);
       } catch (err) {
         if (--errorBudget <= 0) {
-          console.warn('[bot-detector] too many errors, standing down', label, err);
+          console.warn(UI.formatLine('content', 'standing-down', { at: label }), err);
           teardown();
         }
         return undefined;
@@ -169,7 +169,7 @@
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   async function askBackground(message, retries = 1) {
-    if (extensionDead) throw new Error('extension unloaded');
+    if (extensionDead) throw UI.codedError('worker-reloaded', 'extension unloaded');
     let res;
     try {
       res = await chrome.runtime.sendMessage(message);
@@ -177,20 +177,21 @@
       const text = String((err && err.message) || err);
       if (/Extension context invalidated/i.test(text)) {
         teardown();
-        throw new Error('extension was reloaded — refresh the page');
+        throw UI.codedError('worker-reloaded', 'extension was reloaded — refresh the page');
       }
       if (retries > 0 && /connection|Receiving end|port closed/i.test(text)) {
         // The MV3 worker was asleep and is spinning back up. One retry.
         await sleep(400);
         return askBackground(message, retries - 1);
       }
-      throw new Error(text);
+      throw UI.codedError('worker-messaging', text);
     }
-    if (!res) throw new Error('no response from the extension worker');
+    if (!res) throw UI.codedError('worker-silent', 'no response from the extension worker');
     if (!res.ok) {
-      const err = new Error((res.error && res.error.message) || 'lookup failed');
-      err.kind = res.error && res.error.kind;
-      throw err;
+      throw UI.codedError(
+        (res.error && (res.error.code || res.error.kind)) || 'worker-messaging',
+        (res.error && res.error.message) || 'lookup failed'
+      );
     }
     return res.data;
   }

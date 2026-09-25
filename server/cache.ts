@@ -29,26 +29,49 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
-import config from './config.js';
+import config from './config.ts';
 
 const SCHEMA_VERSION = 1;
 
-function ensureDir(filePath) {
+/** The three tables. One shape each, differing only in the TTL that fills expires_at. */
+const TABLES = ['profiles', 'verdicts', 'llm_reads'] as const;
+type Table = (typeof TABLES)[number];
+
+/** A cache hit: the stored value plus when it landed and when it dies. */
+export interface CacheHit<T = unknown> {
+  value: T;
+  storedAt: number;
+  expiresAt: number;
+}
+
+/** What a write reports back. */
+export interface CacheWrite {
+  storedAt: number;
+  expiresAt: number;
+}
+
+export interface CacheOptions {
+  /** Defaults to config.dbPath; ':memory:' in tests. */
+  dbPath?: string;
+  /** Injectable clock, in seconds, for expiry tests. */
+  now?: () => number;
+}
+
+function ensureDir(filePath: string): void {
   if (filePath === ':memory:') return;
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
 }
 
-function nowSeconds() {
+function nowSeconds(): number {
   return Math.floor(Date.now() / 1000);
 }
 
 export class Cache {
-  /**
-   * @param {object} [opts]
-   * @param {string} [opts.dbPath] - defaults to config.dbPath; ':memory:' in tests.
-   * @param {() => number} [opts.now] - injectable clock (seconds), for expiry tests.
-   */
-  constructor({ dbPath = config.dbPath, now = nowSeconds } = {}) {
+  readonly dbPath: string;
+  readonly now: () => number;
+  readonly db: DatabaseSync;
+
+  constructor({ dbPath = config.dbPath, now = nowSeconds }: CacheOptions = {}) {
     ensureDir(dbPath);
     this.dbPath = dbPath;
     this.now = now;
@@ -62,7 +85,7 @@ export class Cache {
     // One shape for all three tables: a (platform, username) key, a stored
     // JSON payload, and an absolute expiry. Only the TTL that produced
     // `expires_at` differs between them.
-    for (const table of ['profiles', 'verdicts', 'llm_reads']) {
+    for (const table of TABLES) {
       this.db.exec(`
         CREATE TABLE IF NOT EXISTS ${table} (
           platform TEXT NOT NULL,
@@ -81,11 +104,11 @@ export class Cache {
   }
 
   /** Usernames are case-insensitive on Reddit; the cache key follows. */
-  #key(username) {
+  #key(username: string): string {
     return String(username).toLowerCase();
   }
 
-  #get(table, platform, username) {
+  #get<T>(table: Table, platform: string, username: string): CacheHit<T> | null {
     const row = this.db
       .prepare(
         `SELECT payload, stored_at, expires_at FROM ${table}
@@ -93,7 +116,8 @@ export class Cache {
       )
       .get(platform, this.#key(username));
     if (!row) return null;
-    if (row.expires_at <= this.now()) {
+    const expiresAt = Number(row.expires_at);
+    if (expiresAt <= this.now()) {
       // Miss AND remove: an expired profile still holds comment bodies, and
       // the retention rule is about what is on disk, not what is returned.
       this.db
@@ -101,18 +125,18 @@ export class Cache {
         .run(platform, this.#key(username));
       return null;
     }
-    let payload;
+    let payload: T;
     try {
-      payload = JSON.parse(row.payload);
+      payload = JSON.parse(String(row.payload)) as T;
     } catch {
       // A corrupt row is a cache miss, not a crash -- everything here is
       // regenerable by definition.
       return null;
     }
-    return { value: payload, storedAt: row.stored_at, expiresAt: row.expires_at };
+    return { value: payload, storedAt: Number(row.stored_at), expiresAt };
   }
 
-  #put(table, platform, username, value, ttlSeconds) {
+  #put(table: Table, platform: string, username: string, value: unknown, ttlSeconds: number): CacheWrite {
     const storedAt = this.now();
     const expiresAt = storedAt + ttlSeconds;
     this.db
@@ -129,27 +153,27 @@ export class Cache {
     return { storedAt, expiresAt };
   }
 
-  getProfile(platform, username) {
+  getProfile(platform: string, username: string): CacheHit | null {
     return this.#get('profiles', platform, username);
   }
 
-  putProfile(platform, username, profile, ttlSeconds = config.profileTtlSeconds) {
+  putProfile(platform: string, username: string, profile: unknown, ttlSeconds = config.profileTtlSeconds): CacheWrite {
     return this.#put('profiles', platform, username, profile, ttlSeconds);
   }
 
-  getVerdict(platform, username) {
+  getVerdict(platform: string, username: string): CacheHit | null {
     return this.#get('verdicts', platform, username);
   }
 
-  putVerdict(platform, username, verdict, ttlSeconds = config.verdictTtlSeconds) {
+  putVerdict(platform: string, username: string, verdict: unknown, ttlSeconds = config.verdictTtlSeconds): CacheWrite {
     return this.#put('verdicts', platform, username, verdict, ttlSeconds);
   }
 
-  getLlmRead(platform, username) {
+  getLlmRead(platform: string, username: string): CacheHit | null {
     return this.#get('llm_reads', platform, username);
   }
 
-  putLlmRead(platform, username, read, ttlSeconds = config.llmTtlSeconds) {
+  putLlmRead(platform: string, username: string, read: unknown, ttlSeconds = config.llmTtlSeconds): CacheWrite {
     return this.#put('llm_reads', platform, username, read, ttlSeconds);
   }
 
@@ -158,10 +182,10 @@ export class Cache {
    * after each write; see the privacy note in this file's header for why this
    * is a delete rather than a read-time filter.
    */
-  purgeExpired() {
+  purgeExpired(): number {
     const cutoff = this.now();
     let removed = 0;
-    for (const table of ['profiles', 'verdicts', 'llm_reads']) {
+    for (const table of TABLES) {
       const result = this.db.prepare(`DELETE FROM ${table} WHERE expires_at <= ?`).run(cutoff);
       removed += Number(result.changes || 0);
     }
@@ -169,9 +193,9 @@ export class Cache {
   }
 
   /** Test/ops helper: forget one account across all three tables. */
-  forget(platform, username) {
+  forget(platform: string, username: string): number {
     let removed = 0;
-    for (const table of ['profiles', 'verdicts', 'llm_reads']) {
+    for (const table of TABLES) {
       const result = this.db
         .prepare(`DELETE FROM ${table} WHERE platform = ? AND username = ?`)
         .run(platform, this.#key(username));
@@ -180,16 +204,16 @@ export class Cache {
     return removed;
   }
 
-  stats() {
-    const out = {};
-    for (const table of ['profiles', 'verdicts', 'llm_reads']) {
+  stats(): Record<Table, number> {
+    const out = {} as Record<Table, number>;
+    for (const table of TABLES) {
       const row = this.db.prepare(`SELECT COUNT(*) AS n FROM ${table}`).get();
-      out[table] = Number(row.n || 0);
+      out[table] = Number(row?.n ?? 0);
     }
     return out;
   }
 
-  close() {
+  close(): void {
     this.db.close();
   }
 }

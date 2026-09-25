@@ -612,7 +612,42 @@
     if (openPanelEl && openAnchor) position(openPanelEl, openAnchor);
   }, true);
 
+  /**
+   * The coded-error factory for the two classic content scripts.
+   *
+   * They cannot import ../errors.js -- Chrome does not support ES modules for
+   * declaratively-injected content scripts -- so the codes are literals here
+   * and test/errors.test.js asserts every one of them is declared in
+   * errors.js. A test rather than a comment, because a second list that
+   * nothing compares is exactly how the two drift apart.
+   */
+  function codedError(code, message) {
+    const err = new Error(message);
+    err.code = code;
+    err.kind = code; // the alias the worker envelope and this file were written against
+    return err;
+  }
+
+  /**
+   * `[bot-detector:<domain>] event key=value` -- the same line shape
+   * extension/log.js produces, duplicated here for the one reason the coded-error
+   * factory is duplicated: a declaratively-injected content script cannot import
+   * anything. test/errors.test.js holds the two formats to each other.
+   */
+  function formatLine(domain, event, fields) {
+    const tail = Object.entries(fields || {})
+      .filter(([, value]) => value !== undefined)
+      .map(([key, value]) => {
+        const text = String(value);
+        return /[\s"]/.test(text) ? `${key}=${JSON.stringify(text)}` : `${key}=${text}`;
+      })
+      .join(' ');
+    return `[bot-detector:${domain}] ${event}${tail ? ` ${tail}` : ''}`;
+  }
+
   window.__bdUI = {
+    codedError,
+    formatLine,
     createBadge,
     setIdle,
     setPending,

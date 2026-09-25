@@ -12,7 +12,7 @@ inside `extension/lib/` and is loaded directly by an MV3 service worker — whic
 only supports ES modules (`"type": "module"` in `manifest.json`). The optional
 server then imports *those same files* through `../extension/lib/...`, so there
 is one implementation of the scoring with no build step, no bundler and no copy.
-Node 22 loads ESM natively, so honouring the extension's constraint costs the
+Node loads ESM natively, so honouring the extension's constraint costs the
 server nothing.
 
 The same reasoning is written into `package.json`'s `//type` comment, at the

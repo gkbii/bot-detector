@@ -18,6 +18,8 @@
  * must be shape-identical, so the UI has one renderer.
  */
 
+import { codedError } from '../errors.js';
+
 const DEFAULT_TIMEOUT_MS = 20000;
 const DEEP_TIMEOUT_MS = 90000;
 const HEALTH_TIMEOUT_MS = 5000;
@@ -52,10 +54,7 @@ function timeoutSignal(ms, outerSignal) {
 }
 
 function backendError(message, kind, extra = {}) {
-  const err = new Error(message);
-  err.kind = kind || 'backend-error';
-  Object.assign(err, extra);
-  return err;
+  return codedError(kind || 'backend-error', message, extra);
 }
 
 /**

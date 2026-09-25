@@ -6,7 +6,7 @@
  *   node scripts/measure-quoted-titles.mjs --report
  *
  * GOES TO THE NETWORK, like `capture-corpus.mjs`, `probe-prolific-humans.mjs`,
- * `measure-jio329.mjs` and `measure-interval-crossing.mjs`, and for the same
+ * `measure-band-edge.mjs` and `measure-interval-crossing.mjs`, and for the same
  * reason. Run by hand; not part of `npm test` or `npm run evaluate`.
  *
  * WHY IT HAS TO FETCH. JIO-349 stops `stripUrls()` from crediting an account
@@ -48,7 +48,7 @@
  * fails loudly if its needle has moved, and the patched copy is PROVEN to
  * differ from the original on a fixture per rule before any number is believed
  * — a silent no-op there would print "nothing moved" and read as a clean
- * result. This is `measure-jio329.mjs`'s device, kept, for the reason it was
+ * result. This is `measure-band-edge.mjs`'s device, kept, for the reason it was
  * built: a before-arm reconstructed by hand in the script drifts away from the
  * code it claims to be a copy of.
  *

@@ -23,7 +23,9 @@
 // `BOT_AGENDA_MAX_COMMENTS` bounds both, and bodies are truncated rather than
 // sent whole.
 
-import config from './config.js';
+import config from './config.ts';
+import { BotDetectorError } from '../extension/errors.js';
+import type { AccountProfile, EvidencePack, ProfileComment, ProfilePost } from './types.ts';
 
 const TRUNCATION_MARKER = ' …[truncated]';
 
@@ -32,13 +34,13 @@ const TRUNCATION_MARKER = ' …[truncated]';
  * midpoints, breadth-first. Deterministic, so two runs over the same profile
  * produce the same pack (and therefore the same cache-worthy result).
  */
-export function spreadOrder(n) {
-  const out = [];
+export function spreadOrder(n: number): number[] {
+  const out: number[] = [];
   if (!Number.isFinite(n) || n <= 0) return out;
   const seen = new Array(n).fill(false);
-  const queue = [[0, n - 1]];
+  const queue: [number, number][] = [[0, n - 1]];
   while (queue.length > 0) {
-    const [lo, hi] = queue.shift();
+    const [lo, hi] = queue.shift() as [number, number];
     if (lo > hi) continue;
     const mid = Math.floor((lo + hi) / 2);
     if (!seen[mid]) {
@@ -51,17 +53,17 @@ export function spreadOrder(n) {
   return out;
 }
 
-function byTimeAsc(a, b) {
+function byTimeAsc(a: ProfileComment, b: ProfileComment): number {
   const at = Number(a.createdUtc) || 0;
   const bt = Number(b.createdUtc) || 0;
   if (at !== bt) return at - bt;
   return String(a.id || '').localeCompare(String(b.id || ''));
 }
 
-function usableComments(profile) {
+function usableComments(profile: AccountProfile): ProfileComment[] {
   const comments = Array.isArray(profile?.comments) ? profile.comments : [];
   return comments.filter(
-    (c) => c && typeof c.body === 'string' && c.body.trim().length > 0
+    (c): c is ProfileComment => Boolean(c) && typeof c.body === 'string' && c.body.trim().length > 0
   );
 }
 
@@ -70,15 +72,16 @@ function usableComments(profile) {
  * timeline. Exported separately from buildPack() so the selection rule can be
  * tested without constructing a whole profile.
  */
-export function selectComments(comments, max) {
+export function selectComments(comments: readonly ProfileComment[], max: number): ProfileComment[] {
   const sorted = [...comments].sort(byTimeAsc);
   if (sorted.length <= max) return sorted;
 
-  const buckets = new Map();
+  const buckets = new Map<string, ProfileComment[]>();
   for (const comment of sorted) {
     const key = comment.group || '(unknown)';
-    if (!buckets.has(key)) buckets.set(key, []);
-    buckets.get(key).push(comment);
+    const bucket = buckets.get(key) ?? [];
+    if (bucket.length === 0) buckets.set(key, bucket);
+    bucket.push(comment);
   }
 
   // Largest group first so a dominant subreddit is never crowded out by a
@@ -90,14 +93,14 @@ export function selectComments(comments, max) {
 
   const cursors = ordered.map(([, items]) => ({ items, order: spreadOrder(items.length), at: 0 }));
 
-  const picked = [];
+  const picked: ProfileComment[] = [];
   let progressed = true;
   while (picked.length < max && progressed) {
     progressed = false;
     for (const cursor of cursors) {
       if (picked.length >= max) break;
       if (cursor.at >= cursor.order.length) continue;
-      picked.push(cursor.items[cursor.order[cursor.at]]);
+      picked.push(cursor.items[cursor.order[cursor.at] as number] as ProfileComment);
       cursor.at += 1;
       progressed = true;
     }
@@ -106,13 +109,13 @@ export function selectComments(comments, max) {
   return picked.sort(byTimeAsc);
 }
 
-function truncate(body, maxChars) {
+function truncate(body: string, maxChars: number): string {
   const text = body.replace(/\s+/g, ' ').trim();
   if (text.length <= maxChars) return text;
   return text.slice(0, maxChars) + TRUNCATION_MARKER;
 }
 
-function isoDay(createdUtc) {
+function isoDay(createdUtc: number | undefined): string {
   const seconds = Number(createdUtc);
   if (!Number.isFinite(seconds) || seconds <= 0) return 'unknown-date';
   return new Date(seconds * 1000).toISOString().slice(0, 10);
@@ -135,12 +138,12 @@ function isoDay(createdUtc) {
  *   selected: number, available: number
  * }}
  */
-export function buildPack(profile, {
+export function buildPack(profile: AccountProfile, {
   maxComments = config.agendaMaxComments,
   maxCommentChars = config.agendaMaxCommentChars,
-} = {}) {
+}: { maxComments?: number; maxCommentChars?: number } = {}): EvidencePack {
   if (!profile || typeof profile !== 'object') {
-    throw new Error('buildPack(): no profile');
+    throw new BotDetectorError('no-profile', 'buildPack(): no profile');
   }
 
   const available = usableComments(profile);
@@ -149,12 +152,12 @@ export function buildPack(profile, {
   const entries = selected.map((comment, i) => ({
     id: `C${i + 1}`,
     comment,
-    text: truncate(comment.body, maxCommentChars),
+    text: truncate(String(comment.body), maxCommentChars),
   }));
 
   const byId = new Map(entries.map((entry) => [entry.id, entry]));
 
-  const groupCounts = new Map();
+  const groupCounts = new Map<string, number>();
   for (const comment of available) {
     const key = comment.group || '(unknown)';
     groupCounts.set(key, (groupCounts.get(key) || 0) + 1);
@@ -175,7 +178,7 @@ export function buildPack(profile, {
       karma: profile.karma ?? null,
       counts: profile.counts ?? null,
       postGroups: Array.isArray(profile.posts)
-        ? [...new Set(profile.posts.map((p) => p?.group).filter(Boolean))]
+        ? [...new Set(profile.posts.map((p: ProfilePost) => p?.group).filter((g): g is string => Boolean(g)))]
         : [],
     },
     coverage: profile.coverage ?? null,
@@ -189,8 +192,8 @@ export function buildPack(profile, {
  * buildPack() so a `--dry-run` (or a test) can print exactly what would be
  * sent without an API key in the environment.
  */
-export function renderPack(pack) {
-  const lines = [];
+export function renderPack(pack: EvidencePack): string {
+  const lines: string[] = [];
   lines.push(`Account: ${pack.username} (${pack.platform})`);
   if (pack.account.accountAgeDays != null) {
     lines.push(`Account age: ${pack.account.accountAgeDays} days`);

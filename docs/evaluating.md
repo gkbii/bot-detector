@@ -22,20 +22,20 @@ does not name one). And:
 npm run evaluate                # the table, the invariants, and a diff. exit 1 if anything moved
 npm run evaluate -- --detail    # one line per account
 npm run evaluate -- --update    # accept today's scores as the new baseline
-node scripts/capture-corpus.mjs # rebuilds test/corpus/ from the live API
-node scripts/probe-prolific-humans.mjs   # hunts the prolific human — EVALUATION.md 4a
-node scripts/measure-jio329.mjs --corpus # JIO-329's cost, offline; --harvest/--fetch go live
-node scripts/measure-agenda-shape.mjs    # the agenda hold — EVALUATION.md 4c, offline
-node scripts/measure-reply-share.mjs     # the reply-share spread — EVALUATION.md 4d, offline
-node scripts/measure-interval-cv.mjs     # the interval-CV spread — EVALUATION.md 4e, offline
-node scripts/measure-topical-breadth.mjs # the items-per-group gap — EVALUATION.md 4f, offline
-node scripts/measure-quoted-titles.mjs --sweep --profiles  # JIO-349's cost to people; goes live
-node scripts/measure-interval-crossing.mjs # who JIO-346 crossed — EVALUATION.md 4e, LIVE
+npm run capture:corpus          # rebuilds test/corpus/ from the live API. LIVE
+npm run measure:prolific-humans          # hunts the prolific human — EVALUATION.md 4a. LIVE
+npm run measure:band-edge -- --corpus    # the band-edge cost, offline; --harvest/--fetch go LIVE
+npm run measure:agenda-shape             # the agenda hold — EVALUATION.md 4c, offline
+npm run measure:reply-share              # the reply-share spread — EVALUATION.md 4d, offline
+npm run measure:interval-cv              # the interval-CV spread — EVALUATION.md 4e, offline
+npm run measure:topical-breadth          # the items-per-group gap — EVALUATION.md 4f, offline
+npm run measure:quoted-titles -- --sweep --profiles  # the quote strip's cost to people. LIVE
+npm run measure:interval-crossing        # who the CV gate crossed — EVALUATION.md 4e. LIVE
 ```
 
 `capture-corpus.mjs`, `probe-prolific-humans.mjs` and
 `measure-interval-crossing.mjs` are the three that always touch the network, and
-none of them is part of `npm test`. `measure-jio329.mjs` goes either way:
+none of them is part of `npm test`. `measure-band-edge.mjs` goes either way:
 `--corpus`, `--variants` and `--report` read `test/corpus/` or a state file
 already on disk and fetch nothing, while `--harvest`/`--fetch` go live.
 `measure-agenda-shape.mjs`, `measure-reply-share.mjs`, `measure-interval-cv.mjs`
@@ -192,7 +192,7 @@ compares today's code against a fixed input, which means it is blind to the
 archive changing, to the fetch window changing, and to both classes of defect
 this repo has actually shipped: the forged 12-year dormancy and the unbound
 `globalThis.fetch`, each of which passed a fully green suite. Re-capture with
-`node scripts/capture-corpus.mjs --force` and re-read the accounts by hand
+`npm run capture:corpus -- --force` and re-read the accounts by hand
 before claiming anything about live behaviour. The capture is deliberately not
 part of `npm test` — it is the one thing here that fetches, it paces itself
 because arctic-shift answers throttling with a 422, and it resumes per account

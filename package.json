@@ -5,15 +5,12 @@
   "description": "Reddit account signal analysis — three separate scores (automation, agenda, authenticity), shared by the Chrome extension and the optional Node server.",
 
   "//type": [
-    "ESM, deliberately — this is the ONE package in BigBrain that is not CommonJS.",
-    "The Chrome extension is the primary artifact and must install with",
-    "load-unpacked and zero setup, so the scoring core lives inside extension/lib/",
-    "and is loaded directly by an MV3 service worker, which only supports ESM",
-    "(\"type\": \"module\" in manifest.json). The optional Node server imports the",
-    "very same files via ../extension/lib/..., so there is one implementation of",
-    "the scoring with no build step, no bundler and no copy. Node 22 loads ESM",
-    "natively, so honouring the extension's constraint costs nothing here.",
-    "skill-backend/ and task-runner/ stay CommonJS; do not 'fix' this to match them."
+    "ESM because the Chrome extension is the primary artifact: it must install",
+    "load-unpacked with zero setup, so the scoring core lives in extension/lib/",
+    "and is loaded directly by an MV3 service worker, which only supports ESM.",
+    "The optional Node server imports the very same files, so there is one",
+    "implementation of the scoring with no build step, no bundler and no copy.",
+    "See docs/decisions/0001-esm-deliberately.md."
   ],
   "type": "module",
 
@@ -22,58 +19,68 @@
     "core have NO dependencies and must keep none: they use fetch and node:test",
     "only, per the convention of preferring Node's built-ins to npm packages,",
     "and a dependency there would additionally have to survive being loaded",
-    "unbundled by a browser extension. @anthropic-ai/sdk is used by server/",
-    "agenda.js alone, for the same Messages API call task-runner already depends",
-    "on it for -- pure JS, no compiler and no Homebrew formula, so it satisfies",
-    "the convention the same way that one does. server/agenda.js imports it",
-    "LAZILY, so `npm install` is not needed to run the extension, the scoring",
-    "core, or the deterministic half of the server; a backend started without it",
-    "still serves verdicts and reports the missing agenda read rather than dying."
+    "unbundled by a browser extension. @anthropic-ai/sdk is used by",
+    "server/agenda.ts alone and is imported LAZILY, so `npm install` is not",
+    "needed to run the extension, the scoring core, the test suite, or the",
+    "deterministic half of the server; a backend started without it still serves",
+    "verdicts and reports the missing agenda read rather than dying. The",
+    "typechecker is fetched by scripts/typecheck.js with npx for the same",
+    "reason -- see docs/decisions/0012-the-typed-half-is-the-server.md."
   ],
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0"
   },
 
   "engines": {
-    "node": ">=22"
+    "node": ">=24"
   },
+
   "//scripts": [
-    "Both test globs are needed: test/ holds the shared core's suite and",
-    "server/test/ the backend's. A single test/*.test.js glob silently skips",
-    "the server.",
+    "`test` typechecks and then runs both suites. Both globs are needed: test/",
+    "holds the shared core's suite and server/test/ the backend's, and a single",
+    "test/*.test.js glob silently skips the server.",
     "",
-    "`evaluate` reprints EVALUATION.md's headline band table from the 27",
-    "profiles frozen in test/corpus/ and exits non-zero if any of the 81 scores",
-    "moved. It reads nothing but JSON -- no network, no node_modules -- so",
-    "'the 17-human / 8-bot separation is not regressed' is a command rather",
-    "than a hand re-measure (JIO-343). `capture:corpus` is one of the five",
-    "scripts here that go to the network -- probe-prolific-humans.mjs (JIO-344),",
-    "measure-jio329.mjs (JIO-405), measure-interval-crossing.mjs (JIO-346) and",
-    "measure-quoted-titles.mjs (JIO-349) are the others -- and none is part of",
-    "`test`; all five are run by hand.",
+    "`evaluate` reprints EVALUATION.md's headline band table from the profiles",
+    "frozen in test/corpus/ and exits non-zero if any of the 81 scores moved. It",
+    "reads nothing but JSON -- no network, no node_modules -- so 'the human/bot",
+    "separation is not regressed' is a command rather than a hand re-measure.",
     "",
-    "The last two fetch BECAUSE the corpus is frozen, which is why they are the",
-    "two measure-* scripts deliberately ABSENT from corpus.test.js's no-network",
-    "allowlist. measure-interval-crossing asks whether JIO-346 pushed a real",
-    "person over the band edge, and a 2026-08-18 snapshot is what hid that for",
-    "three days. measure-quoted-titles asks what JIO-349's quoted-title strip",
-    "costs an ordinary person, and 19 of the 27 frozen profiles carry synthetic",
-    "bodies with no markdown links, so the corpus answers zero by construction.",
-    "",
-    "measure-agenda-shape.mjs (JIO-424) is",
-    "run by hand too but never fetches: like `evaluate` it reads test/corpus/",
-    "and nothing else, which is why it has no script entry to protect it from",
-    "being run by accident. measure-reply-share.mjs (JIO-345),",
-    "measure-interval-cv.mjs (JIO-346) and measure-topical-breadth.mjs (JIO-347)",
-    "are the second, third and fourth of those and are the same shape: hand-run,",
-    "no network, no script entry. test/corpus.test.js holds all four to the",
-    "no-network claim at the import graph."
+    "The measure:* scripts are the hand-run measurements behind EVALUATION.md's",
+    "findings. Five of the eight go to the network and none is part of `test`;",
+    "docs/evaluating.md says which, and why the ones that fetch cannot read the",
+    "frozen corpus instead. test/corpus.test.js holds the no-network ones to",
+    "that claim at the import graph."
   ],
   "scripts": {
-    "start": "node server/index.js",
-    "dev": "node --watch server/index.js",
-    "test": "node --test test/*.test.js server/test/*.test.js",
+    "start": "node server/index.ts",
+    "dev": "node --watch server/index.ts",
+    "typecheck": "node scripts/typecheck.js",
+    "test": "npm run typecheck && node --test test/*.test.js test/*.test.cjs server/test/*.test.js",
+    "registry": "node scripts/render-registry.js",
     "evaluate": "node scripts/evaluate.mjs",
-    "capture:corpus": "node scripts/capture-corpus.mjs"
+    "capture:corpus": "node scripts/capture-corpus.mjs",
+    "measure:agenda-shape": "node scripts/measure-agenda-shape.mjs",
+    "measure:band-edge": "node scripts/measure-band-edge.mjs",
+    "measure:interval-crossing": "node scripts/measure-interval-crossing.mjs",
+    "measure:interval-cv": "node scripts/measure-interval-cv.mjs",
+    "measure:prolific-humans": "node scripts/probe-prolific-humans.mjs",
+    "measure:quoted-titles": "node scripts/measure-quoted-titles.mjs",
+    "measure:reply-share": "node scripts/measure-reply-share.mjs",
+    "measure:topical-breadth": "node scripts/measure-topical-breadth.mjs"
+  },
+
+  "//conformance": [
+    "The per-repo knobs test/conformance.test.cjs reads. srcDirs is the code the",
+    "standard is asserted over: extension/ is the product and server/ the",
+    "optional backend, and there is no src/ because extension/ must stay",
+    "copy-out-able. `server: false` because the server is optional and has no",
+    "supervisor to restart -- `npm start` is the only way in."
+  ],
+  "conformance": {
+    "srcDirs": [
+      "extension",
+      "server"
+    ],
+    "server": false
   }
 }

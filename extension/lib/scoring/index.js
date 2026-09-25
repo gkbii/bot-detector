@@ -31,6 +31,7 @@ import {
 import { scoreAutomation } from './automation.js';
 import { scoreAgenda } from './agenda.js';
 import { scoreAuthenticity } from './authenticity.js';
+import { BotDetectorError } from '../../errors.js';
 
 export { BAND, MIN_COMMENTS_FOR_SCORING, MIN_HISTORY_DAYS } from './axis.js';
 
@@ -41,7 +42,7 @@ export { BAND, MIN_COMMENTS_FOR_SCORING, MIN_HISTORY_DAYS } from './axis.js';
  */
 export function scoreAccount(profile, opts = {}) {
   if (!profile || typeof profile !== 'object') {
-    throw new TypeError('scoreAccount: an AccountProfile is required');
+    throw new BotDetectorError('bad-profile', 'scoreAccount: an AccountProfile is required');
   }
 
   const gate = checkHistory(profile);

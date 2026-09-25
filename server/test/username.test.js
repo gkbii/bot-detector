@@ -4,7 +4,7 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { normalisePlatform, normaliseUsername } from '../username.js';
+import { normalisePlatform, normaliseUsername } from '../username.ts';
 
 test('accepts a plain handle', () => {
   assert.deepEqual(normaliseUsername('spez'), { ok: true, username: 'spez' });

@@ -25,16 +25,12 @@
 
 import { fetchAccount } from '../lib/sources/arcticShift.js';
 import { scoreAccount } from '../lib/scoring/index.js';
+import { AccountNotFoundError, BotDetectorError } from '../errors.js';
 
-/** Thrown when the account itself could not be resolved (deleted, suspended, typo). */
-export class AccountNotFoundError extends Error {
-  constructor(username) {
-    super(`No archive data for u/${username}`);
-    this.name = 'AccountNotFoundError';
-    this.kind = 'not-found';
-    this.username = username;
-  }
-}
+// AccountNotFoundError moved to ../errors.js, the one coded taxonomy, and is
+// re-exported here because providers/index.js and the worker import it from
+// this module.
+export { AccountNotFoundError };
 
 /**
  * Score an account entirely in the browser.
@@ -49,9 +45,10 @@ export async function getLocalVerdict(username, opts = {}) {
   if (typeof fetchAccount !== 'function' || typeof scoreAccount !== 'function') {
     // Shape check rather than existence check — a core that loaded but renamed
     // its exports should fail loudly here, not silently score nothing.
-    const err = new Error('Core scoring modules loaded but do not match the expected interface');
-    err.kind = 'core-mismatch';
-    throw err;
+    throw new BotDetectorError(
+      'core-mismatch',
+      'Core scoring modules loaded but do not match the expected interface'
+    );
   }
 
   // `fetchImpl` is bound here on purpose, and it is not optional.
@@ -72,9 +69,7 @@ export async function getLocalVerdict(username, opts = {}) {
 
   const verdict = scoreAccount(profile, { platform });
   if (!verdict || typeof verdict !== 'object') {
-    const err = new Error('scoreAccount() returned no verdict');
-    err.kind = 'core-mismatch';
-    throw err;
+    throw new BotDetectorError('core-mismatch', 'scoreAccount() returned no verdict');
   }
   return verdict;
 }

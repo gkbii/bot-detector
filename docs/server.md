@@ -45,18 +45,18 @@ neutral badge.
 
 ### What the server adds — and it is only these two things
 
-1. **A Claude agenda read** (`server/agenda.js`). The judgement pattern-matching
+1. **A Claude agenda read** (`server/agenda.ts`). The judgement pattern-matching
    cannot make: the difference between narrative repetition and a person with a
    hobbyhorse, or between stock talking points and an opinion someone genuinely
    holds and has held for three years. Both look identical to a frequency
    counter. This is why an API key is involved at all, and **the key must never
    ship in the extension** — a Chrome extension's bundle is readable by anyone
    who installs it, so a key put there is a published key.
-2. **A shared SQLite cache** (`server/cache.js`). A lookup done on the laptop is
+2. **A shared SQLite cache** (`server/cache.ts`). A lookup done on the laptop is
    free on the desktop.
 
 The deterministic verdict is *the extension's own code*
-(`server/deterministic.js` imports `../extension/lib/...` lazily). The server
+(`server/deterministic.ts` imports `../extension/lib/...` lazily). The server
 has no second opinion about it. Re-implementing the fetch or the scoring here
 would immediately produce two answers to the same question that drift apart
 silently.
@@ -72,7 +72,7 @@ extension's card says the read was unavailable.
 
 ### Setting the server up, if you want it
 
-Requires Node 22+ (for native ESM and `node:sqlite`) and an
+Requires Node 24+ (for native ESM, `node:sqlite` and type stripping) and an
 [Anthropic API key](https://console.anthropic.com/). Neither is needed for the
 extension itself.
 
@@ -100,7 +100,7 @@ things listed above and nothing else.
 
 ### Citations are verified, not trusted
 
-`server/pack.js` builds a numbered evidence pack in plain deterministic code —
+`server/pack.ts` builds a numbered evidence pack in plain deterministic code —
 no network, no model — which is what makes citation verification possible at
 all: the model can only cite ids that this file minted. On return, every cited
 id is resolved against the pack that was actually sent:
@@ -132,7 +132,7 @@ party, so bodies are truncated rather than sent whole.
 
 ### Privacy rules the server holds itself to
 
-Stated in `server/index.js`'s header because this thing judges real people:
+Stated in `server/index.ts`'s header because this thing judges real people:
 
 * Only public data is ever touched — the same public archive the extension reads
   with no credentials. Nothing logs in as anyone, scrapes anything gated, or
@@ -151,7 +151,7 @@ Stated in `server/index.js`'s header because this thing judges real people:
   one fetch, a verdict is a cheap pure
   function of it, an LLM read is an Opus call. A stale verdict must not drag a
   still-valid LLM read down with it.
-* `server/username.js` is a **security boundary, not a nicety**: its output is
+* `server/username.ts` is a **security boundary, not a nicety**: its output is
   interpolated into an outbound URL, so anything that is not a real Reddit
   handle is rejected rather than sanitised — "sanitised" is where SSRF lives.
   Reddit handles are `[A-Za-z0-9_-]{3,20}`, a strict subset of what is safe in a

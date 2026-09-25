@@ -135,6 +135,7 @@
  */
 
 import { PLATFORMS, buildCoverage, buildProfile } from './profile.js';
+import { BotDetectorError } from '../../errors.js';
 
 const BASE_URL = 'https://arctic-shift.photon-reddit.com';
 export const SOURCE_NAME = 'arctic-shift';
@@ -214,7 +215,7 @@ export async function fetchAccount(username, opts = {}) {
   } = opts;
 
   if (typeof fetchImpl !== 'function') {
-    throw new TypeError('fetchAccount: no fetch implementation available');
+    throw new BotDetectorError('no-fetch-impl', 'fetchAccount: no fetch implementation available');
   }
 
   const name = normalizeUsername(username);
@@ -479,7 +480,8 @@ async function requestData(ctx, path, params) {
 
   for (let attempt = 0; attempt <= MAX_RETRIES_PER_REQUEST; attempt += 1) {
     if (!spendRequest(ctx)) {
-      throw new Error(
+      throw new BotDetectorError(
+        'request-ceiling',
         `request ceiling of ${ctx.budget.ceiling} reached for this lookup`,
       );
     }
@@ -510,14 +512,14 @@ async function requestData(ctx, path, params) {
     const message = (body && body.error) || `HTTP ${res.status}`;
 
     if (!isRetryable(res.status, message)) {
-      throw new Error(`${path} failed: ${message}`);
+      throw new BotDetectorError('archive-request-failed', `${path} failed: ${message}`);
     }
 
-    lastError = new Error(`${path} failed: ${message}`);
+    lastError = new BotDetectorError('archive-request-failed', `${path} failed: ${message}`);
     await backoff(ctx, res, attempt);
   }
 
-  throw lastError ?? new Error(`${path} failed`);
+  throw lastError ?? new BotDetectorError('archive-request-failed', `${path} failed`);
 }
 
 /**

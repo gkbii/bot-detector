@@ -19,7 +19,7 @@
  * It reads PUBLISHED signals only — `value` and `band`, never `strength`,
  * which `axis.js` strips on purpose. So the columns here are the same numbers
  * the extension renders to a user, and nothing in this file needs the
- * instrumented-copy machinery `measure-jio329.mjs` needs.
+ * instrumented-copy machinery `measure-band-edge.mjs` needs.
  */
 
 import { scoreAgenda } from '../extension/lib/scoring/agenda.js';

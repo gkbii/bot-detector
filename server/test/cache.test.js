@@ -3,7 +3,7 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { Cache } from '../cache.js';
+import { Cache } from '../cache.ts';
 
 /** A cache with a clock we control, so expiry is testable without sleeping. */
 function makeCache() {

@@ -20,7 +20,7 @@
  * It reads PUBLISHED signals only — `band` and `value`, never `strength`, which
  * `axis.js` strips on purpose — so the columns here are what the extension
  * renders to a user. `value.coefficientOfVariation` survives that stripping,
- * which is why no instrumented copy is needed here and `measure-jio329.mjs`
+ * which is why no instrumented copy is needed here and `measure-band-edge.mjs`
  * needs one.
  *
  * WHAT IT CANNOT SHOW. 19 humans and 8 declared bots, all utility bots. It can

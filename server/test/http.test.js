@@ -3,9 +3,9 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createApp, isOriginAllowed } from '../index.js';
-import { Cache } from '../cache.js';
-import { AgendaError } from '../agenda.js';
+import { createApp, isOriginAllowed } from '../index.ts';
+import { Cache } from '../cache.ts';
+import { AgendaError } from '../agenda.ts';
 
 const PROFILE = {
   platform: 'reddit',

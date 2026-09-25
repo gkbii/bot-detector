@@ -17,7 +17,7 @@
  * It reads PUBLISHED signals only — `band` and `value`, never `strength`, which
  * `axis.js` strips on purpose — so the columns here are what the extension
  * renders to a user, and nothing here needs the instrumented-copy machinery
- * `measure-jio329.mjs` needs.
+ * `measure-band-edge.mjs` needs.
  *
  * WHAT IT CANNOT SHOW. 19 humans and 8 declared bots, all utility bots. It can
  * say that a reply rate does not separate THESE populations above the cut; it

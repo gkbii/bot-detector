@@ -7,7 +7,7 @@
  *   node scripts/measure-interval-crossing.mjs u/someone u/else
  *
  * GOES TO THE NETWORK, like `capture-corpus.mjs`, `probe-prolific-humans.mjs`
- * and `measure-jio329.mjs`, and like all three it is run by hand and is not
+ * and `measure-band-edge.mjs`, and like all three it is run by hand and is not
  * part of `npm test` or `npm run evaluate`. That is the whole point of it: the
  * question it answers is one the frozen corpus CANNOT answer, so the three
  * no-network `measure-*.mjs` scripts are the wrong tool and the import-graph
@@ -36,7 +36,7 @@
  * WHAT IT CANNOT SHOW. It re-fetches accounts THIS REPO ALREADY NAMES, so it is
  * a re-measure and not a fresh sample: it can tell you the invariant broke, it
  * cannot tell you how many people are in the strip. Finding 4b's whole-ranking
- * sweep is the tool for that question and `measure-jio329.mjs --harvest` is the
+ * sweep is the tool for that question and `measure-band-edge.mjs --harvest` is the
  * command. It also reads PUBLISHED signals only — `band` and `value`, never
  * `strength`, which `axis.js` strips on purpose — so `measuredWeight` here is
  * recomputed from which signals came back `insufficient-data`.

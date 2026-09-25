@@ -10,12 +10,6 @@ scores entirely in the browser, and needs **no account, no API key and no
 server**. There is also an optional Node server that adds a Claude read and a
 shared cache; nothing requires it.
 
-```sh
-npm test        # 185 tests, and they pass with NO node_modules installed
-npm install     # only needed for the optional server's one dependency
-npm start       # the optional server
-```
-
 ## Install
 
 **Requirements: Chrome 112 or newer — or any Chromium browser (Edge, Brave,
@@ -72,7 +66,7 @@ arrow on the extension's card.
   `manifest.json`.
 * **A grey dashed "no data" badge is not a failure.** It is a real verdict: the
   account has too little history to score (fewer than 15 comments, or under 14
-  days). See [ADR 0004](docs/adr/0004-coverage-and-the-insufficient-data-gate.md)
+  days). See [decision 0004](docs/decisions/0004-coverage-and-the-insufficient-data-gate.md)
   for why that is deliberately not reported as a clean score.
 * The content script never touches Reddit's own DOM when something goes wrong,
   so a broken lookup can degrade the badge but cannot break the page.
@@ -103,7 +97,8 @@ evidence** — an unmeasurable signal is excluded from the average rather than
 counted as a clean zero.
 
 Why three axes and not one, why the weights are what they are, and which signals
-argue in one direction only: [ADR 0003](docs/adr/0003-three-separate-scores.md).
+argue in one direction only:
+[decision 0003](docs/decisions/0003-three-separate-scores.md).
 
 ## The optional server
 
@@ -124,67 +119,58 @@ npm install               # the one dependency, @anthropic-ai/sdk
 npm start                 # listens on http://localhost:3200
 ```
 
-Requires Node 22+. Full setup, the wire contract for writing a different
-backend, citation verification and the privacy rules the server holds itself
-to: [`docs/server.md`](docs/server.md).
-
-## Layout
-
-```
-extension/     the product — MV3, load-unpacked, no build step
-  lib/sources/   the ONLY modules that know an archive's URLs
-  lib/scoring/   scoreAccount() — three axes, no blended number, pure function
-  providers/     the seam: local scoring, or your backend, degrading loudly
-  content/       the badge, and the Reddit DOM adapter
-server/        OPTIONAL. A Claude read + a shared cache. Nothing else.
-scripts/       NOT shipped, NOT imported, NOT run by npm test
-test/corpus/   27 frozen buildProfile outputs — the evaluation as a diff
-docs/          the diagram and feature list this project's public page is built from
-```
-
-The full annotated tree is in [`docs/architecture.md`](docs/architecture.md).
+Requires Node 24+. Every setting it reads, every route it serves and every error
+code it can return: [`docs/registry.md`](docs/registry.md). The wire contract for
+writing a different backend, citation verification and the privacy rules the
+server holds itself to: [`docs/server.md`](docs/server.md).
 
 ## Tests
 
 ```sh
-npm test                          # both suites, 185 tests
+npm test                          # typecheck + both suites, 200 tests
 node --test test/scoring.test.js  # one file
 npm run evaluate                  # the band table, off the frozen corpus
 ```
 
 The suite runs with **nothing installed** — keep it that way. `scoreAccount` is
 a pure function (no network, no `Date.now()`), which is what makes every case in
-it testable for free with a hand-built profile.
+it testable for free with a hand-built profile. `npm test` typechecks first,
+fetching the compiler with `npx`; with no network it says it skipped that and
+runs the rest.
 
 Keep in mind what the suite structurally *cannot* catch: every defect that
-mattered here was found by pointing the thing at live accounts, not by the 106
-green tests running at the time. A change to the fetch window, the pagination,
-or any timing signal deserves the same treatment before it is believed.
+mattered here was found by pointing the thing at live accounts, not by the green
+tests running at the time. A change to the fetch window, the pagination, or any
+timing signal deserves the same treatment before it is believed.
 [`docs/evaluating.md`](docs/evaluating.md) is the harness and the hand-run
 measurement scripts.
 
 ## Where to read more
 
+* [`docs/registry.md`](docs/registry.md) — every environment variable, route,
+  worker message, command and error code, generated from `server/registry/`.
 * [`EVALUATION.md`](EVALUATION.md) — what it actually scored against a live
-  r/politics thread, and every defect that turned up since. The eight findings
-  behind the current weights all live here.
+  r/politics thread, and every defect that turned up since. The findings behind
+  the current weights all live here.
 * [`PLATFORMS.md`](PLATFORMS.md) — TikTok and X, probed against the live
   services. The seam holds; the data does not.
-* [`docs/adr/`](docs/adr/) — one file per decision, with the alternatives that
-  lost:
+* [`docs/decisions/`](docs/decisions/) — one file per decision, with the
+  alternatives that lost:
 
   | | |
   | --- | --- |
-  | [0001](docs/adr/0001-esm-deliberately.md) | ESM, deliberately — do not "fix" this to CommonJS |
-  | [0002](docs/adr/0002-not-reddits-own-api.md) | Reddit's own API is not used, and that was checked |
-  | [0003](docs/adr/0003-three-separate-scores.md) | Three separate scores, never one number |
-  | [0004](docs/adr/0004-coverage-and-the-insufficient-data-gate.md) | Coverage is part of every verdict |
-  | [0005](docs/adr/0005-shape-signals-held-to-their-evidence.md) | The agenda shape signals are held to the evidence beside them |
-  | [0006](docs/adr/0006-signals-that-argue-one-way-only.md) | Three signals argue in one direction only |
-  | [0007](docs/adr/0007-the-index-does-not-decide-existence.md) | The users index does not get to decide whether an account exists |
-  | [0008](docs/adr/0008-good-citizen-of-a-free-archive.md) | Being a good citizen of a free public archive |
-  | [0009](docs/adr/0009-least-privilege.md) | Least privilege, because it reads pages you are logged into |
-  | [0010](docs/adr/0010-docs-contract-has-no-test-here.md) | This repo alone runs no test against the `docs/` contract |
+  | [0001](docs/decisions/0001-esm-deliberately.md) | ESM, deliberately — do not "fix" this to CommonJS |
+  | [0002](docs/decisions/0002-not-reddits-own-api.md) | Reddit's own API is not used, and that was checked |
+  | [0003](docs/decisions/0003-three-separate-scores.md) | Three separate scores, never one number |
+  | [0004](docs/decisions/0004-coverage-and-the-insufficient-data-gate.md) | Coverage is part of every verdict |
+  | [0005](docs/decisions/0005-shape-signals-held-to-their-evidence.md) | The agenda shape signals are held to the evidence beside them |
+  | [0006](docs/decisions/0006-signals-that-argue-one-way-only.md) | Three signals argue in one direction only |
+  | [0007](docs/decisions/0007-the-index-does-not-decide-existence.md) | The users index does not get to decide whether an account exists |
+  | [0008](docs/decisions/0008-good-citizen-of-a-free-archive.md) | Being a good citizen of a free public archive |
+  | [0009](docs/decisions/0009-least-privilege.md) | Least privilege, because it reads pages you are logged into |
+  | [0010](docs/decisions/0010-docs-contract-has-no-test-here.md) | This repo alone runs no test against the `docs/` contract |
+  | [0011](docs/decisions/0011-the-extension-is-not-typechecked.md) | The typed half is the server; the extension stays checked-as-JavaScript |
+  | [0012](docs/decisions/0012-the-compiler-comes-from-npx.md) | The typechecker is fetched with `npx`, not installed |
 
 ## Where this comes from
 

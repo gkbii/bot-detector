@@ -9,6 +9,7 @@
  */
 
 import { normaliseBackendUrl } from './providers/backend.js';
+import { BotDetectorError } from './errors.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -21,8 +22,8 @@ function setStatus(node, message, kind) {
 
 async function ask(message) {
   const res = await chrome.runtime.sendMessage(message);
-  if (!res) throw new Error('the extension worker did not respond');
-  if (!res.ok) throw new Error((res.error && res.error.message) || 'failed');
+  if (!res) throw new BotDetectorError('worker-silent');
+  if (!res.ok) throw new BotDetectorError(res.error?.code || 'worker-messaging', res.error?.message);
   return res.data;
 }
 

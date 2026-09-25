@@ -17,11 +17,13 @@ const HANDLE = /^[A-Za-z0-9_-]{3,20}$/;
 
 const PLATFORMS = new Set(['reddit']);
 
-/**
- * @param {unknown} raw
- * @returns {{ ok: true, username: string } | { ok: false, reason: string }}
- */
-export function normaliseUsername(raw) {
+/** Either a username safe to put in an outbound URL, or the reason it is not. */
+export type UsernameCheck = { ok: true; username: string } | { ok: false; reason: string };
+
+/** Either the platform to score against, or the reason the request named none. */
+export type PlatformCheck = { ok: true; platform: string } | { ok: false; reason: string };
+
+export function normaliseUsername(raw: unknown): UsernameCheck {
   if (typeof raw !== 'string') {
     return { ok: false, reason: 'username must be a string' };
   }
@@ -36,7 +38,7 @@ export function normaliseUsername(raw) {
     /^https?:\/\/(?:[a-z0-9-]+\.)?reddit\.com\/(?:u|user)\/([^/?#]+)/i
   );
   if (urlMatch) {
-    value = urlMatch[1];
+    value = urlMatch[1] as string;
   } else {
     value = value.replace(/^\/+/, '');
     value = value.replace(/^(?:u|user)\//i, '');
@@ -54,11 +56,7 @@ export function normaliseUsername(raw) {
   return { ok: true, username: value };
 }
 
-/**
- * @param {unknown} raw
- * @returns {{ ok: true, platform: string } | { ok: false, reason: string }}
- */
-export function normalisePlatform(raw) {
+export function normalisePlatform(raw: unknown): PlatformCheck {
   if (raw === undefined || raw === null || raw === '') return { ok: true, platform: 'reddit' };
   if (typeof raw !== 'string') return { ok: false, reason: 'platform must be a string' };
   const value = raw.trim().toLowerCase();

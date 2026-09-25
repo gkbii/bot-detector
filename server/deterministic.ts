@@ -18,36 +18,42 @@
 const SOURCE_MODULE = '../extension/lib/sources/arcticShift.js';
 const SCORING_MODULE = '../extension/lib/scoring/index.js';
 
-let cached = null;
-
-export class DeterministicUnavailableError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = 'DeterministicUnavailableError';
-    this.code = 'deterministic-unavailable';
-  }
-}
+// DeterministicUnavailableError moved to ../extension/errors.js, the one coded
+// taxonomy; re-exported because server/index.ts imports it from here.
+export { DeterministicUnavailableError };
 
 /**
- * @returns {Promise<{ fetchAccount: Function, scoreAccount: Function }>}
+ * The scoring core, borrowed from the extension. Deliberately loose: the core is
+ * the extension's untyped ESM and this server has no second opinion about its
+ * shape beyond "these two are functions", which loadDeterministic() checks at
+ * run time rather than trusting.
  */
-export async function loadDeterministic() {
+
+import { DeterministicUnavailableError, errorMessage } from '../extension/errors.js';
+export interface DeterministicCore {
+  fetchAccount: (username: string, opts?: Record<string, unknown>) => Promise<unknown>;
+  scoreAccount: (profile: unknown, opts?: Record<string, unknown>) => unknown;
+}
+
+let cached: DeterministicCore | null = null;
+
+export async function loadDeterministic(): Promise<DeterministicCore> {
   if (cached) return cached;
 
-  let source;
-  let scoring;
+  let source: Record<string, unknown>;
+  let scoring: Record<string, unknown>;
   try {
     source = await import(SOURCE_MODULE);
   } catch (err) {
     throw new DeterministicUnavailableError(
-      `could not load ${SOURCE_MODULE} (${err.message})`
+      `could not load ${SOURCE_MODULE} (${errorMessage(err)})`
     );
   }
   try {
     scoring = await import(SCORING_MODULE);
   } catch (err) {
     throw new DeterministicUnavailableError(
-      `could not load ${SCORING_MODULE} (${err.message})`
+      `could not load ${SCORING_MODULE} (${errorMessage(err)})`
     );
   }
 
@@ -58,12 +64,15 @@ export async function loadDeterministic() {
     throw new DeterministicUnavailableError(`${SCORING_MODULE} does not export scoreAccount()`);
   }
 
-  cached = { fetchAccount: source.fetchAccount, scoreAccount: scoring.scoreAccount };
+  cached = {
+    fetchAccount: source.fetchAccount as DeterministicCore['fetchAccount'],
+    scoreAccount: scoring.scoreAccount as DeterministicCore['scoreAccount'],
+  };
   return cached;
 }
 
 /** Test-only: injects the pair without touching the filesystem. */
-export function _setDeterministicForTests(pair) {
+export function _setDeterministicForTests(pair: DeterministicCore | null) {
   cached = pair;
 }
 

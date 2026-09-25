@@ -22,6 +22,8 @@
  */
 
 import { getVerdict, getSettings, describeMode, probeBackendHealth, normaliseBackendUrl } from './providers/index.js';
+import { codedError } from './errors.js';
+import { formatLine } from './log.js';
 
 // ---------------------------------------------------------------------------
 // Limits. All of them are about being a good citizen of a free public archive.
@@ -223,7 +225,9 @@ async function recordLookup(platform, username, details) {
   markLogDirty();
   // Mirror a one-liner to the worker console (chrome://extensions ->
   // "Inspect views: service worker") with the full entry attached to expand.
-  console.debug(`[bot-detector] ${summariseEntry(entry)}`, entry);
+  // formatLine rather than log(), because the second argument is what makes
+  // this line expandable in the worker's devtools and log() takes scalars only.
+  console.debug(formatLine('lookup', summariseEntry(entry)), entry);
 }
 
 function summariseEntry(entry) {
@@ -329,7 +333,7 @@ async function runJob(job) {
   } catch (err) {
     recordLookup(job.platform, job.username, {
       outcome: 'error',
-      error: { message: (err && err.message) || String(err), kind: (err && err.kind) || 'error' },
+      error: errorEnvelope(err),
     }).catch(() => {});
     consecutiveFailures += 1;
     const explicit = Number(err && err.retryAfterMs);
@@ -373,9 +377,17 @@ async function requestVerdict(req) {
 }
 
 function taggedError(message, kind) {
-  const err = new Error(message);
-  err.kind = kind;
-  return err;
+  return codedError(kind, message);
+}
+
+/**
+ * What crosses `chrome.runtime.sendMessage` when a lookup fails. `code` is the
+ * canonical name and `kind` is its alias, sent for the content scripts, which
+ * cannot import errors.js and were written against `kind`.
+ */
+function errorEnvelope(err) {
+  const code = (err && (err.code || err.kind)) || 'worker-messaging';
+  return { message: (err && err.message) || String(err), code, kind: code };
 }
 
 // ---------------------------------------------------------------------------
@@ -417,7 +429,7 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
     .then((data) => sendResponse({ ok: true, data }))
     .catch((err) => sendResponse({
       ok: false,
-      error: { message: (err && err.message) || String(err), kind: (err && err.kind) || 'error' },
+      error: errorEnvelope(err),
     }));
   return true; // async reply
 });

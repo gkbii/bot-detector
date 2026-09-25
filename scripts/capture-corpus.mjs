@@ -2,7 +2,7 @@
  * Capture `test/corpus/` — the frozen evaluation corpus. Goes to the network on
  * purpose; it is not run by `npm test`, by `npm run evaluate`, or by anything
  * in the extension. Two other scripts here fetch: `probe-prolific-humans.mjs`,
- * which feeds this one (see PROLIFIC_HUMANS below), and `measure-jio329.mjs`.
+ * which feeds this one (see PROLIFIC_HUMANS below), and `measure-band-edge.mjs`.
  *
  *   node scripts/capture-corpus.mjs                 # fill in what is missing
  *   node scripts/capture-corpus.mjs --force         # re-capture everything

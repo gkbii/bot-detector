@@ -7,8 +7,8 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildPack, selectComments, spreadOrder, renderPack } from '../pack.js';
-import { AgendaError, readAgenda, resolveFindings, RESPONSE_SCHEMA } from '../agenda.js';
+import { buildPack, selectComments, spreadOrder, renderPack } from '../pack.ts';
+import { AgendaError, readAgenda, resolveFindings, RESPONSE_SCHEMA } from '../agenda.ts';
 
 function comment(i, { group = 'politics', createdUtc = 1_700_000_000 + i * 86400 } = {}) {
   return {

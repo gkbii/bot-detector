@@ -35,12 +35,35 @@
 
 import http from 'node:http';
 import { pathToFileURL } from 'node:url';
-import config from './config.js';
-import { Cache } from './cache.js';
-import { normalisePlatform, normaliseUsername } from './username.js';
-import { buildPack } from './pack.js';
-import { readAgenda, AgendaError } from './agenda.js';
-import { loadDeterministic } from './deterministic.js';
+import config from './config.ts';
+import { Cache } from './cache.ts';
+import { normalisePlatform, normaliseUsername } from './username.ts';
+import { buildPack } from './pack.ts';
+import { readAgenda, AgendaError } from './agenda.ts';
+import { loadDeterministic } from './deterministic.ts';
+import { ROUTES } from './registry/routes.ts';
+import { BotDetectorError, ERRORS } from '../extension/errors.js';
+import { log as logEvent } from '../extension/log.js';
+import { errorMessage } from '../extension/errors.js';
+import type { IncomingMessage, ServerResponse } from 'node:http';
+import type { Route } from './registry/routes.ts';
+import type { DeterministicCore } from './deterministic.ts';
+import type { AccountProfile, Verdict } from './types.ts';
+
+/** Why there is no LLM block on a verdict. Reported, never invented around. */
+interface LlmError {
+  code: string;
+  message: string | undefined;
+}
+
+/** One access-log line. Carries no request or response body -- see the privacy block. */
+interface AccessLine {
+  method: string | undefined;
+  route: string;
+  status: number;
+  ms: number;
+  origin: string | null;
+}
 
 const MAX_BODY_BYTES = 16 * 1024;
 
@@ -51,7 +74,7 @@ const MAX_BODY_BYTES = 16 * 1024;
  * extends with a port (so `http://localhost` covers `http://localhost:5173`).
  * `*` allows everything and is a local-dev-only setting.
  */
-export function isOriginAllowed(origin, allowed = config.allowedOrigins) {
+export function isOriginAllowed(origin: string | undefined, allowed: readonly string[] = config.allowedOrigins): boolean {
   if (!origin) return true; // Not a browser request; CORS is not the control here.
   for (const entry of allowed) {
     if (entry === '*') return true;
@@ -62,8 +85,8 @@ export function isOriginAllowed(origin, allowed = config.allowedOrigins) {
   return false;
 }
 
-function corsHeaders(origin) {
-  const headers = { Vary: 'Origin' };
+function corsHeaders(origin: string | undefined | null): Record<string, string> {
+  const headers: Record<string, string> = { Vary: 'Origin' };
   if (origin) {
     headers['Access-Control-Allow-Origin'] = origin;
     headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS';
@@ -73,7 +96,7 @@ function corsHeaders(origin) {
   return headers;
 }
 
-function sendJson(res, status, body, origin) {
+function sendJson(res: ServerResponse, status: number, body: unknown, origin: string | undefined | null): void {
   const payload = JSON.stringify(body);
   res.writeHead(status, {
     'Content-Type': 'application/json; charset=utf-8',
@@ -84,14 +107,19 @@ function sendJson(res, status, body, origin) {
   res.end(payload);
 }
 
-function readJsonBody(req) {
+/** A failure whose status comes from the code, so no route repeats a number. */
+function sendFailure(res: ServerResponse, code: keyof typeof ERRORS, message: string, origin: string | undefined): void {
+  return sendJson(res, ERRORS[code].httpStatus, { error: message, code }, origin);
+}
+
+function readJsonBody(req: IncomingMessage): Promise<Record<string, unknown>> {
   return new Promise((resolve, reject) => {
     let size = 0;
-    const chunks = [];
-    req.on('data', (chunk) => {
+    const chunks: Buffer[] = [];
+    req.on('data', (chunk: Buffer) => {
       size += chunk.length;
       if (size > MAX_BODY_BYTES) {
-        reject(Object.assign(new Error('request body too large'), { status: 413 }));
+        reject(new BotDetectorError('body-too-large', 'request body too large'));
         req.destroy();
         return;
       }
@@ -103,11 +131,11 @@ function readJsonBody(req) {
       try {
         const parsed = JSON.parse(raw);
         if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
-          return reject(Object.assign(new Error('body must be a JSON object'), { status: 400 }));
+          return reject(new BotDetectorError('body-not-object', 'body must be a JSON object'));
         }
-        resolve(parsed);
+        resolve(parsed as Record<string, unknown>);
       } catch {
-        reject(Object.assign(new Error('body was not valid JSON'), { status: 400 }));
+        reject(new BotDetectorError('body-not-json', 'body was not valid JSON'));
       }
     });
     req.on('error', reject);
@@ -119,7 +147,7 @@ function readJsonBody(req) {
  * verdict the scorer produced. Shape-identical to the local provider's verdict
  * plus `agenda.llm`, which is the whole contract the panel renders against.
  */
-function withAgendaBlock(verdict, { llm = null, llmError = null } = {}) {
+function withAgendaBlock(verdict: Verdict, { llm = null, llmError = null }: { llm?: unknown; llmError?: LlmError | null } = {}): Verdict {
   const agenda = { ...(verdict.agenda || {}) };
   if (llm) agenda.llm = llm;
   if (llmError) agenda.llmError = llmError;
@@ -140,7 +168,13 @@ export function createApp({
   log = defaultLog,
   agendaConfigured = () => Boolean(config.anthropicApiKey),
 } = {}) {
-  async function handleHealth(res, origin) {
+  /** The handlers ROUTES names, by key. */
+  const handlers: Record<Route['handler'], (req: IncomingMessage, res: ServerResponse, origin: string | undefined) => Promise<void>> = {
+    health: (_req, res, origin) => handleHealth(res, origin),
+    verdict: (req, res, origin) => handleVerdict(req, res, origin),
+  };
+
+  async function handleHealth(res: ServerResponse, origin: string | undefined): Promise<void> {
     sendJson(
       res,
       200,
@@ -155,12 +189,14 @@ export function createApp({
     );
   }
 
-  async function handleVerdict(req, res, origin) {
-    let body;
+  async function handleVerdict(req: IncomingMessage, res: ServerResponse, origin: string | undefined): Promise<void> {
+    let body: Record<string, unknown>;
     try {
       body = await readJsonBody(req);
     } catch (err) {
-      return sendJson(res, err.status || 400, { error: err.message }, origin);
+      const status = err instanceof BotDetectorError ? err.httpStatus : 400;
+      const code = err instanceof BotDetectorError ? err.code : 'bad-request';
+      return sendJson(res, status, { error: errorMessage(err), code }, origin);
     }
 
     const platformCheck = normalisePlatform(body.platform);
@@ -177,20 +213,21 @@ export function createApp({
     const { username } = usernameCheck;
     const deep = Boolean(body.deep);
 
-    let deterministic;
+    let deterministic: DeterministicCore;
     try {
       deterministic = await load();
     } catch (err) {
-      return sendJson(res, 503, { error: err.message, code: err.code }, origin);
+      const code = err instanceof BotDetectorError ? err.code : 'deterministic-unavailable';
+      return sendJson(res, ERRORS[code].httpStatus, { error: errorMessage(err), code }, origin);
     }
 
     const cached = { profile: false, verdict: false, llm: false };
 
-    let llm = deep ? cache.getLlmRead(platform, username)?.value ?? null : null;
+    let llm: unknown = deep ? cache.getLlmRead(platform, username)?.value ?? null : null;
     cached.llm = Boolean(llm);
-    let verdict = cache.getVerdict(platform, username)?.value ?? null;
+    let verdict = (cache.getVerdict(platform, username)?.value ?? null) as Verdict | null;
     cached.verdict = Boolean(verdict);
-    let profile = cache.getProfile(platform, username)?.value ?? null;
+    let profile = (cache.getProfile(platform, username)?.value ?? null) as AccountProfile | null;
     cached.profile = Boolean(profile);
 
     // The profile is needed to score, and needed again to build an evidence
@@ -199,29 +236,29 @@ export function createApp({
     const needProfile = !verdict || (deep && !llm);
     if (needProfile && !profile) {
       try {
-        profile = await deterministic.fetchAccount(username, { platform });
+        profile = (await deterministic.fetchAccount(username, { platform })) as AccountProfile | null;
       } catch (err) {
-        return sendJson(res, 502, { error: `fetch failed: ${err.message}` }, origin);
+        return sendFailure(res, 'archive-request-failed', `fetch failed: ${errorMessage(err)}`, origin);
       }
       if (!profile) {
-        return sendJson(res, 404, { error: `no such ${platform} account: ${username}` }, origin);
+        return sendFailure(res, 'not-found', `no such ${platform} account: ${username}`, origin);
       }
       cache.putProfile(platform, username, profile);
     }
 
     if (!verdict) {
       try {
-        verdict = deterministic.scoreAccount(profile, { platform });
+        verdict = deterministic.scoreAccount(profile, { platform }) as Verdict;
       } catch (err) {
-        return sendJson(res, 500, { error: `scoring failed: ${err.message}` }, origin);
+        return sendFailure(res, 'core-mismatch', `scoring failed: ${errorMessage(err)}`, origin);
       }
       cache.putVerdict(platform, username, verdict);
     }
 
-    let llmError = null;
+    let llmError: LlmError | null = null;
     if (deep && !llm) {
       try {
-        const pack = buildPack(profile);
+        const pack = buildPack(profile as AccountProfile);
         const result = await agendaRead({ pack });
         if (result.read) {
           llm = result.read;
@@ -239,14 +276,14 @@ export function createApp({
         llmError =
           err instanceof AgendaError
             ? { code: err.code, message: err.message }
-            : { code: 'agenda-failed', message: err.message };
+            : { code: 'agenda-failed', message: errorMessage(err) };
       }
     }
 
     sendJson(
       res,
       200,
-      { verdict: withAgendaBlock(verdict, { llm, llmError }), provider: 'backend', cached },
+      { verdict: withAgendaBlock(verdict as Verdict, { llm, llmError }), provider: 'backend', cached },
       origin
     );
   }
@@ -254,7 +291,7 @@ export function createApp({
   const server = http.createServer((req, res) => {
     const started = Date.now();
     const origin = req.headers.origin;
-    const url = new URL(req.url, 'http://localhost');
+    const url = new URL(req.url ?? '/', 'http://localhost');
     const route = url.pathname.replace(/\/+$/, '') || '/';
 
     res.on('finish', () => {
@@ -268,7 +305,7 @@ export function createApp({
     });
 
     if (origin && !isOriginAllowed(origin)) {
-      return sendJson(res, 403, { error: 'origin not allowed' }, null);
+      return sendJson(res, ERRORS['origin-not-allowed'].httpStatus, { error: 'origin not allowed', code: 'origin-not-allowed' }, null);
     }
 
     if (req.method === 'OPTIONS') {
@@ -276,25 +313,17 @@ export function createApp({
       return res.end();
     }
 
-    if (route === '/api/health') {
-      if (req.method !== 'GET') {
-        return sendJson(res, 405, { error: 'method not allowed' }, origin);
-      }
-      return handleHealth(res, origin).catch((err) =>
-        sendJson(res, 500, { error: err.message }, origin)
-      );
-    }
+    // Dispatch is a lookup in registry/routes.ts, not a branch per route: a
+    // path that table does not carry is a 404 and one asked with the wrong
+    // method is a 405, both decided here once.
+    const matches = ROUTES.filter((entry) => entry.path === route);
+    if (matches.length === 0) return sendFailure(res, 'not-a-route', 'not found', origin);
+    const matched = matches.find((entry) => entry.method === req.method);
+    if (!matched) return sendFailure(res, 'method-not-allowed', 'method not allowed', origin);
 
-    if (route === '/api/verdict') {
-      if (req.method !== 'POST') {
-        return sendJson(res, 405, { error: 'method not allowed' }, origin);
-      }
-      return handleVerdict(req, res, origin).catch((err) =>
-        sendJson(res, 500, { error: err.message }, origin)
-      );
-    }
-
-    return sendJson(res, 404, { error: 'not found' }, origin);
+    return handlers[matched.handler](req, res, origin).catch((err) =>
+      sendJson(res, 500, { error: err.message, code: err.code }, origin)
+    );
   });
 
   server.on('close', () => {
@@ -309,27 +338,30 @@ export function createApp({
 }
 
 /** Access log. Deliberately carries no request or response body -- see the privacy block. */
-function defaultLog(line) {
-  // eslint-disable-next-line no-console
-  console.log(
-    `${new Date().toISOString()} ${line.method} ${line.route} ${line.status} ${line.ms}ms`
-  );
+function defaultLog(line: AccessLine): void {
+  logEvent('http', 'request', {
+    method: line.method,
+    route: line.route,
+    status: line.status,
+    ms: line.ms,
+    origin: line.origin ?? undefined,
+  });
 }
 
-export function start({ port = config.port } = {}) {
+export function start({ port = config.port }: { port?: number } = {}) {
   const server = createApp();
   server.listen(port, () => {
-    // eslint-disable-next-line no-console
-    console.log(
-      `bot-detector server listening on http://localhost:${port} ` +
-        `(agenda read: ${config.anthropicApiKey ? 'configured' : 'NOT configured'}, ` +
-        `cache: ${config.dbPath})`
-    );
+    logEvent('server', 'listening', {
+      url: `http://localhost:${port}`,
+      // A boolean about configuration, never the key.
+      agenda: config.anthropicApiKey ? 'configured' : 'NOT-configured',
+      cache: config.dbPath,
+    });
   });
   return server;
 }
 
-// `node server/index.js` starts it; importing it (tests, another module) does not.
+// `npm start` starts it; importing it (tests, another module) does not.
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   start();
 }
