@@ -257,9 +257,11 @@ Content scripts never fetch. They ask the worker and render what comes back,
 which is the only place a concurrency cap, an inter-request gap and a backoff
 can be *global*: five open Reddit tabs are five page adapters and one worker, so
 the archive — a free service run by a volunteer — sees one polite client rather
-than five impatient ones. Badging is driven by visibility, so a 4,000-comment
-thread never fires 4,000 lookups, and `cache` holds a verdict for 12 hours under
-an LRU cap.
+than five impatient ones. `badge` costs the archive nothing to place — by
+default it sits idle until you click it, and only that one account is looked
+up. An opt-in setting restores a lookup on scroll instead, and even there
+visibility is what triggers each one, so a busy thread never fires a lookup
+per comment. `cache` holds a verdict for 12 hours under an LRU cap.
 
 There is also a hard per-lookup request ceiling, and it is a **safety property
 rather than a tuning knob**: one badge render must never be able to become a

@@ -9,8 +9,8 @@
   "diagramCaption": "Three scores that never meet, computed in your own browser from a public archive, with everything it could not see stated on the badge.",
   "diagramCaptionSimple": "It works out three separate scores inside your own browser, and always says what it was not able to check.",
   "howToUse": {
-    "intro": "It is public and installs unpacked. Four steps, then it works as you scroll.",
-    "introSimple": "It is free to get and installs in one step. Four things, then it just works.",
+    "intro": "It is public and installs unpacked. Four steps, then a click checks anyone.",
+    "introSimple": "It is free to get and installs in one step. Four things, then one click checks someone.",
     "steps": [
       {
         "label": "Get the code: github.com/gkbii/bot-detector",
@@ -24,13 +24,13 @@
       },
       {
         "label": "Open a Reddit thread and scroll",
-        "detail": "A badge appears next to each commenter as it scores them.",
-        "detailSimple": "Open Reddit and a small badge appears next to each person."
+        "detail": "A small button appears next to each commenter. Nothing is looked up until you click one.",
+        "detailSimple": "Open Reddit and a small button appears next to each person."
       },
       {
-        "label": "Click a badge for the working behind the score",
-        "detail": "Every signal that fired, how much was read, and what it could not judge.",
-        "detailSimple": "Click a badge to see why it decided that, and what it could not tell."
+        "label": "Click the button to check someone",
+        "detail": "One click scores the account; a second shows what stood out, each linked to the comment or post behind it.",
+        "detailSimple": "Click once to check someone, and again to see what stood out, with a link to the real comment."
       }
     ]
   },
