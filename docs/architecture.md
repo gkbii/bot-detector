@@ -1,5 +1,12 @@
 # Architecture — Bot Detector
 
+<!-- registry:begin -->
+
+> **`docs/registry.md` is this repo's canonical list of what it has** -- environment, routes, worker messages, commands, errors -- generated from the modules that own those facts, with a test that fails when it goes stale.
+> This page is the picture; that file is the list. Read the list first.
+
+<!-- registry:end -->
+
 A Chrome extension that badges Reddit commenters as you scroll, with **three
 separate scores** — is a machine posting this, is this account pushing
 something, and is there positive evidence of a real person. Everything below
