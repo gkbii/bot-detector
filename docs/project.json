@@ -2,7 +2,7 @@
   "slug": "bot-detector",
   "name": "Bot Detector",
   "tagline": "Scores a Reddit commenter on three separate things, because a paid human passes every bot check.",
-  "status": "live",
+  "status": "abandoned",
   "repos": [
     "bot-detector"
   ],
@@ -101,5 +101,9 @@
     "package-lock.json",
     ".gitignore",
     ".env.example"
-  ]
+  ],
+  "abandoned": {
+    "reason": "No longer maintained or developed. The repository stays public, with its code and tests as they are.",
+    "reasonSimple": "I've stopped working on it. The code is still public for anyone to read, but nothing new is coming."
+  }
 }
